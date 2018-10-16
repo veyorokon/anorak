@@ -120,7 +120,7 @@ export default class BillingTab extends Component {
       this.alertError(token.error);
     } else {
       this.setState({ submittingSignup: true }, () => {
-        fetch('http://18.191.250.199:8000/updateStripe/', {
+        fetch('http://127.0.0.1:8000/updateStripe/', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -152,7 +152,7 @@ export default class BillingTab extends Component {
   }
 
   handleUpdate() {
-    fetch('http://18.191.250.199:8000/updateBilling/', {
+    fetch('http://127.0.0.1:8000/updateBilling/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

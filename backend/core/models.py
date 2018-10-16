@@ -1,18 +1,19 @@
 from __future__ import unicode_literals
-
+from random import randint
 from django.db import models
 from django.conf import settings
 from .managers import UserManager
 from django.dispatch import receiver
 from django.core.mail import send_mail
-from django.db.models.signals import post_save, pre_save
 from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import PermissionsMixin
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import PermissionsMixin
+from django.db.models.signals import post_save, pre_save
 from django.contrib.auth.base_user import AbstractBaseUser
-
+from verification_api.models import *
 import stripe
 stripe.api_key = settings.STRIPE_ACCOUNT_SID
+
 
 # Stores the user's billing information
 class AddressBilling(models.Model):
@@ -46,6 +47,8 @@ class StripeCustomer(models.Model):
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
+    email_verification_code = models.OneToOneField(EmailVerificationCode, 
+        null=True, on_delete=models.CASCADE, related_name='user')
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
     date_joined = models.DateTimeField(_('date joined'), 

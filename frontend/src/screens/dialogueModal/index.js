@@ -67,7 +67,7 @@ export default class DialogueModal extends Component {
    * @return {[type]} [returns none]
    */
   handleSubscribe() {
-    fetch('http://18.191.250.199:8000/subscriptionSignup/', {
+    fetch('http://127.0.0.1:8000/subscriptionSignup/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

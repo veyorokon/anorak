@@ -25,14 +25,8 @@ SECRET_KEY = 'v(m)6f0+s3d$o4lk$lli&un$e1a@bu3oww^9=s=ms)+@df23*r'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = ['squadup.xyz', 'www.squadup.xyz', 'nginx', '18.191.250.199', 'django-env.k4nxphhzk2.us-west-1.elasticbeanstalk.com']
+#ALLOWED_HOSTS = ['squadup.xyz', 'www.squadup.xyz', 'nginx', '127.0.0.1', 'django-env.k4nxphhzk2.us-west-1.elasticbeanstalk.com']
 ALLOWED_HOSTS=['127.0.0.1']
-
-#Twilio settings
-TWILIO_ACCOUNT_SID = 'ACaf89a225145d292dfb5ad9ec6e8ab10e'
-TWILIO_AUTH_TOKEN = 'de38eed12958a9d20b3e0a058ee7b5ef'
-TWILIO_NUMBER = '+18596948148'
-TWILIO_DEFAULT_CALLERID = 'SquadUp'
 
 
 #Stripe key
@@ -51,7 +45,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'core',
-    'subscription_api'
+    'subscription_api',
+    'verification_api'
 ]
 
 MIDDLEWARE = [

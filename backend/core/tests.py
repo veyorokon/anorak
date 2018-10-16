@@ -1,5 +1,9 @@
-from django.test import TestCase
 from . models import User
+from django.test import TestCase
+from django.conf import settings
+
+import stripe
+stripe.api_key = settings.STRIPE_ACCOUNT_SID
 
 class UserCreationTests(TestCase):
     
@@ -11,6 +15,10 @@ class UserCreationTests(TestCase):
             password = '12345678910'
         )
         u.save()        
-        print(u.session_token)
-        print(u.address_billing.__dict__)
-        print(u.stripe_customer.stripe_customer_id)
+        print('Session Token: '+str(u.session_token))
+        print('Billing Address: '+str(u.address_billing.__dict__))
+        print('Created Stripe Customer ID: '+str(u.stripe_customer.stripe_customer_id))
+        cu = stripe.Customer.retrieve(u.stripe_customer.stripe_customer_id)
+        print('Destroying Stripe Customer ID: '+str(u.stripe_customer.stripe_customer_id))
+        cu.delete()
+        

@@ -77,7 +77,7 @@ export default class SubscriptionDashboard extends Component {
     const before = this.state.data.user.address.billing.valid;
     if (!this.state.data.user.address.billing.valid) {
       //alert(JSON.stringify(this.state.tokenCredentials));
-      fetch('http://18.191.250.199:8000/api-token-login/', {
+      fetch('http://127.0.0.1:8000/api-token-login/', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -117,7 +117,7 @@ export default class SubscriptionDashboard extends Component {
   }
 
   handleLogout() {
-    fetch('http://18.191.250.199:8000/logout/', {
+    fetch('http://127.0.0.1:8000/logout/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

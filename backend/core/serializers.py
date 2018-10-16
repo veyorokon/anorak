@@ -6,6 +6,7 @@ class StripeCustomerserializer(serializers.ModelSerializer):
     class Meta:
         model = StripeCustomer
         fields = '__all__'
+        
 
 class UserSerializer(serializers.ModelSerializer):
     

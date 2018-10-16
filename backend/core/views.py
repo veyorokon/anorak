@@ -1,6 +1,7 @@
 
 from . models import *
 from . serializers import *
+from rest_framework import status
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -20,6 +21,3 @@ class UserAPI(APIView):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
-    
-    
-

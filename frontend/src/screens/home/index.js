@@ -21,60 +21,16 @@ export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      placeholderText: 'Enter your mobile number',
+      placeholderText: 'Enter your email address',
       proceed: false,
-      phoneNumber: '',
-      numberIsNull: true,
+      email: '',
       tokenCredentials: {},
     };
-    this._retrieveData();
   }
 
   static navigationOptions = {
     header: null,
   };
-
-  _retrieveData = async () => {
-    try {
-      const token = await AsyncStorage.getItem('SQUAD_UP_KEY');
-      const username = await AsyncStorage.getItem('SQUAD_UP_USERNAME');
-      if (token !== null && username !== null) {
-        this.setState({
-          tokenCredentials: {
-            username: username,
-            token: token,
-          },
-        });
-        this.handleAutoTokenLogin();
-      }
-    } catch (error) {
-      return {};
-    }
-  };
-
-  handleAutoTokenLogin() {
-    fetch('http://18.191.250.199:8000/api-token-login/', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(this.state.tokenCredentials),
-    })
-      .then(response => {
-        if (response.status == 200) {
-          response.json();
-          this.props.navigation.navigate('SubscriptionDashboard', {
-            data: JSON.parse(response._bodyText),
-          });
-        } else {
-          throw new Error(response.status);
-        }
-      })
-      .catch(() => {
-        //alert(JSON.stringify(err.message));
-      });
-  }
 
   componentWillMount() {
     this.loginHeight = new Animated.Value(150);
@@ -131,7 +87,7 @@ export default class Home extends React.Component {
     }
 
     this.setState({
-      placeholderText: 'Enter your mobile number',
+      placeholderText: 'Enter your email address',
     });
 
     Animated.parallel([
@@ -150,20 +106,20 @@ export default class Home extends React.Component {
     ]).start();
   };
 
-  increaseHeightOfLogin = () => {
+  increase_height_of_login = () => {
     Animated.timing(this.loginHeight, {
       toValue: SCREEN_HEIGHT,
       duration: 500,
     }).start(() => {
-      this.refs.textInputMobile.focus();
+      this.refs.emailInput.focus();
       this.setState({
-        placeholderText: '092123456789',
+        placeholderText: 'your_email@example.com',
         proceed: true,
       });
     });
   };
 
-  decreaseHeightOfLogin = () => {
+  decrease_height_of_login = () => {
     Keyboard.dismiss();
     this.setState({
       proceed: false,
@@ -174,44 +130,31 @@ export default class Home extends React.Component {
     }).start();
   };
 
-  allowForwardArrow() {
+  enable_forward_arrow() {
     return this.state.proceed;
   }
 
-  updatePhoneNumber(value) {
-    this.setState({ phoneNumber: value.replace(/[^0-9]/g, '') });
+  update_email_address(value) {
+    this.setState({ email: value });
   }
 
-  _showInvalidNumberAlert = () =>
-    Alert.alert(
-      'Invalid Number',
-      'Please enter a valid US phone number.',
-      [
-        {
-          text: 'OK',
-        },
-      ],
-      { cancelable: false }
-    );
-
-  sendPhoneAPICodeRequest() {
-    const number = '1' + this.state.phoneNumber;
-    fetch('http://18.191.250.199:8000/api-phone-code-request/', {
+  send_email_confirmation_code() {
+    const email = this.state.email;
+    fetch('http://127.0.0.1:8000/api/email_verification_codes/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ phoneNumber: number }),
+      body: JSON.stringify({ email: email }),
     })
       .then(response => {
         if (response.status == 201) {
           response.json();
           this.props.navigation.navigate('VerifyPhone', {
-            phoneNumber: number,
+            email: email,
           });
         } else {
-          this._showInvalidNumberAlert();
         }
       })
       .catch(() => {});
@@ -267,7 +210,7 @@ export default class Home extends React.Component {
             opacity: headerBackArrowOpacity,
           }}
         >
-          <TouchableOpacity onPress={() => this.decreaseHeightOfLogin()}>
+          <TouchableOpacity onPress={() => this.decrease_height_of_login()}>
             <Icon name="md-arrow-back" style={{ color: 'black' }} />
           </TouchableOpacity>
         </Animated.View>
@@ -290,8 +233,8 @@ export default class Home extends React.Component {
           <Icon
             name="md-arrow-forward"
             onPress={() => {
-              if (this.allowForwardArrow()) {
-                this.sendPhoneAPICodeRequest();
+              if (this.enable_forward_arrow()) {
+                this.send_email_confirmation_code();
               }
             }}
             style={{ color: 'black' }}
@@ -339,7 +282,7 @@ export default class Home extends React.Component {
               </View>
 
               {/** BOTTOM FORM **/}
-              <TouchableOpacity onPress={() => this.increaseHeightOfLogin()}>
+              <TouchableOpacity onPress={() => this.increase_height_of_login()}>
                 <Animated.View
                   style={{
                     marginTop: marginTop,
@@ -357,17 +300,17 @@ export default class Home extends React.Component {
                       opacity: titleTextOpacity,
                     }}
                   >
-                    Sign Up
+                    Enter your email address
                   </Animated.Text>
 
-                  <Image
+                  {/* <Image
                     source={require('../../../assets/flag.png')}
                     style={{
                       height: 24,
                       width: 24,
                       resizeMode: 'contain',
                     }}
-                  />
+                  /> */}
                   <Animated.View
                     pointerEvents="none"
                     style={{
@@ -376,73 +319,23 @@ export default class Home extends React.Component {
                       borderBottomWidth: this.borderBottomWidth,
                     }}
                   >
-                    <Text style={{ fontSize: 20, paddingHorizontal: 10 }}>
-                      +1
-                    </Text>
                     <TextInput
-                      ref="textInputMobile"
-                      keyboardType="numeric"
+                      autoCorrect={false}
+                      autoCapitalize={'none'}
+                      ref="emailInput"
                       style={{ flex: 1, fontSize: 20, borderBottomWidth: 0.5 }}
                       placeholder={this.state.placeholderText}
-                      onChangeText={value => this.updatePhoneNumber(value)}
+                      onChangeText={value => this.update_email_address(value)}
                     />
                   </Animated.View>
                 </Animated.View>
               </TouchableOpacity>
-              <Animated.Text
-                animation="slideInUp"
-                iterationCount={1}
-                style={{
-                  fontSize: 12,
-                  color: 'gray',
-                  position: 'absolute',
-                  bottom: titleTextBottom,
-                  left: titleTextLeft,
-                  right: titleTextLeft,
-                  opacity: titleTextOpacity,
-                  marginTop: 50 + '%',
-                  flex: 1,
-                }}
-              >
-                By continuing, we will send you an SMS to confirm your phone
-                number. Message &amp; data rates may apply.
-              </Animated.Text>
 
               {/** LOGIN OPTION **/}
             </Animated.View>
-            {/* <View
-              style={{
-                height: 70,
-                backgroundColor: 'white',
-                alignItems: 'flex-start',
-                justifyContent: 'center',
-                borderTopColor: '#e8e8ec',
-                borderTopWidth: 1,
-                paddingHorizontal: 25,
-              }}
-            >
-              <Text
-                onPress={() => this.props.navigation.navigate('Login')}
-                style={{
-                  color: '#5a7fdf',
-                  fontWeight: 'bold',
-                }}
-              >
-                Or if you have an account, login
-              </Text>
-            </View> */}
           </Animatable.View>
         </ImageBackground>
       </View>
     );
   }
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });

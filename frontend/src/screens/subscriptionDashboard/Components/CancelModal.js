@@ -66,7 +66,7 @@ export default class CancelModal extends Component {
    */
   handleCancellation() {
     this.setState({ submittingCancellation: true }, () => {
-      fetch('http://18.191.250.199:8000/subscriptionCancel/', {
+      fetch('http://127.0.0.1:8000/subscriptionCancel/', {
         method: 'POST',
         headers: {
           Accept: 'application/json',

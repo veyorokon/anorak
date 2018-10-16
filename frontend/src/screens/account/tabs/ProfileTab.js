@@ -34,7 +34,7 @@ export default class ProfileTab extends Component {
    */
   handleUpdate() {
     this.setState({ submittingSignup: true }, () => {
-      fetch('http://18.191.250.199:8000/updateProfile/', {
+      fetch('http://127.0.0.1:8000/updateProfile/', {
         method: 'POST',
         headers: {
           Accept: 'application/json',

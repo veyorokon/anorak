@@ -22,9 +22,9 @@ export default class VerifyPhone extends React.Component {
       placeholderText: 'Confirmation Code',
       proceed: true,
       code: '',
-      phoneNumber: this.props.navigation.state.params.phoneNumber,
-      numberIsNull: true,
+      email: this.props.navigation.state.params.email,
     };
+    alert(JSON.stringify(this.state.email));
   }
 
   static navigationOptions = {
@@ -137,7 +137,7 @@ export default class VerifyPhone extends React.Component {
   sendCodeVerifyRequest() {
     const number = this.state.phoneNumber;
     const code = this.state.code;
-    fetch('http://18.191.250.199:8000/api-verify-phone/', {
+    fetch('http://127.0.0.1:8000/api-verify-phone/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

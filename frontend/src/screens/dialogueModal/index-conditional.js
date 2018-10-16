@@ -53,7 +53,7 @@ export default class DialogueModal extends Component {
    * @return {[type]} [returns none]
    */
   handleSubmit() {
-    fetch('http://18.191.250.199:8000/user/', {
+    fetch('http://127.0.0.1:8000/user/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
