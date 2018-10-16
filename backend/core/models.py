@@ -1,12 +1,47 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.core.mail import send_mail
-from django.contrib.auth.models import PermissionsMixin
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.utils.translation import ugettext_lazy as _
-
+from django.conf import settings
 from .managers import UserManager
+from django.dispatch import receiver
+from django.core.mail import send_mail
+from django.db.models.signals import post_save, pre_save
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import PermissionsMixin
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.base_user import AbstractBaseUser
+
+import stripe
+stripe.api_key = settings.STRIPE_ACCOUNT_SID
+
+# Stores the user's billing information
+class AddressBilling(models.Model):
+    name_on_card = models.CharField(max_length=70, null=True, blank=True)
+    last_four = models.IntegerField(null=True, blank=True)
+    street = models.CharField(max_length=64, null=True, blank=True)
+    city = models.CharField(max_length=64, null=True, blank=True)
+    state = models.CharField(max_length=64, null=True, blank=True)
+    zip = models.IntegerField(null=True, blank=True)
+    valid = models.BooleanField(default=False)
+    
+
+class StripeCustomer(models.Model):
+    #The stripe customer id
+    stripe_customer_id = models.CharField(max_length=32, null=True, 
+        blank=True)
+    #The stripe plan id
+    stripe_credit_card_id = models.CharField(max_length=32, null=True,
+        blank=True)
+        
+    def create_stripe_customer(self):
+        data = stripe.Customer.create(email=self.user.email)
+        self.stripe_customer_id = data.id
+        self.save()
+        return data
+        
+    def get_stripe_customer(self):
+        customer = stripe.Customer.retrieve(self.stripe_customer_id)
+        return customer
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -17,7 +52,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         editable=True, auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('active'), default=False)
-
+    stripe_customer = models.OneToOneField(StripeCustomer, null=True,
+        on_delete=models.SET_NULL, related_name='user')
+    session_token = models.OneToOneField(Token, null=True,
+        on_delete=models.SET_NULL, related_name='session_user')
+    address_billing = models.OneToOneField(AddressBilling, null=True, 
+        blank=True, on_delete=models.SET_NULL, related_name='user')
+    
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
@@ -45,3 +86,22 @@ class User(AbstractBaseUser, PermissionsMixin):
         Sends an email to this User.
         '''
         send_mail(subject, message, from_email, [self.email], **kwargs)
+        
+    def validate_session_token(self, token):
+        if(self.session_token.key == token):
+            return True 
+        return False
+
+# Signals for Auth User model.
+@receiver(post_save, sender=User)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        session_token = Token.objects.create(user=instance)
+        stripe_customer = StripeCustomer.objects.create(user=instance)
+        stripe_customer.create_stripe_customer()
+        address_billing = AddressBilling.objects.create(user=instance)
+        instance.session_token = session_token
+        instance.stripe_customer = stripe_customer
+        instance.address_billing = address_billing
+        instance.save()
+        
