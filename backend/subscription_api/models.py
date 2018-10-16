@@ -7,7 +7,7 @@ from django_enumfield import enum
 class Squad(models.Model):
     #User who owns this subscription product
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, 
-        on_delete=models.CASCADE, related_name='owner')
+        on_delete=models.CASCADE)
     #Squad name
     name = models.CharField(max_length=32, null=True)
     #Squad description
@@ -30,6 +30,7 @@ class Squad(models.Model):
             self.date_created = timezone.now()
         self.date_modified = timezone.now()
         return super(Squad, self).save(*args, **kwargs)
+        
 
 
 class SquadDashboardElement(models.Model):

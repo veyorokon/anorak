@@ -1,0 +1,448 @@
+import React from 'react';
+import {
+  Text,
+  TextInput,
+  Platform,
+  Keyboard,
+  Dimensions,
+  Animated,
+  Image,
+  TouchableOpacity,
+  View,
+  ImageBackground,
+} from 'react-native';
+import { Icon } from 'native-base';
+import * as Animatable from 'react-native-animatable';
+import { AsyncStorage, Alert } from 'react-native';
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+
+export default class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      placeholderText: 'Enter your mobile number',
+      proceed: false,
+      phoneNumber: '',
+      numberIsNull: true,
+      tokenCredentials: {},
+    };
+    this._retrieveData();
+  }
+
+  static navigationOptions = {
+    header: null,
+  };
+
+  _retrieveData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('SQUAD_UP_KEY');
+      const username = await AsyncStorage.getItem('SQUAD_UP_USERNAME');
+      if (token !== null && username !== null) {
+        this.setState({
+          tokenCredentials: {
+            username: username,
+            token: token,
+          },
+        });
+        this.handleAutoTokenLogin();
+      }
+    } catch (error) {
+      return {};
+    }
+  };
+
+  handleAutoTokenLogin() {
+    fetch('http://18.191.250.199:8000/api-token-login/', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(this.state.tokenCredentials),
+    })
+      .then(response => {
+        if (response.status == 200) {
+          response.json();
+          this.props.navigation.navigate('SubscriptionDashboard', {
+            data: JSON.parse(response._bodyText),
+          });
+        } else {
+          throw new Error(response.status);
+        }
+      })
+      .catch(() => {
+        //alert(JSON.stringify(err.message));
+      });
+  }
+
+  componentWillMount() {
+    this.loginHeight = new Animated.Value(150);
+    this.keyboardWillShowListener = Keyboard.addListener(
+      'keyboardWillShow',
+      this.keyboardWillShow
+    );
+    this.keyboardWillHideListener = Keyboard.addListener(
+      'keyboardWillHide',
+      this.keyboardWillHide
+    );
+    this.keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      this.keyboardWillShow
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      this.keyboardWillHide
+    );
+
+    this.keyboardHeight = new Animated.Value(0);
+    this.forwardArrowOpacity = new Animated.Value(0);
+    this.borderBottomWidth = new Animated.Value(0);
+  }
+
+  keyboardWillShow = event => {
+    if (Platform.OS == 'android') {
+      var duration = 100;
+    } else {
+      duration = event.duration;
+    }
+
+    Animated.parallel([
+      Animated.timing(this.keyboardHeight, {
+        duration: duration + 100,
+        toValue: event.endCoordinates.height + 10,
+      }),
+      Animated.timing(this.forwardArrowOpacity, {
+        duration: duration,
+        toValue: 1,
+      }),
+      Animated.timing(this.borderBottomWidth, {
+        duration: duration,
+        toValue: 1,
+      }),
+    ]).start();
+  };
+
+  keyboardWillHide = event => {
+    if (Platform.OS == 'android') {
+      var duration = 100;
+    } else {
+      duration = event.duration;
+    }
+
+    this.setState({
+      placeholderText: 'Enter your mobile number',
+    });
+
+    Animated.parallel([
+      Animated.timing(this.keyboardHeight, {
+        duration: duration + 100,
+        toValue: 0,
+      }),
+      Animated.timing(this.forwardArrowOpacity, {
+        duration: duration,
+        toValue: 0,
+      }),
+      Animated.timing(this.borderBottomWidth, {
+        duration: duration,
+        toValue: 0,
+      }),
+    ]).start();
+  };
+
+  increaseHeightOfLogin = () => {
+    Animated.timing(this.loginHeight, {
+      toValue: SCREEN_HEIGHT,
+      duration: 500,
+    }).start(() => {
+      this.refs.textInputMobile.focus();
+      this.setState({
+        placeholderText: '092123456789',
+        proceed: true,
+      });
+    });
+  };
+
+  decreaseHeightOfLogin = () => {
+    Keyboard.dismiss();
+    this.setState({
+      proceed: false,
+    });
+    Animated.timing(this.loginHeight, {
+      toValue: 150,
+      duration: 500,
+    }).start();
+  };
+
+  allowForwardArrow() {
+    return this.state.proceed;
+  }
+
+  updatePhoneNumber(value) {
+    this.setState({ phoneNumber: value.replace(/[^0-9]/g, '') });
+  }
+
+  _showInvalidNumberAlert = () =>
+    Alert.alert(
+      'Invalid Number',
+      'Please enter a valid US phone number.',
+      [
+        {
+          text: 'OK',
+        },
+      ],
+      { cancelable: false }
+    );
+
+  sendPhoneAPICodeRequest() {
+    const number = '1' + this.state.phoneNumber;
+    fetch('http://18.191.250.199:8000/api-phone-code-request/', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ phoneNumber: number }),
+    })
+      .then(response => {
+        if (response.status == 201) {
+          response.json();
+          this.props.navigation.navigate('VerifyPhone', {
+            phoneNumber: number,
+          });
+        } else {
+          this._showInvalidNumberAlert();
+        }
+      })
+      .catch(() => {});
+  }
+
+  render() {
+    const headerTextOpacity = this.loginHeight.interpolate({
+      inputRange: [150, SCREEN_HEIGHT],
+      outputRange: [1, 0],
+    });
+
+    const marginTop = this.loginHeight.interpolate({
+      inputRange: [150, SCREEN_HEIGHT],
+      outputRange: [25, 100],
+    });
+
+    const headerBackArrowOpacity = this.loginHeight.interpolate({
+      inputRange: [150, SCREEN_HEIGHT],
+      outputRange: [0, 1],
+    });
+
+    const forwardArrowOpacity = this.loginHeight.interpolate({
+      inputRange: [150, SCREEN_HEIGHT],
+      outputRange: [0, 1],
+    });
+
+    const titleTextLeft = this.loginHeight.interpolate({
+      inputRange: [150, SCREEN_HEIGHT],
+      outputRange: [100, 25],
+    });
+
+    const titleTextBottom = this.loginHeight.interpolate({
+      inputRange: [150, 400, SCREEN_HEIGHT],
+      outputRange: [0, 0, 100],
+    });
+
+    const titleTextOpacity = this.loginHeight.interpolate({
+      inputRange: [150, SCREEN_HEIGHT],
+      outputRange: [0, 1],
+    });
+
+    return (
+      <View style={{ flex: 1 }}>
+        {/** BACK ARROW **/}
+        <Animated.View
+          style={{
+            position: 'absolute',
+            height: 60,
+            width: 60,
+            top: 60,
+            zIndex: 100,
+            left: 25,
+            opacity: headerBackArrowOpacity,
+          }}
+        >
+          <TouchableOpacity onPress={() => this.decreaseHeightOfLogin()}>
+            <Icon name="md-arrow-back" style={{ color: 'black' }} />
+          </TouchableOpacity>
+        </Animated.View>
+
+        <Animated.View
+          style={{
+            position: 'absolute',
+            height: 60,
+            width: 60,
+            right: 10,
+            bottom: this.keyboardHeight,
+            zIndex: 100,
+            opacity: forwardArrowOpacity,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 30,
+            flexDirection: 'row',
+          }}
+        >
+          <Icon
+            name="md-arrow-forward"
+            onPress={() => {
+              if (this.allowForwardArrow()) {
+                this.sendPhoneAPICodeRequest();
+              }
+            }}
+            style={{ color: 'black' }}
+          />
+        </Animated.View>
+
+        <ImageBackground
+          source={require('../../../assets/stars.jpg')}
+          style={{ flex: 1 }}
+        >
+          <View
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          >
+            <Animatable.View animation="zoomIn" iterationCount={1}>
+              <Text
+                style={{ fontWeight: 'bold', fontSize: 30, color: 'white' }}
+              >
+                SquadUp
+              </Text>
+            </Animatable.View>
+          </View>
+
+          {/** BOTTOM HALF **/}
+          <Animatable.View animation="slideInUp" iterationCount={1}>
+            <Animated.View
+              style={{
+                height: this.loginHeight,
+                backgroundColor: 'white',
+              }}
+            >
+              <View
+                style={{
+                  alignItems: 'flex-start',
+                }}
+              >
+                <Animated.View
+                  style={{
+                    opacity: headerTextOpacity,
+                    paddingHorizontal: 25,
+                    marginTop: marginTop,
+                  }}
+                >
+                  <Text style={{ fontSize: 24 }}>{`Let's Get Started`}</Text>
+                </Animated.View>
+              </View>
+
+              {/** BOTTOM FORM **/}
+              <TouchableOpacity onPress={() => this.increaseHeightOfLogin()}>
+                <Animated.View
+                  style={{
+                    marginTop: marginTop,
+                    paddingHorizontal: 25,
+                    flexDirection: 'row',
+                  }}
+                >
+                  <Animated.Text
+                    style={{
+                      fontSize: 24,
+                      color: 'gray',
+                      position: 'absolute',
+                      bottom: titleTextBottom,
+                      left: titleTextLeft,
+                      opacity: titleTextOpacity,
+                    }}
+                  >
+                    Sign Up
+                  </Animated.Text>
+
+                  <Image
+                    source={require('../../../assets/flag.png')}
+                    style={{
+                      height: 24,
+                      width: 24,
+                      resizeMode: 'contain',
+                    }}
+                  />
+                  <Animated.View
+                    pointerEvents="none"
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      borderBottomWidth: this.borderBottomWidth,
+                    }}
+                  >
+                    <Text style={{ fontSize: 20, paddingHorizontal: 10 }}>
+                      +1
+                    </Text>
+                    <TextInput
+                      ref="textInputMobile"
+                      keyboardType="numeric"
+                      style={{ flex: 1, fontSize: 20, borderBottomWidth: 0.5 }}
+                      placeholder={this.state.placeholderText}
+                      onChangeText={value => this.updatePhoneNumber(value)}
+                    />
+                  </Animated.View>
+                </Animated.View>
+              </TouchableOpacity>
+              <Animated.Text
+                animation="slideInUp"
+                iterationCount={1}
+                style={{
+                  fontSize: 12,
+                  color: 'gray',
+                  position: 'absolute',
+                  bottom: titleTextBottom,
+                  left: titleTextLeft,
+                  right: titleTextLeft,
+                  opacity: titleTextOpacity,
+                  marginTop: 50 + '%',
+                  flex: 1,
+                }}
+              >
+                By continuing, we will send you an SMS to confirm your phone
+                number. Message &amp; data rates may apply.
+              </Animated.Text>
+
+              {/** LOGIN OPTION **/}
+            </Animated.View>
+            {/* <View
+              style={{
+                height: 70,
+                backgroundColor: 'white',
+                alignItems: 'flex-start',
+                justifyContent: 'center',
+                borderTopColor: '#e8e8ec',
+                borderTopWidth: 1,
+                paddingHorizontal: 25,
+              }}
+            >
+              <Text
+                onPress={() => this.props.navigation.navigate('Login')}
+                style={{
+                  color: '#5a7fdf',
+                  fontWeight: 'bold',
+                }}
+              >
+                Or if you have an account, login
+              </Text>
+            </View> */}
+          </Animatable.View>
+        </ImageBackground>
+      </View>
+    );
+  }
+}
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#fff',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+// });
