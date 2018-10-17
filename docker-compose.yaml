@@ -1,0 +1,35 @@
+#Commented out frontend
+
+version: '3'
+services:
+
+  backend:
+    restart: always
+    build: backend/
+    working_dir: /app/backend/
+    command: bash -c "python check_db.py --service-name Postgres --ip database --port 5432 &&
+                      python manage.py migrate &&
+                      python manage.py runserver"
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    depends_on:
+      - database
+
+  database:
+    restart: always
+    image: postgres
+    ports:
+      - "5432:5432"
+
+  # nginx:
+  #   restart: always
+  #   image: nginx
+  #   depends_on:
+  #     - backend
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx/config:/etc/nginx

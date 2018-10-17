@@ -10,6 +10,14 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 import json
 
+def get_serialized_user(user):
+    """
+    Serializes the user object
+    """
+    serializer = UserSerializer(user, many=False)
+    return serializer
+
+
 class UserDetailAPI(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
     permission_classes = (IsAuthenticated,)
@@ -32,14 +40,14 @@ class UserCreationAPI(APIView):
         Updates the user object
         """
         user = self.get_new_or_inactive_user_else_none(request)
-        conflicts = self.check_user_form_for_conflicts(request)
-        if(conflicts):
-            return Response(
-                {'errors': conflicts}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
         if(user):
-            serialized_user = self.get_serialized_user(user)
+            conflicts = self.check_user_form_for_conflicts(request, user.pk)
+            if(conflicts):
+                return Response(
+                    {'errors': conflicts}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            serialized_user = get_serialized_user(user)
             return Response(
                 serialized_user.data, 
                 status=status.HTTP_201_CREATED
@@ -70,30 +78,24 @@ class UserCreationAPI(APIView):
                 phone_number = phone_number
             )
             ## NOTE: Add check if user is active and raise exception
-            self.update_user_password(user, request)
+            self.update_user(user, request)
         except:
             user = None
         return user
         
         
-    def get_serialized_user(self, user):
-        """
-        Serializes the user object
-        """
-        serializer = UserSerializer(user, many=False)
-        return serializer
-        
-        
-    def update_user_password(self, user, request):
+    def update_user(self, user, request):
         """
         Updates the user's password
         """
         password = request.data['user']['password']
+        email = request.data['user']['email']
         user.set_password(password)
+        user.email = email
         user.save()
         
         
-    def check_user_form_for_conflicts(self, request):
+    def check_user_form_for_conflicts(self, request, instancePk):
         """
         Builds kwargs as dictionary of fields and values to check for conflicts
         """
@@ -105,16 +107,16 @@ class UserCreationAPI(APIView):
                     {'email': email}, 
                 ]
             }
-        return self.get_conflicts(**kwargs)
+        return self.get_conflicts(instancePk, **kwargs)
         
         
-    def get_conflicts(self, **kwargs):
+    def get_conflicts(self, instancePk, **kwargs):
         """
         Searches for all users with conflicting (unique) kwargs fields
         """
         conflicts = []
         for query in kwargs['data']:            
-            user = User.objects.filter(**query)
+            user = User.objects.filter(**query).exclude(pk=instancePk)
             if(user):
                 (field, value), = query.items()
                 conflicts.append(field)
@@ -125,14 +127,44 @@ class UserCreationAPI(APIView):
 
 class UserTokenLoginAPI(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
     
     def post(self, request, *args, **kwargs):
         """
         Updates the user object
         """
-        print(request.data)
+        isSessionValid, user = self.get_valid_session_login(request)
+        if(isSessionValid and user):
+            serialized_user = get_serialized_user(user)
+            return Response(
+                serialized_user.data, 
+                status=status.HTTP_200_OK
+            )
         return Response(
             '{"success":"false"}', 
             status=status.HTTP_400_BAD_REQUEST
         )
+        
+    def get_valid_session_login(self, request):
+        """
+        Checks if the user and token are in a valid session
+        """
+        user = self.get_user_from_request_username(request)
+        session_token = request.data['session_token']
+        if(user):
+            isUserValidated = user.validate_session_token(session_token)
+            return True, user
+        return False, user
+        
+        
+    def get_user_from_request_username(self, request):
+        """
+        Get the user object with the username
+        """
+        email = request.data['email']
+        try:
+            user = User.objects.get(email=email)
+        except:
+            user = None
+        return user
+        
+    

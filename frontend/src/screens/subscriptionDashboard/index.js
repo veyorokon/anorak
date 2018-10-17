@@ -139,12 +139,12 @@ export default class SubscriptionDashboard extends Component {
             <Text style={{ color: '#307FF6' }}>Logout</Text>
           </Button>
         </View>
-        <SortableList
+        {/* <SortableList
           style={styles.list}
           contentContainerStyle={styles.contentContainer}
           data={this.state.dashboardData}
           renderRow={this._renderRow}
-        />
+        /> */}
 
         <Footer>
           <FooterTab>
@@ -231,7 +231,7 @@ class Row extends Component {
         toValue: Number(nextProps.active),
       }).start();
     }
-    this.setState({ isBillingValid: nextProps.isBillingValid });
+    // this.setState({ isBillingValid: nextProps.isBillingValid });
     //alert('IS BILLING VALID: ' + nextProps.isBillingValid);
   }
 
@@ -249,9 +249,9 @@ class Row extends Component {
           body={data.body}
           footer={data.footer}
           termsLink={data.termsLink}
-          isBillingValid={this.props.isBillingValid}
-          user={this.props.user}
-          token={this.props.token}
+          // isBillingValid={this.props.isBillingValid}
+          // user={this.props.user}
+          // token={this.props.token}
         />
       </Animated.View>
     );

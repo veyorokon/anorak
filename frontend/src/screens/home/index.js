@@ -41,7 +41,7 @@ export default class Home extends React.Component {
       if (session_token !== null && username !== null) {
         this.setState({
           credentials: {
-            username: username,
+            email: username,
             session_token: session_token,
           },
         });
@@ -53,7 +53,7 @@ export default class Home extends React.Component {
   };
 
   request_auto_token_login() {
-    //alert(JSON.stringify(this.state))
+    alert(JSON.stringify(this.state.credentials));
     fetch('http://127.0.0.1:8000/api/users/token_login/', {
       method: 'POST',
       headers: {
@@ -64,10 +64,11 @@ export default class Home extends React.Component {
     })
       .then(response => {
         if (response.status == 200) {
-          response.json();
-          this.props.navigation.navigate('SubscriptionDashboard', {
-            data: JSON.parse(response._bodyText),
-          });
+          //response.json();
+          alert(JSON.strigify(response));
+          // this.props.navigation.navigate('SubscriptionDashboard', {
+          //   data: JSON.parse(response._bodyText),
+          // });
         } else {
           throw new Error(response.status);
         }
