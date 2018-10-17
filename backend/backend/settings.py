@@ -33,6 +33,14 @@ ALLOWED_HOSTS=['127.0.0.1']
 STRIPE_ACCOUNT_SID = 'sk_test_9Xz79VxZxWJbanvxDAWLYmoN'
 
 
+#Phoone verification - Twilio
+TWILIO_ACCOUNT_SID = 'ACaf89a225145d292dfb5ad9ec6e8ab10e'
+TWILIO_AUTH_TOKEN = 'de38eed12958a9d20b3e0a058ee7b5ef'
+TWILIO_NUMBER = '+18596948148'
+TWILIO_DEFAULT_CALLERID = 'SquadUp'
+
+
+
 # Application definition
 
 INSTALLED_APPS = [

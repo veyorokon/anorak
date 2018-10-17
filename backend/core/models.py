@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-from random import randint
+
 from django.db import models
 from django.conf import settings
 from .managers import UserManager
@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import PermissionsMixin
 from django.db.models.signals import post_save, pre_save
 from django.contrib.auth.base_user import AbstractBaseUser
-from verification_api.models import *
+
 import stripe
 stripe.api_key = settings.STRIPE_ACCOUNT_SID
 
@@ -46,9 +46,9 @@ class StripeCustomer(models.Model):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(_('email address'), unique=True)
-    email_verification_code = models.OneToOneField(EmailVerificationCode, 
-        null=True, on_delete=models.CASCADE, related_name='user')
+    email = models.EmailField(_('email address'), unique=True, null=True)
+    phone_number = models.CharField( max_length=17, blank=True, unique=True, 
+        null=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
     date_joined = models.DateTimeField(_('date joined'), 
@@ -94,6 +94,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         if(self.session_token.key == token):
             return True 
         return False
+        
+    def __str__(self):
+        return 'Email={0}, Phone Number={1}'.format(self.email,
+            self.phone_number)
 
 # Signals for Auth User model.
 @receiver(post_save, sender=User)

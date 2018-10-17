@@ -22,9 +22,8 @@ export default class VerifyPhone extends React.Component {
       placeholderText: 'Confirmation Code',
       proceed: true,
       code: '',
-      email: this.props.navigation.state.params.email,
+      phone_number: this.props.navigation.state.params.phone_number,
     };
-    alert(JSON.stringify(this.state.email));
   }
 
   static navigationOptions = {
@@ -134,35 +133,30 @@ export default class VerifyPhone extends React.Component {
       { cancelable: false }
     );
 
-  sendCodeVerifyRequest() {
-    const number = this.state.phoneNumber;
+  send_phone_verification_code() {
+    const number = this.state.phone_number;
     const code = this.state.code;
-    fetch('http://127.0.0.1:8000/api-verify-phone/', {
+    fetch('http://127.0.0.1:8000/api/phone_verification_codes/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ phoneNumber: number, code: code }),
+      body: JSON.stringify({
+        phone_number: number,
+        code: code,
+        isRequestingCode: 0,
+      }),
     }).then(response => {
       if (response.status == 200) {
-        if (JSON.parse(response._bodyText).exists) {
-          this.props.navigation.navigate('Onboarding', {
-            data: JSON.parse(response._bodyText),
-          });
-        } else {
-          this.props.navigation.navigate('SubscriptionDeals', {
-            phoneNumber: number,
-            validation_token: JSON.parse(response._bodyText).validation_token,
-          });
-        }
+        this.props.navigation.navigate('CompleteProfile', {
+          session_token: JSON.parse(response._bodyText),
+          phone_number: number,
+        });
       } else {
         this._showInvalidConfirmationCodeAlert();
       }
     });
-    // // .catch(() => {
-    //   alert(JSON.stringify(response.message));
-    // });
   }
 
   render() {
@@ -240,7 +234,7 @@ export default class VerifyPhone extends React.Component {
             name="md-arrow-forward"
             onPress={() => {
               if (this.allowForwardArrow()) {
-                this.sendCodeVerifyRequest();
+                this.send_phone_verification_code();
               }
             }}
             style={{ color: 'black' }}

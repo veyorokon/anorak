@@ -16,59 +16,23 @@ import {
 } from 'native-base';
 import styles from './styles';
 
-const DEBUG = false;
-
 class CompleteProfile extends Component {
   constructor(props) {
     super(props);
-    if (DEBUG) {
-      var nextVal = this.genRandomValue();
-      this.state = {
-        submittingSignup: false,
-        data: {
-          credentials: {
-            first_name: 'test' + nextVal + 'first_name',
-            last_name: 'test' + nextVal + 'last_name',
-            email: 'test' + nextVal + '@test.com',
-            phoneNumber: nextVal,
-          },
-          address: {
-            street: 'Street' + nextVal,
-            city: 'City' + nextVal,
-            state: 'State' + nextVal,
-            zip: nextVal,
-          },
-          validation_token: nextVal,
-        },
-      };
-    } else {
-      this.state = {
-        data: {
-          credentials: {
-            first_name: '',
-            last_name: '',
-            email: '',
-            phoneNumber: this.props.navigation.state.params.phoneNumber,
-          },
-          address: { street: '', city: '', state: '', zip: '' },
-          validation_token: this.props.navigation.state.params.validation_token,
-        },
-      };
-    }
+
+    this.state = {
+      data: {
+        email: '',
+      },
+      password: { first: '', second: '' },
+      credentials: {
+        session_token: this.props.navigation.state.params.session_token,
+        phone_number: this.props.navigation.state.params.phone_number,
+      },
+    };
   }
 
-  /**
- * Used in testing API to generate random value
- * @return {[type]} [description]
- */
-  genRandomValue() {
-    const min = 1;
-    const max = 1000000;
-    const rand = min + Math.random() * (max - min);
-    return parseInt(rand);
-  }
-
-  _showRegistrationDuplicateEmailAlert = () =>
+  show_duplicate_email_alert = () =>
     Alert.alert(
       'Email Is Being Used',
       'Please enter an email that is not already taken.',
@@ -82,27 +46,44 @@ class CompleteProfile extends Component {
     );
 
   /**
-   * handleRegistration Sends a POST request to the server to register user
+   * send_registration_request Sends a POST request to the server to register user
    * @return {[type]} [returns none]
    */
-  handleRegistration() {
+  send_registration_request() {
     this.setState({ submittingSignup: true }, () => {
-      fetch('http://127.0.0.1:8000/user/', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(this.state.data),
-      })
+      const session_token = JSON.stringify(
+        this.state.credentials.session_token
+      );
+      const email = this.state.data.email;
+      const phone_number = this.state.credentials.phone_number;
+      const password = this.state.password.first;
+      fetch(
+        'http://127.0.0.1:8000/api/users/creation/?session_token=' +
+          session_token,
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user: {
+              email: email,
+              password: password,
+              phone_number: phone_number,
+            },
+            session_token: session_token,
+          }),
+        }
+      )
         .then(response => {
           response.json();
           if (response.status == 201) {
             this.props.navigation.navigate('Onboarding', {
-              data: JSON.parse(response._bodyText),
+              user: JSON.parse(response._bodyText),
             });
           } else {
-            this._showRegistrationDuplicateEmailAlert();
+            this.show_duplicate_email_alert();
           }
         })
         .finally(() => {
@@ -112,13 +93,13 @@ class CompleteProfile extends Component {
   }
 
   /**
-   * [handleCredentialsInput updates the credentials to be POSTed to the server]
+   * [update_user_information updates the credentials to be POSTed to the server]
    * @param  {[type]} value the new value to be added to the state
    * @param  {[type]} field the key to the credentials dictionary for the value
    * @return {[type]}       returns none
    */
-  handleCredentialsInput(value, group, field) {
-    let newCredentials = Object.assign(this.state.data);
+  update_user_information(value, group, field) {
+    let newCredentials = Object.assign(this.state);
     newCredentials[group][field] = value;
     this.setState({
       group: newCredentials,
@@ -152,77 +133,30 @@ class CompleteProfile extends Component {
                 autoCorrect={false}
                 autoCapitalize={'none'}
                 onChangeText={value =>
-                  this.handleCredentialsInput(value, 'credentials', 'email')}
-              />
-            </Item>
-          </Form>
-          <Form
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-          >
-            <Item floatingLabel last style={{ width: 49 + '%' }}>
-              <Label>First Name</Label>
-              <Input
-                autoCorrect={false}
-                onChangeText={value =>
-                  this.handleCredentialsInput(
-                    value,
-                    'credentials',
-                    'first_name'
-                  )}
-              />
-            </Item>
-            <Item floatingLabel last style={{ width: 49 + '%' }}>
-              <Label>Last Name</Label>
-              <Input
-                autoCorrect={false}
-                onChangeText={value =>
-                  this.handleCredentialsInput(
-                    value,
-                    'credentials',
-                    'last_name'
-                  )}
+                  this.update_user_information(value, 'data', 'email')}
               />
             </Item>
           </Form>
 
           <Form>
             <Item floatingLabel>
-              <Label>Street Address</Label>
+              <Label>Create Your Password</Label>
               <Input
+                secureTextEntry={true}
                 autoCorrect={false}
                 onChangeText={value =>
-                  this.handleCredentialsInput(value, 'address', 'street')}
+                  this.update_user_information(value, 'password', 'first')}
               />
             </Item>
           </Form>
-          <Form
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-            }}
-          >
-            <Item floatingLabel last style={{ width: 40 + '%' }}>
-              <Label>City</Label>
+          <Form>
+            <Item floatingLabel>
+              <Label>Password Confirmation</Label>
               <Input
+                secureTextEntry={true}
                 autoCorrect={false}
                 onChangeText={value =>
-                  this.handleCredentialsInput(value, 'address', 'city')}
-              />
-            </Item>
-            <Item floatingLabel last style={{ width: 19 + '%' }}>
-              <Label>State</Label>
-              <Input
-                onChangeText={value =>
-                  this.handleCredentialsInput(value, 'address', 'state')}
-              />
-            </Item>
-            <Item floatingLabel last style={{ width: 35 + '%' }}>
-              <Label>Zip Code</Label>
-              <Input
-                autoCorrect={false}
-                onChangeText={value =>
-                  this.handleCredentialsInput(value, 'address', 'zip')}
+                  this.update_user_information(value, 'password', 'second')}
               />
             </Item>
           </Form>
@@ -231,7 +165,7 @@ class CompleteProfile extends Component {
             block
             disabled={this.state.submittingSignup}
             style={{ margin: 15, marginTop: 50 }}
-            onPress={() => this.handleRegistration()}
+            onPress={() => this.send_registration_request()}
           >
             {/** SIGN UP **/}
             <Text>Signup</Text>

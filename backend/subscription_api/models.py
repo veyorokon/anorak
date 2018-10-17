@@ -2,11 +2,11 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django_enumfield import enum
-
+from core.models import User
 
 class Squad(models.Model):
     #User who owns this subscription product
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, 
+    owner = models.ForeignKey(User, 
         on_delete=models.CASCADE)
     #Squad name
     name = models.CharField(max_length=32, null=True)
@@ -37,7 +37,7 @@ class SquadDashboardElement(models.Model):
     #The squad that the user has added to their dashboard
     squad = models.ForeignKey(Squad, on_delete=models.CASCADE)
     #The user this dashboard belongs to 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, 
+    user = models.ForeignKey(User, 
         on_delete=models.CASCADE)
 
 
@@ -81,7 +81,7 @@ class StripeSubscription(models.Model):
         
 class SquadMember(models.Model):
     #User who owns this subscription
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     #User who owns this subscription
     squad = models.ForeignKey(Squad, on_delete=models.CASCADE)
     #Squad description

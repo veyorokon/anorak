@@ -6,6 +6,7 @@ import Onboarding from 'react-native-onboarding-swiper';
 export default class Simple extends Component {
   constructor(props) {
     super(props);
+    alert(JSON.stringify(this.props.navigation.state.params.user));
   }
   render() {
     return (
@@ -37,7 +38,7 @@ export default class Simple extends Component {
         ]}
         onDone={() =>
           this.props.navigation.navigate('SubscriptionDashboard', {
-            data: this.props.navigation.state.params.data,
+            user: this.props.navigation.state.params.user,
           })}
       />
     );

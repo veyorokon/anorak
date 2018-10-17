@@ -21,16 +21,60 @@ export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      placeholderText: 'Enter your email address',
+      placeholderText: 'Enter your mobile number',
       proceed: false,
-      email: '',
+      phone_number: '',
+      numberIsNull: true,
       tokenCredentials: {},
     };
+    //this._retrieveData();
   }
 
   static navigationOptions = {
     header: null,
   };
+
+  _retrieveData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('SQUAD_UP_KEY');
+      const username = await AsyncStorage.getItem('SQUAD_UP_USERNAME');
+      if (token !== null && username !== null) {
+        this.setState({
+          tokenCredentials: {
+            username: username,
+            token: token,
+          },
+        });
+        this.handleAutoTokenLogin();
+      }
+    } catch (error) {
+      return {};
+    }
+  };
+
+  handleAutoTokenLogin() {
+    fetch('http://127.0.0.1:8000/api-token-login/', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(this.state.tokenCredentials),
+    })
+      .then(response => {
+        if (response.status == 200) {
+          response.json();
+          this.props.navigation.navigate('SubscriptionDashboard', {
+            data: JSON.parse(response._bodyText),
+          });
+        } else {
+          throw new Error(response.status);
+        }
+      })
+      .catch(() => {
+        //alert(JSON.stringify(err.message));
+      });
+  }
 
   componentWillMount() {
     this.loginHeight = new Animated.Value(150);
@@ -87,7 +131,7 @@ export default class Home extends React.Component {
     }
 
     this.setState({
-      placeholderText: 'Enter your email address',
+      placeholderText: 'Enter your mobile number',
     });
 
     Animated.parallel([
@@ -111,9 +155,9 @@ export default class Home extends React.Component {
       toValue: SCREEN_HEIGHT,
       duration: 500,
     }).start(() => {
-      this.refs.emailInput.focus();
+      this.refs.textInputMobile.focus();
       this.setState({
-        placeholderText: 'your_email@example.com',
+        placeholderText: '092123456789',
         proceed: true,
       });
     });
@@ -130,31 +174,44 @@ export default class Home extends React.Component {
     }).start();
   };
 
-  enable_forward_arrow() {
+  allow_forward_arrow() {
     return this.state.proceed;
   }
 
-  update_email_address(value) {
-    this.setState({ email: value });
+  update_phone_number(value) {
+    this.setState({ phone_number: value.replace(/[^0-9]/g, '') });
   }
 
-  send_email_confirmation_code() {
-    const email = this.state.email;
-    fetch('http://127.0.0.1:8000/api/email_verification_codes/', {
+  _showInvalidNumberAlert = () =>
+    Alert.alert(
+      'Invalid Number',
+      'Please enter a valid US phone number.',
+      [
+        {
+          text: 'OK',
+        },
+      ],
+      { cancelable: false }
+    );
+
+  request_phone_verification_code() {
+    const number = '1' + this.state.phone_number;
+    fetch('http://127.0.0.1:8000/api/phone_verification_codes/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email: email }),
+      body: JSON.stringify({ phone_number: number, isRequestingCode: 1 }),
     })
       .then(response => {
         if (response.status == 201) {
           response.json();
           this.props.navigation.navigate('VerifyPhone', {
-            email: email,
+            phone_number: number,
           });
         } else {
+          this._showInvalidNumberAlert();
         }
       })
       .catch(() => {});
@@ -233,8 +290,8 @@ export default class Home extends React.Component {
           <Icon
             name="md-arrow-forward"
             onPress={() => {
-              if (this.enable_forward_arrow()) {
-                this.send_email_confirmation_code();
+              if (this.allow_forward_arrow()) {
+                this.request_phone_verification_code();
               }
             }}
             style={{ color: 'black' }}
@@ -300,17 +357,17 @@ export default class Home extends React.Component {
                       opacity: titleTextOpacity,
                     }}
                   >
-                    Enter your email address
+                    Sign Up
                   </Animated.Text>
 
-                  {/* <Image
+                  <Image
                     source={require('../../../assets/flag.png')}
                     style={{
                       height: 24,
                       width: 24,
                       resizeMode: 'contain',
                     }}
-                  /> */}
+                  />
                   <Animated.View
                     pointerEvents="none"
                     style={{
@@ -319,17 +376,37 @@ export default class Home extends React.Component {
                       borderBottomWidth: this.borderBottomWidth,
                     }}
                   >
+                    <Text style={{ fontSize: 20, paddingHorizontal: 10 }}>
+                      +1
+                    </Text>
                     <TextInput
-                      autoCorrect={false}
-                      autoCapitalize={'none'}
-                      ref="emailInput"
+                      ref="textInputMobile"
+                      keyboardType="numeric"
                       style={{ flex: 1, fontSize: 20, borderBottomWidth: 0.5 }}
                       placeholder={this.state.placeholderText}
-                      onChangeText={value => this.update_email_address(value)}
+                      onChangeText={value => this.update_phone_number(value)}
                     />
                   </Animated.View>
                 </Animated.View>
               </TouchableOpacity>
+              <Animated.Text
+                animation="slideInUp"
+                iterationCount={1}
+                style={{
+                  fontSize: 12,
+                  color: 'gray',
+                  position: 'absolute',
+                  bottom: titleTextBottom,
+                  left: titleTextLeft,
+                  right: titleTextLeft,
+                  opacity: titleTextOpacity,
+                  marginTop: 50 + '%',
+                  flex: 1,
+                }}
+              >
+                By continuing, we will send you an SMS to confirm your phone
+                number. Message &amp; data rates may apply.
+              </Animated.Text>
 
               {/** LOGIN OPTION **/}
             </Animated.View>

@@ -23,6 +23,7 @@ class DashboardAPI(APIView):
             return Response(serializer)
         return Response({'data':[]})
         
+    
     def is_session_validated(self, request):
         """
         Verifies is the user who sent the response owns the session token
@@ -31,6 +32,7 @@ class DashboardAPI(APIView):
         session_token = request.GET.get('session_token')
         isSessionValidated = user.validate_session_token(session_token)
         return isSessionValidated
+    
         
     def get_user_dashboard_elements(self, request):
         """
