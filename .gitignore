@@ -12,8 +12,6 @@ db.sqlite3
 squadupDev
 __init__.py
 
-#Migrations
-
 
 *.log
 .nvm
@@ -100,9 +98,6 @@ package-lock.json
 # ReactCommon subdir shouldn't have Xcode project
 /ReactCommon/**/*.xcodeproj
 RNTester/build
-
-# django migrations
-migrations/
 
 #Deco
 frontend/.deco
