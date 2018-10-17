@@ -60,7 +60,6 @@ export default class Home extends React.Component {
       body: JSON.stringify(this.state.credentials),
     })
       .then(response => {
-        //alert(JSON.stringify(response._bodyInit));
         if (response.status == 200) {
           this.props.navigation.navigate('SubscriptionDashboard', {
             user: JSON.parse(response._bodyInit),

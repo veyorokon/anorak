@@ -100,14 +100,14 @@ export default class SubscriptionDashboard extends Component {
     }
   }
 
-  handleLogout() {
-    fetch('http://127.0.0.1:8000/logout/', {
+  send_logout_request() {
+    fetch('http://127.0.0.1:8000/api/users/logout/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(this.state.data),
+      body: JSON.stringify(this.state.user),
     })
       .then(response => {
         response.json();
@@ -133,7 +133,7 @@ export default class SubscriptionDashboard extends Component {
               justifyContent: 'center',
               alignItems: 'center',
             }}
-            onPress={() => this.handleLogout()}
+            onPress={() => this.send_logout_request()}
           >
             <Text style={{ color: '#307FF6' }}>Logout</Text>
           </Button>

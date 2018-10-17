@@ -91,9 +91,22 @@ class User(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
         
     def validate_session_token(self, token):
-        if(self.session_token.key == token):
-            return True 
+        print(token)
+        try:
+            if(self.session_token.key == token):
+                return True 
+        except:
+            self.create_session_token()
         return False
+    
+    def delete_session_token(self):
+        self.session_token.delete()
+        self.session_token = None
+        self.save()
+        
+    def create_session_token(self):
+        self.session_token = Token.objects.create(user=self)
+        self.save()
         
     def __str__(self):
         return 'Email={0}, Phone Number={1}'.format(self.email,
@@ -111,4 +124,3 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         instance.stripe_customer = stripe_customer
         instance.address_billing = address_billing
         instance.save()
-        
