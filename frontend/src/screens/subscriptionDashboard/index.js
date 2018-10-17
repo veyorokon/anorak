@@ -55,7 +55,7 @@ export default class SubscriptionDashboard extends Component {
    * @return {[type]} [description]
    */
   componentWillMount() {
-    this.updateBillingData();
+    //this.updateBillingData();
   }
 
   updateBillingData() {
@@ -92,8 +92,8 @@ export default class SubscriptionDashboard extends Component {
 
   async _storeData() {
     try {
-      const username = this.state.data.user.email;
-      const session_token = this.state.data.user.session_token;
+      const username = this.state.user.email;
+      const session_token = this.state.user.session_token;
       await AsyncStorage.setItem('SQUAD_UP_KEY', session_token);
       await AsyncStorage.setItem('SQUAD_UP_USERNAME', username);
     } catch (error) {
@@ -155,8 +155,8 @@ export default class SubscriptionDashboard extends Component {
             <Button
               onPress={() =>
                 this.props.navigation.navigate('Account', {
-                  user: this.state.data.user,
-                  token: this.state.data.token,
+                  user: this.state.user,
+                  //token: this.state.user.session_token,
                 })}
             >
               <Text>Account</Text>
@@ -173,10 +173,10 @@ export default class SubscriptionDashboard extends Component {
       <Row
         data={data}
         active={active}
-        isBillingValid={this.state.data.user.address.billing.valid}
-        navigation={this.props.navigation}
-        user={this.state.data.user}
-        token={this.state.tokenCredentials.token}
+        // isBillingValid={this.state.user.address.billing.valid}
+        // navigation={this.props.navigation}
+        // user={this.state.user}
+        // token={this.state.tokenCredentials.token}
       />
     );
   };

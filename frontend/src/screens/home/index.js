@@ -25,7 +25,7 @@ export default class Home extends React.Component {
       proceed: false,
       phone_number: '',
       numberIsNull: true,
-      tokenCredentials: {},
+      credentials: {},
     };
     this.retrieve_data();
   }
@@ -53,13 +53,14 @@ export default class Home extends React.Component {
   };
 
   request_auto_token_login() {
-    fetch('http://127.0.0.1:8000/api-token-login/', {
+    //alert(JSON.stringify(this.state))
+    fetch('http://127.0.0.1:8000/api/users/token_login/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(this.state.tokenCredentials),
+      body: JSON.stringify(this.state.credentials),
     })
       .then(response => {
         if (response.status == 200) {

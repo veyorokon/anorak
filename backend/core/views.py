@@ -123,8 +123,9 @@ class UserCreationAPI(APIView):
         return conflicts
 
 
-class UserLoginAPI(APIView):
+class UserTokenLoginAPI(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
     
     def post(self, request, *args, **kwargs):
         """
