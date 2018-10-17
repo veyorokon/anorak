@@ -47,13 +47,10 @@ export default class Home extends React.Component {
         });
         this.request_auto_token_login();
       }
-    } catch (error) {
-      return {};
-    }
+    } catch (error) {}
   };
 
   request_auto_token_login() {
-    alert(JSON.stringify(this.state.credentials));
     fetch('http://127.0.0.1:8000/api/users/token_login/', {
       method: 'POST',
       headers: {
@@ -63,14 +60,12 @@ export default class Home extends React.Component {
       body: JSON.stringify(this.state.credentials),
     })
       .then(response => {
+        //alert(JSON.stringify(response._bodyInit));
         if (response.status == 200) {
-          //response.json();
-          alert(JSON.strigify(response));
-          // this.props.navigation.navigate('SubscriptionDashboard', {
-          //   data: JSON.parse(response._bodyText),
-          // });
+          this.props.navigation.navigate('SubscriptionDashboard', {
+            user: JSON.parse(response._bodyInit),
+          });
         } else {
-          throw new Error(response.status);
         }
       })
       .catch(() => {

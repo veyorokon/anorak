@@ -28,7 +28,6 @@ export default class SubscriptionDashboard extends Component {
 
       dashboardData: {},
     };
-
     this._storeData();
   }
 
@@ -139,12 +138,12 @@ export default class SubscriptionDashboard extends Component {
             <Text style={{ color: '#307FF6' }}>Logout</Text>
           </Button>
         </View>
-        {/* <SortableList
+        <SortableList
           style={styles.list}
           contentContainerStyle={styles.contentContainer}
           data={this.state.dashboardData}
           renderRow={this._renderRow}
-        /> */}
+        />
 
         <Footer>
           <FooterTab>
@@ -155,8 +154,8 @@ export default class SubscriptionDashboard extends Component {
             <Button
               onPress={() =>
                 this.props.navigation.navigate('Account', {
-                  user: this.state.user,
-                  //token: this.state.user.session_token,
+                  user: this.state.data.user,
+                  token: this.state.data.token,
                 })}
             >
               <Text>Account</Text>
@@ -173,10 +172,10 @@ export default class SubscriptionDashboard extends Component {
       <Row
         data={data}
         active={active}
-        // isBillingValid={this.state.user.address.billing.valid}
-        // navigation={this.props.navigation}
-        // user={this.state.user}
-        // token={this.state.tokenCredentials.token}
+        isBillingValid={this.state.data.user.address.billing.valid}
+        navigation={this.props.navigation}
+        user={this.state.data.user}
+        token={this.state.tokenCredentials.token}
       />
     );
   };
@@ -231,7 +230,7 @@ class Row extends Component {
         toValue: Number(nextProps.active),
       }).start();
     }
-    // this.setState({ isBillingValid: nextProps.isBillingValid });
+    this.setState({ isBillingValid: nextProps.isBillingValid });
     //alert('IS BILLING VALID: ' + nextProps.isBillingValid);
   }
 
@@ -249,9 +248,9 @@ class Row extends Component {
           body={data.body}
           footer={data.footer}
           termsLink={data.termsLink}
-          // isBillingValid={this.props.isBillingValid}
-          // user={this.props.user}
-          // token={this.props.token}
+          isBillingValid={this.props.isBillingValid}
+          user={this.props.user}
+          token={this.props.token}
         />
       </Animated.View>
     );

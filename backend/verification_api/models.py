@@ -37,7 +37,7 @@ class EmailVerificationCode(models.Model):
         self.save()
         
     def __str__(self):
-        return self.email, self.code # Extends the User model
+        return self.email # Extends the User model
     
         
 class PhoneVerificationCode(models.Model):
@@ -90,4 +90,4 @@ class PhoneVerificationCode(models.Model):
         return self.user
         
     def __str__(self):
-        return self.phoneNumber, self.code # Extends the User model
+        return self.phone_number
