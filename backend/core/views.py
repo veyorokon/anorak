@@ -31,7 +31,7 @@ class UserCreationAPI(APIView):
         """
         Updates the user object
         """
-        user = self.get_user_or_none(request)
+        user = self.get_new_or_inactive_user_else_none(request)
         conflicts = self.check_user_form_for_conflicts(request)
         if(conflicts):
             return Response(
@@ -58,7 +58,7 @@ class UserCreationAPI(APIView):
         return json.loads(session_token)['session_token']
     
     
-    def get_user_or_none(self, request):
+    def get_new_or_inactive_user_else_none(self, request):
         """
         Retrieves the user matching the credentials or returns None 
         """
@@ -69,6 +69,7 @@ class UserCreationAPI(APIView):
                 session_token__key = session_token,
                 phone_number = phone_number
             )
+            ## NOTE: Add check if user is active and raise exception
             self.update_user_password(user, request)
         except:
             user = None
@@ -120,3 +121,17 @@ class UserCreationAPI(APIView):
         if(len(conflicts)==0):
             return None
         return conflicts
+
+
+class UserLoginAPI(APIView):
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    
+    def post(self, request, *args, **kwargs):
+        """
+        Updates the user object
+        """
+        print(request.data)
+        return Response(
+            '{"success":"false"}', 
+            status=status.HTTP_400_BAD_REQUEST
+        )

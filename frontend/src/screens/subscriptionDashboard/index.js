@@ -24,24 +24,9 @@ export default class SubscriptionDashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: this.props.navigation.state.params.data,
-      tokenCredentials: {
-        username: this.props.navigation.state.params.data.user.profile.username,
-        token: this.props.navigation.state.params.data.token,
-      },
-      dashboardData: {
-        0: {
-          text: 'SquadUp Phone Plan',
-          price: '$ 35',
-          body:
-            'Unlimited phone data provided though Cricket. No contract, cancel anytime. Billed monthly.',
-          status: this.getSquadUpOption(
-            this.props.navigation.state.params.data.subscriber
-          ),
-          footer: 'Terms',
-          termsLink: 'https://www.cricketwireless.com/terms',
-        },
-      },
+      user: this.props.navigation.state.params.user,
+
+      dashboardData: {},
     };
 
     this._storeData();
@@ -107,9 +92,9 @@ export default class SubscriptionDashboard extends Component {
 
   async _storeData() {
     try {
-      const username = this.state.data.user.profile.username;
-      const token = this.state.data.token;
-      await AsyncStorage.setItem('SQUAD_UP_KEY', token);
+      const username = this.state.data.user.email;
+      const session_token = this.state.data.user.session_token;
+      await AsyncStorage.setItem('SQUAD_UP_KEY', session_token);
       await AsyncStorage.setItem('SQUAD_UP_USERNAME', username);
     } catch (error) {
       // Error saving data

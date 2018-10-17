@@ -27,32 +27,32 @@ export default class Home extends React.Component {
       numberIsNull: true,
       tokenCredentials: {},
     };
-    //this._retrieveData();
+    this.retrieve_data();
   }
 
   static navigationOptions = {
     header: null,
   };
 
-  _retrieveData = async () => {
+  retrieve_data = async () => {
     try {
-      const token = await AsyncStorage.getItem('SQUAD_UP_KEY');
+      const session_token = await AsyncStorage.getItem('SQUAD_UP_KEY');
       const username = await AsyncStorage.getItem('SQUAD_UP_USERNAME');
-      if (token !== null && username !== null) {
+      if (session_token !== null && username !== null) {
         this.setState({
-          tokenCredentials: {
+          credentials: {
             username: username,
-            token: token,
+            session_token: session_token,
           },
         });
-        this.handleAutoTokenLogin();
+        this.request_auto_token_login();
       }
     } catch (error) {
       return {};
     }
   };
 
-  handleAutoTokenLogin() {
+  request_auto_token_login() {
     fetch('http://127.0.0.1:8000/api-token-login/', {
       method: 'POST',
       headers: {
