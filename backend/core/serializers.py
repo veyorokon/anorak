@@ -1,16 +1,25 @@
-from rest_framework import serializers
 from . models import *
+from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 
-class StripeCustomerserializer(serializers.ModelSerializer):
+class StripeCustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StripeCustomer
         fields = '__all__'
         
 
+class SessionTokenSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Token
+        fields = '__all__'
+
+
 class UserSerializer(serializers.ModelSerializer):
     
-    stripe_customer = StripeCustomerserializer(required=True)
+    stripe_customer = StripeCustomerSerializer(required=True)
+    session_token = SessionTokenSerializer(required=True)
     
     def create(self, validated_data):
         return User(**validated_data)
@@ -22,6 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
             'phone_number', instance.phone_number
             )
         return instance
+
 
     class Meta:
         model = User

@@ -1,4 +1,5 @@
 from . models import User 
+from rest_framework.authtoken.models import Token
 
 class SessionManager(object):
     
@@ -10,10 +11,9 @@ class SessionManager(object):
         Checks if the user and token are in a valid session
         """
         user = self.get_user_from_request(request)
-        session_token = request.data['session_token']
-        if(user):
-            isUserValidated = user.validate_session_token(session_token)
-            return True, user
+        token = self.get_token_from_request(request)
+        if(user and token):
+            return self.validate_user_with_token(user, token)
         return False, user
         
     def get_user_from_request(self, request):
@@ -27,6 +27,22 @@ class SessionManager(object):
             user = None
         return user
         
+    def get_token_from_request(self, request):
+        """
+        Get the user object with the username
+        """
+        tokenKey = request.data['session_token']
+        try:
+            token = Token.objects.get(key=tokenKey)
+        except:
+            token = None
+        return token
+        
     def logout(self, user):
-        user.delete_session_token()        
+        user.generate_new_session_token()  
+        
+    def validate_user_with_token(self, user, token):
+        if(token.user == user):
+            return True, user
+        return False, user
         

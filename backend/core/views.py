@@ -51,13 +51,13 @@ class UserCreationAPI(APIView):
         Updates the user object
         """
         user = self.get_new_or_inactive_user_else_none(request)
+        conflicts = self.check_user_form_for_conflicts(request, user)
+        if(conflicts):
+            return Response(
+                {'errors': conflicts}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
         if(user):
-            conflicts = self.check_user_form_for_conflicts(request, user.pk)
-            if(conflicts):
-                return Response(
-                    {'errors': conflicts}, 
-                    status=status.HTTP_400_BAD_REQUEST
-                )
             serialized_user = get_serialized_user(user)
             return Response(
                 serialized_user.data, 
@@ -106,16 +106,21 @@ class UserCreationAPI(APIView):
         user.save()
         
         
-    def check_user_form_for_conflicts(self, request, instancePk):
+    def check_user_form_for_conflicts(self, request, user):
         """
         Builds kwargs as dictionary of fields and values to check for conflicts
         """
         errors = {"email":0, "phone_number":0}
         email = request.data['user']['email']
+        phone_number = request.data['user']['phone_number']
+        if(user == None):
+            return None
+        instancePk = user.pk
         kwargs = {
             'data':
                 [
                     {'email': email}, 
+                    {'phone_number': phone_number}, 
                 ]
             }
         return self.get_conflicts(instancePk, **kwargs)
@@ -163,15 +168,9 @@ class UserLogoutAPI(APIView):
         """
         Updates the user object
         """
-        isSessionValid, user = Session.authenticate(request)
-        if(isSessionValid):
-            Session.logout(user)
-            return Response(
-                '{"success":"true"}', 
-                status=status.HTTP_200_OK
-            )
+        Session.logout(user)
         return Response(
-            '{"success":"false"}', 
-            status=status.HTTP_400_BAD_REQUEST
+            '{"success":"true"}', 
+            status=status.HTTP_200_OK
         )
                 

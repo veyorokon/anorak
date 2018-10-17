@@ -92,7 +92,7 @@ export default class SubscriptionDashboard extends Component {
   async _storeData() {
     try {
       const username = this.state.user.email;
-      const session_token = this.state.user.session_token;
+      const session_token = this.state.user.session_token.key;
       await AsyncStorage.setItem('SQUAD_UP_KEY', session_token);
       await AsyncStorage.setItem('SQUAD_UP_USERNAME', username);
     } catch (error) {
@@ -110,12 +110,7 @@ export default class SubscriptionDashboard extends Component {
       body: JSON.stringify(this.state.user),
     })
       .then(response => {
-        response.json();
-        if (response.status == 200) {
-          this.props.navigation.navigate('Home');
-        } else {
-          throw new Error(response.status);
-        }
+        this.props.navigation.navigate('Home');
       })
       .catch(err => {
         alert(JSON.stringify(err.message));
