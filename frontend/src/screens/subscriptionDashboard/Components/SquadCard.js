@@ -73,7 +73,7 @@ export default class SquadCard extends Component {
             paddingHorizontal: 20,
           }}
         >
-          <View style={{ flex: 1, alignItems: 'flex-start' }}>
+          <View style={{ flex: 1, alignItems: 'flex-start', paddingTop: 10 }}>
             <CardItem>
               <Text style={{ color: 'black', fontSize: 18 }}>
                 {this.state.data.owner}
@@ -81,35 +81,29 @@ export default class SquadCard extends Component {
             </CardItem>
           </View>
 
-          <View style={{ flex: 1, alignItems: 'center' }}>
-            <CardItem>
-              <View
-                style={{
-                  width: 52,
-                  height: 52,
-                  borderRadius: 52 / 2,
-                  backgroundColor: 'black',
-                  justifyContent: 'center',
-                }}
-              >
-                <View
-                  style={{ flexDirection: 'row', justifyContent: 'center' }}
-                >
-                  <Text style={{ color: 'red', fontSize: 26 }}>
-                    {this.state.data.title.charAt(0)}
-                  </Text>
-                </View>
-              </View>
-            </CardItem>
-          </View>
-
-          <View style={{ flex: 1, alignItems: 'flex-end', fontSize: 18 }}>
-            <CardItem header>
-              <View>
-                <Text style={{ color: 'black' }}>
-                  {this.state.data.status}
+          <View style={{ flex: 1, alignItems: 'center', paddingTop: 3 }}>
+            <View
+              style={{
+                width: 52,
+                height: 52,
+                borderRadius: 52 / 2,
+                backgroundColor: 'black',
+                justifyContent: 'center',
+              }}
+            >
+              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <Text style={{ color: 'red', fontSize: 26 }}>
+                  {this.state.data.title.charAt(0)}
                 </Text>
               </View>
+            </View>
+          </View>
+
+          <View style={{ flex: 1, alignItems: 'flex-end', paddingTop: 10 }}>
+            <CardItem>
+              <Text style={{ color: 'black', fontSize: 18 }}>
+                {this.state.data.status}
+              </Text>
             </CardItem>
           </View>
         </View>
@@ -137,22 +131,39 @@ export default class SquadCard extends Component {
             flexDirection: 'row',
             flex: 1,
             justifyContent: 'space-around',
+            paddingHorizontal: 20,
           }}
         >
-          <View style={{ justifyContent: 'flex-end', padding: 10 }}>
-            <TouchableOpacity onPress={() => alert('Account')}>
-              <Text>Account</Text>
-            </TouchableOpacity>
+          <View
+            style={{ flex: 1, alignItems: 'flex-start', paddingBottom: 10 }}
+          >
+            <CardItem>
+              <TouchableOpacity onPress={() => alert('Account')}>
+                <Text>Account</Text>
+              </TouchableOpacity>
+            </CardItem>
           </View>
-          <View style={{ alignItems: 'flex-end' }}>
-            <Text style={{ color: 'black' }}>
-              {this.state.data.price}
-            </Text>
+
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+            }}
+          >
+            <CardItem>
+              <Text>
+                {this.state.data.price}
+              </Text>
+            </CardItem>
           </View>
-          <View style={{ justifyContent: 'flex-end', padding: 10 }}>
-            <TouchableOpacity onPress={() => alert('Manage')}>
-              <Text>Manage</Text>
-            </TouchableOpacity>
+
+          <View style={{ flex: 1, alignItems: 'flex-end', paddingBottom: 10 }}>
+            <CardItem>
+              <TouchableOpacity onPress={() => alert('Account')}>
+                <Text>Manage</Text>
+              </TouchableOpacity>
+            </CardItem>
           </View>
         </View>
       </Card>
