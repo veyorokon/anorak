@@ -6,7 +6,6 @@ import Onboarding from 'react-native-onboarding-swiper';
 export default class Simple extends Component {
   constructor(props) {
     super(props);
-    alert(JSON.stringify(this.props.navigation.state.params.user));
   }
   render() {
     return (

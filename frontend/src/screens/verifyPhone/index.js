@@ -149,13 +149,53 @@ export default class VerifyPhone extends React.Component {
       }),
     }).then(response => {
       if (response.status == 200) {
-        this.props.navigation.navigate('CompleteProfile', {
-          session_token: JSON.parse(response._bodyText),
-          phone_number: number,
-        });
+        const session_token = JSON.parse(response._bodyText);
+        this.send_registration_request(session_token.session_token);
       } else {
         this._showInvalidConfirmationCodeAlert();
       }
+    });
+  }
+
+  /**
+   * send_registration_request Sends a POST request to the server to register user
+   * @return {[type]} [returns none]
+   */
+  send_registration_request(session_token) {
+    this.setState({ submittingSignup: true }, () => {
+      const phone_number = this.state.phone_number;
+      fetch(
+        'http://127.0.0.1:8000/api/users/creation/?session_token=' +
+          session_token,
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user: {
+              // email: email,
+              // password: password,
+              phone_number: phone_number,
+            },
+            session_token: session_token,
+          }),
+        }
+      )
+        .then(response => {
+          response.json();
+          if (response.status == 201) {
+            this.props.navigation.navigate('Onboarding', {
+              user: JSON.parse(response._bodyText),
+            });
+          } else {
+            this.show_duplicate_email_alert();
+          }
+        })
+        .finally(() => {
+          this.setState({ submittingSignup: false });
+        });
     });
   }
 

@@ -46,7 +46,7 @@ class StripeCustomer(models.Model):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(_('email address'), unique=True, null=True)
+    email = models.EmailField(_('email address'), null=True)
     phone_number = models.CharField( max_length=17, blank=True, unique=True, 
         null=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
@@ -57,15 +57,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_('active'), default=False)
     stripe_customer = models.OneToOneField(StripeCustomer, null=True,
         on_delete=models.SET_NULL, related_name='user')
-    session_token = models.OneToOneField(Token, null=True,
-        on_delete=models.SET_NULL, related_name='session_user')
     address_billing = models.OneToOneField(AddressBilling, null=True, 
         blank=True, on_delete=models.SET_NULL, related_name='user')
     
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['phone_number']
+    USERNAME_FIELD = 'phone_number'
 
     class Meta:
         verbose_name = _('user')
@@ -91,24 +88,64 @@ class User(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
         
     def validate_session_token(self, token):
+        """
+        Checks if the session token is valid
+        """
         if(self.session_token.key == token):
             return True 
+    
         return False
+            
+    def delete_session_token(self):
+        """
+        Gets the session token and deletes it.
+        """
+        try:
+            self.session_token.delete()
+        except:
+            pass
+        
+    def create_session_token(self):
+        """
+        Creates a new session token
+        """
+        try:
+            Token.objects.create(user=self)
+        except:
+            pass
+            
+    def generate_new_session_token(self):
+        """
+        Clears and renews session token.
+        """
+        self.delete_session_token()
+        self.create_session_token()
         
     def __str__(self):
-        return 'Email={0}, Phone Number={1}'.format(self.email,
-            self.phone_number)
+        return 'Email={0}, Phone Number={1}'.format(
+            self.email,
+            self.phone_number
+        )
+    
+    @property
+    def session_token(self):
+        """
+        Essentially a reverse relation.
+        """
+        try:
+            return Token.objects.get(user=self)
+        except:
+            return None
 
 # Signals for Auth User model.
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
-        session_token = Token.objects.create(user=instance)
+        Token.objects.create(user=instance)
         stripe_customer = StripeCustomer.objects.create(user=instance)
         stripe_customer.create_stripe_customer()
         address_billing = AddressBilling.objects.create(user=instance)
-        instance.session_token = session_token
+        #instance.session_token = session_token
         instance.stripe_customer = stripe_customer
         instance.address_billing = address_billing
         instance.save()
-        
