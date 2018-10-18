@@ -14,9 +14,10 @@ import {
   Dimensions,
   Platform,
   AsyncStorage,
+  ImageBackground,
 } from 'react-native';
 import SortableList from 'react-native-sortable-list';
-import SubscriptionCard from './Components/SubscriptionCard';
+import SquadCard from './Components/SquadCard';
 import { Footer, FooterTab, Button, Icon } from 'native-base';
 const window = Dimensions.get('window');
 
@@ -25,97 +26,38 @@ export default class SubscriptionDashboard extends Component {
     super(props);
     this.state = {
       user: this.props.navigation.state.params.user,
-
-      dashboardData: {},
+      dashboardData: {
+        0: {
+          title: 'Netflix',
+          price: '$ 3.00',
+          owner: 'Natasha',
+          status: 'Joined',
+        },
+      },
     };
     this._storeData();
-  }
-
-  /**
-   * Checks which value to display to the user who wants to subscribe.
-   * Need to force app refresh.
-   * @param  {[type]} subscriber [subscriber status]
-   * @return {[type]}            [JSON]
-   */
-  getSquadUpOption(subscriber) {
-    if (subscriber == null || (subscriber.isProcessed && !subscriber.isValid)) {
-      var status = 0;
-    } else if (!subscriber.isProcessed) {
-      status = 1;
-    } else {
-      status = 2;
-    }
-    return status;
-  }
-
-  /**
-   * Handles automatically updating user data after billing information
-   * added to allow subscription
-   * @return {[type]} [description]
-   */
-  componentWillMount() {
-    //this.updateBillingData();
-  }
-
-  updateBillingData() {
-    const before = this.state.data.user.address.billing.valid;
-    if (!this.state.data.user.address.billing.valid) {
-      //alert(JSON.stringify(this.state.tokenCredentials));
-      fetch('http://127.0.0.1:8000/api-token-login/', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(this.state.tokenCredentials),
-      })
-        .then(response => {
-          if (response.status == 200) {
-            response.json();
-            const after = JSON.parse(response._bodyText).user.address.billing
-              .valid;
-            if (before != after) {
-              this.setState({
-                data: JSON.parse(response._bodyText),
-              });
-            }
-          } else {
-            throw new Error(response.status);
-          }
-        })
-        .catch(() => {
-          //alert(JSON.stringify(err.message));
-        });
-    }
   }
 
   async _storeData() {
     try {
       const username = this.state.user.email;
-      const session_token = this.state.user.session_token;
-      await AsyncStorage.setItem('SQUAD_UP_KEY', session_token);
+      const session_token = this.state.user.session_token.key;
+      await AsyncStorage.setItem('SQUAD_UP_SESSION_KEY', session_token);
       await AsyncStorage.setItem('SQUAD_UP_USERNAME', username);
-    } catch (error) {
-      // Error saving data
-    }
+    } catch (error) {}
   }
 
-  handleLogout() {
-    fetch('http://127.0.0.1:8000/logout/', {
+  send_logout_request() {
+    fetch('http://127.0.0.1:8000/api/users/logout/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(this.state.data),
+      body: JSON.stringify(this.state.user),
     })
       .then(response => {
-        response.json();
-        if (response.status == 200) {
-          this.props.navigation.navigate('Home');
-        } else {
-          throw new Error(response.status);
-        }
+        this.props.navigation.navigate('Home');
       })
       .catch(err => {
         alert(JSON.stringify(err.message));
@@ -126,18 +68,19 @@ export default class SubscriptionDashboard extends Component {
     return (
       <View style={styles.container}>
         <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.title}>Subscription Dashboard</Text>
+          <Text style={styles.title}>SquadUp</Text>
           <Button
             style={{
               backgroundColor: 'transparent',
               justifyContent: 'center',
               alignItems: 'center',
             }}
-            onPress={() => this.handleLogout()}
+            onPress={() => this.send_logout_request()}
           >
             <Text style={{ color: '#307FF6' }}>Logout</Text>
           </Button>
         </View>
+        <Text>Hi, Ben</Text>
         <SortableList
           style={styles.list}
           contentContainerStyle={styles.contentContainer}
@@ -149,17 +92,9 @@ export default class SubscriptionDashboard extends Component {
           <FooterTab>
             <Button active>
               <Text>Dashboard</Text>
-              <Icon name="ios-apps-outline" />
             </Button>
-            <Button
-              onPress={() =>
-                this.props.navigation.navigate('Account', {
-                  user: this.state.data.user,
-                  token: this.state.data.token,
-                })}
-            >
-              <Text>Account</Text>
-              <Icon name="ios-contact-outline" />
+            <Button onPress={() => alert('Billing')}>
+              <Text>Billing</Text>
             </Button>
           </FooterTab>
         </Footer>
@@ -168,16 +103,7 @@ export default class SubscriptionDashboard extends Component {
   }
 
   _renderRow = ({ data, active }) => {
-    return (
-      <Row
-        data={data}
-        active={active}
-        isBillingValid={this.state.data.user.address.billing.valid}
-        navigation={this.props.navigation}
-        user={this.state.data.user}
-        token={this.state.tokenCredentials.token}
-      />
-    );
+    return <Row data={data} active={active} />;
   };
 }
 
@@ -230,8 +156,6 @@ class Row extends Component {
         toValue: Number(nextProps.active),
       }).start();
     }
-    this.setState({ isBillingValid: nextProps.isBillingValid });
-    //alert('IS BILLING VALID: ' + nextProps.isBillingValid);
   }
 
   render() {
@@ -239,19 +163,7 @@ class Row extends Component {
 
     return (
       <Animated.View style={[this._style]}>
-        <SubscriptionCard
-          navigation={this.props.navigation}
-          title={data.text}
-          price={data.price}
-          status={data.status}
-          titleStyle={styles.text}
-          body={data.body}
-          footer={data.footer}
-          termsLink={data.termsLink}
-          isBillingValid={this.props.isBillingValid}
-          user={this.props.user}
-          token={this.props.token}
-        />
+        <SquadCard data={data} />
       </Animated.View>
     );
   }

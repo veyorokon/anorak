@@ -12,7 +12,7 @@ class UserAdmin(DjangoUserAdmin):
     """Define admin model for custom User model with no email field."""
 
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('phone_number','email', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                        'groups', 'user_permissions')}),
@@ -24,9 +24,9 @@ class UserAdmin(DjangoUserAdmin):
             'fields': ('email', 'password1', 'password2'),
         }),
     )
-    list_display = ('email', 'first_name', 'last_name', 'is_staff')
-    search_fields = ('email', 'first_name', 'last_name')
-    ordering = ('email',)
+    list_display = ('phone_number','email', 'first_name', 'last_name', 'is_staff')
+    search_fields = ('phone_number','email', 'first_name', 'last_name')
+    ordering = ('phone_number','email',)
     
 admin.site.register(StripeCustomer)
 admin.site.register(AddressBilling)

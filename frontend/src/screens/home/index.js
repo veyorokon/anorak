@@ -36,7 +36,7 @@ export default class Home extends React.Component {
 
   retrieve_data = async () => {
     try {
-      const session_token = await AsyncStorage.getItem('SQUAD_UP_KEY');
+      const session_token = await AsyncStorage.getItem('SQUAD_UP_SESSION_KEY');
       const username = await AsyncStorage.getItem('SQUAD_UP_USERNAME');
       if (session_token !== null && username !== null) {
         this.setState({
@@ -60,7 +60,6 @@ export default class Home extends React.Component {
       body: JSON.stringify(this.state.credentials),
     })
       .then(response => {
-        //alert(JSON.stringify(response._bodyInit));
         if (response.status == 200) {
           this.props.navigation.navigate('SubscriptionDashboard', {
             user: JSON.parse(response._bodyInit),
