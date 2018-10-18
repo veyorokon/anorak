@@ -32,6 +32,14 @@ export default class SubscriptionDashboard extends Component {
           price: '$ 3.00',
           owner: 'Natasha',
           status: 'Joined',
+          order: 0,
+        },
+        1: {
+          title: 'Hulu',
+          price: '$ 1.50',
+          owner: 'Ben',
+          status: 'Owner',
+          order: 1,
         },
       },
     };
