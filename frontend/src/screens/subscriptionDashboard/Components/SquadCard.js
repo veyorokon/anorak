@@ -15,7 +15,7 @@ import CancelModal from './CancelModal';
 
 import './styles';
 
-export default class SubscriptionCard extends Component {
+export default class SquadCard extends Component {
   state = {
     status: null,
     isSignupModalVisible: false,

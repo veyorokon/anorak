@@ -17,7 +17,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import SortableList from 'react-native-sortable-list';
-import SubscriptionCard from './Components/SubscriptionCard';
+import SquadCard from './Components/SquadCard';
 import { Footer, FooterTab, Button, Icon } from 'native-base';
 const window = Dimensions.get('window');
 
@@ -30,10 +30,6 @@ export default class SubscriptionDashboard extends Component {
         0: {
           text: 'SquadUp Phone Plan',
           price: '$ 35',
-          body:
-            'Unlimited phone data provided though Cricket. No contract, cancel anytime. Billed monthly.',
-          footer: 'Terms',
-          termsLink: 'https://www.cricketwireless.com/terms',
         },
       },
     };
@@ -97,13 +93,7 @@ export default class SubscriptionDashboard extends Component {
               <Text>Dashboard</Text>
               <Icon name="ios-apps-outline" />
             </Button>
-            <Button
-              onPress={() =>
-                this.props.navigation.navigate('Account', {
-                  user: this.state.data.user,
-                  token: this.state.data.token,
-                })}
-            >
+            <Button onPress={() => alert('Account')}>
               <Text>Account</Text>
               <Icon name="ios-contact-outline" />
             </Button>
@@ -174,7 +164,7 @@ class Row extends Component {
 
     return (
       <Animated.View style={[this._style]}>
-        <SubscriptionCard
+        <SquadCard
           navigation={this.props.navigation}
           title={data.text}
           price={data.price}
