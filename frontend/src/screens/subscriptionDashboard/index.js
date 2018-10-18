@@ -41,6 +41,13 @@ export default class SubscriptionDashboard extends Component {
           status: 'Owner',
           order: 1,
         },
+        2: {
+          title: 'Spotify',
+          price: '$ 1.00',
+          owner: 'Vahid',
+          status: 'Pending',
+          order: 2,
+        },
       },
     };
     this._storeData();
@@ -76,7 +83,7 @@ export default class SubscriptionDashboard extends Component {
     return (
       <View style={styles.container}>
         <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.title}>Subscription Dashboard</Text>
+          <Text style={styles.title}>Hi, Ben</Text>
           <Button
             style={{
               backgroundColor: 'transparent',
@@ -192,7 +199,6 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 20,
-    paddingVertical: 20,
     color: '#999999',
   },
 
