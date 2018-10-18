@@ -28,8 +28,10 @@ export default class SubscriptionDashboard extends Component {
       user: this.props.navigation.state.params.user,
       dashboardData: {
         0: {
-          text: 'SquadUp Phone Plan',
-          price: '$ 35',
+          title: 'Netflix',
+          price: '$ 3.00',
+          owner: 'Natasha',
+          status: 'Joined',
         },
       },
     };
@@ -40,11 +42,9 @@ export default class SubscriptionDashboard extends Component {
     try {
       const username = this.state.user.email;
       const session_token = this.state.user.session_token.key;
-      await AsyncStorage.setItem('SQUAD_UP_KEY', session_token);
+      await AsyncStorage.setItem('SQUAD_UP_SESSION_KEY', session_token);
       await AsyncStorage.setItem('SQUAD_UP_USERNAME', username);
-    } catch (error) {
-      // Error saving data
-    }
+    } catch (error) {}
   }
 
   send_logout_request() {
@@ -91,11 +91,9 @@ export default class SubscriptionDashboard extends Component {
           <FooterTab>
             <Button active>
               <Text>Dashboard</Text>
-              <Icon name="ios-apps-outline" />
             </Button>
-            <Button onPress={() => alert('Account')}>
-              <Text>Account</Text>
-              <Icon name="ios-contact-outline" />
+            <Button onPress={() => alert('Billing')}>
+              <Text>Billing</Text>
             </Button>
           </FooterTab>
         </Footer>
@@ -164,11 +162,7 @@ class Row extends Component {
 
     return (
       <Animated.View style={[this._style]}>
-        <SquadCard
-          navigation={this.props.navigation}
-          title={data.text}
-          price={data.price}
-        />
+        <SquadCard data={data} />
       </Animated.View>
     );
   }

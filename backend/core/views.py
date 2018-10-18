@@ -50,7 +50,6 @@ class UserCreationAPI(APIView):
         """
         Updates the user object
         """
-        print(request.data)
         sessionValidated, user = self.validate_session(request)
         if(sessionValidated):
             serialized_user = get_serialized_user(user)

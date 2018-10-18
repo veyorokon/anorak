@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { Linking, TouchableOpacity, Alert } from 'react-native';
-import {
-  Card,
-  CardItem,
-  Text,
-  Body,
-  Left,
-  Center,
-  Right,
-  View,
-} from 'native-base';
+import { Card, CardItem, Text, Body, Left, Right, View } from 'native-base';
 import SignupModal from './SignupModal';
 import CancelModal from './CancelModal';
 
@@ -17,10 +8,7 @@ import './styles';
 
 export default class SquadCard extends Component {
   state = {
-    status: null,
-    isSignupModalVisible: false,
-    isCancelModalVisible: false,
-    isBillingValid: this.props.isBillingValid,
+    data: this.props.data,
   };
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
@@ -64,8 +52,8 @@ export default class SquadCard extends Component {
           style: 'confirm',
           onPress: () => {
             this.props.navigation.navigate('Account', {
-              user: this.props.user,
-              token: this.props.token,
+              user: this.state.data.user,
+              token: this.state.data.token,
               activeTab: 1,
             });
           },
@@ -76,71 +64,52 @@ export default class SquadCard extends Component {
 
   render() {
     return (
-      <View>
-        <Card style={{ overflow: 'hidden', borderRadius: 12 }}>
-          <CardItem
-            header
-            style={{ justifyContent: 'space-between', paddingHorizontal: 10 }}
-          >
-            <Text style={{ color: 'black' }}>
-              {this.props.title}
-            </Text>
-            <Right>
-              <Text>
-                {this.props.price}
-              </Text>
-            </Right>
-          </CardItem>
-          <CardItem>
-            <Body>
-              <Text style={{ paddingHorizontal: 10 }}>
-                {this.props.body}
-              </Text>
-            </Body>
-          </CardItem>
-          <CardItem
-            footer
-            bordered
-            style={{ justifyContent: 'space-between', paddingHorizontal: 10 }}
-          >
-            <Left>
-              <TouchableOpacity onPress={this._toggleSignupModal}>
-                <Text>Test</Text>
-              </TouchableOpacity>
-            </Left>
+      <Card style={{ overflow: 'hidden', borderRadius: 12 }}>
+        <CardItem header style={{ justifyContent: 'space-between' }}>
+          <Text style={{ color: 'black' }}>
+            {this.state.data.owner}
+          </Text>
 
-            <Right>
-              <Text
-                onPress={() => {
-                  Linking.openURL(this.props.termsLink);
-                }}
-                style={{ color: 'red' }}
-              >
-                {this.props.footer}
+          <View
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: 50 / 2,
+              backgroundColor: 'black',
+              justifyContent: 'center',
+            }}
+          >
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+              <Text style={{ color: 'red', fontSize: 25, fontWeight: 'bold' }}>
+                {this.state.data.title.charAt(0)}
               </Text>
-            </Right>
-          </CardItem>
-        </Card>
-        <SignupModal
-          visible={this.state.isSignupModalVisible}
-          handleCloseModal={this._toggleSignupModal}
-          user={this.props.user}
-          token={this.props.token}
-          onSuccess={() => {
-            this.setState({ status: 1 });
-          }}
-        />
+            </View>
+          </View>
 
-        <CancelModal
-          visible={this.state.isCancelModalVisible}
-          handleCloseModal={this._toggleCancelModal}
-          user={this.props.user}
-          token={this.props.token}
-          onSuccess={() => {
-            this.setState({ status: 1 });
-          }}
-        />
-      </View>
+          <Text>
+            {this.state.data.price}
+          </Text>
+        </CardItem>
+        <CardItem style={{ flexDirection: 'row', justifyContent: 'center' }}>
+          <Text
+            style={{
+              fontSize: 28,
+              fontWeight: '200',
+            }}
+          >
+            {this.state.data.title}
+          </Text>
+        </CardItem>
+        <CardItem style={{ justifyContent: 'space-between' }}>
+          <TouchableOpacity onPress={() => alert('Account')}>
+            <Text>Account</Text>
+          </TouchableOpacity>
+
+          <Text onPress={() => alert('Manage')} style={{ color: 'red' }}>
+            <Text>Manage</Text>
+          </Text>
+        </CardItem>
+      </Card>
     );
   }
 }
