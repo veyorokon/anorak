@@ -87,7 +87,7 @@ export default class SquadCard extends Component {
           </View>
 
           <Text>
-            {this.state.data.price}
+            {this.state.data.status}
           </Text>
         </CardItem>
         <CardItem style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -104,6 +104,10 @@ export default class SquadCard extends Component {
           <TouchableOpacity onPress={() => alert('Account')}>
             <Text>Account</Text>
           </TouchableOpacity>
+
+          <Text>
+            {this.state.data.price}
+          </Text>
 
           <Text onPress={() => alert('Manage')} style={{ color: 'red' }}>
             <Text>Manage</Text>
