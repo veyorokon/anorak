@@ -1,3 +1,3 @@
 # Setting up Development Environment
 
-@TODO(joetyson): Instructions for pipenv / Pipfile
+TODO(@joetyson): Instructions for pipenv / Pipfile
