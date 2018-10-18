@@ -50,6 +50,7 @@ class UserCreationAPI(APIView):
         """
         Updates the user object
         """
+        print(request.data)
         sessionValidated, user = self.validate_session(request)
         if(sessionValidated):
             serialized_user = get_serialized_user(user)
@@ -67,18 +68,18 @@ class UserCreationAPI(APIView):
         Returns session validation bool and the user
         """
         user = self.get_user_from_request_with_phone_number(request)
-        session_token = self.get_session_token_from_url(request)
+        session_token = self.get_session_token_from_request(request)
         if (user == None):
             return False, None
         return user.validate_session_token(session_token), user
             
             
-    def get_session_token_from_url(self, request):
+    def get_session_token_from_request(self, request):
         """
         Extracts the session token from the URL
         """
-        session_token = request.GET.get('session_token')
-        return json.loads(session_token)['session_token']
+        session_token = request.data['session_token']
+        return session_token
     
     
     def get_user_from_request_with_phone_number(self, request):

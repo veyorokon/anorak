@@ -74,39 +74,7 @@ export default class SubscriptionCard extends Component {
       { cancelable: true }
     );
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ isBillingValid: nextProps.isBillingValid });
-    // alert('IS BILLING VALID: ' + nextProps.isBillingValid);
-  }
-
-  onSubscriptionSignupSuccess() {
-    this.setState({ status: 1 });
-  }
-
-  getCancelButton() {
-    var status = this.state.status || this.props.status;
-    if (status == 2) {
-      return (
-        <TouchableOpacity onPress={this._toggleCancelModal}>
-          <Text style={{ color: 'red' }}>Cancel</Text>
-        </TouchableOpacity>
-      );
-    }
-    return null;
-  }
-
   render() {
-    var status = this.state.status || this.props.status;
-    if (status == 0) {
-      status = 'Squad Up!';
-      var statusColor = 'blue';
-    } else if (status == 1) {
-      status = 'Processing...';
-      statusColor = 'grey';
-    } else {
-      status = 'Subscribed';
-      statusColor = 'green';
-    }
     return (
       <View>
         <Card style={{ overflow: 'hidden', borderRadius: 12 }}>
@@ -137,13 +105,9 @@ export default class SubscriptionCard extends Component {
           >
             <Left>
               <TouchableOpacity onPress={this._toggleSignupModal}>
-                <Text style={{ color: statusColor }}>
-                  {status}
-                </Text>
+                <Text>Test</Text>
               </TouchableOpacity>
             </Left>
-
-            {this.getCancelButton()}
 
             <Right>
               <Text
