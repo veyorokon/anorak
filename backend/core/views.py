@@ -102,6 +102,7 @@ class UserTokenLoginAPI(APIView):
         """
         Updates the user object
         """
+        print(request.data)
         isSessionValid, user = Session.authenticate(request)
         if(isSessionValid and user):
             serialized_user = get_serialized_user(user)

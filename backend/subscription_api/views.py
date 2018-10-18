@@ -30,7 +30,10 @@ class DashboardAPI(APIView):
         """
         user = request.user
         session_token = request.GET.get('session_token')
-        isSessionValidated = user.validate_session_token(session_token)
+        try:
+            isSessionValidated = user.validate_session_token(session_token)
+        except:
+            isSessionValidated = False
         return isSessionValidated
     
         

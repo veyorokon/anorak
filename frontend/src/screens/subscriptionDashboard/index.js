@@ -40,10 +40,10 @@ export default class SubscriptionDashboard extends Component {
 
   async _storeData() {
     try {
-      const username = this.state.user.email;
+      const phone_number = this.state.user.phone_number;
       const session_token = this.state.user.session_token.key;
       await AsyncStorage.setItem('SQUAD_UP_SESSION_KEY', session_token);
-      await AsyncStorage.setItem('SQUAD_UP_USERNAME', username);
+      await AsyncStorage.setItem('SQUAD_UP_USERNAME', phone_number);
     } catch (error) {}
   }
 
