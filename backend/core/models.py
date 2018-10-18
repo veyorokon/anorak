@@ -46,7 +46,7 @@ class StripeCustomer(models.Model):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(_('email address'), unique=True, null=True)
+    email = models.EmailField(_('email address'), null=True)
     phone_number = models.CharField( max_length=17, blank=True, unique=True, 
         null=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
@@ -62,8 +62,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['phone_number']
+    USERNAME_FIELD = 'phone_number'
 
     class Meta:
         verbose_name = _('user')

@@ -50,14 +50,8 @@ class UserCreationAPI(APIView):
         """
         Updates the user object
         """
-        user = self.get_new_or_inactive_user_else_none(request)
-        conflicts = self.check_user_form_for_conflicts(request, user)
-        if(conflicts):
-            return Response(
-                {'errors': conflicts}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        if(user):
+        sessionValidated, user = self.validate_session(request)
+        if(sessionValidated):
             serialized_user = get_serialized_user(user)
             return Response(
                 serialized_user.data, 
@@ -68,8 +62,18 @@ class UserCreationAPI(APIView):
             status=status.HTTP_400_BAD_REQUEST
         )
         
-        
-    def get_session_token_from_request(self, request):
+    def validate_session(self, request):
+        """
+        Returns session validation bool and the user
+        """
+        user = self.get_user_from_request_with_phone_number(request)
+        session_token = self.get_session_token_from_url(request)
+        if (user == None):
+            return False, None
+        return user.validate_session_token(session_token), user
+            
+            
+    def get_session_token_from_url(self, request):
         """
         Extracts the session token from the URL
         """
@@ -77,70 +81,20 @@ class UserCreationAPI(APIView):
         return json.loads(session_token)['session_token']
     
     
-    def get_new_or_inactive_user_else_none(self, request):
+    def get_user_from_request_with_phone_number(self, request):
         """
         Retrieves the user matching the credentials or returns None 
         """
-        session_token = self.get_session_token_from_request(request)
         phone_number = request.data['user']['phone_number']
         try:
             user = User.objects.get(
-                session_token__key = session_token,
                 phone_number = phone_number
             )
-            ## NOTE: Add check if user is active and raise exception
-            self.update_user(user, request)
         except:
             user = None
         return user
         
         
-    def update_user(self, user, request):
-        """
-        Updates the user's password
-        """
-        password = request.data['user']['password']
-        email = request.data['user']['email']
-        user.set_password(password)
-        user.email = email
-        user.save()
-        
-        
-    def check_user_form_for_conflicts(self, request, user):
-        """
-        Builds kwargs as dictionary of fields and values to check for conflicts
-        """
-        errors = {"email":0, "phone_number":0}
-        email = request.data['user']['email']
-        phone_number = request.data['user']['phone_number']
-        if(user == None):
-            return None
-        instancePk = user.pk
-        kwargs = {
-            'data':
-                [
-                    {'email': email}, 
-                    {'phone_number': phone_number}, 
-                ]
-            }
-        return self.get_conflicts(instancePk, **kwargs)
-        
-        
-    def get_conflicts(self, instancePk, **kwargs):
-        """
-        Searches for all users with conflicting (unique) kwargs fields
-        """
-        conflicts = []
-        for query in kwargs['data']:            
-            user = User.objects.filter(**query).exclude(pk=instancePk)
-            if(user):
-                (field, value), = query.items()
-                conflicts.append(field)
-        if(len(conflicts)==0):
-            return None
-        return conflicts
-        
-
 class UserTokenLoginAPI(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
         
@@ -168,6 +122,7 @@ class UserLogoutAPI(APIView):
         """
         Updates the user object
         """
+        isSessionValid, user = Session.authenticate(request)
         Session.logout(user)
         return Response(
             '{"success":"true"}', 

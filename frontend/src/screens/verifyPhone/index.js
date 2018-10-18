@@ -149,7 +149,6 @@ export default class VerifyPhone extends React.Component {
       }),
     }).then(response => {
       if (response.status == 200) {
-        alert(JSON.stringify(response));
         this.props.navigation.navigate('CompleteProfile', {
           session_token: JSON.parse(response._bodyText),
           phone_number: number,
