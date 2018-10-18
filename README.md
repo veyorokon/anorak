@@ -1,6 +1,14 @@
-# Setting up Development Environment
+# Development Environment
 
-TODO(@joetyson): Instructions for pipenv / Pipfile
+## Using pipenv
+
+```
+$ pip install -U pipenv
+$ cd backend/ 
+$ pipenv install
+$ pipenv shell
+$ pipenv install some-pip-dependency
+```
 
 
 # Connecting to stuff
