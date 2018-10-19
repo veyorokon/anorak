@@ -32,7 +32,6 @@ export default class SubscriptionDashboard extends Component {
           price: '$ 3.00',
           owner: 'Natasha',
           status: 'Joined',
-          order: 0,
         },
         1: {
           title: 'Hulu',
@@ -102,6 +101,7 @@ export default class SubscriptionDashboard extends Component {
             <Text style={{ color: '#307FF6' }}>Logout</Text>
           </Button>
         </View>
+        <Text>Hi, Ben</Text>
         <SortableList
           style={styles.list}
           contentContainerStyle={styles.contentContainer}

@@ -24,7 +24,7 @@ services:
     restart: always
     image: postgres
     ports:
-      - "5432:5432"
+      - "9432:5432"
 
   # nginx:
   #   restart: always

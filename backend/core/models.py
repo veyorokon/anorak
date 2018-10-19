@@ -46,7 +46,8 @@ class StripeCustomer(models.Model):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(_('email address'), null=True)
+
+    email = models.EmailField(_('email address'), default=None, null=True)
     phone_number = models.CharField( max_length=17, blank=True, unique=True, 
         null=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
@@ -63,6 +64,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'phone_number'
+    REQUIRED_FILEDS = []
 
     class Meta:
         verbose_name = _('user')
@@ -145,7 +147,6 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         stripe_customer = StripeCustomer.objects.create(user=instance)
         stripe_customer.create_stripe_customer()
         address_billing = AddressBilling.objects.create(user=instance)
-        #instance.session_token = session_token
         instance.stripe_customer = stripe_customer
         instance.address_billing = address_billing
         instance.save()
