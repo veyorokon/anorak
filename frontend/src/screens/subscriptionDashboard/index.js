@@ -101,7 +101,6 @@ export default class SubscriptionDashboard extends Component {
             <Text style={{ color: '#307FF6' }}>Logout</Text>
           </Button>
         </View>
-        <Text>Hi, Ben</Text>
         <SortableList
           style={styles.list}
           contentContainerStyle={styles.contentContainer}
