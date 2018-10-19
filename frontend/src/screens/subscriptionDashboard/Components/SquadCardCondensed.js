@@ -200,7 +200,7 @@ export default class SquadCard extends Component {
             }}
           >
             <TouchableOpacity onPress={() => alert('Login pressed')}>
-              <Text>Login</Text>
+              <Text style={{ color: 'blue' }}>Login</Text>
             </TouchableOpacity>
           </View>
 
