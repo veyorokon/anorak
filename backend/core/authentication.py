@@ -20,9 +20,9 @@ class SessionManager(object):
         """
         Get the user object with the username
         """
-        email = request.data['email']
+        phone_number = request.data['phone_number']
         try:
-            user = User.objects.get(email=email)
+            user = User.objects.get(phone_number=phone_number)
         except:
             user = None
         return user

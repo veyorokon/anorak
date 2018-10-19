@@ -17,7 +17,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import SortableList from 'react-native-sortable-list';
-import SquadCard from './Components/SquadCard';
+import { SquadCardCondensed } from './Components';
 import { Footer, FooterTab, Button, Icon } from 'native-base';
 const window = Dimensions.get('window');
 
@@ -33,6 +33,27 @@ export default class SubscriptionDashboard extends Component {
           owner: 'Natasha',
           status: 'Joined',
         },
+        1: {
+          title: 'Hulu',
+          price: '$ 1.50',
+          owner: 'Ben',
+          status: 'Owner',
+          order: 1,
+        },
+        2: {
+          title: 'Spotify',
+          price: '$ 1.00',
+          owner: 'Vahid',
+          status: 'Pending',
+          order: 2,
+        },
+        3: {
+          title: 'HBO',
+          price: '$ 1.25',
+          owner: 'Natasha',
+          status: 'Pending',
+          order: 3,
+        },
       },
     };
     this._storeData();
@@ -40,10 +61,10 @@ export default class SubscriptionDashboard extends Component {
 
   async _storeData() {
     try {
-      const username = this.state.user.email;
+      const phone_number = this.state.user.phone_number;
       const session_token = this.state.user.session_token.key;
       await AsyncStorage.setItem('SQUAD_UP_SESSION_KEY', session_token);
-      await AsyncStorage.setItem('SQUAD_UP_USERNAME', username);
+      await AsyncStorage.setItem('SQUAD_UP_USERNAME', phone_number);
     } catch (error) {}
   }
 
@@ -68,7 +89,7 @@ export default class SubscriptionDashboard extends Component {
     return (
       <View style={styles.container}>
         <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.title}>SquadUp</Text>
+          <Text style={styles.title}>Hi, Ben</Text>
           <Button
             style={{
               backgroundColor: 'transparent',
@@ -163,7 +184,7 @@ class Row extends Component {
 
     return (
       <Animated.View style={[this._style]}>
-        <SquadCard data={data} />
+        <SquadCardCondensed data={data} />
       </Animated.View>
     );
   }
@@ -185,7 +206,6 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 20,
-    paddingVertical: 20,
     color: '#999999',
   },
 

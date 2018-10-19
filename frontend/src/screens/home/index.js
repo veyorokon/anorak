@@ -41,7 +41,7 @@ export default class Home extends React.Component {
       if (session_token !== null && username !== null) {
         this.setState({
           credentials: {
-            email: username,
+            phone_number: username,
             session_token: session_token,
           },
         });

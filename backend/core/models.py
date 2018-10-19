@@ -46,6 +46,7 @@ class StripeCustomer(models.Model):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+
     email = models.EmailField(_('email address'), default=None, null=True)
     phone_number = models.CharField( max_length=17, blank=True, unique=True, 
         null=True)
@@ -149,4 +150,3 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         instance.stripe_customer = stripe_customer
         instance.address_billing = address_billing
         instance.save()
-        

@@ -8,6 +8,9 @@ services:
     build: backend/
     working_dir: /app/backend/
     command: bash -c "python check_db.py --service-name Postgres --ip database --port 5432 &&
+                      python manage.py makemigrations core &&
+                      python manage.py makemigrations verification_api &&
+                      python manage.py makemigrations subscription_api &&
                       python manage.py migrate &&
                       python manage.py runserver 0.0.0.0:8000"
     volumes:
