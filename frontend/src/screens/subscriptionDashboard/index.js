@@ -17,7 +17,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import SortableList from 'react-native-sortable-list';
-import SquadCard from './Components/SquadCard';
+import { SquadCardCondensed } from './Components';
 import { Footer, FooterTab, Button, Icon } from 'native-base';
 const window = Dimensions.get('window');
 
@@ -47,6 +47,13 @@ export default class SubscriptionDashboard extends Component {
           owner: 'Vahid',
           status: 'Pending',
           order: 2,
+        },
+        3: {
+          title: 'HBO',
+          price: '$ 1.25',
+          owner: 'Natasha',
+          status: 'Pending',
+          order: 3,
         },
       },
     };
@@ -177,7 +184,7 @@ class Row extends Component {
 
     return (
       <Animated.View style={[this._style]}>
-        <SquadCard data={data} />
+        <SquadCardCondensed data={data} />
       </Animated.View>
     );
   }

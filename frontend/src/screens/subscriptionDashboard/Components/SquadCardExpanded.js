@@ -6,7 +6,7 @@ import { Card, CardItem, Text, View } from 'native-base';
 
 import './styles';
 
-export default class SquadCard extends Component {
+export default class SquadCardExpanded extends Component {
   state = {
     data: this.props.data,
   };
@@ -91,8 +91,8 @@ export default class SquadCard extends Component {
               <Text
                 style={{
                   fontSize: 35,
-                  fontWeight: '300',
-                  letterSpacing: 10,
+                  fontWeight: 'bold',
+                  letterSpacing: 7,
                 }}
               >
                 {this.state.data.title}
