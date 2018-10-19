@@ -40,7 +40,7 @@ export default class SquadCard extends Component {
 
   render() {
     return (
-      <Card style={{ overflow: 'hidden', borderRadius: 12 }}>
+      <Card style={{ overflow: 'hidden', borderRadius: 8 }}>
         {/** TOP ROW **/}
         <View
           style={{
