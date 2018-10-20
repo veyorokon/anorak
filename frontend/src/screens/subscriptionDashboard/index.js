@@ -8,18 +8,18 @@ import React, { Component } from 'react';
 import {
   Animated,
   Easing,
-  StyleSheet,
   Text,
   View,
-  Dimensions,
   Platform,
   AsyncStorage,
-  ImageBackground,
+  TouchableOpacity,
+  Image,
+  StatusBar,
 } from 'react-native';
 import SortableList from 'react-native-sortable-list';
 import { SquadCardCondensed } from './Components';
-import { Footer, FooterTab, Button, Icon } from 'native-base';
-const window = Dimensions.get('window');
+import { Footer, FooterTab, Button } from 'native-base';
+import styles from './styles';
 
 export default class SubscriptionDashboard extends Component {
   constructor(props) {
@@ -54,6 +54,13 @@ export default class SubscriptionDashboard extends Component {
           status: 'Pending',
           order: 3,
         },
+        4: {
+          title: 'Prime',
+          price: '$ 4.25',
+          owner: 'Tom',
+          status: 'Joined',
+          order: 4,
+        },
       },
     };
     this._storeData();
@@ -66,6 +73,10 @@ export default class SubscriptionDashboard extends Component {
       await AsyncStorage.setItem('SQUAD_UP_SESSION_KEY', session_token);
       await AsyncStorage.setItem('SQUAD_UP_USERNAME', phone_number);
     } catch (error) {}
+  }
+
+  componentDidMount() {
+    StatusBar.setHidden(true);
   }
 
   send_logout_request() {
@@ -88,20 +99,54 @@ export default class SubscriptionDashboard extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.title}>Hi, Ben</Text>
-          <Button
+        <View
+          style={{
+            flexDirection: 'row',
+          }}
+        >
+          <View
             style={{
-              backgroundColor: 'transparent',
-              justifyContent: 'center',
+              flex: 1,
+              alignItems: 'center',
+              marginLeft: 44,
+            }}
+          >
+            <Text style={styles.title}>Squad Up</Text>
+          </View>
+
+          <View style={{ paddingRight: 10 }}>
+            <TouchableOpacity onPress={() => this.send_logout_request()}>
+              <Image
+                source={require('../../../assets/logout.png')}
+                style={{
+                  height: 24,
+                  width: 24,
+                  tintColor: '#0E6E6E',
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={{ flexDirection: 'row', paddingBottom: 5, paddingTop: 8 }}>
+          <View
+            style={{
+              flex: 1,
               alignItems: 'center',
             }}
-            onPress={() => this.send_logout_request()}
           >
-            <Text style={{ color: '#307FF6' }}>Logout</Text>
-          </Button>
+            <TouchableOpacity onPress={() => alert('Create pressed')}>
+              <Text style={{ color: '#0E6E6E' }}>Create Squad</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <TouchableOpacity onPress={() => alert('Join pressed')}>
+              <Text style={{ color: '#0E6E6E' }}>Join Squad</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <Text>Hi, Ben</Text>
+
         <SortableList
           style={styles.list}
           contentContainerStyle={styles.contentContainer}
@@ -109,7 +154,7 @@ export default class SubscriptionDashboard extends Component {
           renderRow={this._renderRow}
         />
 
-        <Footer>
+        <Footer style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>
           <FooterTab>
             <Button active>
               <Text>Dashboard</Text>
@@ -189,80 +234,3 @@ class Row extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#eee',
-
-    ...Platform.select({
-      ios: {
-        paddingTop: 20,
-      },
-    }),
-  },
-
-  title: {
-    fontSize: 20,
-    color: '#999999',
-  },
-
-  list: {
-    flex: 1,
-  },
-
-  contentContainer: {
-    width: window.width,
-
-    ...Platform.select({
-      ios: {
-        paddingHorizontal: 15,
-      },
-
-      android: {
-        paddingHorizontal: 0,
-      },
-    }),
-  },
-
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 16,
-    height: 80,
-    flex: 1,
-    marginTop: 7,
-    marginBottom: 12,
-    borderRadius: 4,
-
-    ...Platform.select({
-      ios: {
-        width: window.width - 30 * 2,
-        shadowColor: 'rgba(0,0,0,0.2)',
-        shadowOpacity: 1,
-        shadowOffset: { height: 2, width: 2 },
-        shadowRadius: 2,
-      },
-
-      android: {
-        width: window.width - 30 * 2,
-        elevation: 0,
-        marginHorizontal: 30,
-      },
-    }),
-  },
-
-  image: {
-    height: 200,
-    width: null,
-    flex: 1,
-  },
-
-  text: {
-    fontSize: 20,
-    paddingVertical: 20,
-  },
-});

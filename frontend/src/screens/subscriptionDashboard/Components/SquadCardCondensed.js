@@ -40,7 +40,7 @@ export default class SquadCard extends Component {
 
   render() {
     return (
-      <Card style={{ overflow: 'hidden', borderRadius: 12 }}>
+      <Card style={{ overflow: 'hidden', borderRadius: 8 }}>
         {/** TOP ROW **/}
         <View
           style={{
@@ -59,9 +59,9 @@ export default class SquadCard extends Component {
           >
             <View
               style={{
-                width: 50,
-                height: 50,
-                borderRadius: 50 / 2,
+                width: 44,
+                height: 44,
+                borderRadius: 44 / 2,
                 backgroundColor: 'black',
                 justifyContent: 'center',
               }}
@@ -200,7 +200,7 @@ export default class SquadCard extends Component {
             }}
           >
             <TouchableOpacity onPress={() => alert('Login pressed')}>
-              <Text>Login</Text>
+              <Text style={{ color: 'blue' }}>Login</Text>
             </TouchableOpacity>
           </View>
 
