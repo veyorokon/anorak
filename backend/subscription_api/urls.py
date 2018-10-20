@@ -18,4 +18,5 @@ from . import views
 
 urlpatterns = [
     path('dashboard/', views.DashboardAPI.as_view()),
+    path('dashboard/create_squad/', views.CreateSquadAPI.as_view()),
 ]

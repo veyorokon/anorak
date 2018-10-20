@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Linking, TouchableOpacity, Alert } from 'react-native';
-import { Card, CardItem, Text, Body, Left, Right, View } from 'native-base';
-import SignupModal from './SignupModal';
-import CancelModal from './CancelModal';
+import { TouchableOpacity, Alert, Image } from 'react-native';
+import { Card, CardItem, Text, View } from 'native-base';
+//import SignupModal from './SignupModal';
+//import CancelModal from './CancelModal';
 
 import './styles';
 
@@ -13,30 +13,6 @@ export default class SquadCard extends Component {
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
-
-  _toggleSignupModal = () => {
-    if (this.props.status == 0) {
-      if (this.state.isBillingValid) {
-        this.setState({
-          isSignupModalVisible: !this.state.isSignupModalVisible,
-        });
-      } else {
-        this._showBillingInformationMissingAlert();
-      }
-    }
-
-    // ADD HANDLING CANCELATION HERE
-  };
-
-  _toggleCancelModal = () => {
-    if (this.props.status == 2) {
-      this.setState({
-        isCancelModalVisible: !this.state.isCancelModalVisible,
-      });
-    }
-
-    // ADD HANDLING CANCELATION HERE
-  };
 
   _showBillingInformationMissingAlert = () =>
     Alert.alert(
@@ -64,55 +40,191 @@ export default class SquadCard extends Component {
 
   render() {
     return (
-      <Card style={{ overflow: 'hidden', borderRadius: 12 }}>
-        <CardItem header style={{ justifyContent: 'space-between' }}>
-          <Text style={{ color: 'black' }}>
-            {this.state.data.owner}
-          </Text>
-
+      <Card style={{ overflow: 'hidden', borderRadius: 8 }}>
+        {/** TOP ROW **/}
+        <View
+          style={{
+            flexDirection: 'row',
+            flex: 1,
+            justifyContent: 'space-around',
+            paddingHorizontal: 15,
+          }}
+        >
           <View
             style={{
-              width: 50,
-              height: 50,
-              borderRadius: 50 / 2,
-              backgroundColor: 'black',
-              justifyContent: 'center',
+              flex: 1,
+              alignItems: 'flex-start',
+              paddingTop: 10,
             }}
           >
-            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-              <Text style={{ color: 'red', fontSize: 25, fontWeight: 'bold' }}>
-                {this.state.data.title.charAt(0)}
-              </Text>
+            <View
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 44 / 2,
+                backgroundColor: 'black',
+                justifyContent: 'center',
+              }}
+            >
+              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <Text style={{ color: 'red', fontSize: 26 }}>
+                  {this.state.data.title.charAt(0)}
+                </Text>
+              </View>
             </View>
           </View>
 
-          <Text>
-            {this.state.data.status}
-          </Text>
-        </CardItem>
-        <CardItem style={{ flexDirection: 'row', justifyContent: 'center' }}>
-          <Text
+          <View
             style={{
-              fontSize: 28,
-              fontWeight: '200',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            {this.state.data.title}
-          </Text>
-        </CardItem>
-        <CardItem style={{ justifyContent: 'space-between' }}>
-          <TouchableOpacity onPress={() => alert('Account')}>
-            <Text>Account</Text>
-          </TouchableOpacity>
+            <CardItem style={{ flexDirection: 'row' }}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  letterSpacing: 2,
+                }}
+              >
+                {this.state.data.title}
+              </Text>
+            </CardItem>
+          </View>
 
-          <Text>
-            {this.state.data.price}
-          </Text>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'flex-end',
+              justifyContent: 'center',
+            }}
+          >
+            <CardItem>
+              <Text style={{ fontSize: 16 }}>
+                {this.state.data.price}
+              </Text>
+            </CardItem>
+          </View>
+        </View>
 
-          <Text onPress={() => alert('Manage')} style={{ color: 'red' }}>
-            <Text>Manage</Text>
-          </Text>
-        </CardItem>
+        {/** Owner ROW **/}
+
+        <View
+          style={{
+            flexDirection: 'row',
+            flex: 1,
+            justifyContent: 'space-around',
+          }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              flex: 1,
+              justifyContent: 'flex-end',
+              paddingHorizontal: 10,
+            }}
+          >
+            <View>
+              <Text>Owner: </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              flex: 1,
+              justifyContent: 'flex-start',
+              paddingHorizontal: 10,
+            }}
+          >
+            <View>
+              <Text>
+                {this.state.data.owner}
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Status Row */}
+        <View
+          style={{
+            flexDirection: 'row',
+            flex: 1,
+            justifyContent: 'space-around',
+          }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              flex: 1,
+              justifyContent: 'flex-end',
+              paddingHorizontal: 10,
+            }}
+          >
+            <View>
+              <Text>Status: </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              flex: 1,
+              justifyContent: 'flex-start',
+              paddingHorizontal: 10,
+            }}
+          >
+            <View>
+              <Text>
+                {this.state.data.status}
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Footer Menu Row */}
+        <View
+          style={{
+            flexDirection: 'row',
+            flex: 1,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              flex: 1,
+              justifyContent: 'flex-start',
+              paddingLeft: 20,
+            }}
+          >
+            <TouchableOpacity onPress={() => alert('Login pressed')}>
+              <Text style={{ color: 'blue' }}>Login</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              flex: 1,
+              justifyContent: 'flex-end',
+              alignItems: 'flex-end',
+              paddingBottom: 5,
+            }}
+          >
+            <TouchableOpacity onPress={() => alert('Menu pressed')}>
+              <Image
+                source={require('../../../../assets/menu-dots-vertical.png')}
+                style={{
+                  height: 24,
+                  width: 24,
+                  resizeMode: 'contain',
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
       </Card>
     );
   }

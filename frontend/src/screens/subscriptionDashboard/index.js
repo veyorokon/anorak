@@ -17,7 +17,7 @@ import {
   StatusBar,
 } from 'react-native';
 import SortableList from 'react-native-sortable-list';
-import { SquadCardCondensed } from './Components';
+import { SquadCardCondensed, CreateSquadModal } from './Components';
 import { Footer, FooterTab, Button } from 'native-base';
 import styles from './styles';
 
@@ -26,6 +26,7 @@ export default class SubscriptionDashboard extends Component {
     super(props);
     this.state = {
       user: this.props.navigation.state.params.user,
+      isModalVisible: false,
       dashboardData: {
         0: {
           title: 'Netflix',
@@ -96,6 +97,24 @@ export default class SubscriptionDashboard extends Component {
       });
   }
 
+  send_create_squad_request() {
+    fetch('http://127.0.0.1:8000/api/dashboard/create_squad/', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ user: this.state.user }),
+    })
+      .then(response => {})
+      .catch(err => {
+        alert(JSON.stringify(err.message));
+      });
+  }
+
+  _toggle_modal = () =>
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+
   render() {
     return (
       <View style={styles.container}>
@@ -135,7 +154,7 @@ export default class SubscriptionDashboard extends Component {
               alignItems: 'center',
             }}
           >
-            <TouchableOpacity onPress={() => alert('Create pressed')}>
+            <TouchableOpacity onPress={() => this._toggle_modal()}>
               <Text style={{ color: '#0E6E6E' }}>Create Squad</Text>
             </TouchableOpacity>
           </View>

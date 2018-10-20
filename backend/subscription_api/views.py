@@ -1,12 +1,19 @@
-
 from . models import *
 from . serializers import *
+from core.models import User 
+from rest_framework import status
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from core.authentication import SessionManager
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+
+#################################################
+#############  GLOBAL VARIABLES  ################
+#################################################
+Session = SessionManager()
 
 
 class DashboardAPI(APIView):
@@ -50,3 +57,21 @@ class DashboardAPI(APIView):
     
     
 
+class CreateSquadAPI(APIView):
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    
+    def post(self, request, *args, **kwargs):
+        """
+        List all Dashboard Element objects
+        """
+        
+        userData = request.data['user']
+        user = User.objects.get(pk=4)
+        u = Session.validate_request_with_session_token(request)
+        print(u)
+        return Response(
+            '{"success":"false"}', 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    

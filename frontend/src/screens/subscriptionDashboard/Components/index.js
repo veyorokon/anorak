@@ -1,6 +1,6 @@
-import SquadCardCondensed from './SquadCardCondensed';
+import SquadCard from './SquadCard';
 import SquadCardExpanded from './SquadCardExpanded';
-import CancelModal from './CancelModal';
-import SignupModal from './SignupModal';
+import SquadCardCondensed from './SquadCardCondensed';
+import CreateSquadModal from './CreateSquadModal';
 
-export { SquadCardExpanded, SquadCardCondensed, CancelModal, SignupModal };
+export { SquadCardExpanded, SquadCard, SquadCardCondensed, CreateSquadModal };
