@@ -22,13 +22,13 @@ services:
     ports:
       - "9432:5432"
 
-  # nginx:
-  #   restart: always
-  #   image: nginx
-  #   depends_on:
-  #     - backend
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
+  # frontend:
+  #   build: frontend/
   #   volumes:
-  #     - ./nginx/config:/etc/nginx
+  #     - ./frontend/:/app/frontend
+  #   working_dir: /app/frontend/
+  #   command: sh ./expo.dev.sh
+  #   ports:
+  #     - "19002:19002"
+  #   environment:
+  #     - NODE_ENV=development
