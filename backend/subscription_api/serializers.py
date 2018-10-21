@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from . models import *
 
-class DashboardElementserializer(serializers.ModelSerializer):
+class SquadSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = SquadDashboardElement
+        model = Squad
         fields = '__all__'
 

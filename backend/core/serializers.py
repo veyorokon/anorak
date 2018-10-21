@@ -15,11 +15,17 @@ class SessionTokenSerializer(serializers.ModelSerializer):
         model = Token
         fields = '__all__'
 
+class AddressBillingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AddressBilling
+        fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     
     stripe_customer = StripeCustomerSerializer(required=True)
     session_token = SessionTokenSerializer(required=True)
+    address_billing = AddressBillingSerializer(required=True)
     
     def create(self, validated_data):
         return User(**validated_data)

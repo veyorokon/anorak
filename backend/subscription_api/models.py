@@ -1,63 +1,24 @@
+import uuid
+from core.models import User
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django_enumfield import enum
-from core.models import User
-
-class Squad(models.Model):
-    #User who owns this subscription product
-    owner = models.ForeignKey(User, 
-        on_delete=models.CASCADE)
-    #Squad name
-    name = models.CharField(max_length=32, null=True)
-    #Squad description
-    description = models.CharField(max_length=64, null=True)
-    #Date that the subscription was created
-    date_created = models.DateTimeField(editable=False)
-    #Date that the subscription was created
-    date_modified = models.DateTimeField(editable=False)
-    #Date that the start date for the subscription
-    date_subscription_start = models.DateTimeField(blank=True,
-        null=True, editable=True)
-    #The stripe product id
-    stripe_product_id = models.CharField(max_length=32, null=True, blank=True)
-    
-    def save(self, *args, **kwargs):
-        ''' 
-        On save, update timestamps 
-        '''
-        if not self.id:
-            self.date_created = timezone.now()
-        self.date_modified = timezone.now()
-        return super(Squad, self).save(*args, **kwargs)
-        
-
-
-class SquadDashboardElement(models.Model):
-    #The squad that the user has added to their dashboard
-    squad = models.ForeignKey(Squad, on_delete=models.CASCADE)
-    #The user this dashboard belongs to 
-    user = models.ForeignKey(User, 
-        on_delete=models.CASCADE)
 
 
 # Frequency of subscription billing
 class Frequency(enum.Enum):
-    DAILY = 0
-    WEEKLY = 1
-    BIWEEKLY = 2
-    MONTHLY = 3
+    DAY = 0
+    WEEK = 1
+    MONTH = 2
     
     
 # Subscription service provided
 class StripePlan(models.Model):
-    #The user this dashboard belongs to 
-    squad = models.OneToOneField(Squad, 
-        on_delete=models.CASCADE, related_name='stripe_plan')
     #The stripe plan id
     stripe_plan_id = models.CharField(max_length=32, null=True, blank=True)
     #The frequency of billing
-    billing_frequency = enum.EnumField(Frequency, default=Frequency.MONTHLY)
+    billing_frequency = enum.EnumField(Frequency, default=Frequency.MONTH)
     #The base price charged to SquadUp
     cost_price = models.FloatField(null=True)
     #The SquadUp fee if any
@@ -70,23 +31,52 @@ class StripePlan(models.Model):
     cost_net_total = models.FloatField(default=0)
     
 
-# Subscription service provided
-class StripeSubscription(models.Model):
+# Contains a Stripe product. 
+class Squad(models.Model):
+    #User who owns this subscription product
+    owner = models.ForeignKey(User, 
+        on_delete=models.CASCADE)
+    #Squad name
+    squad_uuid = models.UUIDField(primary_key=True, default=uuid.uuid4,
+        editable=False)
+    #Squad description
+    service = models.CharField(max_length=12, null=True)
+    #Squad maximum size
+    maximum_size = models.IntegerField(default=10)
+    #Squad maximum size
+    current_size = models.IntegerField(default=0)
+    #Date that the subscription was created
+    date_created = models.DateTimeField(editable=False)
+    #Date that the subscription was created
+    date_modified = models.DateTimeField(editable=False)
+    #Date that the start date for the subscription
+    date_subscription_start = models.DateTimeField(blank=True,
+        null=True, editable=True)
+    #The stripe product id
+    stripe_product_id = models.CharField(max_length=32, null=True, blank=True)
     #The stripe plan
-    stripe_plan = models.ForeignKey(StripePlan, on_delete=models.CASCADE)
-    #The stripe plan id
-    stripe_subscription_id = models.CharField(max_length=32, null=True, 
-        blank=True)
-        
-        
+    stripe_plan = models.OneToOneField(StripePlan, default=None, 
+        null=True, on_delete=models.CASCADE, related_name='squad')
+    
+    def save(self, *args, **kwargs):
+        ''' 
+        On save, update timestamps 
+        '''
+        if not self.id:
+            self.date_created = timezone.now()
+        self.date_modified = timezone.now()
+        return super(Squad, self).save(*args, **kwargs)
+    
+
+# Contains a stripe subscription
 class SquadMember(models.Model):
     #User who owns this subscription
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     #User who owns this subscription
     squad = models.ForeignKey(Squad, on_delete=models.CASCADE)
-    #Squad description
-    stripe_subscription = models.OneToOneField(StripeSubscription, 
-        on_delete=models.CASCADE, related_name='squad_member', null=True)
+    #The stripe subscription id
+    stripe_subscription_id = models.CharField(max_length=32, null=True, 
+        blank=True)
     #Date that the user joined the subscription
     date_joined = models.DateTimeField(editable=False)
     #Date that the user left the subscription

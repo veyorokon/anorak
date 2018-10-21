@@ -215,7 +215,7 @@ export default class SquadCard extends Component {
           >
             <TouchableOpacity onPress={() => alert('Menu pressed')}>
               <Image
-                source={require('../../../../assets/menu-dots-vertical.png')}
+                source={this.props.loginButtonImage}
                 style={{
                   height: 24,
                   width: 24,

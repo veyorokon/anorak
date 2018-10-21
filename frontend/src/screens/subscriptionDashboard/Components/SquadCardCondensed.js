@@ -61,10 +61,10 @@ export default class SquadCard extends Component {
           >
             <TouchableOpacity onPress={() => alert('Login Information')}>
               <Image
-                source={require('../../../../assets/login-circle-bold.png')}
+                source={this.props.loginButtonImage}
                 style={{
-                  height: 55,
-                  width: 55,
+                  height: 50,
+                  width: 50,
                   tintColor: '#307FF6',
                 }}
               />
@@ -82,7 +82,7 @@ export default class SquadCard extends Component {
             <CardItem style={{ flexDirection: 'row' }}>
               <Text
                 style={{
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: 'bold',
                   letterSpacing: 2,
                 }}
@@ -139,7 +139,7 @@ export default class SquadCard extends Component {
             >
               <TouchableOpacity onPress={() => alert('Menu pressed')}>
                 <Image
-                  source={require('../../../../assets/menu-dots-vertical.png')}
+                  source={this.props.optionButtonImage}
                   style={{
                     height: 24,
                     width: 24,

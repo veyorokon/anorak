@@ -18,10 +18,11 @@ export default {
 
   title: {
     fontSize: 20,
-    color: 'black',
+    paddingVertical: 30,
+    color: '#999999',
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 20,
     color: '#999999',
   },
 
