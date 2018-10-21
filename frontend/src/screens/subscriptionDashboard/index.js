@@ -17,7 +17,11 @@ import {
   StatusBar,
 } from 'react-native';
 import SortableList from 'react-native-sortable-list';
-import { SquadCardCondensed } from './Components';
+import {
+  SquadCardCondensed,
+  CreateSquadModal,
+  JoinSquadModal,
+} from './Components';
 import { Footer, FooterTab, Button } from 'native-base';
 import styles from './styles';
 
@@ -26,6 +30,10 @@ export default class SubscriptionDashboard extends Component {
     super(props);
     this.state = {
       user: this.props.navigation.state.params.user,
+      modals: {
+        create: false,
+        join: false,
+      },
       dashboardData: {
         0: {
           title: 'Netflix',
@@ -62,6 +70,10 @@ export default class SubscriptionDashboard extends Component {
           order: 4,
         },
       },
+      forms: {
+        create: { service: '', size: 0, price: 0 },
+        join: {},
+      },
     };
     this._storeData();
   }
@@ -77,6 +89,14 @@ export default class SubscriptionDashboard extends Component {
 
   componentDidMount() {
     StatusBar.setHidden(true);
+  }
+
+  toggle_modal(field) {
+    let newModals = Object.assign(this.state.modals);
+    newModals[field] = !this.state.modals[field];
+    this.setState({
+      modals: newModals,
+    });
   }
 
   send_logout_request() {
@@ -96,9 +116,36 @@ export default class SubscriptionDashboard extends Component {
       });
   }
 
+  send_create_squad_request() {
+    fetch('http://127.0.0.1:8000/api/dashboard/create_squad/', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user: this.state.user,
+        form: this.state.forms.create,
+      }),
+    })
+      .then(response => {})
+      .catch(err => {
+        alert(JSON.stringify(err.message));
+      });
+  }
+
+  handle_form_input(form, field, value) {
+    let newFormsData = Object.assign(this.state.forms);
+    newFormsData[form][field] = value;
+    this.setState({
+      forms: newFormsData,
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        {/** The header, logo and buttons for create, join and logout **/}
         <View
           style={{
             flexDirection: 'row',
@@ -128,6 +175,8 @@ export default class SubscriptionDashboard extends Component {
           </View>
         </View>
 
+        {/** Create and Join a squad options.**/}
+
         <View style={{ flexDirection: 'row', paddingBottom: 5, paddingTop: 8 }}>
           <View
             style={{
@@ -135,17 +184,27 @@ export default class SubscriptionDashboard extends Component {
               alignItems: 'center',
             }}
           >
-            <TouchableOpacity onPress={() => alert('Create pressed')}>
+            <TouchableOpacity
+              onPress={() => {
+                this.toggle_modal('create');
+              }}
+            >
               <Text style={{ color: '#0E6E6E' }}>Create Squad</Text>
             </TouchableOpacity>
           </View>
 
           <View style={{ flex: 1, alignItems: 'center' }}>
-            <TouchableOpacity onPress={() => alert('Join pressed')}>
+            <TouchableOpacity
+              onPress={() => {
+                this.toggle_modal('join');
+              }}
+            >
               <Text style={{ color: '#0E6E6E' }}>Join Squad</Text>
             </TouchableOpacity>
           </View>
         </View>
+
+        {/** The dashboard of the user's squads.**/}
 
         <SortableList
           style={styles.list}
@@ -164,6 +223,23 @@ export default class SubscriptionDashboard extends Component {
             </Button>
           </FooterTab>
         </Footer>
+
+        {/** Modals to collect input for create and join squad forms .**/}
+
+        <CreateSquadModal
+          visible={this.state.modals.create}
+          toggleModal={() => this.toggle_modal('create')}
+          handleFormInput={(field, value) =>
+            this.handle_form_input('create', field, value)}
+          onSubmit={() => this.send_create_squad_request()}
+        />
+
+        <JoinSquadModal
+          visible={this.state.modals.join}
+          toggleModal={() => this.toggle_modal('join')}
+          handleFormInput={(field, value) =>
+            this.handle_form_input('join', field, value)}
+        />
       </View>
     );
   }
@@ -229,7 +305,11 @@ class Row extends Component {
 
     return (
       <Animated.View style={[this._style]}>
-        <SquadCardCondensed data={data} />
+        <SquadCardCondensed
+          data={data}
+          loginButtonImage={require('../../../assets/login-circle-bold.png')}
+          optionButtonImage={require('../../../assets/menu-dots-filled.png')}
+        />
       </Animated.View>
     );
   }

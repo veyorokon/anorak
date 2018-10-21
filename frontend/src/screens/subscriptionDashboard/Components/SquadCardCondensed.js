@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, Alert, Image } from 'react-native';
+import { TouchableOpacity, Alert, Image, StyleSheet } from 'react-native';
 import { Card, CardItem, Text, View } from 'native-base';
 //import SignupModal from './SignupModal';
 //import CancelModal from './CancelModal';
@@ -40,51 +40,49 @@ export default class SquadCard extends Component {
 
   render() {
     return (
-      <Card style={{ overflow: 'hidden', borderRadius: 8 }}>
-        {/** TOP ROW **/}
+      <Card style={{ overflow: 'hidden', borderRadius: 40 }}>
+        {/** MAIN ROW **/}
         <View
           style={{
             flexDirection: 'row',
             flex: 1,
             justifyContent: 'space-around',
-            paddingHorizontal: 15,
           }}
         >
+          {/** COLUMN 1 - LOGIN **/}
           <View
             style={{
-              flex: 1,
+              flex: 2,
+              justifyContent: 'center',
               alignItems: 'flex-start',
-              paddingTop: 10,
+              padding: 10,
+              paddingLeft: 10,
             }}
           >
-            <View
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: 44 / 2,
-                backgroundColor: 'black',
-                justifyContent: 'center',
-              }}
-            >
-              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <Text style={{ color: 'red', fontSize: 26 }}>
-                  {this.state.data.title.charAt(0)}
-                </Text>
-              </View>
-            </View>
+            <TouchableOpacity onPress={() => alert('Login Information')}>
+              <Image
+                source={this.props.loginButtonImage}
+                style={{
+                  height: 50,
+                  width: 50,
+                  tintColor: '#307FF6',
+                }}
+              />
+            </TouchableOpacity>
           </View>
 
+          {/** COLUMN 2 - TITLE **/}
           <View
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
+              flex: 4,
+              alignItems: 'flex-start',
               justifyContent: 'center',
             }}
           >
             <CardItem style={{ flexDirection: 'row' }}>
               <Text
                 style={{
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: 'bold',
                   letterSpacing: 2,
                 }}
@@ -94,135 +92,62 @@ export default class SquadCard extends Component {
             </CardItem>
           </View>
 
+          {/** COLUMN 3 - OVERVIEW **/}
           <View
             style={{
-              flex: 1,
-              alignItems: 'flex-end',
-              justifyContent: 'center',
+              flex: 3,
+              padding: 10,
             }}
           >
-            <CardItem>
-              <Text style={{ fontSize: 16 }}>
-                {this.state.data.price}
-              </Text>
-            </CardItem>
-          </View>
-        </View>
-
-        {/** Owner ROW **/}
-
-        <View
-          style={{
-            flexDirection: 'row',
-            flex: 1,
-            justifyContent: 'space-around',
-          }}
-        >
-          <View
-            style={{
-              flexDirection: 'row',
-              flex: 1,
-              justifyContent: 'flex-end',
-              paddingHorizontal: 10,
-            }}
-          >
-            <View>
-              <Text>Owner: </Text>
-            </View>
-          </View>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              flex: 1,
-              justifyContent: 'flex-start',
-              paddingHorizontal: 10,
-            }}
-          >
-            <View>
-              <Text>
-                {this.state.data.owner}
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Status Row */}
-        <View
-          style={{
-            flexDirection: 'row',
-            flex: 1,
-            justifyContent: 'space-around',
-          }}
-        >
-          <View
-            style={{
-              flexDirection: 'row',
-              flex: 1,
-              justifyContent: 'flex-end',
-              paddingHorizontal: 10,
-            }}
-          >
-            <View>
-              <Text>Status: </Text>
-            </View>
-          </View>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              flex: 1,
-              justifyContent: 'flex-start',
-              paddingHorizontal: 10,
-            }}
-          >
-            <View>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}
+            >
               <Text>
                 {this.state.data.status}
               </Text>
             </View>
-          </View>
-        </View>
-
-        {/* Footer Menu Row */}
-        <View
-          style={{
-            flexDirection: 'row',
-            flex: 1,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: 'row',
-              flex: 1,
-              justifyContent: 'flex-start',
-              paddingLeft: 20,
-            }}
-          >
-            <TouchableOpacity onPress={() => alert('Login pressed')}>
-              <Text style={{ color: 'blue' }}>Login</Text>
-            </TouchableOpacity>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}
+            >
+              <Text>
+                {this.state.data.price}
+              </Text>
+            </View>
           </View>
 
+          {/** COLUMN 4 - DOTS **/}
           <View
             style={{
-              flexDirection: 'row',
               flex: 1,
-              justifyContent: 'flex-end',
-              alignItems: 'flex-end',
-              paddingBottom: 5,
+              padding: 5,
             }}
           >
-            <TouchableOpacity onPress={() => alert('Menu pressed')}>
-              <Image
-                source={require('../../../../assets/menu-dots-vertical.png')}
-                style={{
-                  height: 24,
-                  width: 24,
-                  resizeMode: 'contain',
-                }}
-              />
-            </TouchableOpacity>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+              }}
+            >
+              <TouchableOpacity onPress={() => alert('Menu pressed')}>
+                <Image
+                  source={this.props.optionButtonImage}
+                  style={{
+                    height: 24,
+                    width: 24,
+                    resizeMode: 'contain',
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Card>
