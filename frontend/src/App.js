@@ -6,8 +6,6 @@ import Home from './screens/home';
 import Account from './screens/account';
 import Onboarding from './screens/onboarding';
 import VerifyPhone from './screens/verifyPhone';
-import DialogueModal from './screens/dialogueModal';
-import CompleteProfile from './screens/completeProfile';
 import SubscriptionDashboard from './screens/subscriptionDashboard';
 
 const Drawer = DrawerNavigator(
@@ -16,8 +14,6 @@ const Drawer = DrawerNavigator(
     Account: { screen: Account },
     Onboarding: { screen: Onboarding },
     VerifyPhone: { screen: VerifyPhone },
-    DialogueModal: { screen: DialogueModal },
-    CompleteProfile: { screen: CompleteProfile },
     SubscriptionDashboard: { screen: SubscriptionDashboard },
   },
   {

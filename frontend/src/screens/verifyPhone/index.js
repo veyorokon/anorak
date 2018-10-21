@@ -13,6 +13,8 @@ import {
 import { Icon } from 'native-base';
 import * as Animatable from 'react-native-animatable';
 
+import api from '../../lib/api';
+
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 export default class VerifyPhone extends React.Component {
@@ -136,27 +138,15 @@ export default class VerifyPhone extends React.Component {
   send_phone_verification_code() {
     const number = this.state.phone_number;
     const code = this.state.code;
-    fetch('http://127.0.0.1:8000/api/phone_verification_codes/', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        phone_number: number,
-        code: code,
-        isRequestingCode: 0,
-      }),
-  }).then(response => {
-      response.json()
-      .then((data) => {
+    api.sendPhoneVerificationCode(number, code).then(response => {
+      response.json().then(data => {
         if (response.status == 200) {
           this.send_registration_request(data.session_token);
         } else {
           this._showInvalidConfirmationCodeAlert();
         }
       });
-    })
+    });
   }
 
   /**
@@ -166,37 +156,19 @@ export default class VerifyPhone extends React.Component {
   send_registration_request(session_token) {
     this.setState({ submittingSignup: true }, () => {
       const phone_number = this.state.phone_number;
-      fetch(
-        'http://127.0.0.1:8000/api/users/creation/?session_token=' +
-          session_token,
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            user: {
-              // email: email,
-              // password: password,
-              phone_number: phone_number,
-            },
-            session_token: session_token,
-          }),
-        }
-      )
+      api
+        .sendRegistrationRequest(session_token, phone_number)
         .then(response => {
-          response.json()
-           .then((data) => {
-              if (response.status == 201) {
-                this.props.navigation.navigate('Onboarding', {
-                  user: data,
-                });
-              } else {
-                this.show_duplicate_email_alert();
-              }
-          })
-      })
+          response.json().then(data => {
+            if (response.status == 201) {
+              this.props.navigation.navigate('Onboarding', {
+                user: data,
+              });
+            } else {
+              this.show_duplicate_email_alert();
+            }
+          });
+        })
         .finally(() => {
           this.setState({ submittingSignup: false });
         });
