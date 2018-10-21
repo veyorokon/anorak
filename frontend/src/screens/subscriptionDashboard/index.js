@@ -23,6 +23,7 @@ import {
   JoinSquadModal,
 } from './Components';
 import { Footer, FooterTab, Button } from 'native-base';
+import api from '../../lib/api';
 import styles from './styles';
 
 export default class SubscriptionDashboard extends Component {
@@ -76,7 +77,7 @@ export default class SubscriptionDashboard extends Component {
       },
     };
     this._storeData();
-    alert(JSON.stringify(this.state.user))
+    alert(JSON.stringify(this.state.user));
   }
 
   async _storeData() {
@@ -101,15 +102,9 @@ export default class SubscriptionDashboard extends Component {
   }
 
   send_logout_request() {
-    fetch('http://127.0.0.1:8000/api/users/logout/', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(this.state.user),
-    })
-      .then(response => {
+    api
+      .sendLogoutRequest(this.state.user)
+      .then(() => {
         this.props.navigation.navigate('Home');
       })
       .catch(err => {
@@ -118,18 +113,9 @@ export default class SubscriptionDashboard extends Component {
   }
 
   send_create_squad_request() {
-    fetch('http://127.0.0.1:8000/api/dashboard/create_squad/', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        user: this.state.user,
-        form: this.state.forms.create,
-      }),
-    })
-      .then(response => {})
+    api
+      .sendCreateSquadRequest(this.state.user, this.state.forms.create)
+      .then(() => {})
       .catch(err => {
         alert(JSON.stringify(err.message));
       });

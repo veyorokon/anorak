@@ -15,6 +15,8 @@ import { Icon } from 'native-base';
 import * as Animatable from 'react-native-animatable';
 import { AsyncStorage, Alert } from 'react-native';
 
+import api from '../../lib/api';
+
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 export default class Home extends React.Component {
@@ -51,14 +53,8 @@ export default class Home extends React.Component {
   };
 
   request_auto_token_login() {
-    fetch('http://127.0.0.1:8000/api/users/token_login/', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(this.state.credentials),
-    })
+    api
+      .requestAutoTokenLogin(this.state.credentials)
       .then(response => {
         if (response.status == 200) {
           this.props.navigation.navigate('SubscriptionDashboard', {
@@ -192,14 +188,8 @@ export default class Home extends React.Component {
 
   request_phone_verification_code() {
     const number = '1' + this.state.phone_number;
-    fetch('http://127.0.0.1:8000/api/phone_verification_codes/', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ phone_number: number, isRequestingCode: 1 }),
-    })
+    api
+      .requestPhoneVerificationCode(number)
       .then(response => {
         if (response.status == 201) {
           this.props.navigation.navigate('VerifyPhone', {
