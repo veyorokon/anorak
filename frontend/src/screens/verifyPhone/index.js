@@ -147,14 +147,16 @@ export default class VerifyPhone extends React.Component {
         code: code,
         isRequestingCode: 0,
       }),
-    }).then(response => {
-      if (response.status == 200) {
-        const session_token = JSON.parse(response._bodyText);
-        this.send_registration_request(session_token.session_token);
-      } else {
-        this._showInvalidConfirmationCodeAlert();
-      }
-    });
+  }).then(response => {
+      response.json()
+      .then((data) => {
+        if (response.status == 200) {
+          this.send_registration_request(data.session_token);
+        } else {
+          this._showInvalidConfirmationCodeAlert();
+        }
+      });
+    })
   }
 
   /**
@@ -184,15 +186,17 @@ export default class VerifyPhone extends React.Component {
         }
       )
         .then(response => {
-          response.json();
-          if (response.status == 201) {
-            this.props.navigation.navigate('Onboarding', {
-              user: JSON.parse(response._bodyText),
-            });
-          } else {
-            this.show_duplicate_email_alert();
-          }
-        })
+          response.json()
+           .then((data) => {
+              if (response.status == 201) {
+                this.props.navigation.navigate('Onboarding', {
+                  user: data,
+                });
+              } else {
+                this.show_duplicate_email_alert();
+              }
+          })
+      })
         .finally(() => {
           this.setState({ submittingSignup: false });
         });

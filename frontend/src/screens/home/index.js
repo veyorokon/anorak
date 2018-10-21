@@ -202,7 +202,6 @@ export default class Home extends React.Component {
     })
       .then(response => {
         if (response.status == 201) {
-          response.json();
           this.props.navigation.navigate('VerifyPhone', {
             phone_number: number,
           });
