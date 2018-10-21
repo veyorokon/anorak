@@ -76,6 +76,7 @@ export default class SubscriptionDashboard extends Component {
       },
     };
     this._storeData();
+    alert(JSON.stringify(this.state.user))
   }
 
   async _storeData() {
