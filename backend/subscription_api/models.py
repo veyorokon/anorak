@@ -4,7 +4,12 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django_enumfield import enum
+from django.dispatch import receiver
+#from . managers import SquadManager
+from django.db.models.signals import post_save, pre_save, pre_delete
 
+import stripe
+stripe.api_key = settings.STRIPE_ACCOUNT_SID
 
 # Frequency of subscription billing
 class Frequency(enum.Enum):
@@ -19,8 +24,6 @@ class StripePlan(models.Model):
     stripe_plan_id = models.CharField(max_length=32, null=True, blank=True)
     #The frequency of billing
     billing_frequency = enum.EnumField(Frequency, default=Frequency.MONTH)
-    #The base price charged to SquadUp
-    cost_price = models.FloatField(null=True)
     #The SquadUp fee if any
     cost_service_fee = models.FloatField(default=0)
     #Any taxes associated with the cost of the service
@@ -30,17 +33,38 @@ class StripePlan(models.Model):
     #The net total amount after tax and fees
     cost_net_total = models.FloatField(default=0)
     
+    def create_stripe_plan(self, name, cost_price, *args, **kwargs):
+        if not self.id:
+            stripe_plan_id = stripe.Plan.create(
+                id=name,
+                amount=cost_price,
+                interval="month",
+                product=settings.STRIPE_SQUADUP_PRODUCT,
+                currency="usd",
+            )
+            self.stripe_plan_id = stripe_plan_id.id
+            
+            return super(StripePlan, self).save(*args, **kwargs)
+        else:
+            raise ValueError('Stripe plan could not be created')
+                    
+            
+    def delete_plan_and_product(self):
+        plan = stripe.Plan.retrieve(self.stripe_plan_id)
+        #product = stripe.Product.retrieve(plan.product)
+        plan.delete()
+        #product.delete()        
+    
 
 # Contains a Stripe product. 
 class Squad(models.Model):
     #User who owns this subscription product
     owner = models.ForeignKey(User, 
         on_delete=models.CASCADE)
-    #Squad name
-    squad_uuid = models.UUIDField(primary_key=True, default=uuid.uuid4,
-        editable=False)
     #Squad description
     service = models.CharField(max_length=12, null=True)
+    #The base price charged to SquadUp
+    cost_price = models.IntegerField(null=False)
     #Squad maximum size
     maximum_size = models.IntegerField(default=10)
     #Squad maximum size
@@ -49,14 +73,11 @@ class Squad(models.Model):
     date_created = models.DateTimeField(editable=False)
     #Date that the subscription was created
     date_modified = models.DateTimeField(editable=False)
-    #Date that the start date for the subscription
-    date_subscription_start = models.DateTimeField(blank=True,
-        null=True, editable=True)
-    #The stripe product id
-    stripe_product_id = models.CharField(max_length=32, null=True, blank=True)
-    #The stripe plan
+    #The stripe plan for this squad
     stripe_plan = models.OneToOneField(StripePlan, default=None, 
         null=True, on_delete=models.CASCADE, related_name='squad')
+        
+    #objects = SquadManager()
     
     def save(self, *args, **kwargs):
         ''' 
@@ -66,14 +87,39 @@ class Squad(models.Model):
             self.date_created = timezone.now()
         self.date_modified = timezone.now()
         return super(Squad, self).save(*args, **kwargs)
-    
+        
+
+# Signals for Auth User model.
+@receiver(post_save, sender=Squad)
+def create_stripe_plan(sender, instance=None, created=False, **kwargs):
+    if created:
+        try:
+            stripe_plan_object = StripePlan()
+            stripe_plan_object.create_stripe_plan(
+                name=instance.service+'_'+str(instance.id),
+                cost_price=instance.cost_price
+                )
+            instance.stripe_plan = stripe_plan_object
+            instance.save()
+        except:
+           instance.delete()
+           raise ValueError('Squad could not be created')
+
+# Signals for Auth User model.
+@receiver(pre_delete, sender=Squad)
+def delete_stripe_plan(sender, instance=None, **kwargs):
+    try:
+        instance.stripe_plan.delete_plan_and_product()
+        instance.stripe_plan.delete()
+    except:
+        pass
 
 # Contains a stripe subscription
 class SquadMember(models.Model):
     #User who owns this subscription
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     #User who owns this subscription
-    squad = models.ForeignKey(Squad, on_delete=models.CASCADE)
+    squad = models.ForeignKey(Squad, on_delete=models.CASCADE, null=True)
     #The stripe subscription id
     stripe_subscription_id = models.CharField(max_length=32, null=True, 
         blank=True)

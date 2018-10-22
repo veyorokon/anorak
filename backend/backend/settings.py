@@ -31,7 +31,7 @@ ALLOWED_HOSTS=['127.0.0.1']
 
 #Stripe key
 STRIPE_ACCOUNT_SID = 'sk_test_9Xz79VxZxWJbanvxDAWLYmoN'
-
+STRIPE_SQUADUP_PRODUCT = 'prod_DpCsP9IHtbLKxZ'
 
 #Phoone verification - Twilio
 TWILIO_ACCOUNT_SID = 'ACaf89a225145d292dfb5ad9ec6e8ab10e'

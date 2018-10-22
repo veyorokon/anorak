@@ -72,7 +72,7 @@ export default class SubscriptionDashboard extends Component {
         },
       },
       forms: {
-        create: { service: '', size: 0, price: 0 },
+        create: { service: '', maximum_size: 0, cost_price: 0 },
         join: {},
       },
     };

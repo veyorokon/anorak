@@ -75,7 +75,7 @@ export default class createSquadModal extends Component {
                 </Label>
                 <Input
                   onChangeText={value =>
-                    this.props.handleFormInput('size', value)}
+                    this.props.handleFormInput('maximum_size', value)}
                 />
               </Item>
             </Form>
@@ -99,7 +99,7 @@ export default class createSquadModal extends Component {
                 </Label>
                 <Input
                   onChangeText={value =>
-                    this.props.handleFormInput('price', value)}
+                    this.props.handleFormInput('cost_price', value)}
                 />
               </Item>
             </Form>
