@@ -54,6 +54,10 @@ class CreateSquadAPI(APIView):
         isSessionValid, user = self.validate_session(request)
         if(isSessionValid):
             self.create_squad(user, request)
+            return Response(
+                '{"success":"true"}', 
+                status=status.HTTP_200_OK
+            )
         
         return Response(
             '{"success":"false"}', 

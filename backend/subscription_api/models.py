@@ -36,25 +36,24 @@ class StripePlan(models.Model):
     def create_stripe_plan(self, name, cost_price, *args, **kwargs):
         if not self.id:
             stripe_plan_id = stripe.Plan.create(
+                id=name,
                 amount=cost_price,
                 interval="month",
-                product={
-                    "name":name,
-                },
+                product=settings.STRIPE_SQUADUP_PRODUCT,
                 currency="usd",
             )
             self.stripe_plan_id = stripe_plan_id.id
             
             return super(StripePlan, self).save(*args, **kwargs)
         else:
-            raise ValueError('StripePlan already exists for squad')
+            raise ValueError('Stripe plan could not be created')
                     
             
     def delete_plan_and_product(self):
         plan = stripe.Plan.retrieve(self.stripe_plan_id)
-        product = stripe.Product.retrieve(plan.product)
+        #product = stripe.Product.retrieve(plan.product)
         plan.delete()
-        product.delete()        
+        #product.delete()        
     
 
 # Contains a Stripe product. 
@@ -94,13 +93,17 @@ class Squad(models.Model):
 @receiver(post_save, sender=Squad)
 def create_stripe_plan(sender, instance=None, created=False, **kwargs):
     if created:
-        stripe_plan_object = StripePlan()
-        stripe_plan_object.create_stripe_plan(
-            name=instance.service+'_'+str(instance.id),
-            cost_price=instance.cost_price
-            )
-        instance.stripe_plan = stripe_plan_object
-        instance.save()
+        try:
+            stripe_plan_object = StripePlan()
+            stripe_plan_object.create_stripe_plan(
+                name=instance.service+'_'+str(instance.id),
+                cost_price=instance.cost_price
+                )
+            instance.stripe_plan = stripe_plan_object
+            instance.save()
+        except:
+           instance.delete()
+           raise ValueError('Squad could not be created')
 
 # Signals for Auth User model.
 @receiver(pre_delete, sender=Squad)
