@@ -138,15 +138,14 @@ export default class VerifyPhone extends React.Component {
   send_phone_verification_code() {
     const number = this.state.phone_number;
     const code = this.state.code;
-    api.sendPhoneVerificationCode(number, code).then(response => {
-      response.json().then(data => {
-        if (response.status == 200) {
-          this.send_registration_request(data.session_token);
-        } else {
-          this._showInvalidConfirmationCodeAlert();
-        }
+    api
+      .sendPhoneVerificationCode(number, code)
+      .then(data => {
+        this.send_registration_request(data.session_token);
+      })
+      .catch(() => {
+        this._showInvalidConfirmationCodeAlert();
       });
-    });
   }
 
   /**
@@ -158,16 +157,14 @@ export default class VerifyPhone extends React.Component {
       const phone_number = this.state.phone_number;
       api
         .sendRegistrationRequest(session_token, phone_number)
-        .then(response => {
-          response.json().then(data => {
-            if (response.status == 201) {
-              this.props.navigation.navigate('Onboarding', {
-                user: data,
-              });
-            } else {
-              this.show_duplicate_email_alert();
-            }
+        .then(data => {
+          this.props.navigation.navigate('Onboarding', {
+            user: data,
           });
+        })
+        .catch(() => {
+          // TODO: fix
+          this.show_duplicate_email_alert();
         })
         .finally(() => {
           this.setState({ submittingSignup: false });

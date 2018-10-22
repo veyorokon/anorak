@@ -53,19 +53,11 @@ export default class Home extends React.Component {
   };
 
   request_auto_token_login() {
-    api
-      .requestAutoTokenLogin(this.state.credentials)
-      .then(response => {
-        if (response.status == 200) {
-          this.props.navigation.navigate('SubscriptionDashboard', {
-            user: JSON.parse(response._bodyInit),
-          });
-        } else {
-        }
-      })
-      .catch(() => {
-        //alert(JSON.stringify(err.message));
-      });
+    api.requestAutoTokenLogin(this.state.credentials).then(user => {
+      if (user) {
+        this.props.navigation.navigate('SubscriptionDashboard', { user });
+      }
+    });
   }
 
   componentWillMount() {
@@ -190,16 +182,14 @@ export default class Home extends React.Component {
     const number = '1' + this.state.phone_number;
     api
       .requestPhoneVerificationCode(number)
-      .then(response => {
-        if (response.status == 201) {
-          this.props.navigation.navigate('VerifyPhone', {
-            phone_number: number,
-          });
-        } else {
-          this._showInvalidNumberAlert();
-        }
+      .then(() => {
+        this.props.navigation.navigate('VerifyPhone', {
+          phone_number: number,
+        });
       })
-      .catch(() => {});
+      .catch(() => {
+        this._showInvalidNumberAlert();
+      });
   }
 
   render() {

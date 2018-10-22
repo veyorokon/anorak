@@ -32,7 +32,7 @@ def get_serialized_user(user):
 class UserDetailAPI(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
     permission_classes = (IsAuthenticated,)
-    
+
     def get(self, request, *args, **kwargs):
         """
         List all User objects
@@ -40,12 +40,12 @@ class UserDetailAPI(APIView):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
-        
-        
-        
+
+
+
 class UserCreationAPI(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
-    
+
     def post(self, request, *args, **kwargs):
         """
         Updates the user object
@@ -54,14 +54,14 @@ class UserCreationAPI(APIView):
         if(sessionValidated):
             serialized_user = get_serialized_user(user)
             return Response(
-                serialized_user.data, 
+                serialized_user.data,
                 status=status.HTTP_201_CREATED
             )
         return Response(
-            '{"success":"false"}', 
+            '{"success":"false"}',
             status=status.HTTP_400_BAD_REQUEST
         )
-        
+
     def validate_session(self, request):
         """
         Returns session validation bool and the user
@@ -71,19 +71,19 @@ class UserCreationAPI(APIView):
         if (user == None):
             return False, None
         return user.validate_session_token(session_token), user
-            
-            
+
+
     def get_session_token_from_request(self, request):
         """
         Extracts the session token from the URL
         """
         session_token = request.data['session_token']
         return session_token
-    
-    
+
+
     def get_user_from_request_with_phone_number(self, request):
         """
-        Retrieves the user matching the credentials or returns None 
+        Retrieves the user matching the credentials or returns None
         """
         phone_number = request.data['user']['phone_number']
         try:
@@ -93,11 +93,11 @@ class UserCreationAPI(APIView):
         except:
             user = None
         return user
-        
-        
+
+
 class UserTokenLoginAPI(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
-        
+
     def post(self, request, *args, **kwargs):
         """
         Updates the user object
@@ -106,18 +106,15 @@ class UserTokenLoginAPI(APIView):
         if(isSessionValid and user):
             serialized_user = get_serialized_user(user)
             return Response(
-                serialized_user.data, 
+                serialized_user.data,
                 status=status.HTTP_200_OK
             )
-        return Response(
-            '{"success":"false"}', 
-            status=status.HTTP_400_BAD_REQUEST
-        )
-    
+        return Response(False)
+
 
 class UserLogoutAPI(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
-        
+
     def post(self, request, *args, **kwargs):
         """
         Updates the user object
@@ -125,7 +122,6 @@ class UserLogoutAPI(APIView):
         isSessionValid, user = Session.authenticate(request)
         Session.logout(user)
         return Response(
-            '{"success":"true"}', 
+            '{"success":"true"}',
             status=status.HTTP_200_OK
         )
-                
