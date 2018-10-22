@@ -108,7 +108,7 @@ export default class SubscriptionDashboard extends Component {
         this.props.navigation.navigate('Home');
       })
       .catch(err => {
-        alert(JSON.stringify(err.message));
+        alert(err.message);
       });
   }
 
@@ -117,7 +117,7 @@ export default class SubscriptionDashboard extends Component {
       .sendCreateSquadRequest(this.state.user, this.state.forms.create)
       .then(() => {})
       .catch(err => {
-        alert(JSON.stringify(err.message));
+        alert(err.message);
       });
   }
 
