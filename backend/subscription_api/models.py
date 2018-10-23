@@ -121,7 +121,7 @@ class SquadMember(models.Model):
         """
         Creates a special membership for squad owners
         """
-        self.membership_status = SquadMemberStatus.OWNER
+        self.status = SquadMemberStatus.OWNER
         self.user = squad.owner
         self.squad = squad
         self.date_joined = timezone.now()

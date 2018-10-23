@@ -15,6 +15,7 @@ import {
   TouchableOpacity,
   Image,
   StatusBar,
+  Alert,
 } from 'react-native';
 import SortableList from 'react-native-sortable-list';
 import {
@@ -85,7 +86,16 @@ export default class SubscriptionDashboard extends Component {
   send_create_squad_request() {
     api
       .sendCreateSquadRequest(this.state.user, this.state.forms.create)
-      .then(() => {})
+      .then(data => {
+        if (data) {
+          Alert.alert(
+            'Success',
+            'You created your squad!',
+            [{ text: 'OK', onPress: () => this.toggle_modal('create') }],
+            { cancelable: false }
+          );
+        }
+      })
       .catch(err => {
         alert(err.message);
       });

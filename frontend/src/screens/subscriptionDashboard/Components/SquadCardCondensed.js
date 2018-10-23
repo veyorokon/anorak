@@ -39,12 +39,14 @@ export default class SquadCard extends Component {
     );
 
   render() {
+    var loginButtonDisabled = false;
     if (this.state.data.status === 0) {
       var statusColor = 'purple';
       var status = 'Owner';
     } else if (this.state.data.status === 1) {
       statusColor = 'grey';
       status = 'Pending';
+      loginButtonDisabled = true;
     } else {
       statusColor = 'green';
       status = 'Subscribed';
@@ -70,13 +72,16 @@ export default class SquadCard extends Component {
               paddingLeft: 10,
             }}
           >
-            <TouchableOpacity onPress={() => alert('Login Information')}>
+            <TouchableOpacity
+              disabled={loginButtonDisabled}
+              onPress={() => alert('Login Information')}
+            >
               <Image
                 source={this.props.loginButtonImage}
                 style={{
                   height: 50,
                   width: 50,
-                  tintColor: '#307FF6',
+                  tintColor: statusColor,
                 }}
               />
             </TouchableOpacity>
