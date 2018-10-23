@@ -1,7 +1,4 @@
-from io import StringIO
 from . models import User 
-from . serializers import UserSerializer
-from rest_framework.parsers import JSONParser
 from rest_framework.authtoken.models import Token
 
 class SessionManager(object):

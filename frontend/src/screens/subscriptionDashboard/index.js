@@ -35,49 +35,19 @@ export default class SubscriptionDashboard extends Component {
         create: false,
         join: false,
       },
-      dashboardData: {
-        0: {
-          title: 'Netflix',
-          price: '$ 3.00',
-          owner: 'Natasha',
-          status: 'Joined',
-        },
-        1: {
-          title: 'Hulu',
-          price: '$ 1.50',
-          owner: 'Ben',
-          status: 'Owner',
-          order: 1,
-        },
-        2: {
-          title: 'Spotify',
-          price: '$ 1.00',
-          owner: 'Vahid',
-          status: 'Pending',
-          order: 2,
-        },
-        3: {
-          title: 'HBO',
-          price: '$ 1.25',
-          owner: 'Natasha',
-          status: 'Pending',
-          order: 3,
-        },
-        4: {
-          title: 'Prime',
-          price: '$ 4.25',
-          owner: 'Tom',
-          status: 'Joined',
-          order: 4,
-        },
-      },
+      dashboardData: this.props.navigation.state.params.dashboardData,
       forms: {
-        create: { service: '', maximum_size: 0, cost_price: 0 },
+        create: {
+          service: '',
+          maximum_size: 0,
+          cost_price: 0,
+          username: '',
+          password: '',
+        },
         join: {},
       },
     };
     this._storeData();
-    alert(JSON.stringify(this.state.user));
   }
 
   async _storeData() {

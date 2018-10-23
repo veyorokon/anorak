@@ -124,8 +124,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.create_session_token()
         
     def __str__(self):
-        return 'Email={0}, Phone Number={1}'.format(
-            self.email,
+        return 'Phone Number={0}'.format(
             self.phone_number
         )
     

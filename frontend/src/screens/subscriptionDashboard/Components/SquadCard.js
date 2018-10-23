@@ -68,7 +68,7 @@ export default class SquadCard extends Component {
             >
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                 <Text style={{ color: 'red', fontSize: 26 }}>
-                  {this.state.data.title.charAt(0)}
+                  {this.state.data.service.charAt(0)}
                 </Text>
               </View>
             </View>
@@ -89,7 +89,7 @@ export default class SquadCard extends Component {
                   letterSpacing: 2,
                 }}
               >
-                {this.state.data.title}
+                {this.state.data.service}
               </Text>
             </CardItem>
           </View>

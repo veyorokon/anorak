@@ -38,6 +38,7 @@ export default class Simple extends Component {
         onDone={() =>
           this.props.navigation.navigate('SubscriptionDashboard', {
             user: this.props.navigation.state.params.user,
+            dashboardData: this.props.navigation.state.params.dashboardData,
           })}
       />
     );

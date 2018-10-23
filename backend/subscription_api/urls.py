@@ -17,7 +17,24 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('dashboard/stripe_plan_detail/', views.StripePlanDetailAPI.as_view()),
-    path('dashboard/squad_detail/', views.SquadDetailAPI.as_view()),
-    path('dashboard/create_squad/', views.CreateSquadAPI.as_view()),
+    path(
+        'dashboard/stripe_plan_detail/', 
+        views.StripePlanDetailAPI.as_view()
+    ),
+    path(
+        'dashboard/squad_detail/', 
+        views.SquadDetailAPI.as_view()
+    ),
+    path(
+        'dashboard/squad_member_details/', 
+        views.SquadMemberDetailAPI.as_view()
+    ),
+    path(
+        'dashboard/create_squad/', 
+        views.CreateSquadAPI.as_view()
+    ),
+    path(
+        'dashboard/user_dashboard/', 
+        views.DashboardAPI.as_view()
+    ),
 ]

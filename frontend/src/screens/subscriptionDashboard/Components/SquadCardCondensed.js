@@ -39,6 +39,17 @@ export default class SquadCard extends Component {
     );
 
   render() {
+    if (this.state.data.status === 0) {
+      var statusColor = 'purple';
+      var status = 'Owner';
+    } else if (this.state.data.status === 1) {
+      statusColor = 'grey';
+      status = 'Pending';
+    } else {
+      statusColor = 'green';
+      status = 'Subscribed';
+    }
+
     return (
       <Card style={{ overflow: 'hidden', borderRadius: 40 }}>
         {/** MAIN ROW **/}
@@ -87,7 +98,7 @@ export default class SquadCard extends Component {
                   letterSpacing: 2,
                 }}
               >
-                {this.state.data.title}
+                {this.state.data.service}
               </Text>
             </CardItem>
           </View>
@@ -106,8 +117,8 @@ export default class SquadCard extends Component {
                 justifyContent: 'center',
               }}
             >
-              <Text>
-                {this.state.data.status}
+              <Text style={{ color: statusColor }}>
+                {status}
               </Text>
             </View>
             <View
@@ -119,7 +130,7 @@ export default class SquadCard extends Component {
               }}
             >
               <Text>
-                {this.state.data.price}
+                $ {this.state.data.price.toFixed(2)}
               </Text>
             </View>
           </View>
