@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, Alert, Image, StyleSheet } from 'react-native';
+import { TouchableOpacity, Image } from 'react-native';
 import { Card, CardItem, Text, View } from 'native-base';
 //import SignupModal from './SignupModal';
 //import CancelModal from './CancelModal';
@@ -10,46 +10,21 @@ export default class SquadCard extends Component {
   state = {
     data: this.props.data,
   };
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible });
-  }
-
-  _showBillingInformationMissingAlert = () =>
-    Alert.alert(
-      'Missing Billing Information',
-      'You must update your billing information before you can Squad Up for subscriptions',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Update',
-          style: 'confirm',
-          onPress: () => {
-            this.props.navigation.navigate('Account', {
-              user: this.state.data.user,
-              token: this.state.data.token,
-              activeTab: 1,
-            });
-          },
-        },
-      ],
-      { cancelable: true }
-    );
 
   render() {
+    const data = this.state.data;
+
     var loginButtonDisabled = false;
-    if (this.state.data.status === 0) {
+    if (data.status === 0) {
       var statusColor = 'purple';
       var status = 'Owner';
-    } else if (this.state.data.status === 1) {
+    } else if (data.status === 1) {
       statusColor = 'grey';
       status = 'Pending';
       loginButtonDisabled = true;
     } else {
       statusColor = 'green';
-      status = 'Subscribed';
+      status = 'Active';
     }
 
     return (
@@ -98,12 +73,12 @@ export default class SquadCard extends Component {
             <CardItem style={{ flexDirection: 'row' }}>
               <Text
                 style={{
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: 'bold',
                   letterSpacing: 2,
                 }}
               >
-                {this.state.data.service}
+                {data.service}
               </Text>
             </CardItem>
           </View>
@@ -135,7 +110,7 @@ export default class SquadCard extends Component {
               }}
             >
               <Text>
-                $ {this.state.data.price.toFixed(2)}
+                $ {data.price.toFixed(2)}
               </Text>
             </View>
           </View>
@@ -153,7 +128,7 @@ export default class SquadCard extends Component {
                 justifyContent: 'center',
               }}
             >
-              <TouchableOpacity onPress={() => alert('Menu pressed')}>
+              <TouchableOpacity onPress={() => this.props.onManageModal(data)}>
                 <Image
                   source={this.props.optionButtonImage}
                   style={{

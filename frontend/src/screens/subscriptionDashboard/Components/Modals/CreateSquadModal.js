@@ -57,7 +57,7 @@ export default class createSquadModal extends Component {
                   style={{ flexDirection: 'row', width: 60 + '%' }}
                 >
                   <Label style={{ fontSize: 15 }}>
-                    Netflix, Spotify etc...
+                    Netflix, Babysitting etc...
                   </Label>
                   <Input
                     onChangeText={value =>
@@ -81,7 +81,7 @@ export default class createSquadModal extends Component {
                   style={{ flexDirection: 'row', width: 60 + '%' }}
                 >
                   <Label style={{ fontSize: 15 }}>
-                    Enter a number to a max of 10
+                    Recommend no more than 10
                   </Label>
                   <Input
                     onChangeText={value =>

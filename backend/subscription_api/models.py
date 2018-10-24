@@ -135,6 +135,18 @@ class SquadMember(models.Model):
     @property
     def price(self):
         return float(self.squad.cost_price)/100
+        
+    @property
+    def plan_name(self):
+        return self.squad.service+'_'+str(self.squad.id)  
+        
+    @property
+    def current_size(self):
+        return self.squad.current_size
+        
+    @property
+    def maximum_size(self):
+        return self.squad.maximum_size
 
 
 

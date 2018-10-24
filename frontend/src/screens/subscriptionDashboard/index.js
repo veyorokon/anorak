@@ -22,6 +22,7 @@ import {
   SquadCardCondensed,
   CreateSquadModal,
   JoinSquadModal,
+  ManageSquadModal,
 } from './Components';
 import { Footer, FooterTab, Button } from 'native-base';
 import api from '../../lib/api';
@@ -35,6 +36,7 @@ export default class SubscriptionDashboard extends Component {
       modals: {
         create: false,
         join: false,
+        manage: false,
       },
       dashboardData: this.props.navigation.state.params.dashboardData,
       forms: {
@@ -46,9 +48,12 @@ export default class SubscriptionDashboard extends Component {
           password: '',
         },
         join: {},
+        manage: {},
       },
+      currentlyManagingSubscription: {},
     };
     this._storeData();
+    //alert(JSON.stringify(this.state.dashboardData));
   }
 
   async _storeData() {
@@ -64,11 +69,12 @@ export default class SubscriptionDashboard extends Component {
     StatusBar.setHidden(true);
   }
 
-  toggle_modal(field) {
+  toggle_modal(field, subscriptionData = {}) {
     let newModals = Object.assign(this.state.modals);
     newModals[field] = !this.state.modals[field];
     this.setState({
       modals: newModals,
+      currentlyManagingSubscription: subscriptionData,
     });
   }
 
@@ -207,12 +213,27 @@ export default class SubscriptionDashboard extends Component {
           handleFormInput={(field, value) =>
             this.handle_form_input('join', field, value)}
         />
+
+        <ManageSquadModal
+          visible={this.state.modals.manage}
+          toggleModal={() => this.toggle_modal('manage')}
+          handleFormInput={(field, value) =>
+            this.handle_form_input('manage', field, value)}
+          subscriptionData={this.state.currentlyManagingSubscription}
+        />
       </View>
     );
   }
 
   _renderRow = ({ data, active }) => {
-    return <Row data={data} active={active} />;
+    return (
+      <Row
+        data={data}
+        onManageModal={subscriptionData =>
+          this.toggle_modal('manage', subscriptionData)}
+        active={active}
+      />
+    );
   };
 }
 
@@ -274,6 +295,7 @@ class Row extends Component {
       <Animated.View style={[this._style]}>
         <SquadCardCondensed
           data={data}
+          onManageModal={this.props.onManageModal}
           loginButtonImage={require('../../../assets/login-circle-bold.png')}
           optionButtonImage={require('../../../assets/menu-dots-filled.png')}
         />

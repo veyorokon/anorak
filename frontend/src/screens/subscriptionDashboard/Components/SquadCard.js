@@ -10,33 +10,6 @@ export default class SquadCard extends Component {
   state = {
     data: this.props.data,
   };
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible });
-  }
-
-  _showBillingInformationMissingAlert = () =>
-    Alert.alert(
-      'Missing Billing Information',
-      'You must update your billing information before you can Squad Up for subscriptions',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Update',
-          style: 'confirm',
-          onPress: () => {
-            this.props.navigation.navigate('Account', {
-              user: this.state.data.user,
-              token: this.state.data.token,
-              activeTab: 1,
-            });
-          },
-        },
-      ],
-      { cancelable: true }
-    );
 
   render() {
     return (
