@@ -37,4 +37,9 @@ urlpatterns = [
         'dashboard/user_dashboard/', 
         views.DashboardAPI.as_view()
     ),
+    ,
+    path(
+        'dashboard/create_web_subscriber/', 
+        views.CreateWebSubscriberAPI.as_view()
+    ),
 ]
