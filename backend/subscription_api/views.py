@@ -126,3 +126,20 @@ class DashboardAPI(APIView):
     
     def get_dashboard(self, user):
         return SquadMember.objects.filter(user=user)
+        
+        
+class CreateWebSubscriberAPI(APIView):
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    
+    def post(self, request, *args, **kwargs):
+        """
+        List all Dashboard Element objects
+        """
+        
+        data = request.data['user']
+        print(data)
+        
+        return Response(
+            '{"success":"false"}', 
+            status=status.HTTP_400_BAD_REQUEST
+        )

@@ -12,6 +12,24 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+##########################################################################
+## Helper function for environmental settings
+##########################################################################
+
+def environ_setting(name, default=None):
+    """
+    Fetch setting from the environment- if not found, then this setting is
+    ImproperlyConfigured.
+    """
+    if name not in os.environ and default is None:
+        from django.core.exceptions import ImproperlyConfigured
+        raise ImproperlyConfigured(
+            "The {0} ENVVAR is not set.".format(name)
+        )
+
+    return os.environ.get(name, default)
+    
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -100,26 +118,29 @@ AUTH_USER_MODEL = 'core.User'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'HOST': 'database',
-        'PORT': 5432
-    }
-}
 
+# DOCKER
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'squad_admin',
-#         'USER': 'squad_admin',
-#         'PASSWORD': 'vE232050$',
-#         'HOST': 'squadupdatabase.cl30dofcfhys.us-west-1.rds.amazonaws.com',
-#         'PORT': '5432',
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'HOST': 'database',
+#         'PORT': 5432
 #     }
 # }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': environ_setting("DB_NAME"),
+        'USER': environ_setting("DB_USER"),
+        'PASSWORD': environ_setting("DB_PASSWORD"),
+        'HOST': environ_setting("DB_HOST"),
+        'PORT': environ_setting("DB_PORT"),
+    }
+}
 
 
 # Password validation
