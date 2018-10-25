@@ -120,27 +120,27 @@ AUTH_USER_MODEL = 'core.User'
 
 
 # DOCKER
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'postgres',
-#         'USER': 'postgres',
-#         'HOST': 'database',
-#         'PORT': 5432
-#     }
-# }
-
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': environ_setting("DB_NAME"),
-        'USER': environ_setting("DB_USER"),
-        'PASSWORD': environ_setting("DB_PASSWORD"),
-        'HOST': environ_setting("DB_HOST"),
-        'PORT': environ_setting("DB_PORT"),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'database',
+        'PORT': 5432
     }
 }
+
+# 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': environ_setting("DB_NAME"),
+#         'USER': environ_setting("DB_USER"),
+#         'PASSWORD': environ_setting("DB_PASSWORD"),
+#         'HOST': environ_setting("DB_HOST"),
+#         'PORT': environ_setting("DB_PORT"),
+#     }
+# }
 
 
 # Password validation
