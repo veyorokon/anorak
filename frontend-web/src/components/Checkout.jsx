@@ -1,9 +1,6 @@
 import React from 'react';
 import {
-  CardNumberElement,
-  CardExpiryElement,
-  CardCVCElement,
-  PostalCodeElement,
+  CardElement,
   Elements,
   injectStripe,
 } from 'react-stripe-elements';
@@ -106,20 +103,8 @@ class _SplitForm extends React.Component {
         <br />
 
         <label>
-          Card number
-          <CardNumberElement
-            {...createOptions(this.props.fontSize)}
-          />
-        </label>
-        <label>
-          Expiration date
-          <CardExpiryElement
-            {...createOptions(this.props.fontSize)}
-          />
-        </label>
-        <label>
-          CVC
-          <CardCVCElement
+          Card
+          <CardElement
             {...createOptions(this.props.fontSize)}
           />
         </label>
@@ -129,12 +114,6 @@ class _SplitForm extends React.Component {
         {this.renderTextInput('address2', 'Address (2)')}
         {this.renderTextInput('city', 'City')}
         {this.renderTextInput('state', 'State')}
-        <label>
-          Postal code
-          <PostalCodeElement
-            {...createOptions(this.props.fontSize)}
-          />
-        </label>
         <button>Pay</button>
       </form>
     );
