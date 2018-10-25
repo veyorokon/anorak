@@ -16,6 +16,19 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 Session = SessionManager()
 
 
+class SquadMemberDetailAPI(APIView):
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+    
+    def get(self, request, *args, **kwargs):
+        """
+        List all User objects
+        """
+        memberships = SquadMember.objects.all()
+        serializer = SquadMemberSerializer(memberships, many=True)
+        return Response(serializer.data)
+
+
 class StripePlanDetailAPI(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
     permission_classes = (IsAuthenticated,)
@@ -75,11 +88,41 @@ class CreateSquadAPI(APIView):
         cost_price = self.format_price(formData['cost_price'])
         service = formData['service']
         maximum_size = formData['maximum_size']
+        username = formData['username']
+        password = formData['password']
+        
         Squad.objects.create(
             owner=user, 
             service=service,
             maximum_size=maximum_size,
-            cost_price=cost_price
+            cost_price=cost_price,
+            username=username,
+            password=password
         )
     
+
+class DashboardAPI(APIView):
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
     
+    def post(self, request, *args, **kwargs):
+        """
+        List all Dashboard Element objects
+        """
+        
+        userData = request.data['user']
+        isSessionValid, user = self.validate_session(request)
+        if(isSessionValid):
+            memberships = self.get_dashboard(user)
+            serializer = SquadMemberSerializer(memberships, many=True)
+            return Response(serializer.data)
+            
+        return Response(
+            '{"success":"false"}', 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+            
+    def validate_session(self, request):
+        return Session.validate_request_with_session_token(request)
+    
+    def get_dashboard(self, user):
+        return SquadMember.objects.filter(user=user)

@@ -6,8 +6,10 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from . authentication import SessionManager
+from subscription_api.models import SquadMember
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.views import ObtainAuthToken
+from subscription_api.serializers import SquadMemberSerializer
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 import json
 
@@ -53,8 +55,12 @@ class UserCreationAPI(APIView):
         sessionValidated, user = self.validate_session(request)
         if(sessionValidated):
             serialized_user = get_serialized_user(user)
+            dashboardData = self.get_dashboard(user)
             return Response(
-                serialized_user.data,
+                {
+                    'user':serialized_user.data,
+                    'dashboardData':dashboardData,
+                },
                 status=status.HTTP_201_CREATED
             )
         return Response(
@@ -93,6 +99,17 @@ class UserCreationAPI(APIView):
         except:
             user = None
         return user
+        
+    def get_dashboard(self, user):
+        memberships = SquadMember.objects.filter(user=user)
+        dashboard = SquadMemberSerializer(memberships, many=True)
+        dashboardData = {}
+        for element in dashboard.data:
+            for key in element.items():
+                index = key[0]
+                data = key[1]
+                dashboardData[index] = data
+        return(dashboardData)
 
 
 class UserTokenLoginAPI(APIView):
@@ -105,11 +122,27 @@ class UserTokenLoginAPI(APIView):
         isSessionValid, user = Session.authenticate(request)
         if(isSessionValid and user):
             serialized_user = get_serialized_user(user)
+            dashboardData = self.get_dashboard(user)
             return Response(
-                serialized_user.data,
+                {
+                    'user':serialized_user.data,
+                    'dashboardData':dashboardData,
+                },
                 status=status.HTTP_200_OK
             )
         return Response(False)
+        
+    def get_dashboard(self, user):
+        memberships = SquadMember.objects.filter(user=user)
+        dashboard = SquadMemberSerializer(memberships, many=True)
+        dashboardData = {}
+        for element in dashboard.data:
+            for key in element.items():
+                index = key[0]
+                data = key[1]
+                dashboardData[index] = data
+        return(dashboardData)
+        
 
 
 class UserLogoutAPI(APIView):

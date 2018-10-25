@@ -15,12 +15,14 @@ import {
   TouchableOpacity,
   Image,
   StatusBar,
+  Alert,
 } from 'react-native';
 import SortableList from 'react-native-sortable-list';
 import {
   SquadCardCondensed,
   CreateSquadModal,
   JoinSquadModal,
+  ManageSquadModal,
 } from './Components';
 import { Footer, FooterTab, Button } from 'native-base';
 import api from '../../lib/api';
@@ -34,50 +36,24 @@ export default class SubscriptionDashboard extends Component {
       modals: {
         create: false,
         join: false,
+        manage: false,
       },
-      dashboardData: {
-        0: {
-          title: 'Netflix',
-          price: '$ 3.00',
-          owner: 'Natasha',
-          status: 'Joined',
-        },
-        1: {
-          title: 'Hulu',
-          price: '$ 1.50',
-          owner: 'Ben',
-          status: 'Owner',
-          order: 1,
-        },
-        2: {
-          title: 'Spotify',
-          price: '$ 1.00',
-          owner: 'Vahid',
-          status: 'Pending',
-          order: 2,
-        },
-        3: {
-          title: 'HBO',
-          price: '$ 1.25',
-          owner: 'Natasha',
-          status: 'Pending',
-          order: 3,
-        },
-        4: {
-          title: 'Prime',
-          price: '$ 4.25',
-          owner: 'Tom',
-          status: 'Joined',
-          order: 4,
-        },
-      },
+      dashboardData: this.props.navigation.state.params.dashboardData,
       forms: {
-        create: { service: '', maximum_size: 0, cost_price: 0 },
+        create: {
+          service: '',
+          maximum_size: 0,
+          cost_price: 0,
+          username: '',
+          password: '',
+        },
         join: {},
+        manage: {},
       },
+      currentlyManagingSubscription: {},
     };
     this._storeData();
-    alert(JSON.stringify(this.state.user));
+    //alert(JSON.stringify(this.state.dashboardData));
   }
 
   async _storeData() {
@@ -93,11 +69,12 @@ export default class SubscriptionDashboard extends Component {
     StatusBar.setHidden(true);
   }
 
-  toggle_modal(field) {
+  toggle_modal(field, subscriptionData = {}) {
     let newModals = Object.assign(this.state.modals);
     newModals[field] = !this.state.modals[field];
     this.setState({
       modals: newModals,
+      currentlyManagingSubscription: subscriptionData,
     });
   }
 
@@ -115,7 +92,16 @@ export default class SubscriptionDashboard extends Component {
   send_create_squad_request() {
     api
       .sendCreateSquadRequest(this.state.user, this.state.forms.create)
-      .then(() => {})
+      .then(data => {
+        if (data) {
+          Alert.alert(
+            'Success',
+            'You created your squad!',
+            [{ text: 'OK', onPress: () => this.toggle_modal('create') }],
+            { cancelable: false }
+          );
+        }
+      })
       .catch(err => {
         alert(err.message);
       });
@@ -227,12 +213,27 @@ export default class SubscriptionDashboard extends Component {
           handleFormInput={(field, value) =>
             this.handle_form_input('join', field, value)}
         />
+
+        <ManageSquadModal
+          visible={this.state.modals.manage}
+          toggleModal={() => this.toggle_modal('manage')}
+          handleFormInput={(field, value) =>
+            this.handle_form_input('manage', field, value)}
+          subscriptionData={this.state.currentlyManagingSubscription}
+        />
       </View>
     );
   }
 
   _renderRow = ({ data, active }) => {
-    return <Row data={data} active={active} />;
+    return (
+      <Row
+        data={data}
+        onManageModal={subscriptionData =>
+          this.toggle_modal('manage', subscriptionData)}
+        active={active}
+      />
+    );
   };
 }
 
@@ -294,6 +295,7 @@ class Row extends Component {
       <Animated.View style={[this._style]}>
         <SquadCardCondensed
           data={data}
+          onManageModal={this.props.onManageModal}
           loginButtonImage={require('../../../assets/login-circle-bold.png')}
           optionButtonImage={require('../../../assets/menu-dots-filled.png')}
         />

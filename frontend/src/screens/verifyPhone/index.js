@@ -159,7 +159,8 @@ export default class VerifyPhone extends React.Component {
         .sendRegistrationRequest(session_token, phone_number)
         .then(data => {
           this.props.navigation.navigate('Onboarding', {
-            user: data,
+            user: data['user'],
+            dashboardData: data['dashboardData'],
           });
         })
         .catch(() => {

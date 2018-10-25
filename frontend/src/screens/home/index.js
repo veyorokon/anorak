@@ -53,9 +53,12 @@ export default class Home extends React.Component {
   };
 
   request_auto_token_login() {
-    api.requestAutoTokenLogin(this.state.credentials).then(user => {
-      if (user) {
-        this.props.navigation.navigate('SubscriptionDashboard', { user });
+    api.requestAutoTokenLogin(this.state.credentials).then(data => {
+      if (data) {
+        this.props.navigation.navigate('SubscriptionDashboard', {
+          user: data['user'],
+          dashboardData: data['dashboardData'],
+        });
       }
     });
   }

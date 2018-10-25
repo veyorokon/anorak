@@ -30,6 +30,11 @@ const api = {
       isRequestingCode: 0,
     });
   },
+  requestUserDashboard(user) {
+    return apiFetch('dashboard/user_dashboard/', {
+      user: user,
+    });
+  },
   sendRegistrationRequest(sessionToken, number) {
     return apiFetch(`users/creation/?session_token=${sessionToken}`, {
       user: {
