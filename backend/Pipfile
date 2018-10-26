@@ -12,6 +12,7 @@ twilio = "*"
 django-enumfield = "*"
 gunicorn = "==19.6.0"
 Django = "==2.1.1"
+django-cors-headers = "*"
 
 [dev-packages]
 
