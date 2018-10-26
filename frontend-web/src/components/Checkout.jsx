@@ -4,12 +4,13 @@ import {
   Elements,
   injectStripe,
 } from 'react-stripe-elements';
-
-const api = {
-  setupSubscription(args) {
-    console.log(args)
-  }
-}
+import api from '../lib/api';
+// 
+// const api = {
+//   setupSubscription(args) {
+//     console.log(args)
+//   }
+// }
 
 const createOptions = (fontSize, padding) => {
   return {
@@ -55,7 +56,7 @@ class _SplitForm extends React.Component {
     email: '',
     name: '',
     phone: '',
-    planId: '',
+    serviceID: '',
     state: '',
   };
 
@@ -77,8 +78,9 @@ class _SplitForm extends React.Component {
     await api.setupSubscription({
       email: this.state.email,
       name: this.state.name,
-      planId: this.state.planId,
-      tokenId: payload.token.id,
+      phone_number: this.state.phone,
+      serviceID: this.state.serviceID,
+      tokenID: payload.token.id,
     })
   };
 
@@ -96,7 +98,7 @@ class _SplitForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        {this.renderTextInput('planId', 'Plan Id')}
+        {this.renderTextInput('serviceID', 'Service ID')}
         {this.renderTextInput('name', 'Name')}
         {this.renderTextInput('email', 'Email')}
         {this.renderTextInput('phone', 'Phone')}

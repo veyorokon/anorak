@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from rest_framework.authtoken.models import Token
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import PermissionsMixin
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, pre_delete
 from django.contrib.auth.base_user import AbstractBaseUser
 
 import stripe
@@ -35,7 +35,9 @@ class StripeCustomer(models.Model):
         blank=True)
         
     def create_stripe_customer(self):
-        data = stripe.Customer.create(email=self.user.email)
+        data = stripe.Customer.create(
+            description="Customer for "+str(self.user.phone_number)
+        )
         self.stripe_customer_id = data.id
         self.save()
         return data
@@ -43,6 +45,21 @@ class StripeCustomer(models.Model):
     def get_stripe_customer(self):
         customer = stripe.Customer.retrieve(self.stripe_customer_id)
         return customer
+        
+    def delete_customer(self):
+        """
+        Deletes the customer object in Stripe's database
+        """
+        customer =self.get_stripe_customer()
+        customer.delete()
+        
+    def link_card(self, token):
+        customer = self.get_stripe_customer()
+        customer.sources.create(
+            source=token
+        )
+        customer.save()
+        return True
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -149,3 +166,12 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         instance.stripe_customer = stripe_customer
         instance.address_billing = address_billing
         instance.save()
+        
+# Signals for Squad model to delete Stripe objects
+@receiver(pre_delete, sender=User)
+def delete_stripe_plan(sender, instance=None, **kwargs):
+    try:
+        instance.stripe_customer.delete_customer()
+        instance.stripe_customer.delete()
+    except:
+        pass

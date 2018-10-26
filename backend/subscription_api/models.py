@@ -84,6 +84,11 @@ class Squad(models.Model):
         null=True, on_delete=models.CASCADE, related_name='squad')
         
     
+    @property
+    def squad_service_id(self):
+        return self.service+'_'+str(self.id)
+        
+    
     def save(self, *args, **kwargs):
         ''' 
         On save, update timestamps 
@@ -126,6 +131,31 @@ class SquadMember(models.Model):
         self.squad = squad
         self.date_joined = timezone.now()
         return super(SquadMember, self).save(*args, **kwargs)
+        
+    def create_basic_squad_membership(self, squad, user, *args, **kwargs):
+        """
+        Creates a special membership for squad owners
+        """
+        self.status = SquadMemberStatus.SUBSCRIBED
+        self.user = user
+        self.squad = squad
+        self.date_joined = timezone.now()
+        self.create_stripe_subscription(
+            squad=squad,
+            user=user
+        )
+        return super(SquadMember, self).save(*args, **kwargs)
+        
+    def create_stripe_subscription(self, squad, user):
+        stripe_subscription = stripe.Subscription.create(
+            customer=user.stripe_customer.stripe_customer_id,
+            items=[
+                {
+                    "plan": squad.squad_service_id
+                }
+            ]
+        )
+        self.stripe_subscription_id = stripe_subscription.id
         
         
     @property
