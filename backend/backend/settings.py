@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     'core',
     'verification_api',
     'subscription_api',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -90,6 +91,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware', 
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.BrokenLinkEmailsMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -180,9 +183,12 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     )
 }
-#CSRF_COOKIE_SECURE = True
-#SESSION_COOKIE_SECURE = True
-#SECURE_PROXY_SSL_HEADER = True
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = (
+    'http//:localhost:8000',
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -204,5 +210,4 @@ STATIC_URL = os.environ.get('STATIC_URL', '/static/')
 #    ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
-#CORS_ORIGIN_ALLOW_ALL = True
 #STATIC_ROOT = 'static'
