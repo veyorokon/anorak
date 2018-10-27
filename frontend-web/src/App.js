@@ -7,7 +7,7 @@ import './App.css';
 class App extends Component {
   render() {
     return (
-      <StripeProvider apiKey="pk_test_rLuroFoR4XKOxb3FbmJqTqrh">
+      <StripeProvider apiKey="pk_live_BpssZcKZdOznYcltmEYbu3EH">
         <Checkout />
       </StripeProvider>
     );
