@@ -44,7 +44,13 @@ SECRET_KEY = 'v(m)6f0+s3d$o4lk$lli&un$e1a@bu3oww^9=s=ms)+@df23*r'
 DEBUG = True
 
 #ALLOWED_HOSTS = ['squadup.xyz', 'www.squadup.xyz', 'nginx', '127.0.0.1', 'django-env.k4nxphhzk2.us-west-1.elasticbeanstalk.com']
-ALLOWED_HOSTS=['127.0.0.1']
+ALLOWED_HOSTS=[
+    '127.0.0.1', 
+    'localhost', 
+    '.staging.squadup.xyz',
+    '.squadup.xyz',
+    '.preview.sh',
+]
 
 
 #Stripe key
@@ -120,27 +126,26 @@ AUTH_USER_MODEL = 'core.User'
 
 
 # DOCKER
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'HOST': 'database',
-        'PORT': 5432
-    }
-}
-
-# 
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': environ_setting("DB_NAME"),
-#         'USER': environ_setting("DB_USER"),
-#         'PASSWORD': environ_setting("DB_PASSWORD"),
-#         'HOST': environ_setting("DB_HOST"),
-#         'PORT': environ_setting("DB_PORT"),
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'HOST': 'database',
+#         'PORT': 5432
 #     }
 # }
+ 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': environ_setting("DB_NAME"),
+        'USER': environ_setting("DB_USER"),
+        'PASSWORD': environ_setting("DB_PASSWORD"),
+        'HOST': environ_setting("DB_HOST"),
+        'PORT': environ_setting("DB_PORT"),
+    }
+}
 
 
 # Password validation
@@ -191,7 +196,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATIC_URL = '/static/'
+STATIC_URL = os.environ.get('STATIC_URL', '/static/')
 
 #STATICFILES_DIRS = [
 #    #os.path.join(BASE_DIR, 'static'),
