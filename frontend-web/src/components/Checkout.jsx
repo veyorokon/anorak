@@ -7,12 +7,7 @@ import {
 } from 'react-stripe-elements';
 import api from '../lib/api';
 import TextInput from './TextInput.jsx';
-//
-// const api = {
-//   setupSubscription(args) {
-//     console.log(args)
-//   }
-// }
+
 
 const createOptions = (fontSize, padding) => {
   return {
@@ -44,6 +39,7 @@ class _SplitForm extends React.Component {
     phone: '',
     serviceID: '',
     state: '',
+    cost: ''
   };
 
   onInputChange = (ev) => {
@@ -80,30 +76,74 @@ class _SplitForm extends React.Component {
       />
     );
   }
+  
+  renderSquadInput(name, label) {
+    return (
+      <TextInput
+        label={label}
+        name={name}
+        onChange={this.findSquad}
+        value={this.state[name]}
+      />
+    );
+  }
+  
+  findSquad = async (ev) => {
+      const { name, value } = ev.target;
+      ev.preventDefault();
+      await api.getSquadPrice({
+          serviceID: this.state.serviceID
+      }).then(data=>{
+        if(data['price']){
+            var price = '$ '+data['price'].toFixed(2);
+        }
+        else{
+            price = ''
+        }
+        this.setState({ [name]: value, cost: price });
+      })
+  }
+  
+  renderFindSquad(){
+      return (
+          <div  style={{'display':'flex'}}>
+              <div style={{alignItems:'center'}}>
+                  {this.renderSquadInput('serviceID', 'Service ID')}
+              </div>
+              <div style={{alignItems:'center'}}>
+                 {this.state.cost}
+              </div>
+        </div>
+      )
+  }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        {this.renderTextInput('serviceID', 'Service ID')}
-        {this.renderTextInput('name', 'Name')}
-        {this.renderTextInput('email', 'Email')}
-        {this.renderTextInput('phone', 'Phone')}
-        <br />
+        <div>
+            <div style={{'display':'flex',alignItems:'center'}}>
+                {this.renderFindSquad()}
+            </div>
+            <form onSubmit={this.handleSubmit}>
+            {this.renderTextInput('name', 'Name')}
+            {this.renderTextInput('email', 'Email')}
+            {this.renderTextInput('phone', 'Phone')}
+            <br />
 
-        <label>
-          Card
-          <CardElement
-            {...createOptions(this.props.fontSize)}
-          />
-        </label>
-        <br />
+            <label>
+              Card
+              <CardElement
+                {...createOptions(this.props.fontSize)}
+              />
+            </label>
+            <br />
 
-        {this.renderTextInput('address1', 'Address (1)')}
-        {this.renderTextInput('address2', 'Address (2)')}
-        {this.renderTextInput('city', 'City')}
-        {this.renderTextInput('state', 'State')}
-        <button>Pay</button>
-      </form>
+            {this.renderTextInput('address1', 'Address (1)')}
+            {this.renderTextInput('address2', 'Address (2)')}
+            {this.renderTextInput('city', 'City')}
+            {this.renderTextInput('state', 'State')}
+            <button>Squad Up</button>
+          </form>
+      </div>
     );
   }
 }
@@ -130,7 +170,7 @@ export default class Checkout extends React.Component {
   render() {
     const {elementFontSize} = this.state;
     return (
-      <StripeProvider apiKey="pk_live_BpssZcKZdOznYcltmEYbu3EH">
+      <StripeProvider apiKey="pk_test_rLuroFoR4XKOxb3FbmJqTqrh">
         <div className="Checkout">
           <h1>SquadUp</h1>
           <h2>Join a Squad</h2>

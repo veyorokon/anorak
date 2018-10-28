@@ -45,4 +45,8 @@ urlpatterns = [
         'dashboard/create_web_squad/', 
         views.CreateWebSquadAPI.as_view()
     ),
+    path(
+        'dashboard/squad/price/', 
+        views.SquadPriceAPI.as_view()
+    ),
 ]

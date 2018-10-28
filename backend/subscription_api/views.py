@@ -291,3 +291,29 @@ class CreateWebSquadAPI(APIView):
             cost_price=cost_price,
             payment_method = payment_method
         )
+        
+        
+class SquadPriceAPI(APIView):
+    #authentication_classes = (SessionAuthentication, BasicAuthentication)
+    def post(self, request, *args, **kwargs):
+        serviceId = request.data['data']['serviceID']
+        return Response(
+            {
+                "price": self.get_squad_price_from_id(serviceId)
+            }, 
+            status=status.HTTP_200_OK
+        )
+        
+    def get_squad_price_from_id(self, serviceID):
+        try:
+            serviceFormData = serviceID.split('_')
+            service = serviceFormData[0]
+            id = serviceFormData[1]
+            squad = Squad.objects.get(pk=int(id))
+            if (squad.service == service):
+                return squad.cost_price/100
+            return None
+        except:
+            return None
+            
+    

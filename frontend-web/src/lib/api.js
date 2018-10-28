@@ -21,6 +21,9 @@ const api = {
   createSquad(data) {
     return apiFetch('dashboard/create_web_squad/', { data });
   },
+  getSquadPrice(data) {
+    return apiFetch('dashboard/squad/price/', { data });
+  },
 };
 
 export default api;
