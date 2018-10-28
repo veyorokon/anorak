@@ -3,9 +3,11 @@ import {
   CardElement,
   Elements,
   injectStripe,
+  StripeProvider
 } from 'react-stripe-elements';
 import api from '../lib/api';
-// 
+import TextInput from './TextInput.jsx';
+//
 // const api = {
 //   setupSubscription(args) {
 //     console.log(args)
@@ -31,22 +33,6 @@ const createOptions = (fontSize, padding) => {
     },
   };
 };
-
-class TextInput extends React.Component {
-  render() {
-    return (
-      <label>
-        {this.props.label}
-        <input
-          type="text"
-          name={this.props.name}
-          onChange={this.props.onChange}
-          value={this.props.value}
-        />
-      </label>
-    )
-  }
-}
 
 class _SplitForm extends React.Component {
   state = {
@@ -144,13 +130,15 @@ export default class Checkout extends React.Component {
   render() {
     const {elementFontSize} = this.state;
     return (
-      <div className="Checkout">
-        <h1>SquadUp</h1>
-        <h2>Join a Squad</h2>
-        <Elements>
-          <SplitForm fontSize={elementFontSize} />
-        </Elements>
-      </div>
+      <StripeProvider apiKey="pk_live_BpssZcKZdOznYcltmEYbu3EH">
+        <div className="Checkout">
+          <h1>SquadUp</h1>
+          <h2>Join a Squad</h2>
+          <Elements>
+            <SplitForm fontSize={elementFontSize} />
+          </Elements>
+        </div>
+      </StripeProvider>
     );
   }
 }
