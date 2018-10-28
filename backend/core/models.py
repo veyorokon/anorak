@@ -68,7 +68,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField( max_length=17, blank=True, unique=True, 
         null=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
-    last_name = models.CharField(_('last name'), max_length=30, blank=True)
+    last_name = models.CharField(_('last name'), max_length=30, null=True, blank=True)
     date_joined = models.DateTimeField(_('date joined'), 
         editable=True, auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)
