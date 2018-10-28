@@ -75,7 +75,7 @@ button:hover {
   box-shadow: 0 7px 14px rgba(50, 50, 93, .10), 0 3px 6px rgba(0, 0, 0, .08);
 }
 
-input, select, 
+input, select,
 .StripeElement {
   display: block;
   margin: 10px 0 20px 0;
@@ -104,4 +104,24 @@ input:focus,
 .StripeElement.IdealBankElement,
 .StripeElement.PaymentRequestButton {
   padding: 0;
+}
+
+.loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.transparent {
+  opacity: 0.2;
+}
+
+.error {
+  color: #d85050;
 }

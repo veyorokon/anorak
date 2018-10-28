@@ -7,7 +7,6 @@ services:
     restart: always
     build: backend/
     working_dir: /app/backend/
-    dockerfile: Dockerfile-compose
     command: bash -c "python check_db.py --service-name Postgres --ip database --port 5432 &&
                       python manage.py runserver 0.0.0.0:8000"
     volumes:

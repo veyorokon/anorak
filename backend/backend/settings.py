@@ -28,7 +28,7 @@ def environ_setting(name, default=None):
         )
 
     return os.environ.get(name, default)
-    
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,8 +45,8 @@ DEBUG = True
 
 #ALLOWED_HOSTS = ['squadup.xyz', 'www.squadup.xyz', 'nginx', '127.0.0.1', 'django-env.k4nxphhzk2.us-west-1.elasticbeanstalk.com']
 ALLOWED_HOSTS=[
-    '127.0.0.1', 
-    'localhost', 
+    '127.0.0.1',
+    'localhost',
     '.staging.squadup.xyz',
     '.squadup.xyz',
     '.preview.sh',
@@ -89,7 +89,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware', 
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.BrokenLinkEmailsMiddleware',
@@ -129,26 +129,26 @@ AUTH_USER_MODEL = 'core.User'
 
 
 # DOCKER
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'postgres',
-#         'USER': 'postgres',
-#         'HOST': 'database',
-#         'PORT': 5432
-#     }
-# }
- 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': environ_setting("DB_NAME"),
-        'USER': environ_setting("DB_USER"),
-        'PASSWORD': environ_setting("DB_PASSWORD"),
-        'HOST': environ_setting("DB_HOST"),
-        'PORT': environ_setting("DB_PORT"),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'database',
+        'PORT': 5432
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': environ_setting("DB_NAME"),
+#         'USER': environ_setting("DB_USER"),
+#         'PASSWORD': environ_setting("DB_PASSWORD"),
+#         'HOST': environ_setting("DB_HOST"),
+#         'PORT': environ_setting("DB_PORT"),
+#     }
+# }
 
 
 # Password validation
