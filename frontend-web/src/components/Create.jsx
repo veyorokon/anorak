@@ -1,13 +1,14 @@
 import React from 'react';
 import TextInput from './TextInput.jsx'
+import api from '../lib/api';
 
 export default class Create extends React.Component {
   state = {
     email: '',
     name: '',
-    paymentMethod: 'paypal',
-    phone: '',
-    pricePerMember: '',
+    payment_method: 'paypal',
+    phone_number: '',
+    cost_price: '',
     service: '',
   };
 
@@ -24,7 +25,10 @@ export default class Create extends React.Component {
 
   handleSubmit = async (ev) => {
     ev.preventDefault();
-    console.log(this.state)
+    await api.createSquad(this.state)
+        .then(data => {
+            console.log(data)
+        })
   };
 
   onInputChange = (ev) => {
@@ -40,11 +44,11 @@ export default class Create extends React.Component {
 
         <form onSubmit={this.handleSubmit}>
           {this.renderTextInput('name', 'Name')}
-          {this.renderTextInput('phone', 'Phone')}
+          {this.renderTextInput('phone_number', 'Phone')}
           {this.renderTextInput('email', 'Email')}
           <label>
             How should we pay you? (using the above email)
-            <select name="paymentMethod" onChange={this.onInputChange}>
+            <select name="payment_method" onChange={this.onInputChange}>
               <option value="paypal">PayPal</option>
               <option value="venmo">Venmo</option>
             </select>
@@ -57,7 +61,7 @@ export default class Create extends React.Component {
             <input
               type="number"
               placeholder="$3"
-              name="pricePerMember"
+              name="cost_price"
               onChange={this.onInputChange}
               value={this.state.pricePerMember}
             />
