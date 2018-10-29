@@ -248,7 +248,7 @@ export default class Checkout extends React.Component {
   render() {
     const {elementFontSize} = this.state;
     return (
-      <StripeProvider apiKey="pk_test_rLuroFoR4XKOxb3FbmJqTqrh">
+      <StripeProvider apiKey="pk_live_BpssZcKZdOznYcltmEYbu3EH">
         <div className="Checkout">
           <h1>SquadUp</h1>
           <h2>Join a Squad</h2>

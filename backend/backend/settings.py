@@ -41,7 +41,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'v(m)6f0+s3d$o4lk$lli&un$e1a@bu3oww^9=s=ms)+@df23*r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 #ALLOWED_HOSTS = ['squadup.xyz', 'www.squadup.xyz', 'nginx', '127.0.0.1', 'django-env.k4nxphhzk2.us-west-1.elasticbeanstalk.com']
 ALLOWED_HOSTS=[
@@ -135,37 +135,29 @@ AUTH_USER_MODEL = 'core.User'
 
 
 # DOCKER
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'HOST': 'database',
-        'PORT': 5432
+if(DEBUG):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'HOST': 'database',
+            'PORT': 5432
+        }
     }
-}
- 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': environ_setting("DB_NAME"),
-#         'USER': environ_setting("DB_USER"),
-#         'PASSWORD': environ_setting("DB_PASSWORD"),
-#         'HOST': environ_setting("DB_HOST"),
-#         'PORT': environ_setting("DB_PORT"),
-#     }
-# }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': environ_setting("DB_NAME"),
+            'USER': environ_setting("DB_USER"),
+            'PASSWORD': environ_setting("DB_PASSWORD"),
+            'HOST': environ_setting("DB_HOST"),
+            'PORT': environ_setting("DB_PORT"),
+        }
+    }
+    
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': environ_setting("DB_NAME"),
-#         'USER': environ_setting("DB_USER"),
-#         'PASSWORD': environ_setting("DB_PASSWORD"),
-#         'HOST': environ_setting("DB_HOST"),
-#         'PORT': environ_setting("DB_PORT"),
-#     }
-# }
 
 
 # Password validation
