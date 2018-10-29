@@ -143,8 +143,8 @@ class CreateWebSubscriberAPI(APIView):
                 print('user exists')
             else:
                 user = self.create_user_from_form(data)
-                self.save_card_to_user_customer(user, data)
-                self.create_squad_member(user, serviceID)
+            self.save_card_to_user_customer(user, data)
+            self.create_squad_member(user, serviceID)
             return Response(
                 '{"success":"true"}', 
                 status=status.HTTP_200_OK
@@ -191,8 +191,12 @@ class CreateWebSubscriberAPI(APIView):
     def create_user_from_form(self, data):
         phone_number = data['phone_number']
         email = data['email']
-        first_name = data['name'].split(' ')[0]
-        last_name = data['name'].split(' ')[1]
+        try:
+            first_name = data['name'].split(' ')[0]
+            last_name = data['name'].split(' ')[1]
+        except:
+            first_name = data['name']
+            last_name = None
         
         return User.objects.create(
             phone_number=phone_number,
@@ -213,3 +217,103 @@ class CreateWebSubscriberAPI(APIView):
             user=user
         )
         newMember.save()
+        
+        
+class CreateWebSquadAPI(APIView):
+    #authentication_classes = (SessionAuthentication, BasicAuthentication)
+    
+    def post(self, request, *args, **kwargs):
+        """
+        List all Dashboard Element objects
+        """
+        data = request.data['data']
+        print(data)
+        
+        user = self.get_user_from_data_with_phone_number(data)
+        if(user == None):
+            user = self.create_user_from_form(data)
+        squad = self.create_squad(user, request)
+        if(squad):
+            return Response(
+                {
+                    "squad_id":squad.squad_service_id
+                }, 
+                status=status.HTTP_200_OK
+            )
+        
+        return Response(
+            '{"success":"false"}', 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+        
+    def create_user_from_form(self, data):
+        phone_number = data['phone_number']
+        email = data['email']
+        try:
+            first_name = data['name'].split(' ')[0]
+            last_name = data['name'].split(' ')[1]
+        except:
+            first_name = data['name']
+            last_name = None
+        
+        return User.objects.create(
+            phone_number=phone_number,
+            email=email,
+            first_name=first_name,
+            last_name=last_name
+        )
+        
+    def get_user_from_data_with_phone_number(self, request):
+        """
+        Retrieves the user matching the credentials or returns None
+        """
+        phone_number = request['phone_number']
+        try:
+            user = User.objects.get(
+                phone_number = phone_number
+            )
+        except:
+            user = None
+        return user
+        
+    def format_price(self, price):
+        return round(100*float(price))
+        
+    def create_squad(self, user, request):
+        formData = request.data['data']
+        cost_price = self.format_price(formData['cost_price'])
+        service = formData['service']
+        payment_method = formData['payment_method']
+        
+        return Squad.objects.create(
+            owner=user, 
+            service=service,
+            cost_price=cost_price,
+            payment_method = payment_method
+        )
+        
+        
+class SquadPriceAPI(APIView):
+    #authentication_classes = (SessionAuthentication, BasicAuthentication)
+    def post(self, request, *args, **kwargs):
+        serviceId = request.data['data']['serviceID']
+        return Response(
+            {
+                "price": self.get_squad_price_from_id(serviceId)
+            }, 
+            status=status.HTTP_200_OK
+        )
+        
+    def get_squad_price_from_id(self, serviceID):
+        try:
+            serviceFormData = serviceID.split('_')
+            service = serviceFormData[0]
+            id = serviceFormData[1]
+            squad = Squad.objects.get(pk=int(id))
+            if (squad.service == service):
+                return squad.cost_price/100
+            return None
+        except:
+            return None
+            
+    

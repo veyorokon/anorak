@@ -66,7 +66,7 @@ export default class Create extends React.Component {
           {this.state.submittedSuccessfully ? (
             <div>
               <p>
-                Congrats, you've created a Squad! Here's the url that your Squad members
+                Congrats, you've created a Squad (ID: {this.state.planId})! Here's the url that your Squad members
                 can use to join your Squad.
               </p>
               <a href={`https://staging.squadup.xyz/join?planId=${this.state.planId}`}>{`https://staging.squadup.xyz/join?planId=${this.state.planId}`}</a>

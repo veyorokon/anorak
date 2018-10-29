@@ -53,9 +53,15 @@ ALLOWED_HOSTS=[
 ]
 
 
-#Stripe key
-STRIPE_ACCOUNT_SID = 'sk_live_Z74kfkdK1Ga6YOqYaypi9zC4'
-STRIPE_SQUADUP_PRODUCT = 'prod_Drjkufpy6PtWEv'
+if(DEBUG):
+    # STRIPE - DEVELOPMENT
+    STRIPE_ACCOUNT_SID = 'sk_test_9Xz79VxZxWJbanvxDAWLYmoN'
+    STRIPE_SQUADUP_PRODUCT = 'prod_DrVphP23buUlpq'
+else:
+    # STRIPE - PRODUCTION
+    STRIPE_ACCOUNT_SID = 'sk_live_Z74kfkdK1Ga6YOqYaypi9zC4'
+    STRIPE_SQUADUP_PRODUCT = 'prod_Drjkufpy6PtWEv'
+
 
 #Phoone verification - Twilio
 TWILIO_ACCOUNT_SID = 'ACaf89a225145d292dfb5ad9ec6e8ab10e'
@@ -138,6 +144,17 @@ DATABASES = {
         'PORT': 5432
     }
 }
+ 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': environ_setting("DB_NAME"),
+#         'USER': environ_setting("DB_USER"),
+#         'PASSWORD': environ_setting("DB_PASSWORD"),
+#         'HOST': environ_setting("DB_HOST"),
+#         'PORT': environ_setting("DB_PORT"),
+#     }
+# }
 
 # DATABASES = {
 #     'default': {

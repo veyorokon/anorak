@@ -5,14 +5,10 @@ import {
   injectStripe,
   StripeProvider
 } from 'react-stripe-elements';
+import { withRouter } from 'react-router-dom';
 import api from '../lib/api';
 import TextInput from './TextInput.jsx';
-//
-// const api = {
-//   setupSubscription(args) {
-//     console.log(args)
-//   }
-// }
+
 
 const createOptions = (fontSize, padding) => {
   return {
@@ -35,16 +31,36 @@ const createOptions = (fontSize, padding) => {
 };
 
 class _SplitForm extends React.Component {
-  state = {
-    address1: '',
-    address2: '',
-    city: '',
-    email: '',
-    name: '',
-    phone: '',
-    serviceID: '',
-    state: '',
-  };
+  constructor(props) {
+      super(props);
+      
+      const urlSearchParams = new URLSearchParams(props.location.search);
+      this.state = {
+        address1: '',
+        address2: '',
+        city: '',
+        email: '',
+        name: '',
+        phone: '',
+        serviceID: urlSearchParams.has('planId') ? urlSearchParams.get('planId') : '',
+        state: '',
+        cost: ''
+      };
+  }
+  
+  componentWillMount(){
+      api.getSquadPrice({
+          serviceID: this.state.serviceID
+      }).then(data=>{
+        if(data['price']){
+            var price = '$ '+data['price'].toFixed(2);
+        }
+        else{
+            price = ''
+        }
+        this.setState({ cost: price });
+      })
+  }
 
   onInputChange = (ev) => {
     const { name, value } = ev.target;
@@ -80,34 +96,82 @@ class _SplitForm extends React.Component {
       />
     );
   }
+  
+  renderSquadInput(name, label) {
+    return (
+      <TextInput
+        label={label}
+        name={name}
+        onChange={this.findSquad}
+        value={this.state[name]}
+      />
+    );
+  }
+  
+  findSquad = async (ev) => {
+      const { name, value } = ev.target;
+      ev.preventDefault();
+      this.setState({ [name]: value }, async () => {
+          await api.getSquadPrice({
+              serviceID: this.state.serviceID
+          }).then(data=>{
+            if(data['price']){
+                var price = '$ '+data['price'].toFixed(2);
+            }
+            else{
+                price = ''
+            }
+            this.setState({ cost: price });
+          })
+      });
+  }
+  
+  renderFindSquad(){
+      return (
+          <div  style={{'display':'flex'}}>
+              <div style={{alignItems:'center', display:'flex'}}>
+                  {this.renderSquadInput('serviceID', 'Squad ID')}
+              </div>
+              <div style={{alignItems:'center', paddingTop:15, marginLeft:15, display:'flex'}}>
+                  {this.state.cost} {this.state.cost && ' Per Month'}
+              </div>
+        </div>
+      )
+  }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        {this.renderTextInput('serviceID', 'Service ID')}
-        {this.renderTextInput('name', 'Name')}
-        {this.renderTextInput('email', 'Email')}
-        {this.renderTextInput('phone', 'Phone')}
-        <br />
+        <div>
+            <div style={{'display':'flex',alignItems:'center'}}>
+                {this.renderFindSquad()}
+            </div>
+            <br />
+            <br />
+            <form onSubmit={this.handleSubmit}>
+            {this.renderTextInput('name', 'Full Name')}
+            {this.renderTextInput('email', 'Email')}
+            {this.renderTextInput('phone', 'Phone')}
+            <br />
 
-        <label>
-          Card
-          <CardElement
-            {...createOptions(this.props.fontSize)}
-          />
-        </label>
-        <br />
+            <label>
+              Card
+              <CardElement
+                {...createOptions(this.props.fontSize)}
+              />
+            </label>
+            <br />
 
-        {this.renderTextInput('address1', 'Address (1)')}
-        {this.renderTextInput('address2', 'Address (2)')}
-        {this.renderTextInput('city', 'City')}
-        {this.renderTextInput('state', 'State')}
-        <button>Pay</button>
-      </form>
+            {this.renderTextInput('address1', 'Billing Address (1)')}
+            {this.renderTextInput('address2', 'Billing Address (2)')}
+            {this.renderTextInput('city', 'Billing City')}
+            {this.renderTextInput('state', 'Billing State')}
+            <button>Squad Up</button>
+          </form>
+      </div>
     );
   }
 }
-const SplitForm = injectStripe(_SplitForm);
+const SplitForm = injectStripe(withRouter(_SplitForm));
 
 export default class Checkout extends React.Component {
   constructor() {
@@ -130,7 +194,7 @@ export default class Checkout extends React.Component {
   render() {
     const {elementFontSize} = this.state;
     return (
-      <StripeProvider apiKey="pk_live_BpssZcKZdOznYcltmEYbu3EH">
+      <StripeProvider apiKey="pk_test_rLuroFoR4XKOxb3FbmJqTqrh">
         <div className="Checkout">
           <h1>SquadUp</h1>
           <h2>Join a Squad</h2>

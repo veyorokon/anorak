@@ -64,9 +64,9 @@ class Squad(models.Model):
     #User who owns this subscription product
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     #The login username for this service
-    username = models.CharField(max_length=128, null=False)
+    username = models.CharField(max_length=128, null=True, blank=True)
     #Squad description for this service
-    password = models.CharField(max_length=128, null=False)
+    password = models.CharField(max_length=128, null=True, blank=True)
     #Squad description
     service = models.CharField(max_length=12, null=True)
     #The base price charged to SquadUp
@@ -82,11 +82,12 @@ class Squad(models.Model):
     #The stripe plan for this squad
     stripe_plan = models.OneToOneField(StripePlan, default=None, 
         null=True, on_delete=models.CASCADE, related_name='squad')
-        
+    payment_method =models.CharField(max_length=16, blank=True, null=True)
     
     @property
     def squad_service_id(self):
-        return self.service+'_'+str(self.id)
+        squadService = self.service.replace(' ', '_')
+        return squadService+'_'+str(self.id)
         
     
     def save(self, *args, **kwargs):
@@ -168,7 +169,8 @@ class SquadMember(models.Model):
         
     @property
     def plan_name(self):
-        return self.squad.service+'_'+str(self.squad.id)  
+        squadService = self.squad.service.replace(' ', '_')
+        return squadService+'_'+str(self.squad.id)  
         
     @property
     def current_size(self):
@@ -196,8 +198,9 @@ def create_stripe_plan(sender, instance=None, created=False, **kwargs):
             squadMember = SquadMember()
             squadMember.create_squad_owner_membership(instance)
             stripe_plan = StripePlan()
+            squadService = instance.service.replace(' ', '_')+'_'+str(instance.id)
             stripe_plan.create_stripe_plan(
-                name=instance.service+'_'+str(instance.id),
+                name=squadService,
                 cost_price=instance.cost_price
             )
             instance.stripe_plan = stripe_plan
