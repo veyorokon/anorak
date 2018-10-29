@@ -7,12 +7,12 @@ import Create from './components/Create'
 import './App.css';
 
 class App extends Component {
-    
+
   render() {
     return (
       <Router>
         <div>
-          <Route path="/" exact component={Join} />
+          <Route path="/" exact component={Create} />
           <Route path="/create/" component={Create} />
           <Route path="/join/" component={Join} />
         </div>

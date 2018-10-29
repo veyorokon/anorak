@@ -26,6 +26,7 @@ export default class Create extends React.Component {
         name={name}
         onChange={this.onInputChange}
         value={this.state[name]}
+        required
       />
     );
   }

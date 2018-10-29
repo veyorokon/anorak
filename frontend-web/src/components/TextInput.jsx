@@ -10,6 +10,7 @@ export default class TextInput extends React.Component {
           name={this.props.name}
           onChange={this.props.onChange}
           value={this.props.value}
+          required={this.props.required}
         />
       </label>
     );

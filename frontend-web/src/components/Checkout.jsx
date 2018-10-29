@@ -6,6 +6,7 @@ import {
   StripeProvider
 } from 'react-stripe-elements';
 import { withRouter } from 'react-router-dom';
+import BeatLoader from 'react-spinners/BeatLoader';
 import api from '../lib/api';
 import TextInput from './TextInput.jsx';
 
@@ -33,7 +34,7 @@ const createOptions = (fontSize, padding) => {
 class _SplitForm extends React.Component {
   constructor(props) {
       super(props);
-      
+
       const urlSearchParams = new URLSearchParams(props.location.search);
       this.state = {
         address1: '',
@@ -44,10 +45,14 @@ class _SplitForm extends React.Component {
         phone: '',
         serviceID: urlSearchParams.has('planId') ? urlSearchParams.get('planId') : '',
         state: '',
-        cost: ''
+        cost: '',
+
+        submitting: false,
+        submittedSuccessfully: false,
+        error: null,
       };
   }
-  
+
   componentWillMount(){
       api.getSquadPrice({
           serviceID: this.state.serviceID
@@ -69,34 +74,44 @@ class _SplitForm extends React.Component {
 
   handleSubmit = async (ev) => {
     ev.preventDefault();
-    const payload = await this.props.stripe.createToken({
-      name: this.state.name,
-      address_line1: this.state.address1,
-      address_line2: this.state.address2,
-      address_city: this.state.city,
-      address_state: this.state.state,
-      address_country: 'US',
+    this.setState({ error: null, submitting: true }, async () => {
+      try {
+        const payload = await this.props.stripe.createToken({
+          name: this.state.name,
+          address_line1: this.state.address1,
+          address_line2: this.state.address2,
+          address_city: this.state.city,
+          address_state: this.state.state,
+          address_country: 'US',
+        });
+        await api.setupSubscription({
+          email: this.state.email,
+          name: this.state.name,
+          phone_number: this.state.phone,
+          serviceID: this.state.serviceID,
+          tokenID: payload.token.id,
+        })
+        this.setState({ submittedSuccessfully: true });
+      } catch(e) {
+        this.setState({ error: e.message });
+      } finally {
+        this.setState({ submitting: false })
+      }
     });
-    await api.setupSubscription({
-      email: this.state.email,
-      name: this.state.name,
-      phone_number: this.state.phone,
-      serviceID: this.state.serviceID,
-      tokenID: payload.token.id,
-    })
   };
 
-  renderTextInput(name, label) {
+  renderTextInput(name, label, required=true) {
     return (
       <TextInput
         label={label}
         name={name}
         onChange={this.onInputChange}
         value={this.state[name]}
+        required={required}
       />
     );
   }
-  
+
   renderSquadInput(name, label) {
     return (
       <TextInput
@@ -104,10 +119,11 @@ class _SplitForm extends React.Component {
         name={name}
         onChange={this.findSquad}
         value={this.state[name]}
+        required
       />
     );
   }
-  
+
   findSquad = async (ev) => {
       const { name, value } = ev.target;
       ev.preventDefault();
@@ -125,7 +141,7 @@ class _SplitForm extends React.Component {
           })
       });
   }
-  
+
   renderFindSquad(){
       return (
           <div  style={{'display':'flex'}}>
@@ -142,31 +158,69 @@ class _SplitForm extends React.Component {
   render() {
     return (
         <div>
-            <div style={{'display':'flex',alignItems:'center'}}>
-                {this.renderFindSquad()}
-            </div>
-            <br />
-            <br />
-            <form onSubmit={this.handleSubmit}>
-            {this.renderTextInput('name', 'Full Name')}
-            {this.renderTextInput('email', 'Email')}
-            {this.renderTextInput('phone', 'Phone')}
-            <br />
-
-            <label>
-              Card
-              <CardElement
-                {...createOptions(this.props.fontSize)}
+          <div className="loader-container">
+              <BeatLoader
+                loading={this.state.submitting}
+                sizeUnit={"px"}
+                size={60}
+                color={'#36D7B7'}
               />
-            </label>
-            <br />
+            </div>
+            <div className={this.state.submitting ? 'transparent' : ''}>
+              {this.state.submittedSuccessfully ? (
+                <div>
+                  <p>
+                    Congrats, on joining {this.state.serviceID}!
+                  </p>
+                  <p>
+                    Here are some helpful reminders:
+                  </p>
+                  <ul>
+                    <li>You'll need to ask your Squad owner for the login information if they haven't sent it already.</li>
+                    <li>You'll be charged {this.state.cost} per month.</li>
+                  </ul>
+                </div>
+              ) : (
+                <form onSubmit={this.handleSubmit}>
+                  <div style={{'display':'flex',alignItems:'center'}}>
+                      {this.renderFindSquad()}
+                  </div>
+                  <br />
+                  <br />
+                  {this.renderTextInput('name', 'Full Name')}
+                  {this.renderTextInput('email', 'Email')}
+                  {this.renderTextInput('phone', 'Phone')}
+                  <br />
 
-            {this.renderTextInput('address1', 'Billing Address (1)')}
-            {this.renderTextInput('address2', 'Billing Address (2)')}
-            {this.renderTextInput('city', 'Billing City')}
-            {this.renderTextInput('state', 'Billing State')}
-            <button>Squad Up</button>
-          </form>
+                  <label>
+                    Card
+                    <CardElement
+                      {...createOptions(this.props.fontSize)}
+                    />
+                  </label>
+                  <br />
+
+                  {this.renderTextInput('address1', 'Billing Address (1)')}
+                  {this.renderTextInput('address2', 'Billing Address (2)', false)}
+                  {this.renderTextInput('city', 'Billing City')}
+                  {this.renderTextInput('state', 'Billing State')}
+                  <button disabled={this.state.submitting}>Squad Up</button>
+                  {this.state.error && (
+                    <div className="error">
+                      <p>
+                        <strong>We're sorry, it looks like there was issue creating a Squad.</strong>
+                      </p>
+                      <p>
+                        Error: {this.state.error}
+                      </p>
+                      <p>
+                        Please try again and contact us if the issue persists.
+                      </p>
+                    </div>
+                  )}
+                </form>
+              )}
+            </div>
       </div>
     );
   }
