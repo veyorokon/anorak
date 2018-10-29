@@ -88,7 +88,7 @@ export default class Create extends React.Component {
                 {this.renderTextInput('email', 'Email')}
                 <label>
                   How should we pay you? (using the above email)
-                  <select name="payment_method" onChange={this.onInputChange}>
+                  <select name="payment_method" onChange={this.onInputChange} required>
                     <option value="paypal">PayPal</option>
                     <option value="venmo">Venmo</option>
                   </select>
@@ -104,6 +104,7 @@ export default class Create extends React.Component {
                     name="cost_price"
                     onChange={this.onInputChange}
                     value={this.state.pricePerMember}
+                    required
                   />
                 </label>
                 <button disabled={this.state.submitting}>Create</button>
