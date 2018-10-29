@@ -1,6 +1,6 @@
 async function apiFetch(route, body) {
     console.log(route, body)
-  const response = await fetch(`https://dj.staging.xyz/api/${route}`, {
+  const response = await fetch(`https://dj.staging.squadup.xyz/api/${route}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
