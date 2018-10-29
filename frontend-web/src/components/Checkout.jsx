@@ -91,27 +91,29 @@ class _SplitForm extends React.Component {
   findSquad = async (ev) => {
       const { name, value } = ev.target;
       ev.preventDefault();
-      await api.getSquadPrice({
-          serviceID: this.state.serviceID
-      }).then(data=>{
-        if(data['price']){
-            var price = '$ '+data['price'].toFixed(2);
-        }
-        else{
-            price = ''
-        }
-        this.setState({ [name]: value, cost: price });
-      })
+      this.setState({ [name]: value }, async () => {
+          await api.getSquadPrice({
+              serviceID: this.state.serviceID
+          }).then(data=>{
+            if(data['price']){
+                var price = '$ '+data['price'].toFixed(2);
+            }
+            else{
+                price = ''
+            }
+            this.setState({ cost: price });
+          })
+      });
   }
   
   renderFindSquad(){
       return (
           <div  style={{'display':'flex'}}>
-              <div style={{alignItems:'center'}}>
-                  {this.renderSquadInput('serviceID', 'Service ID')}
+              <div style={{alignItems:'center', display:'flex'}}>
+                  {this.renderSquadInput('serviceID', 'Squad ID')}
               </div>
-              <div style={{alignItems:'center'}}>
-                 {this.state.cost}
+              <div style={{alignItems:'center', paddingTop:15, marginLeft:15, display:'flex'}}>
+                  {this.state.cost} {this.state.cost && ' Per Month'}
               </div>
         </div>
       )
@@ -123,8 +125,10 @@ class _SplitForm extends React.Component {
             <div style={{'display':'flex',alignItems:'center'}}>
                 {this.renderFindSquad()}
             </div>
+            <br />
+            <br />
             <form onSubmit={this.handleSubmit}>
-            {this.renderTextInput('name', 'Name')}
+            {this.renderTextInput('name', 'Full Name')}
             {this.renderTextInput('email', 'Email')}
             {this.renderTextInput('phone', 'Phone')}
             <br />
@@ -137,10 +141,10 @@ class _SplitForm extends React.Component {
             </label>
             <br />
 
-            {this.renderTextInput('address1', 'Address (1)')}
-            {this.renderTextInput('address2', 'Address (2)')}
-            {this.renderTextInput('city', 'City')}
-            {this.renderTextInput('state', 'State')}
+            {this.renderTextInput('address1', 'Billing Address (1)')}
+            {this.renderTextInput('address2', 'Billing Address (2)')}
+            {this.renderTextInput('city', 'Billing City')}
+            {this.renderTextInput('state', 'Billing State')}
             <button>Squad Up</button>
           </form>
       </div>
