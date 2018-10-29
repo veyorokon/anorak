@@ -97,10 +97,10 @@ export default class Create extends React.Component {
 
                 {this.renderTextInput('service', 'Service you\'re sharing (e.g. Netflix)')}
                 <label>
-                  Price per member (this is what each member in your Squad will be charged)*
+                  Price per member (this is what each member in your Squad will be charged per month)*
                   <input
                     type="number"
-                    placeholder="$3"
+                    placeholder="3"
                     name="cost_price"
                     onChange={this.onInputChange}
                     value={this.state.pricePerMember}
