@@ -5,6 +5,7 @@ import {
   injectStripe,
   StripeProvider
 } from 'react-stripe-elements';
+import { withRouter } from 'react-router-dom';
 import api from '../lib/api';
 import TextInput from './TextInput.jsx';
 
@@ -30,17 +31,36 @@ const createOptions = (fontSize, padding) => {
 };
 
 class _SplitForm extends React.Component {
-  state = {
-    address1: '',
-    address2: '',
-    city: '',
-    email: '',
-    name: '',
-    phone: '',
-    serviceID: '',
-    state: '',
-    cost: ''
-  };
+  constructor(props) {
+      super(props);
+      
+      const urlSearchParams = new URLSearchParams(props.location.search);
+      this.state = {
+        address1: '',
+        address2: '',
+        city: '',
+        email: '',
+        name: '',
+        phone: '',
+        serviceID: urlSearchParams.has('planId') ? urlSearchParams.get('planId') : '',
+        state: '',
+        cost: ''
+      };
+  }
+  
+  componentWillMount(){
+      api.getSquadPrice({
+          serviceID: this.state.serviceID
+      }).then(data=>{
+        if(data['price']){
+            var price = '$ '+data['price'].toFixed(2);
+        }
+        else{
+            price = ''
+        }
+        this.setState({ cost: price });
+      })
+  }
 
   onInputChange = (ev) => {
     const { name, value } = ev.target;
@@ -151,7 +171,7 @@ class _SplitForm extends React.Component {
     );
   }
 }
-const SplitForm = injectStripe(_SplitForm);
+const SplitForm = injectStripe(withRouter(_SplitForm));
 
 export default class Checkout extends React.Component {
   constructor() {
