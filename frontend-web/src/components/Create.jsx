@@ -1,5 +1,5 @@
 import React from 'react';
-import TextInput from './TextInput.jsx'
+import TextInput from './TextInput.jsx';
 import BeatLoader from 'react-spinners/BeatLoader';
 
 import api from '../lib/api';
@@ -16,7 +16,7 @@ export default class Create extends React.Component {
     submitting: false,
     submittedSuccessfully: false,
     planId: null,
-    error: null,
+    error: null
   };
 
   renderTextInput(name, label) {
@@ -30,7 +30,7 @@ export default class Create extends React.Component {
       />
     );
   }
-  handleSubmit = async (ev) => {
+  handleSubmit = async ev => {
     ev.preventDefault();
     this.setState({ error: null, submitting: true }, async () => {
       try {
@@ -39,15 +39,15 @@ export default class Create extends React.Component {
       } catch (e) {
         this.setState({ error: e.message });
       } finally {
-        this.setState({ submitting: false })
+        this.setState({ submitting: false });
       }
     });
   };
 
-  onInputChange = (ev) => {
+  onInputChange = ev => {
     const { name, value } = ev.target;
     this.setState({ [name]: value });
-  }
+  };
 
   render() {
     return (
@@ -55,7 +55,7 @@ export default class Create extends React.Component {
         <div className="loader-container">
           <BeatLoader
             loading={this.state.submitting}
-            sizeUnit={"px"}
+            sizeUnit={'px'}
             size={60}
             color={'#36D7B7'}
           />
@@ -67,13 +67,18 @@ export default class Create extends React.Component {
           {this.state.submittedSuccessfully ? (
             <div>
               <p>
-                Congrats, you've created a Squad (ID: {this.state.planId})! Here's the url that your Squad members
-                can use to join your Squad.
+                Congrats, you've created a Squad (ID: {this.state.planId}
+                )! Here's the url that your Squad members can use to join your
+                Squad.
               </p>
-              <a href={`https://staging.squadup.xyz/join?planId=${this.state.planId}`}>{`https://staging.squadup.xyz/join?planId=${this.state.planId}`}</a>
-              <p>
-                Here are some helpful reminders:
-              </p>
+              <a
+                href={`https://staging.squadup.xyz/join?planId=${
+                  this.state.planId
+                }`}
+              >{`https://staging.squadup.xyz/join?planId=${
+                this.state.planId
+              }`}</a>
+              <p>Here are some helpful reminders:</p>
               <ul>
                 <li>You'll need to send your Squad your login information.</li>
                 <li>You'll be paid on the last day of each month.</li>
@@ -88,16 +93,24 @@ export default class Create extends React.Component {
                 {this.renderTextInput('email', 'Email')}
                 <label>
                   How should we pay you? (using the above email)
-                  <select name="payment_method" onChange={this.onInputChange} required>
+                  <select
+                    name="payment_method"
+                    onChange={this.onInputChange}
+                    required
+                  >
                     <option value="paypal">PayPal</option>
                     <option value="venmo">Venmo</option>
                   </select>
                 </label>
                 <br />
 
-                {this.renderTextInput('service', 'Service you\'re sharing (e.g. Netflix)')}
+                {this.renderTextInput(
+                  'service',
+                  "Service you're sharing (e.g. Netflix)"
+                )}
                 <label>
-                  Price per member (this is what each member in your Squad will be charged per month)*
+                  Price per member (this is what each member in your Squad will
+                  be charged per month)*
                   <input
                     type="number"
                     placeholder="3"
@@ -111,11 +124,12 @@ export default class Create extends React.Component {
                 {this.state.error && (
                   <div className="error">
                     <p>
-                      <strong>We're sorry, it looks like there was issue creating a Squad.</strong>
+                      <strong>
+                        We're sorry, it looks like there was issue creating a
+                        Squad.
+                      </strong>
                     </p>
-                    <p>
-                      Error: {this.state.error}
-                    </p>
+                    <p>Error: {this.state.error}</p>
                     <p>
                       Please try again and contact us if the issue persists.
                     </p>

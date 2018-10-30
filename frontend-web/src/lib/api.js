@@ -1,12 +1,12 @@
 async function apiFetch(route, body) {
-    console.log(route, body)
+  console.log(route, body);
   const response = await fetch(`https://dj.staging.squadup.xyz/api/${route}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(body)
   });
   if (!response.ok) {
     throw Error(`${response.status}: ${response.statusText}`);
@@ -23,7 +23,7 @@ const api = {
   },
   getSquadPrice(data) {
     return apiFetch('dashboard/squad/price/', { data });
-  },
+  }
 };
 
 export default api;

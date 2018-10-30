@@ -10,7 +10,6 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import api from '../lib/api';
 import TextInput from './TextInput.jsx';
 
-
 const createOptions = (fontSize, padding) => {
   return {
     style: {
@@ -20,59 +19,62 @@ const createOptions = (fontSize, padding) => {
         letterSpacing: '0.025em',
         fontFamily: 'Source Code Pro, monospace',
         '::placeholder': {
-          color: '#aab7c4',
+          color: '#aab7c4'
         },
-        padding,
+        padding
       },
       invalid: {
-        color: '#9e2146',
-      },
-    },
+        color: '#9e2146'
+      }
+    }
   };
 };
 
 class _SplitForm extends React.Component {
   constructor(props) {
-      super(props);
+    super(props);
 
-      const urlSearchParams = new URLSearchParams(props.location.search);
-      this.state = {
-        address1: '',
-        address2: '',
-        city: '',
-        email: '',
-        name: '',
-        phone: '',
-        serviceID: urlSearchParams.has('planId') ? urlSearchParams.get('planId') : '',
-        state: '',
-        cost: '',
+    const urlSearchParams = new URLSearchParams(props.location.search);
+    this.state = {
+      address1: '',
+      address2: '',
+      city: '',
+      email: '',
+      name: '',
+      phone: '',
+      serviceID: urlSearchParams.has('planId')
+        ? urlSearchParams.get('planId')
+        : '',
+      state: '',
+      cost: '',
 
-        submitting: false,
-        submittedSuccessfully: false,
-        error: null,
-      };
+      submitting: false,
+      submittedSuccessfully: false,
+      error: null
+    };
   }
 
-  componentWillMount(){
-      api.getSquadPrice({
-          serviceID: this.state.serviceID
-      }).then(data=>{
-        if(data['price']){
-            var price = '$ '+data['price'].toFixed(2);
-        }
-        else{
-            price = ''
+  componentWillMount() {
+    api
+      .getSquadPrice({
+        serviceID: this.state.serviceID
+      })
+      .then(data => {
+        if (data['price']) {
+          var price = '$ ' + data['price'].toFixed(2);
+        } else {
+          price = '';
         }
         this.setState({ cost: price });
-      })
+      });
   }
 
-  onInputChange = (ev) => {
+  onInputChange = ev => {
     const { name, value } = ev.target;
     this.setState({ [name]: value });
-  }
+  };
 
-  handleSubmit = async (ev) => {
+  handleSubmit = async ev => {
     ev.preventDefault();
     this.setState({ error: null, submitting: true }, async () => {
       try {
@@ -82,25 +84,25 @@ class _SplitForm extends React.Component {
           address_line2: this.state.address2,
           address_city: this.state.city,
           address_state: this.state.state,
-          address_country: 'US',
+          address_country: 'US'
         });
         await api.setupSubscription({
           email: this.state.email,
           name: this.state.name,
           phone_number: this.state.phone,
           serviceID: this.state.serviceID,
-          tokenID: payload.token.id,
-        })
+          tokenID: payload.token.id
+        });
         this.setState({ submittedSuccessfully: true });
-      } catch(e) {
+      } catch (e) {
         this.setState({ error: e.message });
       } finally {
-        this.setState({ submitting: false })
+        this.setState({ submitting: false });
       }
     });
   };
 
-  renderTextInput(name, label, required=true) {
+  renderTextInput(name, label, required = true) {
     return (
       <TextInput
         label={label}
@@ -124,103 +126,107 @@ class _SplitForm extends React.Component {
     );
   }
 
-  findSquad = async (ev) => {
-      const { name, value } = ev.target;
-      ev.preventDefault();
-      this.setState({ [name]: value }, async () => {
-          await api.getSquadPrice({
-              serviceID: this.state.serviceID
-          }).then(data=>{
-            if(data['price']){
-                var price = '$ '+data['price'].toFixed(2);
-            }
-            else{
-                price = ''
-            }
-            this.setState({ cost: price });
-          })
-      });
-  }
+  findSquad = async ev => {
+    const { name, value } = ev.target;
+    ev.preventDefault();
+    this.setState({ [name]: value }, async () => {
+      await api
+        .getSquadPrice({
+          serviceID: this.state.serviceID
+        })
+        .then(data => {
+          if (data['price']) {
+            var price = '$ ' + data['price'].toFixed(2);
+          } else {
+            price = '';
+          }
+          this.setState({ cost: price });
+        });
+    });
+  };
 
-  renderFindSquad(){
-      return (
-          <div  style={{'display':'flex'}}>
-              <div style={{alignItems:'center', display:'flex'}}>
-                  {this.renderSquadInput('serviceID', 'Squad ID')}
-              </div>
-              <div style={{alignItems:'center', paddingTop:15, marginLeft:15, display:'flex'}}>
-                  {this.state.cost} {this.state.cost && ' Per Month'}
-              </div>
+  renderFindSquad() {
+    return (
+      <div style={{ display: 'flex' }}>
+        <div style={{ alignItems: 'center', display: 'flex' }}>
+          {this.renderSquadInput('serviceID', 'Squad ID')}
         </div>
-      )
+        <div
+          style={{
+            alignItems: 'center',
+            paddingTop: 15,
+            marginLeft: 15,
+            display: 'flex'
+          }}
+        >
+          {this.state.cost} {this.state.cost && ' Per Month'}
+        </div>
+      </div>
+    );
   }
 
   render() {
     return (
-        <div>
-          <div className="loader-container">
-              <BeatLoader
-                loading={this.state.submitting}
-                sizeUnit={"px"}
-                size={60}
-                color={'#36D7B7'}
-              />
+      <div>
+        <div className="loader-container">
+          <BeatLoader
+            loading={this.state.submitting}
+            sizeUnit={'px'}
+            size={60}
+            color={'#36D7B7'}
+          />
+        </div>
+        <div className={this.state.submitting ? 'transparent' : ''}>
+          {this.state.submittedSuccessfully ? (
+            <div>
+              <p>Congrats, on joining {this.state.serviceID}!</p>
+              <p>Here are some helpful reminders:</p>
+              <ul>
+                <li>
+                  You'll need to ask your Squad owner for the login information
+                  if they haven't sent it already.
+                </li>
+                <li>You'll be charged {this.state.cost} per month.</li>
+              </ul>
             </div>
-            <div className={this.state.submitting ? 'transparent' : ''}>
-              {this.state.submittedSuccessfully ? (
-                <div>
+          ) : (
+            <form onSubmit={this.handleSubmit}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                {this.renderFindSquad()}
+              </div>
+              <br />
+              <br />
+              {this.renderTextInput('name', 'Full Name')}
+              {this.renderTextInput('email', 'Email')}
+              {this.renderTextInput('phone', 'Phone')}
+              <br />
+
+              <label>
+                Card
+                <CardElement {...createOptions(this.props.fontSize)} />
+              </label>
+              <br />
+
+              {this.renderTextInput('address1', 'Billing Address (1)')}
+              {this.renderTextInput('address2', 'Billing Address (2)', false)}
+              {this.renderTextInput('city', 'Billing City')}
+              {this.renderTextInput('state', 'Billing State')}
+              <button disabled={this.state.submitting}>Squad Up</button>
+              {this.state.error && (
+                <div className="error">
                   <p>
-                    Congrats, on joining {this.state.serviceID}!
+                    <strong>
+                      We're sorry, it looks like there was issue creating a
+                      Squad.
+                    </strong>
                   </p>
-                  <p>
-                    Here are some helpful reminders:
-                  </p>
-                  <ul>
-                    <li>You'll need to ask your Squad owner for the login information if they haven't sent it already.</li>
-                    <li>You'll be charged {this.state.cost} per month.</li>
-                  </ul>
+                  <p>Error: {this.state.error}</p>
+                  <p>Please try again and contact us if the issue persists.</p>
                 </div>
-              ) : (
-                <form onSubmit={this.handleSubmit}>
-                  <div style={{'display':'flex',alignItems:'center'}}>
-                      {this.renderFindSquad()}
-                  </div>
-                  <br />
-                  <br />
-                  {this.renderTextInput('name', 'Full Name')}
-                  {this.renderTextInput('email', 'Email')}
-                  {this.renderTextInput('phone', 'Phone')}
-                  <br />
-
-                  <label>
-                    Card
-                    <CardElement
-                      {...createOptions(this.props.fontSize)}
-                    />
-                  </label>
-                  <br />
-
-                  {this.renderTextInput('address1', 'Billing Address (1)')}
-                  {this.renderTextInput('address2', 'Billing Address (2)', false)}
-                  {this.renderTextInput('city', 'Billing City')}
-                  {this.renderTextInput('state', 'Billing State')}
-                  <button disabled={this.state.submitting}>Squad Up</button>
-                  {this.state.error && (
-                    <div className="error">
-                      <p>
-                        <strong>We're sorry, it looks like there was issue creating a Squad.</strong>
-                      </p>
-                      <p>
-                        Error: {this.state.error}
-                      </p>
-                      <p>
-                        Please try again and contact us if the issue persists.
-                      </p>
-                    </div>
-                  )}
-                </form>
               )}
-            </div>
+            </form>
+          )}
+        </div>
       </div>
     );
   }
@@ -231,22 +237,22 @@ export default class Checkout extends React.Component {
   constructor() {
     super();
     this.state = {
-      elementFontSize: window.innerWidth < 450 ? '14px' : '18px',
+      elementFontSize: window.innerWidth < 450 ? '14px' : '18px'
     };
     window.addEventListener('resize', () => {
       if (window.innerWidth < 450 && this.state.elementFontSize !== '14px') {
-        this.setState({elementFontSize: '14px'});
+        this.setState({ elementFontSize: '14px' });
       } else if (
         window.innerWidth >= 450 &&
         this.state.elementFontSize !== '18px'
       ) {
-        this.setState({elementFontSize: '18px'});
+        this.setState({ elementFontSize: '18px' });
       }
     });
   }
 
   render() {
-    const {elementFontSize} = this.state;
+    const { elementFontSize } = this.state;
     return (
       <StripeProvider apiKey="pk_live_BpssZcKZdOznYcltmEYbu3EH">
         <div className="Checkout">
