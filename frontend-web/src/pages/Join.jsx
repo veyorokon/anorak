@@ -1,6 +1,6 @@
 import React from 'react';
 import { Elements, StripeProvider } from 'react-stripe-elements';
-import JoinForm from './JoinForm';
+import JoinForm from '../components/JoinForm';
 
 export default class Join extends React.Component {
   constructor() {

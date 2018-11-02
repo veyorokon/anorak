@@ -1,6 +1,6 @@
 import React from 'react';
-import TextInput from './TextInput.jsx';
 import BeatLoader from 'react-spinners/BeatLoader';
+import TextInput from '../components/TextInput.jsx';
 
 import api from '../lib/api';
 

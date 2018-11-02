@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import Join from './components/Join';
-import Create from './components/Create';
+import Join from './pages/Join';
+import Create from './pages/Create';
 
 import './App.css';
 
