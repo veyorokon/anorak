@@ -5,6 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Create from './pages/Create';
 import Dashboard from './pages/Dashboard';
 import Join from './pages/Join';
+import Signup from './pages/Signup';
 
 // import './App.css';
 
@@ -18,6 +19,7 @@ class App extends React.Component {
             <Route path="/" exact component={Dashboard} />
             <Route path="/create/" component={Create} />
             <Route path="/join/" component={Join} />
+            <Route path="/signup" component={Signup} />
           </div>
         </Router>
       </React.Fragment>
