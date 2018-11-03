@@ -3,15 +3,16 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Join from './pages/Join';
 import Create from './pages/Create';
+import Dashboard from './pages/Dashboard';
 
-import './App.css';
+//import './App.css';
 
 class App extends Component {
   render() {
     return (
       <Router>
         <div>
-          <Route path="/" exact component={Create} />
+          <Route path="/" exact component={Dashboard} />
           <Route path="/create/" component={Create} />
           <Route path="/join/" component={Join} />
         </div>

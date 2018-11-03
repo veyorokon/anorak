@@ -15,7 +15,7 @@ async function apiFetch(route, body) {
 
 const api = {
   sendCreateSquadRequest(user, form) {
-    return apiFetch('dashboard/create_squad/', { user, form });
+    return apiFetch('dashboard/mobile/create_squad/', { user, form });
   },
   requestPhoneVerificationCode(number) {
     return apiFetch('phone_verification_codes/', {
@@ -31,12 +31,12 @@ const api = {
     });
   },
   requestUserDashboard(user) {
-    return apiFetch('dashboard/user_dashboard/', {
+    return apiFetch('dashboard/mobile/user_dashboard/', {
       user: user,
     });
   },
   sendRegistrationRequest(sessionToken, number) {
-    return apiFetch(`users/creation/?session_token=${sessionToken}`, {
+    return apiFetch(`users/mobile/creation/?session_token=${sessionToken}`, {
       user: {
         phone_number: number,
       },
@@ -44,10 +44,10 @@ const api = {
     });
   },
   sendLogoutRequest(user) {
-    return apiFetch('users/logout/', user);
+    return apiFetch('users/mobile/logout/', user);
   },
   requestAutoTokenLogin(credentials) {
-    return apiFetch('users/token_login/', credentials);
+    return apiFetch('users/mobile/token_login/', credentials);
   },
 };
 
