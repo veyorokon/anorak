@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import FacebookLogin from 'react-facebook-login';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import LockIcon from '@material-ui/icons/LockOutlined';
-import Icon from '@material-ui/core/Icon';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -49,12 +49,16 @@ const styles = theme => ({
     marginBottom: '12px'
   },
   subtitle: {
-    marginBottom: '28px'
+    marginBottom: '20px'
   },
-  button: {
-    marginBottom: '28px'
+  overline: {
+    marginTop: '28px'
   }
 });
+
+const responseFacebook = response => {
+  console.log(response);
+};
 
 function SignupForm(props) {
   const { classes } = props;
@@ -75,15 +79,15 @@ function SignupForm(props) {
         Create your own subscription service and share it with family and
         friends or the SquadUp universe.
       </Typography>
-      <Button
-        color="primary"
-        variant="contained"
+      <FacebookLogin
+        appId="1974089579550206"
+        fields="name,email,picture"
         size="small"
-        className={classes.button}
-      >
-        <Icon className={classes.leftIcon}>facebook</Icon>
-        Sign up with Facebook
-      </Button>
+        textButton="Sign up with Facebook"
+        icon="fa-facebook"
+        callback={responseFacebook}
+        version="3.2"
+      />
 
       <Typography variant="overline" className={classes.overline}>
         Or
