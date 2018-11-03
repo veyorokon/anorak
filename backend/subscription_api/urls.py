@@ -30,19 +30,19 @@ urlpatterns = [
         views.SquadMemberDetailAPI.as_view()
     ),
     path(
-        'dashboard/create_squad/', 
+        'dashboard/mobile/create_squad/', 
         views.CreateSquadAPI.as_view()
     ),
     path(
-        'dashboard/user_dashboard/', 
+        'dashboard/mobile/user_dashboard/', 
         views.DashboardAPI.as_view()
     ),
     path(
-        'dashboard/create_web_subscriber/', 
+        'dashboard/web/create_subscriber/', 
         views.CreateWebSubscriberAPI.as_view()
     ),
     path(
-        'dashboard/create_web_squad/', 
+        'dashboard/web/create_squad/', 
         views.CreateWebSquadAPI.as_view()
     ),
     path(

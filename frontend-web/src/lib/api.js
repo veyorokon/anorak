@@ -1,7 +1,7 @@
 async function apiFetch(route, body) {
   console.log(route, body);
-  const response = await fetch(`https://dj.staging.squadup.xyz/api/${route}`, {
-    // const response = await fetch(`http://localhost:8000/api/${route}`, {
+  // const response = await fetch(`https://dj.staging.squadup.xyz/api/${route}`, {
+    const response = await fetch(`http://localhost:8000/api/${route}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -17,10 +17,10 @@ async function apiFetch(route, body) {
 
 const api = {
   setupSubscription(data) {
-    return apiFetch('dashboard/create_web_subscriber/', { data });
+    return apiFetch('dashboard/web/create_subscriber/', { data });
   },
   createSquad(data) {
-    return apiFetch('dashboard/create_web_squad/', { data });
+    return apiFetch('dashboard/web/create_squad/', { data });
   },
   getSquadPrice(data) {
     return apiFetch('dashboard/squad/price/', { data });

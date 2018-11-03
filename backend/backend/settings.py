@@ -41,7 +41,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'v(m)6f0+s3d$o4lk$lli&un$e1a@bu3oww^9=s=ms)+@df23*r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 #ALLOWED_HOSTS = ['squadup.xyz', 'www.squadup.xyz', 'nginx', '127.0.0.1', 'django-env.k4nxphhzk2.us-west-1.elasticbeanstalk.com']
 ALLOWED_HOSTS=[
