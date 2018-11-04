@@ -7,6 +7,7 @@ import Create from './pages/Create';
 import Dashboard from './pages/Dashboard';
 import Join from './pages/Join';
 import Signup from './pages/Signup';
+import './App.css';
 
 const theme = createMuiTheme({
   palette: {
