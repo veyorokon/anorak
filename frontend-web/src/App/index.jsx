@@ -22,7 +22,7 @@ export default function App() {
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
-      <Routes />
+      <Routes fb={window.FB} />
     </MuiThemeProvider>
   );
 }

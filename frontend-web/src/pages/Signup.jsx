@@ -19,7 +19,6 @@ const styles = theme => ({
 
 function Signup(props) {
   const { classes } = props;
-
   return (
     <main className={classes.layout}>
       <SignupForm />

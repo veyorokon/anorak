@@ -13,17 +13,6 @@ import FacebookLogin from './FacebookLogin';
 import api from '../lib/api';
 
 const styles = theme => ({
-  layout: {
-    width: 'auto',
-    display: 'block', // Fix IE 11 issue.
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-      width: 400,
-      marginLeft: 'auto',
-      marginRight: 'auto'
-    }
-  },
   paper: {
     marginTop: theme.spacing.unit * 8,
     display: 'flex',
@@ -41,9 +30,6 @@ const styles = theme => ({
   },
   submit: {
     marginTop: theme.spacing.unit * 3
-  },
-  leftIcon: {
-    marginRight: theme.spacing.unit
   },
   title: {
     marginTop: '12px',
@@ -78,11 +64,10 @@ class SignupForm extends React.Component {
     });
   };
 
-  render() {
+  renderHeader = () => {
     const { classes } = this.props;
-
     return (
-      <Paper className={classes.paper}>
+      <React.Fragment>
         <Avatar className={classes.avatar}>
           <LockIcon />
         </Avatar>
@@ -97,6 +82,15 @@ class SignupForm extends React.Component {
           Create your own subscription service and share it with family and
           friends or the SquadUp universe.
         </Typography>
+      </React.Fragment>
+    );
+  };
+
+  render() {
+    const { classes } = this.props;
+    return (
+      <Paper className={classes.paper}>
+        {this.renderHeader()}
 
         <FacebookLogin />
 
