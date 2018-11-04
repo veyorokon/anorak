@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FacebookLogin from 'react-facebook-login';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
@@ -10,6 +9,8 @@ import LockIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import FacebookLogin from './FacebookLogin';
+import api from '../lib/api';
 
 const styles = theme => ({
   layout: {
@@ -56,72 +57,90 @@ const styles = theme => ({
   }
 });
 
-const responseFacebook = response => {
-  console.log(response);
-};
+class SignupForm extends React.Component {
+  state = {
+    email: '',
+    fullName: '',
+    password: ''
+  };
 
-function SignupForm(props) {
-  const { classes } = props;
+  onChange = ev => {
+    const { name, value } = ev.target;
+    this.setState({ [name]: value });
+  };
 
-  return (
-    <Paper className={classes.paper}>
-      <Avatar className={classes.avatar}>
-        <LockIcon />
-      </Avatar>
-      <Typography component="h1" variant="h4" className={classes.title}>
-        SquadUp
-      </Typography>
-      <Typography
-        align="center"
-        variant="subtitle1"
-        className={classes.subtitle}
-      >
-        Create your own subscription service and share it with family and
-        friends or the SquadUp universe.
-      </Typography>
-      <FacebookLogin
-        appId="1974089579550206"
-        fields="name,email,picture"
-        size="small"
-        textButton="Sign up with Facebook"
-        icon="fa-facebook"
-        callback={responseFacebook}
-        version="3.2"
-      />
+  onSubmit = ev => {
+    ev.preventDefault();
+    api.createUser({
+      email: this.state.email,
+      fullName: this.state.fullName,
+      password: this.state.password
+    });
+  };
 
-      <Typography variant="overline" className={classes.overline}>
-        Or
-      </Typography>
+  render() {
+    const { classes } = this.props;
 
-      <form className={classes.form}>
-        <FormControl margin="normal" required fullWidth>
-          <InputLabel htmlFor="fullName">Full Name</InputLabel>
-          <Input id="fullName" name="fullName" autoComplete="email" />
-        </FormControl>
-        <FormControl margin="normal" required fullWidth>
-          <InputLabel htmlFor="email">Email Address</InputLabel>
-          <Input id="email" name="email" autoComplete="email" />
-        </FormControl>
-        <FormControl margin="normal" required fullWidth>
-          <InputLabel htmlFor="password">Password</InputLabel>
-          <Input
-            name="password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-        </FormControl>
-        <Button
-          fullWidth
-          type="submit"
-          color="primary"
-          className={classes.submit}
+    return (
+      <Paper className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockIcon />
+        </Avatar>
+        <Typography component="h1" variant="h4" className={classes.title}>
+          SquadUp
+        </Typography>
+        <Typography
+          align="center"
+          variant="subtitle1"
+          className={classes.subtitle}
         >
-          Sign Up
-        </Button>
-      </form>
-    </Paper>
-  );
+          Create your own subscription service and share it with family and
+          friends or the SquadUp universe.
+        </Typography>
+
+        <FacebookLogin />
+
+        <Typography variant="overline" className={classes.overline}>
+          Or
+        </Typography>
+
+        <form className={classes.form} onSubmit={this.onSubmit}>
+          <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="fullName">Full Name</InputLabel>
+            <Input id="fullName" name="fullName" onChange={this.onChange} />
+          </FormControl>
+          <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="email">Email Address</InputLabel>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              onChange={this.onChange}
+            />
+          </FormControl>
+          <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="password">Password</InputLabel>
+            <Input
+              name="password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={this.onChange}
+            />
+          </FormControl>
+          <Button
+            fullWidth
+            type="submit"
+            color="primary"
+            className={classes.submit}
+          >
+            Sign Up
+          </Button>
+        </form>
+      </Paper>
+    );
+  }
 }
 
 SignupForm.propTypes = {
