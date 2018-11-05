@@ -190,7 +190,7 @@ const styles = theme => ({
     margin: theme.spacing.unit,
     backgroundColor: 'rgba(35,33,59,0.91)',
     '&:hover': {
-      backgroundColor: 'black !important'
+      backgroundColor: '#231C07 !important'
     }
   }
 });

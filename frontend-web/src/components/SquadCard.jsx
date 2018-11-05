@@ -31,8 +31,8 @@ function SquadCard(props) {
         <Typography component="p">{props.description}</Typography>
       </CardContent>
       <CardActions>
-        <Button color="secondary" size="small">
-          Access
+        <Button size="small">
+          <Typography style={{ color: '#138A36' }}>Access</Typography>
         </Button>
       </CardActions>
     </Card>
