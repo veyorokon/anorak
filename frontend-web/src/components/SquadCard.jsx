@@ -32,7 +32,7 @@ function SquadCard(props) {
       </CardContent>
       <CardActions>
         <Button color="secondary" size="small">
-          Manage
+          Access
         </Button>
       </CardActions>
     </Card>

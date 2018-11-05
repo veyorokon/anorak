@@ -23,6 +23,20 @@ const TEMP_LIST = [
     price: 3,
     description:
       'Lorem ipsum dolor sit amet, consector apidciscing elit, sed do eiusmod tempor.'
+  },
+  {
+    id: 4,
+    name: 'HBO',
+    price: 3,
+    description:
+      'Lorem ipsum dolor sit amet, consector apidciscing elit, sed do eiusmod tempor.'
+  },
+  {
+    id: 5,
+    name: 'HBO',
+    price: 3,
+    description:
+      'Lorem ipsum dolor sit amet, consector apidciscing elit, sed do eiusmod tempor.'
   }
 ];
 

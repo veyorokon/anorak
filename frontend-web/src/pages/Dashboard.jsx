@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Navbar from '../components/Navbar';
 import SquadList from '../components/SquadList';
+import SearchTable from '../components/SearchTable';
 
 const styles = theme => ({
   content: {
@@ -14,17 +15,20 @@ const styles = theme => ({
     flexGrow: 1
   },
   list: {
-    width: '33%',
+    width: '20%',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginRight: '1%',
+    marginLeft: '1%'
   },
   listTitle: {
     marginTop: 20,
     marginBottom: 20
   },
   search: {
-    width: '67%'
+    width: '80%',
+    marginRight: '1%'
   }
 });
 
@@ -33,7 +37,7 @@ function Dashboard(props) {
 
   return (
     <div>
-      <Navbar />
+      <Navbar search={<div>test</div>} />
       <div className={classes.content}>
         <div className={classes.list}>
           <Typography className={classes.listTitle} align="center" variant="h5">
@@ -41,7 +45,9 @@ function Dashboard(props) {
           </Typography>
           <SquadList />
         </div>
-        <div className={classes.search}>Search</div>
+        <div className={classes.search}>
+          <SearchTable />
+        </div>
       </div>
     </div>
   );
