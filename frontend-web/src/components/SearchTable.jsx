@@ -57,7 +57,7 @@ const rows = [
   { id: 'size', numeric: true, disablePadding: false, label: 'Size' },
   { id: 'duration', numeric: true, disablePadding: false, label: 'Duration' },
   { id: 'price', numeric: true, disablePadding: false, label: 'Price' },
-  { id: 'button', numeric: true, disablePadding: false, label: '' }
+  { id: 'button', numeric: false, disablePadding: true, label: '' }
 ];
 
 class SearchTableHead extends React.Component {
@@ -162,21 +162,6 @@ let SearchTableToolbar = props => {
         )}
       </div>
       <div className={classes.spacer} />
-      <div className={classes.actions}>
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton aria-label="Delete">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton aria-label="Filter list">
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </div>
     </Toolbar>
   );
 };
@@ -203,7 +188,10 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing.unit,
-    backgroundColor: 'rgba(35,33,59,0.91)'
+    backgroundColor: 'rgba(35,33,59,0.91)',
+    '&:hover': {
+      backgroundColor: 'black !important'
+    }
   }
 });
 
@@ -321,8 +309,12 @@ class SearchTable extends React.Component {
                       <TableCell numeric>{n.duration}</TableCell>
                       <TableCell numeric>{n.price}</TableCell>
                       <TableCell>
-                        <Button color="secondary" className={classes.button}>
-                          <Typography color="inherit" noWrap>
+                        <Button
+                          style={{ textTransform: 'none' }}
+                          color="secondary"
+                          className={classes.button}
+                        >
+                          <Typography style={{ color: 'white' }} noWrap>
                             Squad
                           </Typography>
                           <Typography color="secondary" noWrap>
@@ -333,11 +325,6 @@ class SearchTable extends React.Component {
                     </TableRow>
                   );
                 })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </div>
