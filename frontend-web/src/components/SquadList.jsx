@@ -1,6 +1,9 @@
 import React from 'react';
 import SquardCard from './SquadCard';
 import './SquadList.css';
+import List from '@material-ui/core/List';
+
+const screenHeight = window.innerHeight * 0.83;
 
 const TEMP_LIST = [
   {
@@ -42,10 +45,13 @@ const TEMP_LIST = [
 
 export default function SquadList(props) {
   return (
-    <div className="squadList">
+    <List
+      className="squadList"
+      style={{ maxHeight: screenHeight, overflow: 'auto' }}
+    >
       {TEMP_LIST.map(squad => (
         <SquardCard key={squad.id} {...squad} />
       ))}
-    </div>
+    </List>
   );
 }

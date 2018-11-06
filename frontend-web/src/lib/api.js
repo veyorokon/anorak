@@ -17,16 +17,16 @@ async function apiFetch(route, body) {
 
 const api = {
   setupSubscription(data) {
-    return apiFetch('dashboard/web/create_subscriber/', { data });
+    return apiFetch('dashboard/web/create_subscriber/', data);
   },
   createSquad(data) {
-    return apiFetch('dashboard/web/create_squad/', { data });
+    return apiFetch('dashboard/web/create_squad/', data);
   },
   getSquadPrice(data) {
-    return apiFetch('dashboard/squad/price/', { data });
+    return apiFetch('dashboard/squad/price/', data);
   },
   createUser(data) {
-    console.log(data);
+    return apiFetch('users/web/creation/', data);
   }
 };
 

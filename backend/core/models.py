@@ -4,7 +4,6 @@ from django.db import models
 from django.conf import settings
 from .managers import UserManager
 from django.dispatch import receiver
-from django.core.mail import send_mail
 from rest_framework.authtoken.models import Token
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import PermissionsMixin
@@ -36,7 +35,7 @@ class StripeCustomer(models.Model):
         
     def create_stripe_customer(self):
         data = stripe.Customer.create(
-            description="Customer for "+str(self.user.phone_number)
+            description="Customer for "+str(self.user.email)
         )
         self.stripe_customer_id = data.id
         self.save()
@@ -64,15 +63,17 @@ class StripeCustomer(models.Model):
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    email = models.EmailField(_('email address'), default=None, null=True)
+    email = models.EmailField(_('email address'), blank=False, unique=True,
+        null=True)
     phone_number = models.CharField( max_length=17, blank=True, unique=True, 
         null=True)
+    facebook_id = models.CharField(_('facebook id'), max_length=30, blank=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, null=True, blank=True)
     date_joined = models.DateTimeField(_('date joined'), 
         editable=True, auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)
-    is_staff = models.BooleanField(_('active'), default=False)
+    is_staff = models.BooleanField(_('staff'), default=False)
     stripe_customer = models.OneToOneField(StripeCustomer, null=True,
         on_delete=models.SET_NULL, related_name='user')
     address_billing = models.OneToOneField(AddressBilling, null=True, 
@@ -80,7 +81,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     objects = UserManager()
 
-    USERNAME_FIELD = 'phone_number'
+    USERNAME_FIELD = 'email'
     REQUIRED_FILEDS = []
 
     class Meta:
@@ -99,12 +100,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         Returns the short name for the user.
         '''
         return self.first_name
-
-    def email_user(self, subject, message, from_email=None, **kwargs):
-        '''
-        Sends an email to this User.
-        '''
-        send_mail(subject, message, from_email, [self.email], **kwargs)
         
     def validate_session_token(self, token):
         """
@@ -141,8 +136,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.create_session_token()
         
     def __str__(self):
-        return 'Phone Number={0}'.format(
-            self.phone_number
+        return 'Email={0}'.format(
+            self.email
         )
     
     @property
