@@ -11,34 +11,28 @@ import InputBase from '@material-ui/core/InputBase';
 
 const styles = theme => ({
   button: {
-    margin: theme.spacing.unit
+    marginLeft: 16
   },
   grow: {
     flexGrow: 1
   },
-  row: {
+  toolbar: {
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    flexGrow: 1
+    justifyContent: 'space-between'
   },
-  col: {
-    display: 'flex',
-    alignItems: 'center'
+  navbarLeft: {
+    display: 'flex'
   },
   search: {
+    flexGrow: 1,
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25)
     },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing.unit,
-      width: 'auto'
-    }
+    marginLeft: 36,
+    width: 'auto'
   },
   searchIcon: {
     width: theme.spacing.unit * 9,
@@ -73,50 +67,40 @@ function Navbar(props) {
   const { classes } = props;
   return (
     <AppBar position="static">
-      <Toolbar>
-        <div className={classes.row}>
-          <div className={classes.col}>
-            <Typography variant="h5" color="inherit" noWrap>
-              Squad
-            </Typography>
-            <Typography
-              variant="h5"
-              color="secondary"
-              noWrap
-              className={classes.grow}
-            >
-              Up
-            </Typography>
-            <Button
-              variant="outlined"
-              color="secondary"
-              className={classes.button}
-            >
-              Create Squad
-            </Button>
-          </div>
-
-          <div className={classes.col}>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput
-                }}
-              />
-            </div>
-          </div>
-
-          <div className={classes.col}>
-            <Button color="secondary" className={classes.button}>
-              Account
-            </Button>
-          </div>
+      <Toolbar className={classes.toolbar}>
+        <div className={classes.navbarLeft}>
+          <Typography variant="h5" color="inherit" noWrap>
+            Squad
+          </Typography>
+          <Typography variant="h5" color="secondary" noWrap>
+            Up
+          </Typography>
+          <Button
+            variant="outlined"
+            color="secondary"
+            size="small"
+            className={classes.button}
+          >
+            Create Squad
+          </Button>
         </div>
+
+        <div className={classes.search}>
+          <div className={classes.searchIcon}>
+            <SearchIcon />
+          </div>
+          <InputBase
+            placeholder="Search…"
+            classes={{
+              root: classes.inputRoot,
+              input: classes.inputInput
+            }}
+          />
+        </div>
+
+        <Button color="secondary" className={classes.button}>
+          Account
+        </Button>
       </Toolbar>
     </AppBar>
   );

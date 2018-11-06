@@ -45,10 +45,7 @@ const TEMP_LIST = [
 
 export default function SquadList(props) {
   return (
-    <List
-      className="squadList"
-      style={{ maxHeight: screenHeight, overflow: 'auto' }}
-    >
+    <List className="squadList" style={{ maxHeight: screenHeight }}>
       {TEMP_LIST.map(squad => (
         <SquardCard key={squad.id} {...squad} />
       ))}
