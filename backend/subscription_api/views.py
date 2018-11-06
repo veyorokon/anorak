@@ -135,7 +135,7 @@ class CreateWebSubscriberAPI(APIView):
         """
         List all Dashboard Element objects
         """
-        data = request.data['data']
+        data = request.data
         serviceID = data['serviceID']
         if(self.validate_service_with_id(serviceID)):
             user = self.get_user_from_data_with_phone_number(data)
@@ -226,7 +226,7 @@ class CreateWebSquadAPI(APIView):
         """
         List all Dashboard Element objects
         """
-        data = request.data['data']
+        data = request.data
         print(data)
         
         user = self.get_user_from_data_with_phone_number(data)
@@ -280,7 +280,7 @@ class CreateWebSquadAPI(APIView):
         return round(100*float(price))
         
     def create_squad(self, user, request):
-        formData = request.data['data']
+        formData = request.data
         cost_price = self.format_price(formData['cost_price'])
         service = formData['service']
         payment_method = formData['payment_method']
@@ -296,7 +296,7 @@ class CreateWebSquadAPI(APIView):
 class SquadPriceAPI(APIView):
     #authentication_classes = (SessionAuthentication, BasicAuthentication)
     def post(self, request, *args, **kwargs):
-        serviceId = request.data['data']['serviceID']
+        serviceId = request.data['serviceID']
         return Response(
             {
                 "price": self.get_squad_price_from_id(serviceId)

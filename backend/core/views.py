@@ -158,3 +158,23 @@ class UserLogoutAPI(APIView):
             '{"success":"true"}',
             status=status.HTTP_200_OK
         )
+
+
+class UserFacebookAuthenticationAPI(APIView):
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+
+    def post(self, request, *args, **kwargs):
+        """
+        Updates the user object
+        """
+        facebookData = Session.validate_request_with_facebook_token(request)
+        user = Session.get_user_from_request_with_email(request)
+        self.update_user_with_facebook_data(user, facebookData)
+        return Response(
+            '{"success":"false"}',
+            status=status.HTTP_200_OK
+        )
+        
+    def update_user_with_facebook_data(self, user, facebookData):
+        user.facebook_id = facebookData['user_id']
+        user.save()

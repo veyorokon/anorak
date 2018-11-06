@@ -21,4 +21,6 @@ urlpatterns = [
     path('users/mobile/creation/', views.UserCreationAPI.as_view()),
     path('users/mobile/token_login/', views.UserTokenLoginAPI.as_view()),
     path('users/mobile/logout/', views.UserLogoutAPI.as_view()),
+    
+    path('users/web/creation/', views.UserFacebookAuthenticationAPI.as_view()),
 ]
