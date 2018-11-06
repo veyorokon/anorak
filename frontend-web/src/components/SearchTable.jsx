@@ -1,23 +1,15 @@
 import React from 'react';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import { lighten } from '@material-ui/core/styles/colorManipulator';
 import Button from '@material-ui/core/Button';
 
 let counter = 0;
@@ -66,13 +58,7 @@ class SearchTableHead extends React.Component {
   };
 
   render() {
-    const {
-      onSelectAllClick,
-      order,
-      orderBy,
-      numSelected,
-      rowCount
-    } = this.props;
+    const { order, orderBy } = this.props;
 
     return (
       <TableHead>
@@ -116,72 +102,13 @@ SearchTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired
 };
 
-const toolbarStyles = theme => ({
-  root: {
-    paddingRight: theme.spacing.unit
-  },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85)
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark
-        },
-  spacer: {
-    flex: '1 1 100%'
-  },
-  actions: {
-    color: theme.palette.text.secondary
-  },
-  title: {
-    flex: '0 0 auto'
-  }
-});
-
-let SearchTableToolbar = props => {
-  const { numSelected, classes } = props;
-
-  return (
-    <Toolbar
-      className={classNames(classes.root, {
-        [classes.highlight]: numSelected > 0
-      })}
-    >
-      <div className={classes.title}>
-        {numSelected > 0 ? (
-          <Typography color="inherit" variant="subtitle1">
-            {numSelected} selected
-          </Typography>
-        ) : (
-          <Typography variant="h5" id="tableTitle">
-            Explore
-          </Typography>
-        )}
-      </div>
-      <div className={classes.spacer} />
-    </Toolbar>
-  );
-};
-
-SearchTableToolbar.propTypes = {
-  classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired
-};
-
-SearchTableToolbar = withStyles(toolbarStyles)(SearchTableToolbar);
-
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    backgroundColor: 'unset'
+    marginTop: 14
   },
   table: {
-    minWidth: 1020,
-    backgroundColor: 'rgba(243,247,240,0.12)'
+    minWidth: 700
   },
   tableWrapper: {
     overflowX: 'auto'
@@ -201,18 +128,18 @@ class SearchTable extends React.Component {
     orderBy: 'calories',
     selected: [],
     data: [
-      createData('Netflix', '2 / 8', 'Month', 2.0),
-      createData('Netflix', '2 / 8', 'Month', 2.0),
-      createData('Netflix', '2 / 8', 'Month', 2.0),
-      createData('Netflix', '2 / 8', 'Month', 2.0),
-      createData('Netflix', '2 / 8', 'Month', 2.0),
-      createData('Netflix', '2 / 8', 'Month', 2.0),
-      createData('Netflix', '2 / 8', 'Month', 2.0),
-      createData('Netflix', '2 / 8', 'Month', 2.0),
-      createData('Netflix', '2 / 8', 'Month', 2.0),
-      createData('Netflix', '2 / 8', 'Month', 2.0),
-      createData('Netflix', '2 / 8', 'Month', 2.0),
-      createData('Netflix', '2 / 8', 'Month', 2.0)
+      createData('Netflix', '2 / 8', 'Monthly', 2.0),
+      createData('Netflix', '2 / 8', 'Monthly', 2.0),
+      createData('Netflix', '2 / 8', 'Monthly', 2.0),
+      createData('Netflix', '2 / 8', 'Monthly', 2.0),
+      createData('Netflix', '2 / 8', 'Monthly', 2.0),
+      createData('Netflix', '2 / 8', 'Monthly', 2.0),
+      createData('Netflix', '2 / 8', 'Monthly', 2.0),
+      createData('Netflix', '2 / 8', 'Monthly', 2.0),
+      createData('Netflix', '2 / 8', 'Monthly', 2.0),
+      createData('Netflix', '2 / 8', 'Monthly', 2.0),
+      createData('Netflix', '2 / 8', 'Monthly', 2.0),
+      createData('Netflix', '2 / 8', 'Monthly', 2.0)
     ],
     page: 0,
     rowsPerPage: -1
@@ -271,12 +198,9 @@ class SearchTable extends React.Component {
   render() {
     const { classes } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-    const emptyRows =
-      rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     return (
       <Paper className={classes.root}>
-        <SearchTableToolbar numSelected={selected.length} />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <SearchTableHead
@@ -307,7 +231,10 @@ class SearchTable extends React.Component {
                       </TableCell>
                       <TableCell numeric>{n.size}</TableCell>
                       <TableCell numeric>{n.duration}</TableCell>
-                      <TableCell numeric>{n.price}</TableCell>
+                      <TableCell numeric>
+                        ${n.price}
+                        .00
+                      </TableCell>
                       <TableCell>
                         <Button
                           style={{ textTransform: 'none' }}

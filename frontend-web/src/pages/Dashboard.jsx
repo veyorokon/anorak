@@ -16,19 +16,25 @@ const styles = theme => ({
   },
   list: {
     width: '20%',
+    minWidth: 260,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginRight: '1%',
-    marginLeft: '1%'
+    marginRight: 16,
+    marginLeft: 16
   },
   listTitle: {
-    marginTop: 20,
-    marginBottom: 20
+    marginTop: 32,
+    marginBottom: 6
   },
   search: {
     width: '80%',
-    marginRight: '1%'
+    marginRight: 16
+  },
+  searchTitle: {
+    marginTop: 32,
+    marginBottom: 6,
+    marginLeft: 22
   }
 });
 
@@ -40,12 +46,15 @@ function Dashboard(props) {
       <Navbar search={<div>test</div>} />
       <div className={classes.content}>
         <div className={classes.list}>
-          <Typography className={classes.listTitle} align="center" variant="h5">
+          <Typography className={classes.listTitle} align="center" variant="h6">
             Active Squads
           </Typography>
           <SquadList />
         </div>
         <div className={classes.search}>
+          <Typography className={classes.searchTitle} align="left" variant="h6">
+            Explore
+          </Typography>
           <SearchTable />
         </div>
       </div>
