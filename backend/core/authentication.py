@@ -72,10 +72,14 @@ class SessionManager(object):
             return error
         return userData
         
-    def get_user_from_request_with_email(self, request):
+    def get_user_from_request_with_email(self, request, createIfNotFound=True):
         try:
             email = request.data['email']
-            return User.objects.get_or_create(email=email)[0]
+            if createIfNotFound:
+                return User.objects.get_or_create(email=email)[0]
+            return User.objects.get(email=email)
         except:
             return None
+            
+    
             

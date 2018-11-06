@@ -1,16 +1,23 @@
 import React from 'react';
 import api from '../lib/api';
+import { withRouter } from 'react-router-dom';
 
 window.callApiCreateUser = () => {
   window.FB.getLoginStatus(({ authResponse, status }) => {
     if (status === 'connected') {
       window.FB.api('/me', { fields: 'email,name' }, meResponse => {
-        api.createUser({
-          email: meResponse.email,
-          facebookAccessToken: authResponse.accessToken,
-          facebookUserId: authResponse.userID,
-          fullName: meResponse.name
-        });
+        api
+          .createFacebookUser({
+            email: meResponse.email,
+            facebookAccessToken: authResponse.accessToken,
+            facebookUserId: authResponse.userID,
+            fullName: meResponse.name
+          })
+          .then(data => {
+            console.log(data);
+            // PASS USER DATA HERE
+            window.location = '/dashboard';
+          });
       });
     }
   });
@@ -32,4 +39,4 @@ class FacebookLogin extends React.Component {
   }
 }
 
-export default FacebookLogin;
+export default withRouter(FacebookLogin);

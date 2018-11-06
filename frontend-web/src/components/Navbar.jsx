@@ -81,7 +81,15 @@ function Navbar(props) {
             size="small"
             className={classes.button}
           >
-            Create Squad
+            Create
+          </Button>
+          <Button
+            variant="outlined"
+            color="secondary"
+            size="small"
+            className={classes.button}
+          >
+            Add
           </Button>
         </div>
 

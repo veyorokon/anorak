@@ -25,6 +25,9 @@ const api = {
   getSquadPrice(data) {
     return apiFetch('dashboard/squad/price/', data);
   },
+  createFacebookUser(data) {
+    return apiFetch('users/web/facebook/auth/', data);
+  },
   createUser(data) {
     return apiFetch('users/web/creation/', data);
   }

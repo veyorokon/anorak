@@ -57,11 +57,15 @@ class SignupForm extends React.Component {
 
   onSubmit = ev => {
     ev.preventDefault();
-    api.createUser({
-      email: this.state.email,
-      fullName: this.state.fullName,
-      password: this.state.password
-    });
+    api
+      .createUser({
+        email: this.state.email,
+        fullName: this.state.fullName,
+        password: this.state.password
+      })
+      .then(data => {
+        console.log(data);
+      });
   };
 
   renderHeader = () => {
