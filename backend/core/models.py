@@ -78,6 +78,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         on_delete=models.SET_NULL, related_name='user')
     address_billing = models.OneToOneField(AddressBilling, null=True, 
         blank=True, on_delete=models.SET_NULL, related_name='user')
+    can_view_mature_content = models.BooleanField(default=False)
     
     objects = UserManager()
 
