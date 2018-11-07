@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import LockIcon from '@material-ui/icons/LockOutlined';
@@ -162,6 +163,11 @@ class SignupForm extends React.Component {
           >
             Sign Up
           </Button>
+          {this.state.otherError && (
+            <Typography align="center" color="error" variant="subtitle2">
+              We're sorry, an error has occurred. Please try again.
+            </Typography>
+          )}
         </form>
       </Paper>
     );
