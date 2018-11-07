@@ -157,12 +157,10 @@ class UserFacebookAuthAPI(APIView):
         facebookData = Session.validate_request_with_facebook_token(request)
         user = Session.get_user_from_request_with_email(request,createIfNotFound=True)
         self.update_user_with_facebook_data(user, facebookData)
-        serializedUser = get_serialized_user(user).data
-        userDashboard = get_dashboard(user)
         return Response(
             {
-                'user':serializedUser,
-                'dashboardData':userDashboard,
+                'session_token':user.session_token.key,
+                'email':user.email
             },
             status=status.HTTP_201_CREATED
         )
@@ -193,6 +191,7 @@ class UserWebCreationAPI(APIView):
         return Response(
             {
                 'session_token':user.session_token.key,
+                'email':user.email
             },
             status=status.HTTP_201_CREATED
         )
@@ -227,44 +226,10 @@ class UserWebDashboardAPI(APIView):
         """
         Creates a new user ONLY if one did not exist.
         """
-        userAlreadyExists = self.check_if_user_already_exists(request)
-        if(userAlreadyExists):
-            return Response(
-                {
-                    'error':'Email is already being used.'
-                },
-                status=status.HTTP_409_CONFLICT
-            )
-        
-        user = Session.get_user_from_request_with_email(request,createIfNotFound=True)
-        self.set_user_fields(user, request)
-        serializedUser = get_serialized_user(user).data
+        print('herererere')
         return Response(
             {
-                'user':serializedUser,
-                'dashboardData': {}
+                
             },
             status=status.HTTP_201_CREATED
         )
-    
-    def check_if_user_already_exists(self, request):
-        user = Session.get_user_from_request_with_email(request, createIfNotFound=False)
-        if(user):
-            return True
-        return False
-        
-    def parse_first_and_last_name(self, fullName):
-        try:
-            first_name = fullName.split(' ')[0]
-            last_name = fullName.split(' ')[1]
-        except:
-            first_name = fullName
-            last_name = None
-        return first_name, last_name
-        
-    def set_user_fields(self, user, request):
-        requestData = request.data
-        user.set_password(requestData['password'])
-        first_name, last_name = self.parse_first_and_last_name(requestData['fullName'])
-        user.first_name, user.last_name = first_name, last_name
-        user.save()
