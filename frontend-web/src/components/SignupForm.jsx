@@ -9,6 +9,7 @@ import LockIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { withRouter } from 'react-router';
 import FacebookLogin from './FacebookLogin';
 import api from '../lib/api';
 
@@ -64,7 +65,9 @@ class SignupForm extends React.Component {
         password: this.state.password
       })
       .then(data => {
-        console.log(data);
+        window.localStorage.setItem('sessionToken', data.session_token);
+        window.localStorage.setItem('userToken', data.user_token);
+        this.props.history.push('/dashboard');
       });
   };
 
@@ -145,4 +148,4 @@ SignupForm.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(SignupForm);
+export default withStyles(styles)(withRouter(SignupForm));

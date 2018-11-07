@@ -89,7 +89,7 @@ function Navbar(props) {
             size="small"
             className={classes.button}
           >
-            Add
+            Join
           </Button>
         </div>
 
