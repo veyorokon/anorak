@@ -227,9 +227,14 @@ class UserWebDashboardAPI(APIView):
         Creates a new user ONLY if one did not exist.
         """
         isSessionValid, user = Session.validate_web_user_token(request)
+        if(isSessionValid):
+            return Response(
+                {
+                    'dashboard': get_dashboard(user)
+                },
+                status=status.HTTP_200_OK
+            )
         return Response(
-            {
-                'dashboard': get_dashboard(user)
-            },
-            status=status.HTTP_200_OK
+            {},
+            status=status.HTTP_400_BAD_REQUEST
         )
