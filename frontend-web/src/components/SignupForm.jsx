@@ -65,8 +65,11 @@ class SignupForm extends React.Component {
         password: this.state.password
       })
       .then(data => {
-        window.localStorage.setItem('sessionToken', data.session_token);
-        window.localStorage.setItem('userToken', data.user_token);
+        window.localStorage.setItem(
+          'sessionToken',
+          data.user.session_token.key
+        );
+        window.localStorage.setItem('userToken', data.user.email);
         this.props.history.push('/dashboard');
       });
   };
