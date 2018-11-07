@@ -81,5 +81,16 @@ class SessionManager(object):
         except:
             return None
             
+    def validate_web_user_token(self, request):
+        user_token = request.data['user_token']
+        session_token = request.data['session_token']
+        try:
+            user = User.objects.get(email=user_token)
+            token = Token.objects.get(key=session_token)
+            return self.validate_user_with_token(user, token)
+        except:
+            return False, None
+        
+            
     
             

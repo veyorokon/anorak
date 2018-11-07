@@ -24,4 +24,5 @@ urlpatterns = [
     
     path('users/web/facebook/auth/', views.UserFacebookAuthAPI.as_view()),
     path('users/web/creation/', views.UserWebCreationAPI.as_view()),
+    path('users/web/dashboard/', views.UserWebDashboardAPI.as_view()),
 ]

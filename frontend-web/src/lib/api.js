@@ -30,6 +30,9 @@ const api = {
   },
   createUser(data) {
     return apiFetch('users/web/creation/', data);
+  },
+  getUserDashboard(data) {
+    return apiFetch('users/web/dashboard/', data);
   }
 };
 
