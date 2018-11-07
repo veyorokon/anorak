@@ -14,8 +14,8 @@ window.callApiCreateUser = () => {
             fullName: meResponse.name
           })
           .then(data => {
-            console.log(data);
-            // PASS USER DATA HERE
+            window.localStorage.setItem('sessionToken', data.session_token);
+            window.localStorage.setItem('userToken', data.email);
             window.location = '/dashboard';
           });
       });
