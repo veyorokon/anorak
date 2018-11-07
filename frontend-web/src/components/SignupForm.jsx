@@ -7,6 +7,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import LockIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { withRouter } from 'react-router';
@@ -48,12 +49,21 @@ class SignupForm extends React.Component {
   state = {
     email: '',
     fullName: '',
-    password: ''
+    password: '',
+
+    emailIsAlreadyRegisteredError: false,
+    otherError: false
   };
 
   onChange = ev => {
     const { name, value } = ev.target;
     this.setState({ [name]: value });
+  };
+
+  clearError = ev => {
+    if (this.state.emailIsAlreadyRegisteredError) {
+      this.setState({ emailIsAlreadyRegisteredError: false });
+    }
   };
 
   onSubmit = ev => {
@@ -68,6 +78,12 @@ class SignupForm extends React.Component {
         window.localStorage.setItem('sessionToken', data.session_token);
         window.localStorage.setItem('userToken', data.email);
         this.props.history.push('/dashboard');
+      })
+      .catch(e => {
+        const errorType = e.message.includes('409')
+          ? 'emailIsAlreadyRegisteredError'
+          : 'otherError';
+        this.setState({ [errorType]: true });
       });
   };
 
@@ -110,16 +126,24 @@ class SignupForm extends React.Component {
             <InputLabel htmlFor="fullName">Full Name</InputLabel>
             <Input id="fullName" name="fullName" onChange={this.onChange} />
           </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="email">Email Address</InputLabel>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              onChange={this.onChange}
-            />
-          </FormControl>
+          <TextField
+            id="email"
+            label="Email Address"
+            type="email"
+            name="email"
+            autoComplete="email"
+            margin="normal"
+            onChange={this.onChange}
+            onFocus={this.clearError}
+            fullWidth
+            required
+            error={this.state.emailIsAlreadyRegisteredError}
+            helperText={
+              this.state.emailIsAlreadyRegisteredError
+                ? 'It looks like this email address is already registered.'
+                : ''
+            }
+          />
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
             <Input
