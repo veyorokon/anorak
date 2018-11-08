@@ -24,13 +24,9 @@ class StripePlan(models.Model):
     #The frequency of billing
     billing_frequency = enum.EnumField(Frequency, default=Frequency.MONTH)
     #The SquadUp fee if any
-    cost_service_fee = models.FloatField(default=0)
+    cost_cc_processing_fee = models.FloatField(default=0.05)
     #Any taxes associated with the cost of the service
     tax_rate = models.FloatField(default=0)
-    #The gross total amount before tax and fees
-    cost_gross_total = models.FloatField(default=0)
-    #The net total amount after tax and fees
-    cost_net_total = models.FloatField(default=0)
     
     def create_stripe_plan(self, name, cost_price, *args, **kwargs):
         """
@@ -211,11 +207,10 @@ def create_stripe_plan(sender, instance=None, created=False, **kwargs):
             raise ValueError('Squad could not be created')
 
 # Signals for Squad model to delete Stripe objects
-@receiver(pre_delete, sender=Squad)
+@receiver(pre_delete, sender=StripePlan)
 def delete_stripe_plan(sender, instance=None, **kwargs):
     try:
-        instance.stripe_plan.delete_plan()
-        instance.stripe_plan.delete()
+        instance.delete_plan()
     except:
         pass
         

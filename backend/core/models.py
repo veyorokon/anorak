@@ -14,17 +14,6 @@ import stripe
 stripe.api_key = settings.STRIPE_ACCOUNT_SID
 
 
-# Stores the user's billing information
-class AddressBilling(models.Model):
-    name_on_card = models.CharField(max_length=70, null=True, blank=True)
-    last_four = models.IntegerField(null=True, blank=True)
-    street = models.CharField(max_length=64, null=True, blank=True)
-    city = models.CharField(max_length=64, null=True, blank=True)
-    state = models.CharField(max_length=64, null=True, blank=True)
-    zip = models.IntegerField(null=True, blank=True)
-    valid = models.BooleanField(default=False)
-    
-
 class StripeCustomer(models.Model):
     #The stripe customer id
     stripe_customer_id = models.CharField(max_length=32, null=True, 
@@ -76,8 +65,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_('staff'), default=False)
     stripe_customer = models.OneToOneField(StripeCustomer, null=True,
         on_delete=models.SET_NULL, related_name='user')
-    address_billing = models.OneToOneField(AddressBilling, null=True, 
-        blank=True, on_delete=models.SET_NULL, related_name='user')
     can_view_mature_content = models.BooleanField(default=False)
     
     objects = UserManager()
@@ -158,16 +145,13 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
         stripe_customer = StripeCustomer.objects.create(user=instance)
         stripe_customer.create_stripe_customer()
-        address_billing = AddressBilling.objects.create(user=instance)
         instance.stripe_customer = stripe_customer
-        instance.address_billing = address_billing
         instance.save()
         
 # Signals for Squad model to delete Stripe objects
-@receiver(pre_delete, sender=User)
+@receiver(pre_delete, sender=StripeCustomer)
 def delete_stripe_plan(sender, instance=None, **kwargs):
     try:
-        instance.stripe_customer.delete_customer()
-        instance.stripe_customer.delete()
+        instance.delete_customer()
     except:
         pass
