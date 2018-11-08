@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
+import BillingForm from '../components/BillingForm';
 import Navbar from '../components/Navbar';
+import PaymentForm from '../components/PaymentForm';
 import SquadList from '../components/SquadList';
 
 const styles = theme => ({
@@ -19,7 +21,7 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginRight: 16,
+    marginRight: 32,
     marginLeft: 16
   },
   leftTitle: {
@@ -34,6 +36,10 @@ const styles = theme => ({
     marginTop: 32,
     marginBottom: 6,
     marginLeft: 22
+  },
+  forms: {
+    display: 'flex',
+    paddingTop: 8
   }
 });
 
@@ -54,6 +60,10 @@ function Account(props) {
           <Typography className={classes.rightTitle} align="left" variant="h6">
             Account
           </Typography>
+          <div className={classes.forms}>
+            <BillingForm />
+            <PaymentForm />
+          </div>
         </div>
       </div>
     </div>
