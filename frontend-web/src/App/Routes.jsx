@@ -10,6 +10,7 @@ export default function Routes() {
         <Route path="/create" component={Pages.Create} />
         <Route path="/join" component={Pages.Join} />
         <Route path="/signup" component={Pages.Signup} />
+        <Route path="/account" component={Pages.Account} />
       </div>
     </Router>
   );
