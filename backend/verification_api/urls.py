@@ -18,5 +18,4 @@ from . import views
 
 urlpatterns = [
     path('email_verification_codes/', views.EmailVerificationCodeAPI.as_view()),
-    path('phone_verification_codes/', views.PhoneVerificationCodeAPI.as_view()),
 ]

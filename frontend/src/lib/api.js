@@ -1,11 +1,13 @@
 async function apiFetch(route, body) {
-  const response = await fetch(`http://127.0.0.1:8000/api/${route}`, {
+  console.log(route, body);
+  // const response = await fetch(`https://dj.staging.squadup.xyz/api/${route}`, {
+  const response = await fetch(`http://localhost:8000/api/${route}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(body)
   });
   if (!response.ok) {
     throw Error(`${response.status}: ${response.statusText}`);
@@ -14,41 +16,24 @@ async function apiFetch(route, body) {
 }
 
 const api = {
-  sendCreateSquadRequest(user, form) {
-    return apiFetch('dashboard/mobile/create_squad/', { user, form });
+  setupSubscription(data) {
+    return apiFetch('dashboard/web/create_subscriber/', data);
   },
-  requestPhoneVerificationCode(number) {
-    return apiFetch('phone_verification_codes/', {
-      phone_number: number,
-      isRequestingCode: 1,
-    });
+  createSquad(data) {
+    return apiFetch('dashboard/web/create_squad/', data);
   },
-  sendPhoneVerificationCode(number, code) {
-    return apiFetch('phone_verification_codes/', {
-      phone_number: number,
-      code: code,
-      isRequestingCode: 0,
-    });
+  getSquadPrice(data) {
+    return apiFetch('dashboard/squad/price/', data);
   },
-  requestUserDashboard(user) {
-    return apiFetch('dashboard/mobile/user_dashboard/', {
-      user: user,
-    });
+  createFacebookUser(data) {
+    return apiFetch('users/web/facebook/auth/', data);
   },
-  sendRegistrationRequest(sessionToken, number) {
-    return apiFetch(`users/mobile/creation/?session_token=${sessionToken}`, {
-      user: {
-        phone_number: number,
-      },
-      session_token: sessionToken,
-    });
+  createUser(data) {
+    return apiFetch('users/web/creation/', data);
   },
-  sendLogoutRequest(user) {
-    return apiFetch('users/mobile/logout/', user);
-  },
-  requestAutoTokenLogin(credentials) {
-    return apiFetch('users/mobile/token_login/', credentials);
-  },
+  getUserDashboard(data) {
+    return apiFetch('users/web/dashboard/', data);
+  }
 };
 
 export default api;

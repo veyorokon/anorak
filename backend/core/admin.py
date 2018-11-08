@@ -29,4 +29,3 @@ class UserAdmin(DjangoUserAdmin):
     ordering = ('email',)
     
 admin.site.register(StripeCustomer)
-admin.site.register(AddressBilling)
