@@ -15,7 +15,6 @@ window.callApiCreateUser = () => {
           })
           .then(data => {
             window.localStorage.setItem('sessionToken', data.session_token);
-            window.localStorage.setItem('userToken', data.email);
             window.location = '/dashboard';
           });
       });

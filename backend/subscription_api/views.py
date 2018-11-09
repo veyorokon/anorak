@@ -17,8 +17,6 @@ Session = SessionManager()
 
 
 class SquadMemberDetailAPI(APIView):
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
     
     def get(self, request, *args, **kwargs):
         """
@@ -30,8 +28,6 @@ class SquadMemberDetailAPI(APIView):
 
 
 class StripePlanDetailAPI(APIView):
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
     
     def get(self, request, *args, **kwargs):
         """
@@ -43,8 +39,6 @@ class StripePlanDetailAPI(APIView):
 
     
 class SquadDetailAPI(APIView):
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
     
     def get(self, request, *args, **kwargs):
         """
@@ -56,7 +50,6 @@ class SquadDetailAPI(APIView):
 
         
 class CreateWebSubscriberAPI(APIView):
-    #authentication_classes = (SessionAuthentication, BasicAuthentication)
     
     def post(self, request, *args, **kwargs):
         """
@@ -147,7 +140,6 @@ class CreateWebSubscriberAPI(APIView):
         
         
 class CreateWebSquadAPI(APIView):
-    #authentication_classes = (SessionAuthentication, BasicAuthentication)
     
     def post(self, request, *args, **kwargs):
         """
@@ -221,7 +213,7 @@ class CreateWebSquadAPI(APIView):
         
         
 class SquadPriceAPI(APIView):
-    #authentication_classes = (SessionAuthentication, BasicAuthentication)
+    
     def post(self, request, *args, **kwargs):
         serviceId = request.data['serviceID']
         return Response(

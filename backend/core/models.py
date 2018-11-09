@@ -12,7 +12,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 
 import stripe
 stripe.api_key = settings.STRIPE_ACCOUNT_SID
-
+        
 
 class StripeCustomer(models.Model):
     #The stripe customer id
@@ -88,40 +88,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         Returns the short name for the user.
         '''
         return self.first_name
-        
-    def validate_session_token(self, token):
-        """
-        Checks if the session token is valid
-        """
-        if(self.session_token.key == token):
-            return True 
-    
-        return False
-            
-    def delete_session_token(self):
-        """
-        Gets the session token and deletes it.
-        """
-        try:
-            self.session_token.delete()
-        except:
-            pass
-        
-    def create_session_token(self):
-        """
-        Creates a new session token
-        """
-        try:
-            Token.objects.create(user=self)
-        except:
-            pass
-            
-    def generate_new_session_token(self):
-        """
-        Clears and renews session token.
-        """
-        self.delete_session_token()
-        self.create_session_token()
+
         
     def __str__(self):
         return 'Email={0}'.format(
