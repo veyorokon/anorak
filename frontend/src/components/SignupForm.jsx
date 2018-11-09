@@ -76,7 +76,6 @@ class SignupForm extends React.Component {
       })
       .then(data => {
         window.localStorage.setItem('sessionToken', data.session_token);
-        window.localStorage.setItem('userToken', data.email);
         this.props.history.push('/dashboard');
       })
       .catch(e => {

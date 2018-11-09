@@ -10,7 +10,8 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 class EmailVerificationCodeAPI(APIView):
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    authentication_classes = ()
+    permission_classes = ()
     
     def get(self, request, *args, **kwargs):
         codes = EmailVerificationCode.objects.all()

@@ -5,18 +5,20 @@ from rest_framework import status
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from . authentication import SessionManager
+from . authentication import SessionManager, TokenAuthentication
 from subscription_api.models import SquadMember
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.views import ObtainAuthToken
 from subscription_api.serializers import SquadMemberSerializer
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication,BaseAuthentication
 import json
+
 
 #################################################
 #############  GLOBAL VARIABLES  ################
 #################################################
 Session = SessionManager()
+TokenAuth = TokenAuthentication()
 
 def get_serialized_user(user):
     """
@@ -42,8 +44,6 @@ def get_dashboard(user):
 
 
 class UserDetailAPI(APIView):
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         """
@@ -55,19 +55,22 @@ class UserDetailAPI(APIView):
 
 
 class UserFacebookAuthAPI(APIView):
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
-
+    # Remove default authentication classes for signup view
+    authentication_classes = ()
+    permission_classes = ()
+    
     def post(self, request, *args, **kwargs):
         """
         Updates the user object with Facebook info and returns user + dash
         """
         facebookData = Session.validate_request_with_facebook_token(request)
         user = Session.get_user_from_request_with_email(request,createIfNotFound=True)
+        authToken = TokenAuth.manually_generate_token(user)
+        
         self.update_user_with_facebook_data(user, facebookData)
         return Response(
             {
-                'session_token':user.session_token.key,
-                'email':user.email
+                'session_token':authToken,
             },
             status=status.HTTP_201_CREATED
         )
@@ -78,8 +81,10 @@ class UserFacebookAuthAPI(APIView):
 
 
 class UserWebCreationAPI(APIView):
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
-
+    # Remove default authentication classes for signup view
+    authentication_classes = ()
+    permission_classes = ()
+    
     def post(self, request, *args, **kwargs):
         """
         Creates a new user ONLY if one did not exist.
@@ -95,10 +100,10 @@ class UserWebCreationAPI(APIView):
         
         user = Session.get_user_from_request_with_email(request,createIfNotFound=True)
         self.set_user_fields(user, request)
+        authToken = TokenAuth.manually_generate_token(user)
         return Response(
             {
-                'session_token':user.session_token.key,
-                'email':user.email
+                'session_token':authToken,
             },
             status=status.HTTP_201_CREATED
         )
@@ -127,14 +132,13 @@ class UserWebCreationAPI(APIView):
 
 
 class UserWebDashboardAPI(APIView):
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
 
     def post(self, request, *args, **kwargs):
         """
         Creates a new user ONLY if one did not exist.
         """
-        isSessionValid, user = Session.validate_web_user_token(request)
-        if(isSessionValid):
+        user = request.user
+        if(user):
             return Response(
                 {
                     'dashboard': get_dashboard(user)
