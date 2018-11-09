@@ -91,6 +91,26 @@ INSTALLED_APPS = [
     'graphene_django'
 ]
 
+GRAPHENE = {
+    'SCHEMA': 'mysite.myschema.schema',
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
+}
+
+JWT_AUTH = {
+    'JWT_ARGUMENT_NAME': 'token'
+}
+
+GRAPHQL_JWT = {
+    'JWT_ALLOW_ARGUMENT': True,
+}
+
+AUTHENTICATION_BACKENDS = [
+    'graphql_jwt.backends.JSONWebTokenBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
