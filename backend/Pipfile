@@ -15,6 +15,8 @@ Django = "==2.1.1"
 django-cors-headers = "*"
 django-facebook = "*"
 djangorestframework-jwt = "*"
+graphene-django = ">=2.0"
+django-graphql-jwt = "*"
 
 [dev-packages]
 
