@@ -15,7 +15,6 @@ async function apiFetch(route, body, authToken) {
   }
   return response.json();
 }
-// eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6InZleW9yb2tvbkBnbWFpbC5jb20iLCJleHAiOjE1NDE3MjQzMjUsImVtYWlsIjoidmV5b3Jva29uQGdtYWlsLmNvbSJ9.YxC-imjQ4PFQrjpj61d2Ns4a5kZolU16UfromSG_36U
 const api = {
   setupSubscription(data) {
     return apiFetch('dashboard/web/create_subscriber/', data);
