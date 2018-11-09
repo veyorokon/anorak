@@ -7,7 +7,7 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import PermissionsMixin
-from django.db.models.signals import post_save, pre_save, pre_delete
+from django.db.models.signals import post_save, pre_save, pre_delete, post_delete
 from django.contrib.auth.base_user import AbstractBaseUser
 
 import stripe
@@ -116,9 +116,18 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         instance.save()
         
 # Signals for Squad model to delete Stripe objects
+def delete_reverse(sender, **kwargs):
+    try:
+        if kwargs['instance'].stripe_customer:
+            kwargs['instance'].stripe_customer.delete()
+    except:
+        pass
+        
 @receiver(pre_delete, sender=StripeCustomer)
-def delete_stripe_plan(sender, instance=None, **kwargs):
+def delete_stripe_customer(sender, instance=None, **kwargs):
     try:
         instance.delete_customer()
     except:
         pass
+    
+post_delete.connect(delete_reverse, sender=User)

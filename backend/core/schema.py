@@ -22,4 +22,13 @@ class Query(graphene.ObjectType):
     @login_required
     def resolve_all_users(self, info, token, **kwargs):
         return User.objects.all()
-    
+
+
+"""
+query allUsers($token: String!) {
+  allUsers(token: $token) {
+    id
+    email
+  }
+}
+"""
