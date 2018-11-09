@@ -87,7 +87,8 @@ INSTALLED_APPS = [
     'core',
     'verification_api',
     'subscription_api',
-    'corsheaders'
+    'corsheaders',
+    'graphene_django'
 ]
 
 MIDDLEWARE = [
