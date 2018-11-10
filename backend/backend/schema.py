@@ -10,7 +10,7 @@ class Mutations(CoreMutations, SubscriptionMutations, graphene.ObjectType):
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()
 
-class Query(CoreQuery, SubscriptionQuery):
+class Query(CoreQuery):
     pass
-    
+
 schema = graphene.Schema(query=Query, mutation=Mutations)
