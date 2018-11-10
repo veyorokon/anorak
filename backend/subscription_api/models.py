@@ -178,7 +178,6 @@ class SquadMember(models.Model):
         return self.squad.maximum_size
 
 
-
 #################################################
 #############    MODEL SIGNALS   ################
 #################################################
@@ -203,8 +202,10 @@ def create_stripe_plan(sender, instance=None, created=False, **kwargs):
             instance.stripe_plan = stripe_plan
             instance.save()
         except:
-            instance.delete()
-            raise ValueError('Squad could not be created')
+           instance.delete()
+           squadMember.delete()
+           stripe_plan.delete()
+           raise ValueError('Squad could not be created')
 
 # Signals for Squad model to delete Stripe objects
 @receiver(pre_delete, sender=StripePlan)
