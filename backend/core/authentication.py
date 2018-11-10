@@ -77,11 +77,29 @@ class TokenAuthentication(BaseAuthentication):
 
     def authenticate_header(self, request):
         return 'Token'
+    
+class FacebookManager(object):
+        
+    def validate_token(self, facebookAccessToken):  
+        appLink = 'https://graph.facebook.com/oauth/access_token?client_id=' + clientId + '&client_secret=' + clientSecret + '&grant_type=client_credentials'
+        appToken = requests.get(appLink).json()['access_token']
+        
+        link = 'https://graph.facebook.com/debug_token?input_token=' + facebookAccessToken + '&access_token=' + appToken
+        try:
+            userData = requests.get(link).json()['data']
+            if(userData['is_valid']):
+                return userData['user_id']
+            else:
+                return None
+        except (ValueError, KeyError, TypeError) as error:
+            return error
+        return userData
+        
 
 class SessionManager(object):
         
-    def logout(self, user):
-        user.generate_new_session_token()  
+    # def logout(self, user):
+    #     user.generate_new_session_token()  
         
     def validate_request_with_facebook_token(self, request):
         requestData = request.data
