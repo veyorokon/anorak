@@ -11,7 +11,7 @@ class UserType(DjangoObjectType):
 class CreateUser(graphene.Mutation):
     
     class Arguments:
-        email = graphene.String()
+        email = graphene.String(required=True)
         password = graphene.String()
         firstName = graphene.String()
         lastName = graphene.String()

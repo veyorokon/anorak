@@ -2,7 +2,6 @@ import graphene
 from core.schema import Query as CoreQuery
 from core.schema import Mutations as CoreMutations
 
-from subscription_api.schema import Query as SubscriptionQuery
 from subscription_api.schema import Mutations as SubscriptionMutations
 import graphql_jwt
 

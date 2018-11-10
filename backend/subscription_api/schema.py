@@ -16,10 +16,10 @@ class SquadMemberType(DjangoObjectType):
 class CreateSquad(graphene.Mutation):
     
     class Arguments:
-        service = graphene.String()
+        service = graphene.String(required=True)
         password = graphene.String()
         username = graphene.String()
-        costPrice = graphene.Int()
+        costPrice = graphene.Int(required=True)
         token=graphene.String(required=True)
     
     squad =  graphene.Field(SquadType)
@@ -44,9 +44,3 @@ class CreateSquad(graphene.Mutation):
 class Mutations(graphene.ObjectType):
     create_squad = CreateSquad.Field()
 
-class Query(graphene.ObjectType):
-    user_squad_memberships = graphene.List(SquadMemberType, token=graphene.String(required=True))
-    
-    @login_required
-    def resolve_user_squad_memberships(self, info, token, **kwargs):
-        return info.context.user.squad_memberships.all()
