@@ -56,7 +56,7 @@ ALLOWED_HOSTS=[
 if(DEBUG):
     # STRIPE - DEVELOPMENT
     STRIPE_ACCOUNT_SID = 'sk_test_9Xz79VxZxWJbanvxDAWLYmoN'
-    STRIPE_SQUADUP_PRODUCT = 'prod_DrVphP23buUlpq'
+    STRIPE_SQUADUP_PRODUCT = 'prod_DwkQeS0ynwmGnR'
 else:
     # STRIPE - PRODUCTION
     STRIPE_ACCOUNT_SID = 'sk_live_Z74kfkdK1Ga6YOqYaypi9zC4'
