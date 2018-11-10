@@ -27,7 +27,7 @@ urlpatterns = [
     path('graphql/', csrf_exempt(GraphQLView.as_view(
         schema=schema,
         graphiql=settings.DEBUG
-    )),
+    ))),
     path('api/token/auth/', obtain_jwt_token),
     path('api/token/refresh/', refresh_jwt_token),
 

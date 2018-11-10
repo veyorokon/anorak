@@ -2,7 +2,6 @@ import graphene
 from core.schema import Query as CoreQuery
 from core.schema import Mutations as CoreMutations
 
-from subscription_api.schema import Query as SubscriptionQuery
 from subscription_api.schema import Mutations as SubscriptionMutations
 import graphql_jwt
 
@@ -11,7 +10,7 @@ class Mutations(CoreMutations, SubscriptionMutations, graphene.ObjectType):
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()
 
-class Query(CoreQuery, SubscriptionQuery):
+class Query(CoreQuery):
     pass
     
 schema = graphene.Schema(query=Query, mutation=Mutations)
