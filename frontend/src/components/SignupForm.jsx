@@ -10,9 +10,10 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { Mutation } from 'react-apollo';
 import { withRouter } from 'react-router';
+import gql from 'graphql-tag';
 import FacebookLogin from './FacebookLogin';
-import api from '../lib/api';
 
 const styles = theme => ({
   paper: {
@@ -45,10 +46,29 @@ const styles = theme => ({
   }
 });
 
+const CREATE_USER = gql`
+  mutation CreateUser(
+    $email: String!
+    $firstName: String
+    $lastName: String
+    $password: String
+  ) {
+    createUser(
+      email: $email
+      firstName: $firstName
+      lastName: $lastName
+      password: $password
+    ) {
+      token
+    }
+  }
+`;
+
 class SignupForm extends React.Component {
   state = {
     email: '',
-    fullName: '',
+    firstName: '',
+    lastName: '',
     password: '',
 
     emailIsAlreadyRegisteredError: false,
@@ -66,19 +86,21 @@ class SignupForm extends React.Component {
     }
   };
 
-  onSubmit = ev => {
-    ev.preventDefault();
-    api
-      .createUser({
+  onSubmit = createUser => {
+    createUser({
+      variables: {
         email: this.state.email,
-        fullName: this.state.fullName,
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
         password: this.state.password
-      })
-      .then(data => {
-        window.localStorage.setItem('sessionToken', data.session_token);
+      }
+    })
+      .then(({ data }) => {
+        window.localStorage.setItem('sessionToken', data.createUser.token);
         this.props.history.push('/dashboard');
       })
       .catch(e => {
+        console.log(e);
         const errorType = e.message.includes('409')
           ? 'emailIsAlreadyRegisteredError'
           : 'otherError';
@@ -120,53 +142,77 @@ class SignupForm extends React.Component {
           Or
         </Typography>
 
-        <form className={classes.form} onSubmit={this.onSubmit}>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="fullName">Full Name</InputLabel>
-            <Input id="fullName" name="fullName" onChange={this.onChange} />
-          </FormControl>
-          <TextField
-            id="email"
-            label="Email Address"
-            type="email"
-            name="email"
-            autoComplete="email"
-            margin="normal"
-            onChange={this.onChange}
-            onFocus={this.clearError}
-            fullWidth
-            required
-            error={this.state.emailIsAlreadyRegisteredError}
-            helperText={
-              this.state.emailIsAlreadyRegisteredError
-                ? 'It looks like this email address is already registered.'
-                : ''
-            }
-          />
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input
-              name="password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={this.onChange}
-            />
-          </FormControl>
-          <Button
-            fullWidth
-            type="submit"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button>
-          {this.state.otherError && (
-            <Typography align="center" color="error" variant="subtitle2">
-              We're sorry, an error has occurred. Please try again.
-            </Typography>
-          )}
-        </form>
+        <Mutation mutation={CREATE_USER}>
+          {createUser => {
+            return (
+              <form
+                className={classes.form}
+                onSubmit={ev => {
+                  ev.preventDefault();
+                  this.onSubmit(createUser);
+                }}
+              >
+                <FormControl margin="normal" required fullWidth>
+                  <InputLabel htmlFor="firstName">First Name</InputLabel>
+                  <Input
+                    id="firstName"
+                    name="firstName"
+                    onChange={this.onChange}
+                  />
+                </FormControl>
+                <FormControl margin="normal" required fullWidth>
+                  <InputLabel htmlFor="lastName">Last Name</InputLabel>
+                  <Input
+                    id="lastName"
+                    name="lastName"
+                    onChange={this.onChange}
+                  />
+                </FormControl>
+                <TextField
+                  id="email"
+                  label="Email Address"
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  margin="normal"
+                  onChange={this.onChange}
+                  onFocus={this.clearError}
+                  fullWidth
+                  required
+                  error={this.state.emailIsAlreadyRegisteredError}
+                  helperText={
+                    this.state.emailIsAlreadyRegisteredError
+                      ? 'It looks like this email address is already registered.'
+                      : ''
+                  }
+                />
+                <FormControl margin="normal" required fullWidth>
+                  <InputLabel htmlFor="password">Password</InputLabel>
+                  <Input
+                    name="password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    onChange={this.onChange}
+                  />
+                </FormControl>
+                <Button
+                  fullWidth
+                  type="submit"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  Sign Up
+                </Button>
+                {this.state.otherError && (
+                  <Typography align="center" color="error" variant="subtitle2">
+                    We're sorry, an error has occurred. Please try again.
+                  </Typography>
+                )}
+              </form>
+            );
+          }}
+        </Mutation>
       </Paper>
     );
   }
