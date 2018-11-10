@@ -19,7 +19,6 @@ class SessionTokenSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     
     stripe_customer = StripeCustomerSerializer(required=True)
-    session_token = SessionTokenSerializer(required=True)
     
     def create(self, validated_data):
         return User(**validated_data)
