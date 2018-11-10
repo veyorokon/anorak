@@ -12,7 +12,11 @@ from django.contrib.auth.base_user import AbstractBaseUser
 
 import stripe
 stripe.api_key = settings.STRIPE_ACCOUNT_SID
-        
+
+from rest_framework_jwt.settings import api_settings
+jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+
 
 class StripeCustomer(models.Model):
     #The stripe customer id
@@ -96,14 +100,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         )
     
     @property
-    def session_token(self):
-        """
-        Essentially a reverse relation.
-        """
-        try:
-            return Token.objects.get(user=self)
-        except:
-            return None
+    def json_web_token(self):
+        payload = jwt_payload_handler(self)
+        token = jwt_encode_handler(payload)
+        return token
 
 # Signals for Auth User model.
 @receiver(post_save, sender=User)

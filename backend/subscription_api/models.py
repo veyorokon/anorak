@@ -106,7 +106,7 @@ class SquadMemberStatus(enum.Enum):
 # Contains a stripe subscription
 class SquadMember(models.Model):
     #User who owns this subscription
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="squad_memberships")
     #User who owns this subscription
     squad = models.ForeignKey(Squad, on_delete=models.CASCADE, null=True)
     #The frequency of billing
