@@ -1,17 +1,10 @@
 import graphene 
-from graphene_django.types import DjangoObjectType
-from . models import * 
-from graphql_jwt.decorators import login_required, staff_member_required
-import graphql_jwt
-
-from . authentication import FacebookManager
+from . types import *
+from core.models import * 
+from core.authentication import FacebookManager
 
 FBManager = FacebookManager()
 
-class UserType(DjangoObjectType):
-    class Meta:
-        model = User
-        
 class FacebookUser(graphene.Mutation):
     
     class Arguments:
@@ -62,13 +55,3 @@ class CreateUser(graphene.Mutation):
 class Mutations(graphene.ObjectType):
     create_user = CreateUser.Field()
     get_facebook_user = FacebookUser.Field()
-
-        
-class Query(graphene.ObjectType):
-    all_users = graphene.List(UserType, token=graphene.String(required=True))
-    user = graphene.Field(UserType, token=graphene.String(required=True))
-    
-    @login_required
-    def resolve_user(self, info, token, **kwargs):
-        return info.context.user
-    

@@ -1,18 +1,7 @@
 import graphene 
-from graphene_django.types import DjangoObjectType
-from . models import * 
-from graphql_jwt.decorators import login_required, staff_member_required
-import graphql_jwt
-from core.schema import UserType
+from . types import *
+from graphql_jwt.decorators import login_required
 
-class SquadType(DjangoObjectType):
-    class Meta:
-        model = Squad
-
-class SquadMemberType(DjangoObjectType):
-    class Meta:
-        model = SquadMember
-        
 class CreateSquad(graphene.Mutation):
     
     class Arguments:

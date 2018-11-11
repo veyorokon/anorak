@@ -17,5 +17,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('email_verification_codes/', views.EmailVerificationCodeAPI.as_view()),
+    
 ]
