@@ -33,7 +33,7 @@ const styles = theme => ({
   },
   searchTitle: {
     marginTop: 32,
-    marginBottom: 6,
+    marginBottom: 14,
     marginLeft: 22
   }
 });

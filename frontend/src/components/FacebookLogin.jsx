@@ -1,6 +1,6 @@
 import React from 'react';
-import api from '../lib/api';
 import { withRouter } from 'react-router-dom';
+import api from '../lib/api';
 
 window.callApiCreateUser = () => {
   window.FB.getLoginStatus(({ authResponse, status }) => {

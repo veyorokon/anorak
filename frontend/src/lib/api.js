@@ -6,7 +6,7 @@ async function apiFetch(route, body, authToken) {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': `JWT ${authToken}`
+      Authorization: `JWT ${authToken}`
     },
     body: JSON.stringify(body)
   });
@@ -25,12 +25,9 @@ const api = {
   getSquadPrice(data) {
     return apiFetch('dashboard/squad/price/', data);
   },
-  
+
   createFacebookUser(data) {
     return apiFetch('users/web/facebook/auth/', data);
-  },
-  createUser(data) {
-    return apiFetch('users/web/creation/', data);
   },
   getUserDashboard(data, authToken) {
     return apiFetch('users/web/dashboard/', data, authToken);

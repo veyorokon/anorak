@@ -17,6 +17,9 @@ const theme = createMuiTheme({
     background: {
       default: '#eaeded'
     }
+  },
+  typography: {
+    useNextVariants: true
   }
 });
 

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
-import BillingForm from '../components/BillingForm';
+import BillingSection from '../components/BillingSection';
 import Navbar from '../components/Navbar';
-import PaymentForm from '../components/PaymentForm';
+import PaymentSection from '../components/PaymentSection';
 import SquadList from '../components/SquadList';
 
 const styles = theme => ({
@@ -61,8 +61,8 @@ function Account(props) {
             Account
           </Typography>
           <div className={classes.forms}>
-            <BillingForm />
-            <PaymentForm />
+            <BillingSection />
+            <PaymentSection />
           </div>
         </div>
       </div>

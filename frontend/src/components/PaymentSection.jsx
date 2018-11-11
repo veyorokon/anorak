@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
-import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+
 import BankAccountForm from './BankAccountForm';
 import DebitCardForm from './DebitCardForm';
 
@@ -27,7 +28,7 @@ const styles = theme => ({
   }
 });
 
-class PaymentForm extends React.Component {
+class PaymentSection extends React.Component {
   onSubmit = () => {
     console.log('here');
   };
@@ -61,8 +62,8 @@ class PaymentForm extends React.Component {
   }
 }
 
-PaymentForm.propTypes = {
+PaymentSection.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(PaymentForm);
+export default withStyles(styles)(PaymentSection);
