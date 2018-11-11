@@ -1,41 +1,69 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import api from '../lib/api';
+import { withStyles } from '@material-ui/core/styles';
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo';
+import { FacebookProvider, LoginButton } from 'react-facebook';
 
-window.callApiCreateUser = () => {
-  window.FB.getLoginStatus(({ authResponse, status }) => {
-    if (status === 'connected') {
-      window.FB.api('/me', { fields: 'email,name' }, meResponse => {
-        api
-          .createFacebookUser({
-            email: meResponse.email,
-            facebookAccessToken: authResponse.accessToken,
-            facebookUserId: authResponse.userID,
-            fullName: meResponse.name
-          })
-          .then(data => {
-            window.localStorage.setItem('sessionToken', data.session_token);
-            window.location = '/dashboard';
-          });
-      });
+const GET_FACEBOOK_USER = gql`
+  mutation GetFacebookUser($email: String!, $facebookAccessToken: String!) {
+    getFacebookUser(email: $email, facebookAccessToken: $facebookAccessToken) {
+      token
     }
-  });
-};
+  }
+`;
+
+const styles = theme => ({
+  button: {
+    backgroundColor: '#4267b2',
+    borderRadius: 4,
+    borderWidth: 0,
+    color: '#fff',
+    cursor: 'pointer',
+    fontSize: 16,
+    height: 40,
+    outline: 'none',
+    width: 254
+  }
+});
 
 class FacebookLogin extends React.Component {
+  handleResponse = (data, getFacebookUser) => {
+    getFacebookUser({
+      variables: {
+        email: data.profile.email,
+        facebookAccessToken: data.tokenDetail.accessToken
+      }
+    }).then(({ data }) => {
+      window.localStorage.setItem('sessionToken', data.getFacebookUser.token);
+      this.props.history.push('/dashboard');
+    });
+  };
+
+  handleError = e => {
+    console.log(e);
+  };
+
   render() {
     return (
-      <div
-        className="fb-login-button"
-        data-size="large"
-        data-button-type="continue_with"
-        data-auto-logout-link="true"
-        data-use-continue-as="false"
-        data-onlogin="callApiCreateUser();"
-        data-scope="public_profile,email"
-      />
+      <Mutation mutation={GET_FACEBOOK_USER}>
+        {getFacebookUser => {
+          return (
+            <FacebookProvider appId="1974089579550206">
+              <LoginButton
+                className={this.props.classes.button}
+                scope="email"
+                onCompleted={data => this.handleResponse(data, getFacebookUser)}
+                onError={this.handleError}
+              >
+                <span>Signup via Facebook</span>
+              </LoginButton>
+            </FacebookProvider>
+          );
+        }}
+      </Mutation>
     );
   }
 }
 
-export default withRouter(FacebookLogin);
+export default withStyles(styles)(withRouter(FacebookLogin));
