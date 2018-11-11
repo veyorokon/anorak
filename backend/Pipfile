@@ -17,6 +17,8 @@ django-facebook = "*"
 djangorestframework-jwt = "*"
 graphene-django = ">=2.0"
 django-graphql-jwt = "*"
+django-extensions = "*"
+werkzeug = "*"
 
 [dev-packages]
 

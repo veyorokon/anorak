@@ -7,7 +7,7 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import PermissionsMixin
-from django.db.models.signals import post_save, pre_save, pre_delete, post_delete
+from django.db.models.signals import post_save, pre_delete, post_delete
 from django.contrib.auth.base_user import AbstractBaseUser
 
 import stripe
@@ -79,21 +79,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
-
-    def get_full_name(self):
-        '''
-        Returns the first_name plus the last_name, with a space in between.
-        '''
-        full_name = '%s %s' % (self.first_name, self.last_name)
-        return full_name.strip()
-
-    def get_short_name(self):
-        '''
-        Returns the short name for the user.
-        '''
-        return self.first_name
-
-        
+ 
     def __str__(self):
         return 'Email={0}'.format(
             self.email
