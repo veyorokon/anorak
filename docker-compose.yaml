@@ -17,6 +17,8 @@ services:
       - 8000:8000
     depends_on:
       - database
+    environment:
+        - DJANGO_SETTINGS_MODULE=backend.settings.development
 
   database:
     restart: always

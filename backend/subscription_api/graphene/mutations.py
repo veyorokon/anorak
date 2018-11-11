@@ -11,7 +11,7 @@ class CreateSquad(graphene.Mutation):
         costPrice = graphene.Int(required=True)
         token=graphene.String(required=True)
     
-    squad =  graphene.Field(SquadType)
+    squad =  graphene.Field(RestrictedSquadType)
     
     @login_required
     def mutate(self, info, token, service, password, username, costPrice):

@@ -31,36 +31,7 @@ def environ_setting(name, default=None):
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'v(m)6f0+s3d$o4lk$lli&un$e1a@bu3oww^9=s=ms)+@df23*r'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-#ALLOWED_HOSTS = ['squadup.xyz', 'www.squadup.xyz', 'nginx', '127.0.0.1', 'django-env.k4nxphhzk2.us-west-1.elasticbeanstalk.com']
-ALLOWED_HOSTS=[
-    '127.0.0.1',
-    'localhost',
-    '.staging.squadup.xyz',
-    '.squadup.xyz',
-    '.preview.sh',
-]
-
-
-if(DEBUG):
-    # STRIPE - DEVELOPMENT
-    STRIPE_ACCOUNT_SID = 'sk_test_9Xz79VxZxWJbanvxDAWLYmoN'
-    STRIPE_SQUADUP_PRODUCT = 'prod_DwkQeS0ynwmGnR'
-else:
-    # STRIPE - PRODUCTION
-    STRIPE_ACCOUNT_SID = 'sk_live_Z74kfkdK1Ga6YOqYaypi9zC4'
-    STRIPE_SQUADUP_PRODUCT = 'prod_Drjkufpy6PtWEv'
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 #Phoone verification - Twilio
@@ -69,12 +40,13 @@ TWILIO_AUTH_TOKEN = 'de38eed12958a9d20b3e0a058ee7b5ef'
 TWILIO_NUMBER = '+18596948148'
 TWILIO_DEFAULT_CALLERID = 'SquadUp'
 
+
 #Facebook
 FACEBOOK_CLIENT_ID = '1974089579550206'
 FACEBOOK_CLIENT_SECRET = '8117c08eed5c3ec4fe3142ee9d704dc1'
 
-# Application definition
 
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -146,43 +118,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 AUTH_USER_MODEL = 'core.User'
 
 
-# Database
-# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': 'squadupDev',
-#     }
-# }
-
-
-# DOCKER
-if(DEBUG):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'postgres',
-            'USER': 'postgres',
-            'HOST': 'database',
-            'PORT': 5432
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': environ_setting("DB_NAME"),
-            'USER': environ_setting("DB_USER"),
-            'PASSWORD': environ_setting("DB_PASSWORD"),
-            'HOST': environ_setting("DB_HOST"),
-            'PORT': environ_setting("DB_PORT"),
-        }
-    }
-    
-
-
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -203,10 +138,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    # ORIGINAL: 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    # FOR DEVELOPMENT MODE ONLY >>>
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
@@ -237,10 +168,4 @@ USE_TZ = True
 
 STATIC_URL = os.environ.get('STATIC_URL', '/static/')
 
-#STATICFILES_DIRS = [
-#    #os.path.join(BASE_DIR, 'static'),
-#    os.path.join(BASE_DIR, 'static/'),
-#    ]
-
 STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
-#STATIC_ROOT = 'static'
