@@ -48,6 +48,9 @@ FACEBOOK_CLIENT_SECRET = '8117c08eed5c3ec4fe3142ee9d704dc1'
 
 # Application definition
 INSTALLED_APPS = [
+    'django_feedparser',
+    'jet.dashboard',
+    'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
