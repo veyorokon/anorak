@@ -1,9 +1,20 @@
 import React from 'react';
-import SquardCard from './SquadCard';
-import './SquadList.css';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 
+import SquardCard from './SquadCard';
+
 const screenHeight = window.innerHeight * 0.83;
+
+const styles = theme => ({
+  squadList: {
+    maxHeight: screenHeight,
+    '& > *': {
+      marginBottom: 20
+    }
+  }
+});
 
 const TEMP_LIST = [
   {
@@ -43,12 +54,20 @@ const TEMP_LIST = [
   }
 ];
 
-export default function SquadList(props) {
+function SquadList(props) {
+  const { classes } = props;
+
   return (
-    <List className="squadList" style={{ maxHeight: screenHeight }}>
+    <List className={classes.squadList}>
       {TEMP_LIST.map(squad => (
         <SquardCard key={squad.id} {...squad} />
       ))}
     </List>
   );
 }
+
+SquadList.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+
+export default withStyles(styles)(SquadList);
