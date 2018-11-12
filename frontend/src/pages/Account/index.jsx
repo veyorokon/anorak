@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
-import BillingSection from '../components/BillingSection';
-import Navbar from '../components/Navbar';
-import PaymentSection from '../components/PaymentSection';
-import SquadList from '../components/SquadList';
+import Navbar from '../../components/Navbar';
+import SquadList from '../../components/SquadList';
+import BillingSection from './BillingSection';
+import PaymentSection from './PaymentSection';
 
 const styles = theme => ({
   content: {
@@ -45,7 +45,6 @@ const styles = theme => ({
 
 function Account(props) {
   const { classes } = props;
-
   return (
     <div>
       <Navbar search={<div>test</div>} />
