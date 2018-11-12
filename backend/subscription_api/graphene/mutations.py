@@ -6,20 +6,18 @@ class CreateSquad(graphene.Mutation):
     
     class Arguments:
         service = graphene.String(required=True)
-        password = graphene.String()
-        username = graphene.String()
+        secret = graphene.String()
         costPrice = graphene.Int(required=True)
         token=graphene.String(required=True)
     
     squad =  graphene.Field(RestrictedSquadType)
     
     @login_required
-    def mutate(self, info, token, service, password, username, costPrice):
+    def mutate(self, info, token, service, secret, costPrice):
         squad = Squad(
             owner=info.context.user,
             service=service,
-            username=username,
-            password=password,
+            secret=secret,
             cost_price=costPrice
         )
         

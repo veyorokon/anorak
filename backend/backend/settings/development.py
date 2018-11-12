@@ -17,7 +17,7 @@ from . base import *
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'v(m)6f0+s3d$o4lk$lli&un$e1a@bu3oww^9=s=ms)+@df23*r'
-
+FIELD_ENCRYPTION_KEY = 'g2z7GI3SaOnTNDCEZhy_46NWSzyUatriWt_ecPTjHNo='
 
 DEBUG = True
 

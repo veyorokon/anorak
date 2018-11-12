@@ -91,6 +91,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         token = jwt_encode_handler(payload)
         return token
 
+
+####################################################################
+########                      SIGNALS                       ########
+####################################################################
+
 # Signals for Auth User model.
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):

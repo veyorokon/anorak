@@ -5,6 +5,7 @@ from django.conf import settings
 from django.utils import timezone
 from django_enumfield import enum
 from django.dispatch import receiver
+from encrypted_model_fields.fields import EncryptedCharField
 from django.db.models.signals import post_save, pre_save, pre_delete
 
 import stripe
@@ -59,10 +60,8 @@ class StripePlan(models.Model):
 class Squad(models.Model):
     #User who owns this subscription product
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    #The login username for this service
-    username = models.CharField(max_length=128, null=True, blank=True)
-    #Squad description for this service
-    password = models.CharField(max_length=128, null=True, blank=True)
+    #The encrypted secret. 
+    secret = EncryptedCharField(max_length=100, null=True)
     #Squad description
     service = models.CharField(max_length=12, null=True)
     #The base price charged to SquadUp

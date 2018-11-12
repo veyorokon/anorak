@@ -4,7 +4,7 @@ from subscription_api.models import *
 class RestrictedSquadType(DjangoObjectType):
     class Meta:
         model = Squad
-        exclude_fields = ['username', 'password', 'owner']
+        exclude_fields = ['username', 'password', 'owner', 'secret']
 
 class SquadMemberType(DjangoObjectType):
     class Meta:

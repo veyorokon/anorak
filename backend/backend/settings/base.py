@@ -63,7 +63,8 @@ INSTALLED_APPS = [
     'subscription_api',
     'corsheaders',
     'graphene_django',
-    'django_extensions'
+    'django_extensions',
+    'encrypted_model_fields',
 ]
 
 GRAPHENE = {
