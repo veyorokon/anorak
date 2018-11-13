@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import { Elements, StripeProvider } from 'react-stripe-elements';
 
 import Navbar from '../../components/Navbar';
 import SquadList from '../../components/SquadList';
@@ -46,26 +47,38 @@ const styles = theme => ({
 function Account(props) {
   const { classes } = props;
   return (
-    <div>
-      <Navbar search={<div>test</div>} />
-      <div className={classes.content}>
-        <div className={classes.left}>
-          <Typography className={classes.leftTitle} align="center" variant="h6">
-            Active Squads
-          </Typography>
-          <SquadList />
-        </div>
-        <div className={classes.right}>
-          <Typography className={classes.rightTitle} align="left" variant="h6">
-            Account
-          </Typography>
-          <div className={classes.forms}>
-            <BillingSection />
-            <PaymentSection />
+    <StripeProvider apiKey="pk_test_rLuroFoR4XKOxb3FbmJqTqrh">
+      <Elements>
+        <div>
+          <Navbar search={<div>test</div>} />
+          <div className={classes.content}>
+            <div className={classes.left}>
+              <Typography
+                className={classes.leftTitle}
+                align="center"
+                variant="h6"
+              >
+                Active Squads
+              </Typography>
+              <SquadList />
+            </div>
+            <div className={classes.right}>
+              <Typography
+                className={classes.rightTitle}
+                align="left"
+                variant="h6"
+              >
+                Account
+              </Typography>
+              <div className={classes.forms}>
+                <BillingSection />
+                <PaymentSection />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </Elements>
+    </StripeProvider>
   );
 }
 

@@ -7,6 +7,51 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { Field, Form, Formik } from 'formik';
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo';
+import { CardElement, injectStripe } from 'react-stripe-elements';
+
+const createOptions = () => {
+  return {
+    style: {
+      base: {
+        color: '#424770',
+        letterSpacing: '0.025em',
+        fontFamily: 'Source Code Pro, monospace',
+        '::placeholder': {
+          color: '#aab7c4'
+        }
+      },
+      invalid: {
+        color: '#9e2146'
+      }
+    }
+  };
+};
+
+const SET_USER_BILLING_ADDRESS = gql`
+  mutation SetUserBillingAddress(
+    $city: String!
+    $line1: String!
+    $line2: String
+    $state: String!
+    $token: String!
+    $zip: Int!
+  ) {
+    setUserBillingAddress(
+      city: $city
+      line1: $line1
+      line2: $line2
+      state: $state
+      token: $token
+      zip: $zip
+    ) {
+      address {
+        id
+      }
+    }
+  }
+`;
 
 const styles = theme => ({
   paper: {
@@ -24,7 +69,12 @@ const styles = theme => ({
     marginBottom: 16
   },
   topForm: {
-    marginBottom: 32
+    marginBottom: 24
+  },
+  stripeForm: {
+    paddingTop: 10,
+    paddingLeft: 5,
+    paddingRight: 5
   }
 });
 
@@ -33,8 +83,27 @@ const CustomInputComponent = ({ field, form, ...props }) => (
 );
 
 class BillingSection extends React.Component {
-  onSubmit = values => {
-    console.log(values);
+  onSubmit = async (setUserBillingAddress, values) => {
+    const { token } = await this.props.stripe.createToken({
+      name: `${values.firstName} ${values.lastName}`,
+      address_line1: values.address1,
+      address_line2: values.address2,
+      address_city: values.city,
+      address_state: values.state,
+      address_country: values.country
+    });
+    // TODO: send stripe token as well
+    const { data } = await setUserBillingAddress({
+      variables: {
+        city: values.city,
+        line1: values.address1,
+        line2: values.address2,
+        state: values.state,
+        token: window.localStorage.getItem('sessionToken'),
+        zip: token.card.address_zip
+      }
+    });
+    console.log(data);
   };
 
   renderField = (name, label, other = {}) => (
@@ -59,104 +128,86 @@ class BillingSection extends React.Component {
           How you pay for subscriptions.
         </Typography>
 
-        <Formik
-          initialValues={{
-            cardName: '',
-            cardNumber: '',
-            cvv: '',
-            expDate: '',
+        <Mutation mutation={SET_USER_BILLING_ADDRESS}>
+          {setUserBillingAddress => (
+            <Formik
+              initialValues={{
+                address1: '',
+                address2: '',
+                cardName: '',
+                city: '',
+                country: '',
+                firstName: '',
+                lastName: '',
+                state: ''
+              }}
+              onSubmit={async (values, { setSubmitting }) => {
+                await this.onSubmit(setUserBillingAddress, values);
+                setSubmitting(false);
+              }}
+            >
+              {({ isSubmitting }) => (
+                <Form>
+                  <div className={classes.topForm}>
+                    <Typography variant="h6">Credit card</Typography>
+                    <div className={classes.stripeForm}>
+                      <CardElement {...createOptions()} />
+                    </div>
+                  </div>
 
-            address1: '',
-            address2: '',
-            city: '',
-            country: '',
-            firstName: '',
-            lastName: '',
-            state: '',
-            zip: ''
-          }}
-          onSubmit={async (values, { setSubmitting }) => {
-            await this.onSubmit(values);
-            setSubmitting(false);
-          }}
-        >
-          {({ isSubmitting }) => (
-            <Form>
-              <div className={classes.topForm}>
-                <Typography variant="h6">Credit card</Typography>
-                <Grid container spacing={24}>
-                  <Grid item xs={12} md={6}>
-                    {this.renderField('cardName', 'Name on card')}
+                  <Typography variant="h6">Billing adddress</Typography>
+                  <Grid container spacing={24}>
+                    <Grid item xs={12} sm={6}>
+                      {this.renderField('firstName', 'First name', {
+                        autoComplete: 'fname'
+                      })}
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      {this.renderField('lastName', 'Last name', {
+                        autoComplete: 'lname'
+                      })}
+                    </Grid>
+                    <Grid item xs={12}>
+                      {this.renderField('address1', 'Address 1', {
+                        autoComplete: 'billing address-line1'
+                      })}
+                    </Grid>
+                    <Grid item xs={12}>
+                      {this.renderField('address2', 'Address 2', {
+                        autoComplete: 'billing address-line2',
+                        required: false
+                      })}
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      {this.renderField('city', 'City', {
+                        autoComplete: 'billing address-level2'
+                      })}
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      {this.renderField('state', 'State')}
+                    </Grid>
+                    {/* TODO: add proper country form */}
+                    <Grid item xs={12}>
+                      {this.renderField('country', 'Country', {
+                        autoComplete: 'billing country'
+                      })}
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} md={6}>
-                    {this.renderField('cardNumber', 'Card number')}
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    {this.renderField('expDate', 'Expiry date')}
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    {this.renderField('cvv', 'CVV', {
-                      helperText: 'Last three digits on signature strip'
-                    })}
-                  </Grid>
-                </Grid>
-              </div>
 
-              <Typography variant="h6">Billing adddress</Typography>
-              <Grid container spacing={24}>
-                <Grid item xs={12} sm={6}>
-                  {this.renderField('firstName', 'First name', {
-                    autoComplete: 'fname'
-                  })}
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  {this.renderField('lastName', 'Last name', {
-                    autoComplete: 'lname'
-                  })}
-                </Grid>
-                <Grid item xs={12}>
-                  {this.renderField('address1', 'Address 1', {
-                    autoComplete: 'billing address-line1'
-                  })}
-                </Grid>
-                <Grid item xs={12}>
-                  {this.renderField('address2', 'Address 2', {
-                    autoComplete: 'billing address-line2',
-                    required: false
-                  })}
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  {this.renderField('city', 'City', {
-                    autoComplete: 'billing address-level2'
-                  })}
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  {this.renderField('state', 'State')}
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  {this.renderField('zip', 'Zip / Postal code', {
-                    autoComplete: 'billing postal-code'
-                  })}
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  {this.renderField('country', 'Country', {
-                    autoComplete: 'billing country'
-                  })}
-                </Grid>
-              </Grid>
-
-              <Button
-                className={classes.button}
-                color="primary"
-                disabled={isSubmitting}
-                type="submit"
-                variant="outlined"
-              >
-                Save
-              </Button>
-            </Form>
+                  <Button
+                    className={classes.button}
+                    color="primary"
+                    disabled={isSubmitting}
+                    type="submit"
+                    variant="outlined"
+                  >
+                    Save
+                  </Button>
+                </Form>
+              )}
+            </Formik>
           )}
-        </Formik>
+        </Mutation>
       </Paper>
     );
   }
@@ -166,4 +217,4 @@ BillingSection.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(BillingSection);
+export default injectStripe(withStyles(styles)(BillingSection));
