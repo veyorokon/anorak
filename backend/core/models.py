@@ -26,7 +26,8 @@ class Address(models.Model):
     zip = models.IntegerField(null=True, blank=True)
     
     def __str__(self):
-        return "{}\ln{}\n{}, {}, {}".format(self.line_1, self.line_2, self.city, self.state, self.zip)
+        output = "{} {}. {}, {} {}".format(self.line_1, self.line_2, self.city, self.state, self.zip)
+        return output.upper()
         
     class Meta:
         managed = False
@@ -50,8 +51,7 @@ class StripeCustomer(models.Model):
             description="Customer for "+str(self.user.email)
         )
         self.stripe_customer_id = data.id
-        self.save()
-        return data
+
         
     def get_stripe_customer(self):
         customer = stripe.Customer.retrieve(self.stripe_customer_id)
@@ -69,8 +69,6 @@ class StripeCustomer(models.Model):
         customer.sources.create(
             source=token
         )
-        customer.save()
-        return True
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -124,6 +122,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
         stripe_customer = StripeCustomer.objects.create(user=instance)
         stripe_customer.create_stripe_customer()
+        stripe_customer.save()
         instance.stripe_customer = stripe_customer
         instance.save()
         
