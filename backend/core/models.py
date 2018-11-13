@@ -18,21 +18,40 @@ jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 
+class Address(models.Model):
+    line_1 = models.CharField(max_length=32, null=True, blank=True)
+    line_2 = models.CharField(max_length=32, null=True, blank=True)
+    city = models.CharField(max_length=32, null=True, blank=True)
+    state = models.CharField(max_length=32, null=True, blank=True)
+    zip = models.IntegerField(null=True, blank=True)
+    
+    def __str__(self):
+        output = "{} {}. {}, {} {}".format(self.line_1, self.line_2, self.city, self.state, self.zip)
+        return output.upper()
+        
+    class Meta:
+        managed = False
+        
+class ShippingAddress(Address):
+    class Meta:
+        managed = True
+class BillingAddress(Address):
+    class Meta:
+        managed =True
+
+
 class StripeCustomer(models.Model):
     #The stripe customer id
-    stripe_customer_id = models.CharField(max_length=32, null=True, 
-        blank=True)
+    stripe_customer_id = models.CharField(max_length=32, null=True, blank=True)
     #The stripe plan id
-    stripe_credit_card_id = models.CharField(max_length=32, null=True,
-        blank=True)
+    stripe_credit_card_id = models.CharField(max_length=32, null=True, blank=True)
         
     def create_stripe_customer(self):
         data = stripe.Customer.create(
             description="Customer for "+str(self.user.email)
         )
         self.stripe_customer_id = data.id
-        self.save()
-        return data
+
         
     def get_stripe_customer(self):
         customer = stripe.Customer.retrieve(self.stripe_customer_id)
@@ -50,8 +69,6 @@ class StripeCustomer(models.Model):
         customer.sources.create(
             source=token
         )
-        customer.save()
-        return True
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -63,6 +80,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     facebook_id = models.CharField(_('facebook id'), max_length=30, blank=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, null=True, blank=True)
+    address_billing = models.OneToOneField(BillingAddress, null=True, on_delete=models.SET_NULL, related_name='user')
+    address_shipping = models.OneToOneField(ShippingAddress, null=True, on_delete=models.SET_NULL, related_name='user')
     date_joined = models.DateTimeField(_('date joined'), 
         editable=True, auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)
@@ -91,6 +110,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         token = jwt_encode_handler(payload)
         return token
 
+
+####################################################################
+########                      SIGNALS                       ########
+####################################################################
+
 # Signals for Auth User model.
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
@@ -98,6 +122,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
         stripe_customer = StripeCustomer.objects.create(user=instance)
         stripe_customer.create_stripe_customer()
+        stripe_customer.save()
         instance.stripe_customer = stripe_customer
         instance.save()
         
