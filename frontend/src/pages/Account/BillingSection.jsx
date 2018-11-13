@@ -155,7 +155,7 @@ class BillingSection extends React.Component {
                     </div>
                   </div>
 
-                  <Typography variant="h6">Billing adddress</Typography>
+                  <Typography variant="subtitle1">Address</Typography>
                   <Grid container spacing={24}>
                     <Grid item xs={12} sm={6}>
                       {this.renderField('firstName', 'First name', {

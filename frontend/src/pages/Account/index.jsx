@@ -48,36 +48,38 @@ function Account(props) {
   const { classes } = props;
   return (
     <StripeProvider apiKey="pk_test_rLuroFoR4XKOxb3FbmJqTqrh">
-      <Elements>
-        <div>
-          <Navbar search={<div>test</div>} />
-          <div className={classes.content}>
-            <div className={classes.left}>
-              <Typography
-                className={classes.leftTitle}
-                align="center"
-                variant="h6"
-              >
-                Active Squads
-              </Typography>
-              <SquadList />
-            </div>
-            <div className={classes.right}>
-              <Typography
-                className={classes.rightTitle}
-                align="left"
-                variant="h6"
-              >
-                Account
-              </Typography>
-              <div className={classes.forms}>
+      <div>
+        <Navbar search={<div>test</div>} />
+        <div className={classes.content}>
+          <div className={classes.left}>
+            <Typography
+              className={classes.leftTitle}
+              align="center"
+              variant="h6"
+            >
+              Active Squads
+            </Typography>
+            <SquadList />
+          </div>
+          <div className={classes.right}>
+            <Typography
+              className={classes.rightTitle}
+              align="left"
+              variant="h6"
+            >
+              Account
+            </Typography>
+            <div className={classes.forms}>
+              <Elements>
                 <BillingSection />
+              </Elements>
+              <Elements>
                 <PaymentSection />
-              </div>
+              </Elements>
             </div>
           </div>
         </div>
-      </Elements>
+      </div>
     </StripeProvider>
   );
 }
