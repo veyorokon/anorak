@@ -4,6 +4,7 @@ from core.models import *
 class StripeCustomerType(DjangoObjectType):
     class Meta:
         model = StripeCustomer
+        exclude_fields = ['stripe_customer_id', 'stripe_credit_card_id']
 
 class BillingAddressType(DjangoObjectType):
     class Meta:

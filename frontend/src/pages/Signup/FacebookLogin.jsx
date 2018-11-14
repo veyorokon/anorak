@@ -6,8 +6,8 @@ import { Mutation } from 'react-apollo';
 import { FacebookProvider, LoginButton } from 'react-facebook';
 
 const GET_FACEBOOK_USER = gql`
-  mutation GetFacebookUser($email: String!, $facebookAccessToken: String!) {
-    getFacebookUser(email: $email, facebookAccessToken: $facebookAccessToken) {
+  mutation FacebookUser($email: String!, $facebookAccessToken: String!) {
+    facebookUser(email: $email, facebookAccessToken: $facebookAccessToken) {
       token
     }
   }

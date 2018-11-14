@@ -30,7 +30,7 @@ const createOptions = () => {
 };
 
 const SET_USER_SHIPPING_ADDRESS = gql`
-  mutation SetUserShippingAddress(
+  mutation ShippingAddress(
     $city: String!
     $line1: String!
     $line2: String
@@ -38,7 +38,7 @@ const SET_USER_SHIPPING_ADDRESS = gql`
     $token: String!
     $zip: Int!
   ) {
-    setUserShippingAddress(
+    shippingAddress(
       city: $city
       line1: $line1
       line2: $line2

@@ -16,13 +16,13 @@ const styles = theme => ({
 });
 
 const CREATE_USER = gql`
-  mutation CreateUser(
+  mutation User(
     $email: String!
     $firstName: String
     $lastName: String
     $password: String
   ) {
-    createUser(
+    user(
       email: $email
       firstName: $firstName
       lastName: $lastName

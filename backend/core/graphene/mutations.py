@@ -4,6 +4,7 @@ from core.models import *
 from core.authentication import FacebookManager
 from graphql_jwt.decorators import login_required
 
+
 FBManager = FacebookManager()
 
 class FacebookUser(graphene.Mutation):
@@ -24,7 +25,7 @@ class FacebookUser(graphene.Mutation):
         try:
             user.save()
             token = user.json_web_token
-            return CreateUser(token=token)
+            return FacebookUser(token=token)
         except:
             raise ValueError("User not created")
         
@@ -115,42 +116,8 @@ class SetShippingAddress(graphene.Mutation):
         except:
             raise ValueError("Shipping address not created")
 
-class AddStripeCardSetAddress(graphene.Mutation):
-    
-    class Arguments:
-        line1 = graphene.String(required=True)
-        line2 = graphene.String()
-        city = graphene.String(required=True)
-        state = graphene.String(required=True)
-        zip = graphene.Int(required=True)
-        cardToken=graphene.String(required=True)
-        token=graphene.String(required=True)
-        
-    stripeCustomer = graphene.Field(StripeCustomerType)
-    
-    @login_required
-    def mutate(self, info, token, cardToken, line1, line2, city, state, zip):
-        user = info.context.user
-        try:
-            address = user.address_billing
-            if address == None:
-                address = BillingAddress()
-            address.line_1=line1
-            address.line_2=line2
-            address.city=city
-            address.state=state
-            address.zip=zip
-            address.save()
-            user.address_billing = address
-            user.stripe_customer.link_card(cardToken)
-            user.stripe_customer.save()
-            user.save()
-            return AddStripeCardSetAddress(stripeCustomer=user.stripe_customer)
-        except:
-          raise ValueError("Error when updating address and card")
 
-
-class AddStripeCard(graphene.Mutation):
+class StripeCard(graphene.Mutation):
     
     class Arguments:
         cardToken=graphene.String(required=True)
@@ -164,15 +131,15 @@ class AddStripeCard(graphene.Mutation):
         try:
             user.stripe_customer.link_card(cardToken)
             user.stripe_customer.save()
-            return AddStripeCard(stripeCustomer=user.stripe_customer)
+            return StripeCard(stripeCustomer=user.stripe_customer)
         except:
           raise ValueError("Billing address not created")
+
 
 class Mutations(graphene.ObjectType):
     user = CreateUser.Field()
     facebook_user = FacebookUser.Field()
-    set_user_billing_address = SetBillingAddress.Field()
-    set_user_shipping_address = SetShippingAddress.Field()
-    add_stripe_card_set_user_address = AddStripeCardSetAddress.Field()
-    add_stripe_card = AddStripeCard.Field()
+    billing_address = SetBillingAddress.Field()
+    shipping_address = SetShippingAddress.Field()
+    stripe_card = StripeCard.Field()
     

@@ -30,7 +30,7 @@ const createOptions = () => {
 };
 
 const SET_USER_BILLING_ADDRESS = gql`
-  mutation SetUserBillingAddress(
+  mutation BillingAddress(
     $city: String!
     $line1: String!
     $line2: String
@@ -38,7 +38,7 @@ const SET_USER_BILLING_ADDRESS = gql`
     $token: String!
     $zip: Int!
   ) {
-    setUserBillingAddress(
+    billingAddress(
       city: $city
       line1: $line1
       line2: $line2
