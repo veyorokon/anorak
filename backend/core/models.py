@@ -35,6 +35,7 @@ class Address(models.Model):
 class ShippingAddress(Address):
     class Meta:
         managed = True
+        
 class BillingAddress(Address):
     class Meta:
         managed =True
@@ -88,7 +89,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_('staff'), default=False)
     stripe_customer = models.OneToOneField(StripeCustomer, null=True,
         on_delete=models.SET_NULL, related_name='user')
-    can_view_mature_content = models.BooleanField(default=False)
     
     objects = UserManager()
 
