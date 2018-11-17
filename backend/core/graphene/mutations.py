@@ -133,7 +133,7 @@ class StripeCard(graphene.Mutation):
             user.stripe_customer.save()
             return StripeCard(stripeCustomer=user.stripe_customer)
         except:
-          raise ValueError("Billing address not created")
+          raise ValueError("Card not created")
 
 
 class Mutations(graphene.ObjectType):
@@ -141,5 +141,5 @@ class Mutations(graphene.ObjectType):
     facebook_user = FacebookUser.Field()
     billing_address = SetBillingAddress.Field()
     shipping_address = SetShippingAddress.Field()
-    stripe_card = StripeCard.Field()
+    set_stripe_card = StripeCard.Field()
     

@@ -6,7 +6,7 @@ from django.utils import timezone
 from django_enumfield import enum
 from django.dispatch import receiver
 from encrypted_model_fields.fields import EncryptedCharField
-from django.db.models.signals import post_save, pre_save, pre_delete
+from django.db.models.signals import post_save, pre_save, pre_delete, post_delete
 
 import stripe
 stripe.api_key = settings.STRIPE_ACCOUNT_SID
@@ -24,8 +24,10 @@ class StripePlan(models.Model):
     stripe_plan_id = models.CharField(max_length=32, null=True, blank=True)
     #The frequency of billing
     billing_frequency = enum.EnumField(Frequency, default=Frequency.MONTH)
-    #The SquadUp fee if any
-    cost_cc_processing_fee = models.FloatField(default=0.05)
+    #The SquadUp percent fee if any
+    cost_cc_percent_fee = models.FloatField(default=0.03)
+    #The SquadUp constant fee
+    cost_cc_constant_fee = models.FloatField(default=0.5)
     #Any taxes associated with the cost of the service
     tax_rate = models.FloatField(default=0)
     
@@ -61,7 +63,9 @@ class Squad(models.Model):
     #User who owns this subscription product
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     #The encrypted secret. 
-    secret = EncryptedCharField(max_length=100, null=True)
+    description = models.CharField(max_length=128, null=True)
+    #The encrypted secret. 
+    secret = EncryptedCharField(max_length=128, null=True)
     #Squad description
     service = models.CharField(max_length=12, null=True)
     #The base price charged to SquadUp
@@ -183,7 +187,7 @@ class SquadMember(models.Model):
 
 # Signals for Squad model.
 @receiver(post_save, sender=Squad)
-def create_stripe_plan(sender, instance=None, created=False, **kwargs):
+def create_squad(sender, instance=None, created=False, **kwargs):
     """
     Handles the creation of Squad related instances
     of plans and owner memberships.
@@ -213,4 +217,11 @@ def delete_stripe_plan(sender, instance=None, **kwargs):
         instance.delete_plan()
     except:
         pass
-        
+
+# Signals for Squad model to delete Stripe objects
+@receiver(post_delete, sender=Squad)
+def delete_squad(sender, instance=None, **kwargs):
+    try:
+        instance.stripe_plan.delete()
+    except:
+        pass

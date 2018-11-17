@@ -11,28 +11,24 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 
-const createOptions = () => {
-  return {
-    style: {
-      base: {
-        color: '#424770',
-        letterSpacing: '0.025em',
-        fontFamily: 'Source Code Pro, monospace',
-        '::placeholder': {
-          color: '#aab7c4'
-        }
-      },
-      invalid: {
-        color: '#9e2146'
-      }
-    }
-  };
-};
-
-const SET_STRIPE_CARD = gql`
-  mutation SetStripeCard($token: String!, $cardToken: String!) {
-    setStripeCard(token: $token, cardToken: $cardToken) {
-      stripeCustomer {
+const CREATE_SQUAD = gql`
+  mutation CreateSquad(
+    $token: String!
+    $service: String!
+    $secret: String!
+    $costPrice: Float!
+    $description: String!
+    $maxSize: Int!
+  ) {
+    createSquad(
+      token: $token
+      service: $service
+      secret: $secret
+      costPrice: $costPrice
+      description: $description
+      maxSize: $maxSize
+    ) {
+      squad {
         id
       }
     }
@@ -68,21 +64,12 @@ const CustomInputComponent = ({ field, form, ...props }) => (
   <TextField id={field.name} {...field} {...props} />
 );
 
-class BillingSection extends React.Component {
-  onSubmit = async (setStripeCard, values) => {
-    const { token } = await this.props.stripe.createToken({
-      name: `${values.firstName} ${values.lastName}`,
-      address_line1: values.address1,
-      address_line2: values.address2,
-      address_city: values.city,
-      address_state: values.state,
-      address_country: values.country
-    });
-    // TODO: send stripe token as well
-    const { data } = await setStripeCard({
+class CreateForm extends React.Component {
+  onSubmit = async (createSquad, values) => {
+    const { data } = await createSquad({
       variables: {
         token: window.localStorage.getItem('sessionToken'),
-        cardToken: token.id
+        cardToken: values.id
       }
     });
     console.log(data);
@@ -104,75 +91,54 @@ class BillingSection extends React.Component {
     return (
       <Paper className={classes.paper}>
         <Typography component="h2" variant="h5" gutterBottom>
-          Billing
+          Create A Squad
         </Typography>
         <Typography className={classes.subtitle} variant="subtitle1">
-          How you pay for subscriptions.
+          Create your own subscription service.
         </Typography>
 
-        <Mutation mutation={SET_STRIPE_CARD}>
-          {setStripeCard => (
+        <Mutation mutation={CREATE_SQUAD}>
+          {createSquad => (
             <Formik
               initialValues={{
-                address1: '',
-                address2: '',
-                cardName: '',
-                city: '',
-                country: '',
-                firstName: '',
-                lastName: '',
-                state: ''
+                description: '',
+                secret: '',
+                maxSize: '',
+                service: '',
+                costPrice: ''
               }}
               onSubmit={async (values, { setSubmitting }) => {
-                await this.onSubmit(setStripeCard, values);
+                await this.onSubmit(createSquad, values);
                 setSubmitting(false);
               }}
             >
               {({ isSubmitting }) => (
                 <Form>
-                  <div className={classes.topForm}>
-                    <Typography variant="h6">Credit card</Typography>
-                    <div className={classes.stripeForm}>
-                      <CardElement {...createOptions()} />
-                    </div>
-                  </div>
-
-                  <Typography variant="subtitle1">Address</Typography>
+                  <Typography variant="subtitle1">Squad Form</Typography>
                   <Grid container spacing={24}>
-                    <Grid item xs={12} sm={6}>
-                      {this.renderField('firstName', 'First name', {
+                    <Grid item xs={12}>
+                      {this.renderField('service', 'Service Name', {
                         autoComplete: 'fname'
                       })}
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                      {this.renderField('lastName', 'Last name', {
-                        autoComplete: 'lname'
-                      })}
-                    </Grid>
                     <Grid item xs={12}>
-                      {this.renderField('address1', 'Address 1', {
+                      {this.renderField('description', 'Description', {
                         autoComplete: 'billing address-line1'
                       })}
                     </Grid>
                     <Grid item xs={12}>
-                      {this.renderField('address2', 'Address 2', {
+                      {this.renderField('secret', 'Secret', {
                         autoComplete: 'billing address-line2',
                         required: false
                       })}
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      {this.renderField('city', 'City', {
+                      {this.renderField('maxSize', 'Maximum Size', {
                         autoComplete: 'billing address-level2'
                       })}
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      {this.renderField('state', 'State')}
-                    </Grid>
-                    {/* TODO: add proper country form */}
-                    <Grid item xs={12}>
-                      {this.renderField('country', 'Country', {
-                        autoComplete: 'billing country'
-                      })}
+                      {this.renderField('costPrice', 'Cost')}
                     </Grid>
                   </Grid>
 
@@ -183,7 +149,7 @@ class BillingSection extends React.Component {
                     type="submit"
                     variant="outlined"
                   >
-                    Save
+                    Create
                   </Button>
                 </Form>
               )}
@@ -195,8 +161,8 @@ class BillingSection extends React.Component {
   }
 }
 
-BillingSection.propTypes = {
+CreateForm.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default injectStripe(withStyles(styles)(BillingSection));
+export default injectStripe(withStyles(styles)(CreateForm));

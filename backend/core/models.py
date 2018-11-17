@@ -26,7 +26,9 @@ class Address(models.Model):
     zip = models.IntegerField(null=True, blank=True)
     
     def __str__(self):
-        output = "{} {}. {}, {} {}".format(self.line_1, self.line_2, self.city, self.state, self.zip)
+        output = "{} {}. {}, {} {}".format(
+            self.line_1, self.line_2, self.city, self.state, self.zip
+        )
         return output.upper()
         
     class Meta:
