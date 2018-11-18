@@ -28,14 +28,14 @@ const styles = theme => ({
 });
 
 class FacebookLogin extends React.Component {
-  handleResponse = (data, getFacebookUser) => {
-    getFacebookUser({
+  handleResponse = (data, facebookUser) => {
+    facebookUser({
       variables: {
         email: data.profile.email,
         facebookAccessToken: data.tokenDetail.accessToken
       }
     }).then(({ data }) => {
-      window.localStorage.setItem('sessionToken', data.getFacebookUser.token);
+      window.localStorage.setItem('sessionToken', data.facebookUser.token);
       this.props.history.push('/dashboard');
     });
   };
@@ -47,13 +47,13 @@ class FacebookLogin extends React.Component {
   render() {
     return (
       <Mutation mutation={GET_FACEBOOK_USER}>
-        {getFacebookUser => {
+        {facebookUser => {
           return (
             <FacebookProvider appId="1974089579550206">
               <LoginButton
                 className={this.props.classes.button}
                 scope="email"
-                onCompleted={data => this.handleResponse(data, getFacebookUser)}
+                onCompleted={data => this.handleResponse(data, facebookUser)}
                 onError={this.handleError}
               >
                 <span>Signup via Facebook</span>

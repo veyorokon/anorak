@@ -9,7 +9,6 @@ import Typography from '@material-ui/core/Typography';
 import { Field, Form, Formik } from 'formik';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import { CardElement, injectStripe } from 'react-stripe-elements';
 
 const CREATE_SQUAD = gql`
   mutation CreateSquad(
@@ -69,7 +68,11 @@ class CreateForm extends React.Component {
     const { data } = await createSquad({
       variables: {
         token: window.localStorage.getItem('sessionToken'),
-        cardToken: values.id
+        service: values.service,
+        secret: values.secret,
+        costPrice: values.costPrice,
+        description: values.description,
+        maxSize: values.maxSize
       }
     });
     console.log(data);
@@ -118,23 +121,23 @@ class CreateForm extends React.Component {
                   <Grid container spacing={24}>
                     <Grid item xs={12}>
                       {this.renderField('service', 'Service Name', {
-                        autoComplete: 'fname'
+                        // autoComplete: 'fname'
                       })}
                     </Grid>
                     <Grid item xs={12}>
                       {this.renderField('description', 'Description', {
-                        autoComplete: 'billing address-line1'
+                        // autoComplete: 'billing address-line1'
                       })}
                     </Grid>
                     <Grid item xs={12}>
                       {this.renderField('secret', 'Secret', {
-                        autoComplete: 'billing address-line2',
-                        required: false
+                        // autoComplete: 'billing address-line2',
+                        // required: false
                       })}
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       {this.renderField('maxSize', 'Maximum Size', {
-                        autoComplete: 'billing address-level2'
+                        // autoComplete: 'billing address-level2'
                       })}
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -165,4 +168,4 @@ CreateForm.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default injectStripe(withStyles(styles)(CreateForm));
+export default withStyles(styles)(CreateForm);

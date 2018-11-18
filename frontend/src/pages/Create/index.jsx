@@ -66,7 +66,7 @@ function Account(props) {
               align="left"
               variant="h6"
             >
-              Account
+              Squad Creation
             </Typography>
             <div className={classes.forms}>
               <Elements>
