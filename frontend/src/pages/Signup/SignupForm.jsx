@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { Field, Form, Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { withRouter } from 'react-router';
+
+import Field from '../../lib/Field';
 
 const styles = theme => ({
   submit: {
@@ -33,10 +34,6 @@ const CREATE_USER = gql`
   }
 `;
 
-const CustomInputComponent = ({ field, form, ...props }) => (
-  <TextField id={field.name} {...field} {...props} />
-);
-
 class SignupForm extends React.Component {
   state = {
     emailIsAlreadyRegisteredError: false,
@@ -59,9 +56,10 @@ class SignupForm extends React.Component {
           password: values.password
         }
       });
-      window.localStorage.setItem('sessionToken', data.createUser.token);
+      window.localStorage.setItem('sessionToken', data.user.token);
       this.props.history.push('/dashboard');
     } catch (e) {
+      console.log(e);
       const errorType = e.message.includes('409')
         ? 'emailIsAlreadyRegisteredError'
         : 'otherError';
@@ -72,13 +70,12 @@ class SignupForm extends React.Component {
   renderField = (name, label, other = {}) => {
     return (
       <Field
-        component={CustomInputComponent}
-        fullWidth
         label={label}
-        margin="normal"
         name={name}
-        required
-        {...other}
+        other={{
+          ...other,
+          margin: 'normal'
+        }}
       />
     );
   };

@@ -4,11 +4,12 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { Field, Form, Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
+
+import Field from '../../lib/Field';
 
 const CREATE_SQUAD = gql`
   mutation CreateSquad(
@@ -59,10 +60,6 @@ const styles = theme => ({
   }
 });
 
-const CustomInputComponent = ({ field, form, ...props }) => (
-  <TextField id={field.name} {...field} {...props} />
-);
-
 class CreateForm extends React.Component {
   onSubmit = async (createSquad, values) => {
     const { data } = await createSquad({
@@ -79,14 +76,7 @@ class CreateForm extends React.Component {
   };
 
   renderField = (name, label, other = {}) => (
-    <Field
-      component={CustomInputComponent}
-      fullWidth
-      label={label}
-      name={name}
-      required
-      {...other}
-    />
+    <Field label={label} name={name} {...other} />
   );
 
   render() {
