@@ -81,7 +81,6 @@ class Squad(models.Model):
     #The stripe plan for this squad
     stripe_plan = models.OneToOneField(StripePlan, default=None, 
         null=True, on_delete=models.CASCADE, related_name='squad')
-    payment_method =models.CharField(max_length=16, blank=True, null=True)
     is_public = models.BooleanField(default=False)
     
     @property

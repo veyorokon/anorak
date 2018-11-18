@@ -80,7 +80,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True)
     phone_number = models.CharField( max_length=17, blank=True, unique=True, 
         null=True)
-    facebook_id = models.CharField(_('facebook id'), max_length=30, blank=True)
+    facebook_id = models.CharField(_('facebook id'), max_length=30, blank=True, editable=False)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, null=True, blank=True)
     address_billing = models.OneToOneField(BillingAddress, null=True, on_delete=models.SET_NULL, related_name='user')
@@ -91,6 +91,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_('staff'), default=False)
     stripe_customer = models.OneToOneField(StripeCustomer, null=True,
         on_delete=models.SET_NULL, related_name='user')
+    payment_method =models.CharField(max_length=32, blank=True, null=True)
     
     objects = UserManager()
 
@@ -111,6 +112,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         payload = jwt_payload_handler(self)
         token = jwt_encode_handler(payload)
         return token
+    
 
 
 ####################################################################

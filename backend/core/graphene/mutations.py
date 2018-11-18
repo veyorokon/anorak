@@ -134,6 +134,24 @@ class StripeCard(graphene.Mutation):
             return StripeCard(stripeCustomer=user.stripe_customer)
         except:
           raise ValueError("Card not created")
+          
+class PreferredPaymentMethod(graphene.Mutation):
+    
+    class Arguments:
+        token=graphene.String(required=True)
+        paymentMethod=graphene.String(required=True)
+        
+    user = graphene.Field(UserType)
+    
+    @login_required
+    def mutate(self, info, token, paymentMethod):
+        user = info.context.user
+        try:
+            user.payment_method=paymentMethod
+            user.save()
+            return PreferredPaymentMethod(user=user)
+        except:
+          raise ValueError("User payment method could not be updated.")
 
 
 class Mutations(graphene.ObjectType):
@@ -142,4 +160,5 @@ class Mutations(graphene.ObjectType):
     billing_address = SetBillingAddress.Field()
     shipping_address = SetShippingAddress.Field()
     set_stripe_card = StripeCard.Field()
+    preferred_payment_method = PreferredPaymentMethod.Field()
     

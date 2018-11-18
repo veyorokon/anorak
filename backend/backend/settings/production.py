@@ -16,7 +16,7 @@ from . base import *
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'vfdjklaowijd891080542(**272387fnaakjfd&!2_02)=s=ms)+@df23*r'
+SECRET_KEY = environ_setting("SECRET_KEY"),
 FIELD_ENCRYPTION_KEY = environ_setting("FIELD_ENCRYPTION_KEY"),
 
 DEBUG = False
@@ -29,8 +29,8 @@ ALLOWED_HOSTS=[
 ]
 
 
-STRIPE_ACCOUNT_SID = 'sk_live_Z74kfkdK1Ga6YOqYaypi9zC4'
-STRIPE_SQUADUP_PRODUCT = 'prod_Drjkufpy6PtWEv'
+STRIPE_ACCOUNT_SID = environ_setting("STRIPE_ACCOUNT_SID"),
+STRIPE_SQUADUP_PRODUCT = environ_setting("STRIPE_SQUADUP_PRODUCT"),
 
 
 DATABASES = {
