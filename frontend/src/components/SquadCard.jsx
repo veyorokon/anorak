@@ -9,10 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import SquadCardModal from './SquadCardModal';
 
 const styles = {
-  card: {
-    maxWidth: 300
-  },
-  pos: {
+  cost: {
     marginBottom: 10
   }
 };
@@ -20,14 +17,13 @@ const styles = {
 function SquadCard(props) {
   const { classes } = props;
   return (
-    <Card className={classes.card}>
+    <Card>
       <CardContent>
         <Typography variant="h5" component="h2">
-          {props.name}
+          {props.service}
         </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          ${props.price}
-          .00 / month
+        <Typography className={classes.cost} color="textSecondary">
+          ${(props.price / 100).toFixed(2)} / month
         </Typography>
         <Typography component="p">{props.description}</Typography>
       </CardContent>
@@ -39,7 +35,10 @@ function SquadCard(props) {
 }
 
 SquadCard.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  description: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  service: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(SquadCard);

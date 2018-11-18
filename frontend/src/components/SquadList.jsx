@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
 
 import SquardCard from './SquadCard';
 
@@ -12,57 +14,54 @@ const styles = theme => ({
     maxHeight: screenHeight,
     '& > *': {
       marginBottom: 20
-    }
+    },
+    width: '100%'
   }
 });
 
-const TEMP_LIST = [
-  {
-    id: 1,
-    name: 'Netflix',
-    price: 2,
-    description:
-      'Lorem ipsum dolor sit amet, consector apidciscing elit, sed do eiusmod tempor.'
-  },
-  {
-    id: 2,
-    name: 'Hulu',
-    price: 3,
-    description:
-      'Lorem ipsum dolor sit amet, consector apidciscing elit, sed do eiusmod tempor.'
-  },
-  {
-    id: 3,
-    name: 'HBO',
-    price: 3,
-    description:
-      'Lorem ipsum dolor sit amet, consector apidciscing elit, sed do eiusmod tempor.'
-  },
-  {
-    id: 4,
-    name: 'HBO',
-    price: 3,
-    description:
-      'Lorem ipsum dolor sit amet, consector apidciscing elit, sed do eiusmod tempor.'
-  },
-  {
-    id: 5,
-    name: 'HBO',
-    price: 3,
-    description:
-      'Lorem ipsum dolor sit amet, consector apidciscing elit, sed do eiusmod tempor.'
+const GET_USER = gql`
+  query GetUser($token: String!) {
+    user(token: $token) {
+      id
+      squadMemberships {
+        id
+        squad {
+          id
+          costPrice
+          description
+          service
+        }
+      }
+    }
   }
-];
+`;
 
 function SquadList(props) {
   const { classes } = props;
 
   return (
-    <List className={classes.squadList}>
-      {TEMP_LIST.map(squad => (
-        <SquardCard key={squad.id} {...squad} />
-      ))}
-    </List>
+    <Query
+      query={GET_USER}
+      variables={{ token: window.localStorage.getItem('sessionToken') }}
+    >
+      {({ loading, error, data }) => {
+        if (loading) return 'Loading...';
+        if (error) return `Error! ${error.message}`;
+
+        return (
+          <List className={classes.squadList}>
+            {data.user.squadMemberships.map(({ id, squad }) => (
+              <SquardCard
+                key={id}
+                description={squad.description}
+                price={squad.costPrice}
+                service={squad.service}
+              />
+            ))}
+          </List>
+        );
+      }}
+    </Query>
   );
 }
 
