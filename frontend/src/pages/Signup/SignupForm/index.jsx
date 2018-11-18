@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Form, Formik } from 'formik';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { withRouter } from 'react-router';
 
-import Field from '../../lib/Field';
+import Form from '../../../lib/Form';
+import formConfig from './form';
 
 const styles = theme => ({
   submit: {
@@ -67,51 +67,39 @@ class SignupForm extends React.Component {
     }
   };
 
-  renderField = (name, label, other = {}) => {
-    return (
-      <Field
-        label={label}
-        name={name}
-        other={{
-          ...other,
-          margin: 'normal'
-        }}
-      />
-    );
-  };
-
   render() {
     const { classes } = this.props;
     return (
       <Mutation mutation={CREATE_USER}>
         {createUser => (
-          <Formik
-            initialValues={{
-              email: '',
-              firstName: '',
-              lastName: '',
-              password: ''
-            }}
+          <Form
+            config={formConfig}
             onSubmit={async (values, { setSubmitting }) => {
               await this.onSubmit(createUser, values);
               setSubmitting(false);
             }}
           >
-            {({ isSubmitting }) => (
-              <Form>
-                {this.renderField('firstName', 'First Name')}
-                {this.renderField('lastName', 'Last Name')}
-                {this.renderField('email', 'Email Address', {
-                  autoComplete: 'email',
+            {({ isSubmitting, renderField }) => (
+              <div>
+                {renderField('firstName', {
+                  margin: 'normal',
+                  fullWidth: true
+                })}
+                {renderField('lastName', {
+                  margin: 'normal',
+                  fullWidth: true
+                })}
+                {renderField('email', {
+                  margin: 'normal',
+                  fullWidth: true,
                   error: this.state.emailIsAlreadyRegisteredError,
                   helperText: this.state.emailIsAlreadyRegisteredError
                     ? 'It looks like this email address is already registered.'
-                    : '',
-                  type: 'email'
+                    : ''
                 })}
-                {this.renderField('password', 'Password', {
-                  autoComplete: 'current-password',
-                  type: 'password'
+                {renderField('password', {
+                  margin: 'normal',
+                  fullWidth: true
                 })}
 
                 <Button
@@ -129,9 +117,9 @@ class SignupForm extends React.Component {
                     We're sorry, an error has occurred. Please try again.
                   </Typography>
                 )}
-              </Form>
+              </div>
             )}
-          </Formik>
+          </Form>
         )}
       </Mutation>
     );

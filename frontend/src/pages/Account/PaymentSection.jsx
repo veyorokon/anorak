@@ -10,7 +10,7 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 
-import Field from '../../lib/Field';
+import FormField from '../../lib/FormField';
 
 const createOptions = () => {
   return {
@@ -103,8 +103,8 @@ class PaymentSection extends React.Component {
     console.log(data);
   };
 
-  renderField = (name, label, other = {}) => (
-    <Field label={label} name={name} {...other} />
+  renderField = (name, label, custom = {}) => (
+    <FormField label={label} name={name} fullWidth required {...custom} />
   );
 
   render() {

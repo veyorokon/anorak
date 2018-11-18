@@ -6,7 +6,7 @@ import { Elements, StripeProvider } from 'react-stripe-elements';
 
 import Navbar from '../../components/Navbar';
 import SquadList from '../../components/SquadList';
-import CreateForm from './CreateForm';
+import Form from './Form';
 
 const styles = theme => ({
   content: {
@@ -70,7 +70,7 @@ function Account(props) {
             </Typography>
             <div className={classes.forms}>
               <Elements>
-                <CreateForm />
+                <Form />
               </Elements>
             </div>
           </div>

@@ -5,11 +5,11 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { Form, Formik } from 'formik';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
-import Field from '../../lib/Field';
+import Form from '../../../lib/Form';
+import formConfig from './form';
 
 const CREATE_SQUAD = gql`
   mutation CreateSquad(
@@ -40,9 +40,7 @@ const styles = theme => ({
     padding: theme.spacing.unit * 2,
     [theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
       padding: theme.spacing.unit * 3
-    },
-    marginRight: 10,
-    flexBasis: '50%'
+    }
   },
   button: {
     marginTop: theme.spacing.unit * 3
@@ -52,11 +50,6 @@ const styles = theme => ({
   },
   topForm: {
     marginBottom: 24
-  },
-  stripeForm: {
-    paddingTop: 10,
-    paddingLeft: 5,
-    paddingRight: 5
   }
 });
 
@@ -75,10 +68,6 @@ class CreateForm extends React.Component {
     console.log(data);
   };
 
-  renderField = (name, label, other = {}) => (
-    <Field label={label} name={name} {...other} />
-  );
-
   render() {
     const { classes } = this.props;
     return (
@@ -92,46 +81,41 @@ class CreateForm extends React.Component {
 
         <Mutation mutation={CREATE_SQUAD}>
           {createSquad => (
-            <Formik
-              initialValues={{
-                description: '',
-                secret: '',
-                maxSize: '',
-                service: '',
-                costPrice: ''
-              }}
+            <Form
+              config={formConfig}
               onSubmit={async (values, { setSubmitting }) => {
                 await this.onSubmit(createSquad, values);
                 setSubmitting(false);
               }}
             >
-              {({ isSubmitting }) => (
-                <Form>
+              {({ isSubmitting, renderField }) => (
+                <div>
                   <Typography variant="subtitle1">Squad Form</Typography>
                   <Grid container spacing={24}>
                     <Grid item xs={12}>
-                      {this.renderField('service', 'Service Name', {
-                        // autoComplete: 'fname'
+                      {renderField('service', {
+                        fullWidth: true
                       })}
                     </Grid>
                     <Grid item xs={12}>
-                      {this.renderField('description', 'Description', {
-                        // autoComplete: 'billing address-line1'
+                      {renderField('description', {
+                        fullWidth: true
                       })}
                     </Grid>
                     <Grid item xs={12}>
-                      {this.renderField('secret', 'Secret', {
-                        // autoComplete: 'billing address-line2',
-                        // required: false
+                      {renderField('secret', {
+                        fullWidth: true
                       })}
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      {this.renderField('maxSize', 'Maximum Size', {
-                        // autoComplete: 'billing address-level2'
+                      {renderField('maxSize', {
+                        fullWidth: true
                       })}
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      {this.renderField('costPrice', 'Cost')}
+                      {renderField('costPrice', {
+                        fullWidth: true
+                      })}
                     </Grid>
                   </Grid>
 
@@ -144,9 +128,9 @@ class CreateForm extends React.Component {
                   >
                     Create
                   </Button>
-                </Form>
+                </div>
               )}
-            </Formik>
+            </Form>
           )}
         </Mutation>
       </Paper>

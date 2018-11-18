@@ -5,12 +5,12 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { Form, Formik } from 'formik';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 
-import Field from '../../lib/Field';
+import Form from '../../../lib/Form';
+import formConfig from './form';
 
 const createOptions = () => {
   return {
@@ -85,10 +85,6 @@ class BillingSection extends React.Component {
     console.log(data);
   };
 
-  renderField = (name, label, other = {}) => (
-    <Field label={label} name={name} {...other} />
-  );
-
   render() {
     const { classes } = this.props;
     return (
@@ -102,24 +98,15 @@ class BillingSection extends React.Component {
 
         <Mutation mutation={SET_STRIPE_CARD}>
           {setStripeCard => (
-            <Formik
-              initialValues={{
-                address1: '',
-                address2: '',
-                cardName: '',
-                city: '',
-                country: '',
-                firstName: '',
-                lastName: '',
-                state: ''
-              }}
+            <Form
+              config={formConfig}
               onSubmit={async (values, { setSubmitting }) => {
                 await this.onSubmit(setStripeCard, values);
                 setSubmitting(false);
               }}
             >
-              {({ isSubmitting }) => (
-                <Form>
+              {({ isSubmitting, renderField }) => (
+                <div>
                   <div className={classes.topForm}>
                     <Typography variant="h6">Credit card</Typography>
                     <div className={classes.stripeForm}>
@@ -130,39 +117,38 @@ class BillingSection extends React.Component {
                   <Typography variant="subtitle1">Address</Typography>
                   <Grid container spacing={24}>
                     <Grid item xs={12} sm={6}>
-                      {this.renderField('firstName', 'First name', {
-                        autoComplete: 'fname'
+                      {renderField('firstName', {
+                        fullWidth: true
                       })}
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      {this.renderField('lastName', 'Last name', {
-                        autoComplete: 'lname'
+                      {renderField('lastName', {
+                        fullWidth: true
                       })}
                     </Grid>
                     <Grid item xs={12}>
-                      {this.renderField('address1', 'Address 1', {
-                        autoComplete: 'billing address-line1'
+                      {renderField('address1', {
+                        fullWidth: true
                       })}
                     </Grid>
                     <Grid item xs={12}>
-                      {this.renderField('address2', 'Address 2', {
-                        autoComplete: 'billing address-line2',
-                        required: false
+                      {renderField('address2', {
+                        fullWidth: true
                       })}
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      {this.renderField('city', 'City', {
-                        autoComplete: 'billing address-level2'
+                      {renderField('city', {
+                        fullWidth: true
                       })}
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      {this.renderField('state', 'State')}
+                      {renderField('state', {
+                        fullWidth: true
+                      })}
                     </Grid>
                     {/* TODO: add proper country form */}
                     <Grid item xs={12}>
-                      {this.renderField('country', 'Country', {
-                        autoComplete: 'billing country'
-                      })}
+                      {renderField('country')}
                     </Grid>
                   </Grid>
 
@@ -175,9 +161,9 @@ class BillingSection extends React.Component {
                   >
                     Save
                   </Button>
-                </Form>
+                </div>
               )}
-            </Formik>
+            </Form>
           )}
         </Mutation>
       </Paper>

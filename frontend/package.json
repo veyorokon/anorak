@@ -10,6 +10,7 @@
     "graphql": "^14.0.2",
     "husky": "^1.1.2",
     "lint-staged": "^8.0.2",
+    "lodash": "^4.17.11",
     "prettier": "^1.14.3",
     "react": "^16.6.0",
     "react-apollo": "^2.2.4",
