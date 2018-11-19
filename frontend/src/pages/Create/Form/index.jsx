@@ -11,9 +11,7 @@ import { Mutation } from 'react-apollo';
 import Form from '../../../lib/Form';
 import formConfig from './form';
 
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
+import Joyride from 'react-joyride';
 
 const CREATE_SQUAD = gql`
   mutation CreateSquad(
@@ -54,31 +52,60 @@ const styles = theme => ({
   },
   topForm: {
     marginBottom: 24
-  },
-  root: {
-    width: '90%'
-  },
-  backButton: {
-    marginRight: theme.spacing.unit
-  },
-  instructions: {
-    marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit
   }
 });
 
-function getSteps() {
-  return [
-    'Tell us about your squad.',
-    'Squad configuration.',
-    'Confirm and complete!'
-  ];
-}
-
 class CreateForm extends React.Component {
   state = {
-    activeStep: 0
+    run: false,
+    steps: [
+      {
+        target: '.first-step',
+        content: 'This form allows you to create a squad!',
+        placement: 'top',
+        event: 'hover'
+      },
+      {
+        target: '.second-step',
+        content: 'Here you add the name of the service you want to share.',
+        placement: 'bottom'
+      },
+      {
+        target: '.third-step',
+        content:
+          'Then, tell us a bit about that service in one or two sentences. If you make this squad public, this is how other users can search for your squad so be descriptive.',
+        placement: 'bottom'
+      },
+      {
+        target: '.fourth-step',
+        content:
+          'Secrets are encrypted messages that only squad members can access.',
+        placement: 'bottom'
+      },
+      {
+        target: '.fourth-step',
+        content:
+          'If you make this squad public, make sure usernames and passwords are randomly generated and not credentials you use on other sites.',
+        placement: 'bottom'
+      },
+      {
+        target: '.fourth-step',
+        content:
+          'When a squad member leaves, you may want to renew/refresh/regenerate this information.',
+        placement: 'bottom'
+      },
+      {
+        target: '.fifth-step',
+        content:
+          'Lastly, set the maximum size of squad members you want and the price for your squad.',
+        placement: 'bottom'
+      }
+    ]
   };
+
+  componentDidMount() {
+    this.setState({ run: true });
+  }
 
   onSubmit = async (createSquad, values) => {
     const { data } = await createSquad({
@@ -94,104 +121,13 @@ class CreateForm extends React.Component {
     console.log(data);
   };
 
-  handleNext = () => {
-    this.setState(state => ({
-      activeStep: state.activeStep + 1
-    }));
+  callback = data => {
+    const { action, index, type } = data;
   };
-
-  handleBack = () => {
-    this.setState(state => ({
-      activeStep: state.activeStep - 1
-    }));
-  };
-
-  handleReset = () => {
-    this.setState({
-      activeStep: 0
-    });
-  };
-
-  getFirstSetpContent(renderField) {
-    return (
-      <div>
-        <Grid container spacing={24}>
-          <Grid item xs={12} sm={6}>
-            {renderField('service', {
-              fullWidth: true
-            })}
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography className={this.props.classes.instructions}>
-              A squad is a subscription where you can share exclusive content
-              with your squad members.
-            </Typography>
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            {renderField('description', {
-              fullWidth: true
-            })}
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography className={this.props.classes.instructions}>
-              Create a description e.g. 'Squad to share secret information for
-              ...'
-            </Typography>
-          </Grid>
-        </Grid>
-      </div>
-    );
-  }
-
-  getSecondSetpContent(renderField) {
-    return (
-      <div>
-        <Grid container spacing={24}>
-          <Grid item xs={12} sm={6}>
-            {renderField('secret', {
-              fullWidth: true
-            })}
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography className={this.props.classes.instructions}>
-              Secrets are encrypted information that is only visible to squad
-              members.
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            {renderField('maxSize', {
-              fullWidth: true
-            })}
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            {renderField('costPrice', {
-              fullWidth: true
-            })}
-          </Grid>
-        </Grid>
-      </div>
-    );
-  }
-
-  getStepContent(stepIndex, renderField) {
-    switch (stepIndex) {
-      case 0:
-        return this.getFirstSetpContent(renderField);
-      case 1:
-        return this.getSecondSetpContent(renderField);
-      case 2:
-        return '';
-      default:
-        return 'Uknown stepIndex';
-    }
-  }
 
   render() {
     const { classes } = this.props;
-    const steps = getSteps();
-    const { activeStep } = this.state;
-
+    const { steps, run } = this.state;
     return (
       <Paper className={classes.paper}>
         <Typography component="h2" variant="h5" gutterBottom>
@@ -200,6 +136,13 @@ class CreateForm extends React.Component {
         <Typography className={classes.subtitle} variant="subtitle1">
           Create your own squad.
         </Typography>
+
+        <Joyride
+          steps={steps}
+          run={run}
+          callback={this.callback}
+          continuous={true}
+        />
 
         <Mutation mutation={CREATE_SQUAD}>
           {createSquad => (
@@ -211,50 +154,45 @@ class CreateForm extends React.Component {
               }}
             >
               {({ isSubmitting, renderField }) => (
-                <div>
-                  {this.state.activeStep === steps.length ? (
-                    <div>
-                      <Typography className={classes.instructions}>
-                        All steps completed
-                      </Typography>
-                      <Button onClick={this.handleReset}>Reset</Button>
-                    </div>
-                  ) : (
-                    <div>
-                      <Typography variant="subtitle1">Squad Form</Typography>
-                      {this.getStepContent(activeStep, renderField)}
-                      <br />
-                      <br />
-                      <br />
-                      <Stepper activeStep={activeStep} alternativeLabel>
-                        {steps.map(label => {
-                          return (
-                            <Step key={label}>
-                              <StepLabel>{label}</StepLabel>
-                            </Step>
-                          );
-                        })}
-                      </Stepper>
-                      <div>
-                        <Button
-                          disabled={activeStep === 0}
-                          onClick={this.handleBack}
-                          className={classes.backButton}
-                        >
-                          Back
-                        </Button>
-                        <Button
-                          className={classes.button}
-                          color="primary"
-                          type="submit"
-                          variant="contained"
-                          onClick={this.handleNext}
-                        >
-                          {activeStep === steps.length - 1 ? 'Create' : 'Next'}
-                        </Button>
-                      </div>
-                    </div>
-                  )}
+                <div className="first-step">
+                  <Typography variant="subtitle1">Squad Form</Typography>
+                  <Grid container spacing={24}>
+                    <Grid item xs={12} className="second-step">
+                      {renderField('service', {
+                        fullWidth: true
+                      })}
+                    </Grid>
+                    <Grid item xs={12} className="third-step">
+                      {renderField('description', {
+                        fullWidth: true
+                      })}
+                    </Grid>
+                    <Grid item xs={12} className="fourth-step">
+                      {renderField('secret', {
+                        fullWidth: true
+                      })}
+                    </Grid>
+                    <Grid item xs={12} className="fifth-step" sm={6}>
+                      {renderField('maxSize', {
+                        fullWidth: true
+                      })}
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      {renderField('costPrice', {
+                        fullWidth: true
+                      })}
+                    </Grid>
+                  </Grid>
+
+                  <Button
+                    className={classes.button}
+                    color="primary"
+                    disabled={isSubmitting}
+                    type="submit"
+                    variant="outlined"
+                  >
+                    Create
+                  </Button>
                 </div>
               )}
             </Form>
