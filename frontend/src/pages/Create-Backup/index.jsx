@@ -43,7 +43,7 @@ const styles = theme => ({
   }
 });
 
-function Create(props) {
+function Account(props) {
   const { classes } = props;
   return (
     <StripeProvider apiKey="pk_test_rLuroFoR4XKOxb3FbmJqTqrh">
@@ -80,8 +80,8 @@ function Create(props) {
   );
 }
 
-Create.propTypes = {
+Account.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Create);
+export default withStyles(styles)(Account);
