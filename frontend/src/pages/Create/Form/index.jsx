@@ -98,9 +98,6 @@ class CreateForm extends React.Component {
     this.setState(state => ({
       activeStep: state.activeStep + 1
     }));
-    if (this.state.activeStep >= 3) {
-      this.onSubmit();
-    }
   };
 
   handleBack = () => {
@@ -115,85 +112,57 @@ class CreateForm extends React.Component {
     });
   };
 
-  getFirstSetpContent() {
+  getFirstSetpContent(renderField) {
     return (
-      <Mutation mutation={CREATE_SQUAD}>
-        {createSquad => (
-          <Form
-            config={formConfig}
-            onSubmit={async (values, { setSubmitting }) => {
-              await this.onSubmit(createSquad, values);
-              setSubmitting(false);
-            }}
-          >
-            {({ isSubmitting, renderField }) => (
-              <div>
-                <Typography variant="subtitle1">Squad Form</Typography>
-                <Grid container spacing={24}>
-                  <Grid item xs={12}>
-                    {renderField('service', {
-                      fullWidth: true
-                    })}
-                  </Grid>
-                  <Grid item xs={12}>
-                    {renderField('description', {
-                      fullWidth: true
-                    })}
-                  </Grid>
-                </Grid>
-              </div>
-            )}
-          </Form>
-        )}
-      </Mutation>
+      <div>
+        <Typography variant="subtitle1">Squad Form</Typography>
+        <Grid container spacing={24}>
+          <Grid item xs={12}>
+            {renderField('service', {
+              fullWidth: true
+            })}
+          </Grid>
+          <Grid item xs={12}>
+            {renderField('description', {
+              fullWidth: true
+            })}
+          </Grid>
+        </Grid>
+      </div>
     );
   }
 
-  getSecondSetpContent() {
+  getSecondSetpContent(renderField) {
     return (
-      <Mutation mutation={CREATE_SQUAD}>
-        {createSquad => (
-          <Form
-            config={formConfig}
-            onSubmit={async (values, { setSubmitting }) => {
-              await this.onSubmit(createSquad, values);
-              setSubmitting(false);
-            }}
-          >
-            {({ isSubmitting, renderField }) => (
-              <div>
-                <Typography variant="subtitle1">Squad Form</Typography>
-                <Grid container spacing={24}>
-                  <Grid item xs={12}>
-                    {renderField('secret', {
-                      fullWidth: true
-                    })}
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    {renderField('maxSize', {
-                      fullWidth: true
-                    })}
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    {renderField('costPrice', {
-                      fullWidth: true
-                    })}
-                  </Grid>
-                </Grid>
-              </div>
-            )}
-          </Form>
-        )}
-      </Mutation>
+      <div>
+        <Typography variant="subtitle1">Squad Form</Typography>
+        <Grid container spacing={24}>
+          <Grid item xs={12}>
+            {renderField('secret', {
+              fullWidth: true
+            })}
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            {renderField('maxSize', {
+              fullWidth: true
+            })}
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            {renderField('costPrice', {
+              fullWidth: true
+            })}
+          </Grid>
+        </Grid>
+      </div>
     );
   }
 
-  getStepContent(stepIndex) {
+  getStepContent(stepIndex, renderField) {
     switch (stepIndex) {
       case 0:
-        return this.getFirstSetpContent();
+        return this.getFirstSetpContent(renderField);
       case 1:
-        return this.getSecondSetpContent();
+        return this.getSecondSetpContent(renderField);
       case 2:
         return '';
       default:
@@ -215,47 +184,61 @@ class CreateForm extends React.Component {
           Create your own squad.
         </Typography>
 
-        <div>
-          {this.state.activeStep === steps.length ? (
-            <div>
-              <Typography className={classes.instructions}>
-                All steps completed
-              </Typography>
-              <Button onClick={this.handleReset}>Reset</Button>
-            </div>
-          ) : (
-            <div>
-              {this.getStepContent(activeStep)}
-              <Stepper activeStep={activeStep} alternativeLabel>
-                {steps.map(label => {
-                  return (
-                    <Step key={label}>
-                      <StepLabel>{label}</StepLabel>
-                    </Step>
-                  );
-                })}
-              </Stepper>
-              <div>
-                <Button
-                  disabled={activeStep === 0}
-                  onClick={this.handleBack}
-                  className={classes.backButton}
-                >
-                  Back
-                </Button>
-                <Button
-                  className={classes.button}
-                  color="primary"
-                  type="submit"
-                  variant="contained"
-                  onClick={this.handleNext}
-                >
-                  {activeStep === steps.length - 1 ? 'Create' : 'Next'}
-                </Button>
-              </div>
-            </div>
+        <Mutation mutation={CREATE_SQUAD}>
+          {createSquad => (
+            <Form
+              config={formConfig}
+              onSubmit={async (values, { setSubmitting }) => {
+                await this.onSubmit(createSquad, values);
+                setSubmitting(false);
+              }}
+            >
+              {({ isSubmitting, renderField }) => (
+                <div>
+                  {this.state.activeStep === steps.length ? (
+                    <div>
+                      <Typography className={classes.instructions}>
+                        All steps completed
+                      </Typography>
+                      <Button onClick={this.handleReset}>Reset</Button>
+                    </div>
+                  ) : (
+                    <div>
+                      {this.getStepContent(activeStep, renderField)}
+                      <Stepper activeStep={activeStep} alternativeLabel>
+                        {steps.map(label => {
+                          return (
+                            <Step key={label}>
+                              <StepLabel>{label}</StepLabel>
+                            </Step>
+                          );
+                        })}
+                      </Stepper>
+                      <div>
+                        <Button
+                          disabled={activeStep === 0}
+                          onClick={this.handleBack}
+                          className={classes.backButton}
+                        >
+                          Back
+                        </Button>
+                        <Button
+                          className={classes.button}
+                          color="primary"
+                          type="submit"
+                          variant="contained"
+                          onClick={this.handleNext}
+                        >
+                          {activeStep === steps.length - 1 ? 'Create' : 'Next'}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </Form>
           )}
-        </div>
+        </Mutation>
       </Paper>
     );
   }
