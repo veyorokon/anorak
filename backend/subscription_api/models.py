@@ -144,6 +144,8 @@ class SquadMember(models.Model):
             squad=squad,
             user=user
         )
+        self.squad.current_size += 1
+        self.squad.save()
         return super(SquadMember, self).save(*args, **kwargs)
         
     def create_stripe_subscription(self, squad, user):

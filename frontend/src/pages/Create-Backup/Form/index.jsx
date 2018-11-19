@@ -11,8 +11,6 @@ import { Mutation } from 'react-apollo';
 import Form from '../../../lib/Form';
 import formConfig from './form';
 
-import Joyride from 'react-joyride';
-
 const CREATE_SQUAD = gql`
   mutation CreateSquad(
     $token: String!
@@ -56,57 +54,6 @@ const styles = theme => ({
 });
 
 class CreateForm extends React.Component {
-  state = {
-    run: false,
-    steps: [
-      {
-        target: '.first-step',
-        content: 'This form allows you to create a squad!',
-        placement: 'top',
-        event: 'hover'
-      },
-      {
-        target: '.second-step',
-        content: 'Here you add the name of the service you want to share.',
-        placement: 'bottom'
-      },
-      {
-        target: '.third-step',
-        content:
-          'Then, tell us a bit about that service in one or two sentences. If you make this squad public, this is how other users can search for your squad so be descriptive.',
-        placement: 'bottom'
-      },
-      {
-        target: '.fourth-step',
-        content:
-          'Secrets are encrypted messages that only squad members can access.',
-        placement: 'bottom'
-      },
-      {
-        target: '.fourth-step',
-        content:
-          'If you make this squad public, make sure usernames and passwords are randomly generated and not credentials you use on other sites.',
-        placement: 'bottom'
-      },
-      {
-        target: '.fourth-step',
-        content:
-          'When a squad member leaves, you may want to renew/refresh/regenerate this information.',
-        placement: 'bottom'
-      },
-      {
-        target: '.fifth-step',
-        content:
-          'Lastly, set the maximum size of squad members you want and the price for your squad.',
-        placement: 'bottom'
-      }
-    ]
-  };
-
-  componentDidMount() {
-    this.setState({ run: true });
-  }
-
   onSubmit = async (createSquad, values) => {
     const { data } = await createSquad({
       variables: {
@@ -121,13 +68,8 @@ class CreateForm extends React.Component {
     console.log(data);
   };
 
-  callback = data => {
-    const { action, index, type } = data;
-  };
-
   render() {
     const { classes } = this.props;
-    const { steps, run } = this.state;
     return (
       <Paper className={classes.paper}>
         <Typography component="h2" variant="h5" gutterBottom>
@@ -136,13 +78,6 @@ class CreateForm extends React.Component {
         <Typography className={classes.subtitle} variant="subtitle1">
           Create your own squad.
         </Typography>
-
-        <Joyride
-          steps={steps}
-          run={run}
-          callback={this.callback}
-          continuous={true}
-        />
 
         <Mutation mutation={CREATE_SQUAD}>
           {createSquad => (
@@ -154,25 +89,25 @@ class CreateForm extends React.Component {
               }}
             >
               {({ isSubmitting, renderField }) => (
-                <div className="first-step">
+                <div>
                   <Typography variant="subtitle1">Squad Form</Typography>
                   <Grid container spacing={24}>
-                    <Grid item xs={12} className="second-step">
+                    <Grid item xs={12}>
                       {renderField('service', {
                         fullWidth: true
                       })}
                     </Grid>
-                    <Grid item xs={12} className="third-step">
+                    <Grid item xs={12}>
                       {renderField('description', {
                         fullWidth: true
                       })}
                     </Grid>
-                    <Grid item xs={12} className="fourth-step">
+                    <Grid item xs={12}>
                       {renderField('secret', {
                         fullWidth: true
                       })}
                     </Grid>
-                    <Grid item xs={12} className="fifth-step" sm={6}>
+                    <Grid item xs={12} sm={6}>
                       {renderField('maxSize', {
                         fullWidth: true
                       })}

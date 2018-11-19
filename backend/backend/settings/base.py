@@ -34,13 +34,6 @@ def environ_setting(name, default=None):
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-#Phoone verification - Twilio
-TWILIO_ACCOUNT_SID = 'ACaf89a225145d292dfb5ad9ec6e8ab10e'
-TWILIO_AUTH_TOKEN = 'de38eed12958a9d20b3e0a058ee7b5ef'
-TWILIO_NUMBER = '+18596948148'
-TWILIO_DEFAULT_CALLERID = 'SquadUp'
-
-
 #Facebook
 FACEBOOK_CLIENT_ID = '1974089579550206'
 FACEBOOK_CLIENT_SECRET = '8117c08eed5c3ec4fe3142ee9d704dc1'
