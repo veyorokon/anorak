@@ -70,7 +70,7 @@ const styles = theme => ({
 function getSteps() {
   return [
     'Tell us about your squad.',
-    'Squadmember permissions.',
+    'Squad configuration.',
     'Confirm and complete!'
   ];
 }
@@ -115,17 +115,29 @@ class CreateForm extends React.Component {
   getFirstSetpContent(renderField) {
     return (
       <div>
-        <Typography variant="subtitle1">Squad Form</Typography>
         <Grid container spacing={24}>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6}>
             {renderField('service', {
               fullWidth: true
             })}
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6}>
+            <Typography className={this.props.classes.instructions}>
+              A squad is a subscription where you can share exclusive content
+              with your squad members.
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
             {renderField('description', {
               fullWidth: true
             })}
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography className={this.props.classes.instructions}>
+              Create a description e.g. 'Squad to share secret information for
+              ...'
+            </Typography>
           </Grid>
         </Grid>
       </div>
@@ -135,12 +147,17 @@ class CreateForm extends React.Component {
   getSecondSetpContent(renderField) {
     return (
       <div>
-        <Typography variant="subtitle1">Squad Form</Typography>
         <Grid container spacing={24}>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6}>
             {renderField('secret', {
               fullWidth: true
             })}
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography className={this.props.classes.instructions}>
+              Secrets are encrypted information that is only visible to squad
+              members.
+            </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
             {renderField('maxSize', {
@@ -204,7 +221,11 @@ class CreateForm extends React.Component {
                     </div>
                   ) : (
                     <div>
+                      <Typography variant="subtitle1">Squad Form</Typography>
                       {this.getStepContent(activeStep, renderField)}
+                      <br />
+                      <br />
+                      <br />
                       <Stepper activeStep={activeStep} alternativeLabel>
                         {steps.map(label => {
                           return (
