@@ -7,6 +7,14 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
 import SquadCardModal from './SquadCardModal';
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
+
+const GET_SECRET = gql`
+  query GetSecret($token: String!, $membershipID: Int!) {
+    getSecret(token: $token, membershipID: $membershipID)
+  }
+`;
 
 const styles = {
   cost: {
@@ -14,24 +22,38 @@ const styles = {
   }
 };
 
-function SquadCard(props) {
-  const { classes } = props;
-  return (
-    <Card>
-      <CardContent>
-        <Typography variant="h5" component="h2">
-          {props.service}
-        </Typography>
-        <Typography className={classes.cost} color="textSecondary">
-          ${(props.price / 100).toFixed(2)} / month
-        </Typography>
-        <Typography component="p">{props.description}</Typography>
-      </CardContent>
-      <CardActions>
-        <SquadCardModal />
-      </CardActions>
-    </Card>
-  );
+class SquadCard extends React.Component {
+  getSecret = membershipID => {
+    return (
+      // <Query
+      //   query={GET_SECRET}
+      //   variables={{ token: window.localStorage.getItem('sessionToken'), membershipID: membershipID}}
+      // >
+      <SquadCardModal
+        title={this.props.service}
+        membershipID={this.props.membershipID}
+        secret={'dfs'}
+      />
+      // </Query>
+    );
+  };
+
+  render() {
+    return (
+      <Card>
+        <CardContent>
+          <Typography variant="h5" component="h2">
+            {this.props.service}
+          </Typography>
+          <Typography className={this.props.classes.cost} color="textSecondary">
+            ${(this.props.price / 100).toFixed(2)} / month
+          </Typography>
+          <Typography component="p">{this.props.description}</Typography>
+        </CardContent>
+        <CardActions>{this.getSecret(this.props.membershipID)}</CardActions>
+      </Card>
+    );
+  }
 }
 
 SquadCard.propTypes = {

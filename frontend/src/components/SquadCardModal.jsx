@@ -23,7 +23,6 @@ class SquadCardModal extends React.Component {
 
   render() {
     const { fullScreen } = this.props;
-
     return (
       <div>
         <Button style={{ color: '#138A36' }} onClick={this.handleClickOpen}>
@@ -36,19 +35,16 @@ class SquadCardModal extends React.Component {
           aria-labelledby="responsive-dialog-title"
         >
           <DialogTitle id="responsive-dialog-title">
-            {'Squad Title Here'}
+            {this.props.title}
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Here is something about this squad
+              Decrypted: {this.props.secret}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
-              Disagree
-            </Button>
-            <Button onClick={this.handleClose} color="primary" autoFocus>
-              Agree
+              close
             </Button>
           </DialogActions>
         </Dialog>
