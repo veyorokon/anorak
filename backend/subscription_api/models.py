@@ -67,7 +67,7 @@ class Squad(models.Model):
     #The encrypted secret. 
     secret = EncryptedCharField(max_length=128, null=True)
     #Squad description
-    service = models.CharField(max_length=12, null=True)
+    service = models.CharField(max_length=16, null=True)
     #The base price charged to SquadUp
     cost_price = models.IntegerField(null=False)
     #Squad maximum size
@@ -101,9 +101,17 @@ class Squad(models.Model):
         
 # Frequency of subscription billing
 class SquadMemberStatus(enum.Enum):
-    OWNER = 0
+    KICKED = 0
     PENDING = 1
-    SUBSCRIBED = 2
+    UNSUBSCRIBED = 2
+    INVITED = 3
+    SUBSCRIBED = 4
+    OWNER = 5
+    
+    def validate(self, status):
+        if(status >= self.SUBSCRIBED):
+            return True
+        return False
 
 # Contains a stripe subscription
 class SquadMember(models.Model):
