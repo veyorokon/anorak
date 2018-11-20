@@ -1,7 +1,7 @@
 import graphene 
 from . types import * 
 from subscription_api.models import Squad
-from django.contrib.postgres.search import SearchVector
+from django.db.models import Q
 
 
 class Query(graphene.ObjectType):
@@ -9,5 +9,5 @@ class Query(graphene.ObjectType):
     
     
     def resolve_squad_search(self, info, text, **kwargs):
-        return Squad.objects.filter(description__icontains=text)
+        return Squad.objects.filter(Q(service__icontains=text) | Q(description__icontains=text))
         
