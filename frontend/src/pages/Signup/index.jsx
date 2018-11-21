@@ -8,6 +8,21 @@ import FacebookLogin from './FacebookLogin';
 import Header from './Header';
 import SignupForm from './SignupForm';
 
+import track from 'react-tracking';
+
+import { Mutation } from 'react-apollo';
+
+import gql from 'graphql-tag';
+const TRIGGER_EVENT = gql`
+  mutation TriggerEvent($event: String!, $page: String!, $module: String!) {
+    triggerEvent(event: $event, page: $page, module: $module) {
+      trigger {
+        id
+      }
+    }
+  }
+`;
+
 const styles = theme => ({
   layout: {
     width: 'auto',
@@ -32,24 +47,64 @@ const styles = theme => ({
   }
 });
 
-function Signup(props) {
-  const { classes } = props;
-  return (
-    <main className={classes.layout}>
-      <Paper className={classes.paper}>
-        <Header />
-        <FacebookLogin />
-        <Typography variant="overline" className={classes.overline}>
-          Or
-        </Typography>
-        <SignupForm />
-      </Paper>
-    </main>
-  );
+class TriggerEvent extends React.Component {
+  componentDidMount() {
+    const data = this.props.data;
+    this.props.event({
+      variables: {
+        event: data.event,
+        page: data.page,
+        module: data.module
+      }
+    });
+  }
+  render() {
+    return null;
+  }
+}
+
+class Signup extends React.Component {
+  render() {
+    return (
+      <Mutation mutation={TRIGGER_EVENT}>
+        {triggerEvent => {
+          return (
+            <React.Fragment>
+              <TriggerEvent
+                data={this.props.tracking.getTrackingData()}
+                event={triggerEvent}
+              />
+              <main className={this.props.classes.layout}>
+                <Paper className={this.props.classes.paper}>
+                  <Header />
+                  <FacebookLogin />
+
+                  <Typography
+                    variant="overline"
+                    className={this.props.classes.overline}
+                  >
+                    Or
+                  </Typography>
+                  <SignupForm />
+                </Paper>
+              </main>
+            </React.Fragment>
+          );
+        }}
+      </Mutation>
+    );
+  }
 }
 
 Signup.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Signup);
+export default track(
+  {
+    page: 'SignUp Page',
+    event: 'View',
+    module: 'SignUp Page'
+  },
+  { dispatch: data => window.myCustomDataLayer.push(data) }
+)(withStyles(styles)(Signup));
