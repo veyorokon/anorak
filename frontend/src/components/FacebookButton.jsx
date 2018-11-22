@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
@@ -27,7 +28,7 @@ const styles = theme => ({
   }
 });
 
-class FacebookLogin extends React.Component {
+class FacebookButton extends React.Component {
   handleResponse = (data, facebookUser) => {
     facebookUser({
       variables: {
@@ -56,7 +57,7 @@ class FacebookLogin extends React.Component {
                 onCompleted={data => this.handleResponse(data, facebookUser)}
                 onError={this.handleError}
               >
-                <span>Signup via Facebook</span>
+                <span>{this.props.text}</span>
               </LoginButton>
             </FacebookProvider>
           );
@@ -66,4 +67,8 @@ class FacebookLogin extends React.Component {
   }
 }
 
-export default withStyles(styles)(withRouter(FacebookLogin));
+FacebookButton.propTypes = {
+  text: PropTypes.string.isRequired
+};
+
+export default withStyles(styles)(withRouter(FacebookButton));
