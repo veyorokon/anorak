@@ -8,6 +8,7 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
   button: {
@@ -76,6 +77,8 @@ function Navbar(props) {
             Up
           </Typography>
           <Button
+            component={Link}
+            to="/create"
             variant="outlined"
             color="secondary"
             size="small"
@@ -106,7 +109,12 @@ function Navbar(props) {
           />
         </div>
 
-        <Button color="secondary" className={classes.button}>
+        <Button
+          component={Link}
+          to="/account"
+          color="secondary"
+          className={classes.button}
+        >
           Account
         </Button>
       </Toolbar>
