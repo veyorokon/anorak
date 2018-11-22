@@ -9,7 +9,7 @@ import Routes from './Routes';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#2e2836' // OR - 231C07
+      main: '#2e2836'
     },
     secondary: {
       main: '#f8be00'
@@ -32,7 +32,7 @@ export default function App() {
     <ApolloProvider client={client}>
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
-        <Routes fb={window.FB} />
+        <Routes />
       </MuiThemeProvider>
     </ApolloProvider>
   );

@@ -38,7 +38,7 @@ function Layout(props) {
   const { children, classes, rightTitle } = props;
   return (
     <div>
-      <Navbar search={<div>test</div>} />
+      <Navbar />
       <div className={classes.content}>
         <div className={classes.left}>
           <Typography className={classes.leftTitle} align="center" variant="h6">
@@ -46,6 +46,7 @@ function Layout(props) {
           </Typography>
           <SquadList />
         </div>
+
         <div className={classes.right}>
           <Typography className={classes.rightTitle} align="left" variant="h6">
             {rightTitle}
