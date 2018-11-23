@@ -6,10 +6,12 @@ export default function Routes() {
   return (
     <Router>
       <div>
+        <Route path="/" exact component={Pages.Dashboard} />
         <Route path="/account" component={Pages.Account} />
-        <Route path="/dashboard" exact component={Pages.Dashboard} />
-        <Route path="/signup" component={Pages.Signup} />
         <Route path="/create" component={Pages.Create} />
+        <Route path="/dashboard" component={Pages.Dashboard} />
+        <Route path="/login" component={Pages.Login} />
+        <Route path="/signup" component={Pages.Signup} />
       </div>
     </Router>
   );

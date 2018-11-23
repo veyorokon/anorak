@@ -5,13 +5,36 @@ import mapValues from 'lodash/mapValues';
 
 import FormField from './FormField';
 
+/**
+ * Wraps formik's Form to handle a form config object. A form config object is
+ * structured in a way where the keys act as the name of the field and the values
+ * are objects that store common field information like label and input values.
+ *
+ * Configuring the object in this way allows this component to easily set initialValues
+ * and render a field.
+ */
 export default class From extends React.Component {
   static propTypes = {
     children: PropTypes.func.isRequired,
-    config: PropTypes.object.isRequired,
+    config: PropTypes.objectOf(
+      PropTypes.shape({
+        initialValue: PropTypes.any.isRequired,
+        label: PropTypes.string,
+        input: PropTypes.shape({
+          autoComplete: PropTypes.string,
+          required: PropTypes.bool,
+          type: PropTypes.string
+        })
+      })
+    ).isRequired,
     onSubmit: PropTypes.func.isRequired
   };
 
+  /**
+   * @param  {string} name   a field name (a key in the config object prop)
+   * @param  {object} custom overrides defaults if needed
+   * @return {FormField}
+   */
   renderField = (name, custom) => {
     const fieldConfig = this.props.config[name];
     if (!fieldConfig) {

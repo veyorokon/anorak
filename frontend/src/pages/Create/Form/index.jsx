@@ -122,7 +122,7 @@ class CreateForm extends React.Component {
   };
 
   callback = data => {
-    const { action, index, type } = data;
+    // const { action, index, type } = data;
   };
 
   render() {

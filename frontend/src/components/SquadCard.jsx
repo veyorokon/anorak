@@ -7,14 +7,14 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
 import SquadCardModal from './SquadCardModal';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-
-const GET_SECRET = gql`
-  query GetSecret($token: String!, $membershipID: Int!) {
-    getSecret(token: $token, membershipID: $membershipID)
-  }
-`;
+// import gql from 'graphql-tag';
+// import { Query } from 'react-apollo';
+//
+// const GET_SECRET = gql`
+//   query GetSecret($token: String!, $membershipID: Int!) {
+//     getSecret(token: $token, membershipID: $membershipID)
+//   }
+// `;
 
 const styles = {
   cost: {

@@ -4,9 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-import FacebookLogin from './FacebookLogin';
+import FacebookButton from '../../components/FacebookButton';
+import SignupForm from './Form';
 import Header from './Header';
-import SignupForm from './SignupForm';
 
 import track from 'react-tracking';
 
@@ -63,37 +63,32 @@ class TriggerEvent extends React.Component {
   }
 }
 
-class Signup extends React.Component {
-  render() {
-    return (
-      <Mutation mutation={TRIGGER_EVENT}>
-        {triggerEvent => {
-          return (
-            <React.Fragment>
-              <TriggerEvent
-                data={this.props.tracking.getTrackingData()}
-                event={triggerEvent}
-              />
-              <main className={this.props.classes.layout}>
-                <Paper className={this.props.classes.paper}>
-                  <Header />
-                  <FacebookLogin />
-
-                  <Typography
-                    variant="overline"
-                    className={this.props.classes.overline}
-                  >
-                    Or
-                  </Typography>
-                  <SignupForm />
-                </Paper>
-              </main>
-            </React.Fragment>
-          );
-        }}
-      </Mutation>
-    );
-  }
+function Signup(props) {
+  const { classes, tracking } = props;
+  return (
+    <Mutation mutation={TRIGGER_EVENT}>
+      {triggerEvent => {
+        return (
+          <React.Fragment>
+            <TriggerEvent
+              data={tracking.getTrackingData()}
+              event={triggerEvent}
+            />
+            <main className={classes.layout}>
+              <Paper className={classes.paper}>
+                <Header />
+                <FacebookButton text="Signup via Facebook" />
+                <Typography variant="overline" className={classes.overline}>
+                  Or
+                </Typography>
+                <SignupForm />
+              </Paper>
+            </main>
+          </React.Fragment>
+        );
+      }}
+    </Mutation>
+  );
 }
 
 Signup.propTypes = {
