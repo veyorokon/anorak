@@ -29,8 +29,7 @@ const styles = theme => ({
   },
   rightTitle: {
     marginTop: 32,
-    marginBottom: 6,
-    marginLeft: 22
+    marginBottom: 6
   }
 });
 
@@ -42,7 +41,7 @@ function Layout(props) {
       <div className={classes.content}>
         <div className={classes.left}>
           <Typography className={classes.leftTitle} align="center" variant="h6">
-            Active Squads
+            My Squads
           </Typography>
           <SquadList />
         </div>
