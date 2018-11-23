@@ -152,6 +152,23 @@ class PreferredPaymentMethod(graphene.Mutation):
             return PreferredPaymentMethod(user=user)
         except:
           raise ValueError("User payment method could not be updated.")
+          
+
+class LoginUser(graphene.Mutation):
+    
+    class Arguments:
+        email = graphene.String(required=True)
+        password = graphene.String()
+    
+    token =  graphene.String()
+    
+    def mutate(self, info, email, password):
+        user = User.objects.get(email=email)
+        if user.check_password(password):
+            token = user.json_web_token
+            return LoginUser(token=token)
+        else:
+            raise ValueError("User could not be logged in.")
 
 
 class Mutations(graphene.ObjectType):
@@ -161,4 +178,5 @@ class Mutations(graphene.ObjectType):
     shipping_address = SetShippingAddress.Field()
     set_stripe_card = StripeCard.Field()
     preferred_payment_method = PreferredPaymentMethod.Field()
+    login_user = LoginUser.Field()
     
