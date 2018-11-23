@@ -100,11 +100,8 @@ Signup.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default track(
-  {
-    page: 'SignUp Page',
-    event: 'View',
-    module: 'SignUp Page'
-  },
-  { dispatch: data => window.myCustomDataLayer.push(data) }
-)(withStyles(styles)(Signup));
+export default track({
+  page: 'SignUp Page',
+  event: 'View',
+  module: 'SignUp Page'
+})(withStyles(styles)(Signup));
