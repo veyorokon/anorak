@@ -7,14 +7,14 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
 import SquadCardModal from './SquadCardModal';
-// import gql from 'graphql-tag';
-// import { Query } from 'react-apollo';
-//
-// const GET_SECRET = gql`
-//   query GetSecret($token: String!, $membershipID: Int!) {
-//     getSecret(token: $token, membershipID: $membershipID)
-//   }
-// `;
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
+
+const GET_SECRET = gql`
+  query GetSecret($token: String!, $membershipID: Int!) {
+    getSecret(token: $token, membershipID: $membershipID)
+  }
+`;
 
 const styles = {
   cost: {
@@ -25,16 +25,21 @@ const styles = {
 class SquadCard extends React.Component {
   getSecret = membershipID => {
     return (
-      // <Query
-      //   query={GET_SECRET}
-      //   variables={{ token: window.localStorage.getItem('sessionToken'), membershipID: membershipID}}
-      // >
-      <SquadCardModal
-        title={this.props.service}
-        membershipID={this.props.membershipID}
-        secret={'dfs'}
-      />
-      // </Query>
+      <Query
+        query={GET_SECRET}
+        variables={{
+          token: window.localStorage.getItem('sessionToken'),
+          membershipID
+        }}
+      >
+        {({ error, data, loading }) => (
+          <SquadCardModal
+            title={this.props.service}
+            membershipID={this.props.membershipID}
+            secret={!(error || loading) ? data.getSecret : 'unknown'}
+          />
+        )}
+      </Query>
     );
   };
 
