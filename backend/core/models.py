@@ -83,8 +83,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     facebook_id = models.CharField(_('facebook id'), max_length=30, blank=True, editable=False)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, null=True, blank=True)
-    address_billing = models.OneToOneField(BillingAddress, null=True, on_delete=models.SET_NULL, related_name='user')
-    address_shipping = models.OneToOneField(ShippingAddress, null=True, on_delete=models.SET_NULL, related_name='user')
+    address_billing = models.OneToOneField(BillingAddress, null=True, on_delete=models.SET_NULL, related_name='user', blank=True)
+    address_shipping = models.OneToOneField(ShippingAddress, null=True, on_delete=models.SET_NULL, related_name='user', blank=True)
     date_joined = models.DateTimeField(_('date joined'), 
         editable=True, auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)

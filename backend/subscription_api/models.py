@@ -102,8 +102,8 @@ class Squad(models.Model):
 # Frequency of subscription billing
 class SquadMemberStatus(enum.Enum):
     KICKED = 0
-    PENDING = 1
-    UNSUBSCRIBED = 2
+    UNSUBSCRIBED = 1
+    PENDING = 2
     INVITED = 3
     SUBSCRIBED = 4
     OWNER = 5
@@ -128,6 +128,14 @@ class SquadMember(models.Model):
     date_joined = models.DateTimeField(editable=False)
     #Date that the user left the subscription
     date_left = models.DateTimeField(null=True, blank=True, editable=True)
+    
+    def save(self, *args, **kwargs):
+        ''' 
+        On save, update timestamps 
+        '''
+        if not self.id:
+            self.date_joined = timezone.now()
+        return super(SquadMember, self).save(*args, **kwargs)
     
     
     def create_squad_owner_membership(self, squad, *args, **kwargs):
