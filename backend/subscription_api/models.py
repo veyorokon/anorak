@@ -31,13 +31,12 @@ class StripePlan(models.Model):
     #Any taxes associated with the cost of the service
     tax_rate = models.FloatField(default=0)
     
-    def create_stripe_plan(self, name, cost_price, *args, **kwargs):
+    def create_stripe_plan(self, cost_price, *args, **kwargs):
         """
         Creates a stripe pricing plan attached to global squadup product
         """
         if not self.id:
             stripe_plan_id = stripe.Plan.create(
-                id=name,
                 amount=cost_price,
                 interval="month",
                 product=settings.STRIPE_SQUADUP_PRODUCT,
@@ -48,14 +47,20 @@ class StripePlan(models.Model):
             return super(StripePlan, self).save(*args, **kwargs)
         else:
             raise ValueError('Stripe plan could not be created')
-                    
+    
+    def get_stripe_plan(self):
+        return stripe.Plan.retrieve(self.stripe_plan_id)
             
     def delete_plan(self):
         """
         Deletes the pricing plan on Stripe's database
         """
-        plan = stripe.Plan.retrieve(self.stripe_plan_id)
+        plan = self.get_stripe_plan()
         plan.delete()
+        
+    def update_stripe_plan(self):
+        plan = self.get_stripe_plan()
+        #plan
 
 
 # Contains a Stripe product. 
@@ -85,8 +90,7 @@ class Squad(models.Model):
     
     @property
     def squad_service_id(self):
-        squadService = self.service.replace(' ', '_')
-        return squadService+'_'+str(self.id)
+        return self.stripe_plan.stripe_plan_id
         
     
     def save(self, *args, **kwargs):
@@ -118,7 +122,7 @@ class SquadMember(models.Model):
     #User who owns this subscription
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="squad_memberships")
     #User who owns this subscription
-    squad = models.ForeignKey(Squad, on_delete=models.CASCADE, null=True)
+    squad = models.ForeignKey(Squad, on_delete=models.CASCADE, null=True, related_name="members")
     #The frequency of billing
     status = enum.EnumField(SquadMemberStatus, default=SquadMemberStatus.PENDING)
     #The stripe subscription id
@@ -150,8 +154,12 @@ class SquadMember(models.Model):
         
     def create_basic_squad_membership(self, squad, user, *args, **kwargs):
         """
-        Creates a special membership for squad owners
+        Creates a membership for new squad members
         """
+        if self.status == SquadMemberStatus.SUBSCRIBED or self.status == SquadMemberStatus.OWNER:
+            return ValueError("Active membership already exists! Cancel membership before creating a new one.")
+        if self.squad != None and self.squad != squad:
+            raise ValueError("Cannot change squad. Create a new SquadMember instead.")
         self.status = SquadMemberStatus.SUBSCRIBED
         self.user = user
         self.squad = squad
@@ -175,28 +183,20 @@ class SquadMember(models.Model):
         )
         self.stripe_subscription_id = stripe_subscription.id
         
+    def get_stripe_subscription(self):
+        return stripe.Subscription.retrieve(
+            self.stripe_subscription_id
+        )
         
-    @property
-    def service(self):
-        return self.squad.service    
+    def cancel_stripe_subscription(self):
+        subscription = self.get_stripe_subscription()
+        subscription.delete()
+        self.squad.current_size -= 1
+        self.squad.save()
+        self.stripe_subscription_id = None
+        self.status = SquadMemberStatus.UNSUBSCRIBED
+        self.save()
         
-    @property
-    def price(self):
-        return float(self.squad.cost_price)/100
-        
-    @property
-    def plan_name(self):
-        squadService = self.squad.service.replace(' ', '_')
-        return squadService+'_'+str(self.squad.id)  
-        
-    @property
-    def current_size(self):
-        return self.squad.current_size
-        
-    @property
-    def maximum_size(self):
-        return self.squad.maximum_size
-
 
 #################################################
 #############    MODEL SIGNALS   ################
@@ -214,9 +214,7 @@ def create_squad(sender, instance=None, created=False, **kwargs):
             squadMember = SquadMember()
             squadMember.create_squad_owner_membership(instance)
             stripe_plan = StripePlan()
-            squadService = instance.service.replace(' ', '_')+'_'+str(instance.id)
             stripe_plan.create_stripe_plan(
-                name=squadService,
                 cost_price=instance.cost_price
             )
             instance.stripe_plan = stripe_plan

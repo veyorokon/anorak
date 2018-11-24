@@ -12,6 +12,10 @@ def set_members_to_pending(squad):
     squadMembers = SquadMember.objects.filter(squad=squad).filter(status=SquadMemberStatus.SUBSCRIBED)
     for member in squadMembers:
         member.status=SquadMemberStatus.PENDING
+        try:
+            member.cancel_stripe_subscription()
+        except:
+            pass
         member.save()
 
 
@@ -43,11 +47,11 @@ class CreateSquad(graphene.Mutation):
             is_public=isPublic
         )
         
-        try:
-            squad.save()
-            return CreateSquad(squad=squad)
-        except:
-           raise ValueError("Squad not created")
+        #try:
+        squad.save()
+        return CreateSquad(squad=squad)
+        # except:
+        #    raise ValueError("Squad not created")
            
            
 class UpdateSquad(graphene.Mutation):
@@ -55,12 +59,12 @@ class UpdateSquad(graphene.Mutation):
     class Arguments:
         token = graphene.String(required=True)
         squadID = graphene.Int(required=True)
-        service = graphene.String(required=False)
+        #service = graphene.String(required=False)
         description = graphene.String(required=False)
         secret = graphene.String(required=False)
         maxSize = graphene.Int(required=False)
         isPublic = graphene.Boolean(required=False)
-        costPrice = graphene.Int(required=False)
+        #costPrice = graphene.Int(required=False)
     
     squad =  graphene.Field(RestrictedSquadType)
     
@@ -75,9 +79,9 @@ class UpdateSquad(graphene.Mutation):
         values = {convert(key): val for key, val in kwargs.items()}
         try:
             for key, val in values.items():
-                if key == "cost_price":
-                    val *= 100
-                    set_members_to_pending(squad)
+                # if key == "cost_price":
+                #     val *= 100
+                #     set_members_to_pending(squad)
                     
                 setattr(squad, key, val)
             squad.save()
