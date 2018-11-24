@@ -156,6 +156,16 @@ class SquadInvite(graphene.Mutation):
         except:
             pass
             
+        try:
+            activeMembership = SquadMember.objects.filter(
+                squad = squad,
+                user = invitedUser,
+                status = SquadMemberStatus.BANNED
+            )[0]
+            return ValueError("User has an active BAN!")
+        except:
+            pass
+            
         
         try:
             squadMembership = SquadMember.objects.filter(

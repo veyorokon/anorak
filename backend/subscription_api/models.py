@@ -112,13 +112,14 @@ class Squad(models.Model):
         
 # Frequency of subscription billing
 class SquadMemberStatus(enum.Enum):
-    KICKED = 0
-    UNSUBSCRIBED = 1
-    TERMINATED = 2
-    PENDING = 3
-    INVITED = 4
-    SUBSCRIBED = 5
-    OWNER = 6
+    BANNED = 0
+    KICKED = 1
+    UNSUBSCRIBED = 2
+    TERMINATED = 3
+    PENDING = 4
+    INVITED = 5
+    SUBSCRIBED = 6
+    OWNER = 7
     
     def validate(self, status):
         if(status >= self.SUBSCRIBED):
