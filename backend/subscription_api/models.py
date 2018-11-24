@@ -114,12 +114,13 @@ class Squad(models.Model):
 class SquadMemberStatus(enum.Enum):
     BANNED = 0
     KICKED = 1
-    UNSUBSCRIBED = 2
-    TERMINATED = 3
-    PENDING = 4
-    INVITED = 5
-    SUBSCRIBED = 6
-    OWNER = 7
+    REJECTED = 2
+    UNSUBSCRIBED = 3
+    TERMINATED = 4
+    PENDING = 5
+    INVITED = 6
+    SUBSCRIBED = 7
+    OWNER = 8
     
     def validate(self, status):
         if(status >= self.SUBSCRIBED):
@@ -161,6 +162,7 @@ class SquadMember(models.Model):
         self.date_joined = timezone.now()
         return super(SquadMember, self).save(*args, **kwargs)
         
+        
     def create_basic_squad_membership(self, squad, user, *args, **kwargs):
         """
         Creates a membership for new squad members
@@ -199,14 +201,25 @@ class SquadMember(models.Model):
         self.date_left = None
         return super(SquadMember, self).save(*args, **kwargs)
         
-    def confirm_invite(self):
-        self.create_stripe_subscription(
-            squad= self.squad,
-            user= self.user
-        )
-        self.squad.current_size += 1
-        self.squad.save()
-        return super(SquadMember, self).save(*args, **kwargs)
+        
+    def accept_invite(self, *args, **kwargs):
+        if(self.status == SquadMemberStatus.INVITED):
+            self.create_stripe_subscription(
+                squad= self.squad,
+                user= self.user
+            )
+            self.squad.current_size += 1
+            self.squad.save()
+            return super(SquadMember, self).save(*args, **kwargs)
+        return super(SquadMember, self)
+        
+        
+    def reject_invite(self, *args, **kwargs):
+        if(self.status == SquadMemberStatus.INVITED):
+            self.status = SquadMemberStatus.REJECTED
+            return super(SquadMember, self).save(*args, **kwargs)
+        return super(SquadMember, self)
+        
         
     def create_stripe_subscription(self, squad, user):
         stripe_subscription = stripe.Subscription.create(
@@ -217,12 +230,15 @@ class SquadMember(models.Model):
                 }
             ]
         )
+        self.status = SquadMemberStatus.SUBSCRIBED
         self.stripe_subscription_id = stripe_subscription.id
+        
         
     def get_stripe_subscription(self):
         return stripe.Subscription.retrieve(
             self.stripe_subscription_id
         )
+        
         
     def deactivate_membership(self, wasTerminated=False):
         subscription = self.get_stripe_subscription()
@@ -236,7 +252,7 @@ class SquadMember(models.Model):
         else:
             self.status = SquadMemberStatus.UNSUBSCRIBED
         self.date_left = timezone.now()
-        self.save()
+        return super(SquadMember, self).save(*args, **kwargs)
         
 
 #################################################

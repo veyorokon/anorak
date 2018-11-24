@@ -59,12 +59,10 @@ class UpdateSquad(graphene.Mutation):
     class Arguments:
         token = graphene.String(required=True)
         squadID = graphene.Int(required=True)
-        #service = graphene.String(required=False)
         description = graphene.String(required=False)
         secret = graphene.String(required=False)
-        maxSize = graphene.Int(required=False)
+        maximumSize = graphene.Int(required=False)
         isPublic = graphene.Boolean(required=False)
-        #costPrice = graphene.Int(required=False)
     
     squad =  graphene.Field(RestrictedSquadType)
     
@@ -88,6 +86,7 @@ class UpdateSquad(graphene.Mutation):
             return UpdateSquad(squad=squad)
         except:
            raise ValueError("Squad not updated")
+    
            
 class CreateMembership(graphene.Mutation):
     
@@ -180,11 +179,36 @@ class SquadInvite(graphene.Mutation):
             return SquadInvite(squadMembership=squadMembership)
         except Exception as e:
            return e
+           
+           
+class HandleInvite(graphene.Mutation):
+    
+    class Arguments:
+        token = graphene.String(required=True)
+        squadID = graphene.Int(required=True)
+        wasAccepted = graphene.Boolean(required=True)
+    
+    squadMembership =  graphene.Field(SquadMemberType)
         
+    @login_required
+    def mutate(self, info, token, squadID, wasAccepted, **kwargs): 
+        user = info.context.user
+        squad = Squad.objects.get(id = squadID)
+        squadMembership = SquadMember.objects.get(
+            user = user,
+            squad = squad
+        )
+        if(wasAccepted):
+            squadMembership.accept_invite()
+        else:
+            squadMembership.reject_invite()
+        return HandleInvite(squadMembership=squadMembership)
+            
 
 class Mutations(graphene.ObjectType):
     create_squad = CreateSquad.Field()
     update_squad = UpdateSquad.Field()
     create_membership = CreateMembership.Field()
     create_invite = SquadInvite.Field()
+    handle_invite = HandleInvite.Field()
 

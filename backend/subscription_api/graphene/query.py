@@ -21,6 +21,7 @@ class Query(graphene.ObjectType):
     @login_required
     def resolve_get_secret(self, info, token, membershipID, **kwargs):
         user = info.context.user
+        
         membership = user.squad_memberships.filter(id=membershipID)
         statusVerification = SquadMemberStatus()
         if(membership and statusVerification.validate(membership[0].status)):
