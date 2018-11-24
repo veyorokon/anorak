@@ -21,6 +21,7 @@ const CREATE_SQUAD = gql`
     $costPrice: Float!
     $description: String!
     $maxSize: Int!
+    $isPublic: Boolean!
   ) {
     createSquad(
       token: $token
@@ -29,6 +30,7 @@ const CREATE_SQUAD = gql`
       costPrice: $costPrice
       description: $description
       maxSize: $maxSize
+      isPublic: $isPublic
     ) {
       squad {
         id
@@ -115,7 +117,8 @@ class CreateForm extends React.Component {
         secret: values.secret,
         costPrice: values.costPrice,
         description: values.description,
-        maxSize: values.maxSize
+        maxSize: values.maxSize,
+        isPublic: values.isPublic
       }
     });
     console.log(data);
@@ -181,6 +184,10 @@ class CreateForm extends React.Component {
                       {renderField('costPrice', {
                         fullWidth: true
                       })}
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      {renderField('isPublic')}
                     </Grid>
                   </Grid>
 

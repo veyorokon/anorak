@@ -13,6 +13,13 @@ export default {
       required: true
     }
   },
+  isPublic: {
+    initialValue: false,
+    label: 'Public',
+    input: {
+      type: 'checkbox'
+    }
+  },
   maxSize: {
     initialValue: '',
     label: 'Maximum Size',
