@@ -18,7 +18,7 @@ jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 
-class Address(models.Model):
+class ShippingAddress(models.Model):
     line_1 = models.CharField(max_length=32, null=True, blank=True)
     line_2 = models.CharField(max_length=32, null=True, blank=True)
     city = models.CharField(max_length=32, null=True, blank=True)
@@ -30,17 +30,6 @@ class Address(models.Model):
             self.line_1, self.line_2, self.city, self.state, self.zip
         )
         return output.upper()
-        
-    class Meta:
-        managed = False
-        
-class ShippingAddress(Address):
-    class Meta:
-        managed = True
-        
-class BillingAddress(Address):
-    class Meta:
-        managed =True
 
 
 class StripeCustomer(models.Model):
@@ -83,8 +72,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     facebook_id = models.CharField(_('facebook id'), max_length=30, blank=True, editable=False)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, null=True, blank=True)
-    address_billing = models.OneToOneField(BillingAddress, null=True, on_delete=models.SET_NULL, related_name='user', blank=True)
-    address_shipping = models.OneToOneField(ShippingAddress, null=True, on_delete=models.SET_NULL, related_name='user', blank=True)
+    address_shipping = models.OneToOneField(ShippingAddress, null=True, on_delete=models.SET_NULL, blank=True)
     date_joined = models.DateTimeField(_('date joined'), 
         editable=True, auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)

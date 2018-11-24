@@ -17,19 +17,9 @@ const styles = theme => ({
 });
 
 // TODO: change to login mutation
-const CREATE_USER = gql`
-  mutation User(
-    $email: String!
-    $firstName: String
-    $lastName: String
-    $password: String
-  ) {
-    user(
-      email: $email
-      firstName: $firstName
-      lastName: $lastName
-      password: $password
-    ) {
+const LOGIN_USER = gql`
+  mutation LoginUser($email: String!, $password: String) {
+    loginUser(email: $email, password: $password) {
       token
     }
   }
@@ -48,7 +38,7 @@ class LoginForm extends React.Component {
           password: values.password
         }
       });
-      window.localStorage.setItem('sessionToken', data.user.token);
+      window.localStorage.setItem('sessionToken', data.loginUser.token);
       this.props.history.push('/dashboard');
     } catch (e) {
       console.log(e);
@@ -59,7 +49,7 @@ class LoginForm extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <Mutation mutation={CREATE_USER}>
+      <Mutation mutation={LOGIN_USER}>
         {login => (
           <Form
             config={formConfig}

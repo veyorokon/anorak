@@ -29,4 +29,4 @@ class UserAdmin(DjangoUserAdmin):
     ordering = ('email',)
     readonly_fields=('facebook_id','first_name', 'last_name')
     
-admin.site.register([StripeCustomer, ShippingAddress, BillingAddress])
+admin.site.register([StripeCustomer, ShippingAddress])

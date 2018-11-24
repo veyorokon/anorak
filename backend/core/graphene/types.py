@@ -6,10 +6,6 @@ class StripeCustomerType(DjangoObjectType):
         model = StripeCustomer
         exclude_fields = ['stripe_customer_id', 'stripe_credit_card_id']
 
-class BillingAddressType(DjangoObjectType):
-    class Meta:
-        model = BillingAddress
-
 class ShippingAddressType(DjangoObjectType):
     class Meta:
         model = ShippingAddress
