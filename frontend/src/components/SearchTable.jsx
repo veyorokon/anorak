@@ -18,25 +18,6 @@ const rows = [
   { id: 'button', numeric: false, label: '' }
 ];
 
-function createData(name, size, duration, price) {
-  return { name, size, duration, price };
-}
-
-const TABLE_DATA = [
-  createData('Netflix', '2 / 8', 'Monthly', 2.0),
-  createData('Netflix', '2 / 8', 'Monthly', 2.0),
-  createData('Netflix', '2 / 8', 'Monthly', 2.0),
-  createData('Netflix', '2 / 8', 'Monthly', 2.0),
-  createData('Netflix', '2 / 8', 'Monthly', 2.0),
-  createData('Netflix', '2 / 8', 'Monthly', 2.0),
-  createData('Netflix', '2 / 8', 'Monthly', 2.0),
-  createData('Netflix', '2 / 8', 'Monthly', 2.0),
-  createData('Netflix', '2 / 8', 'Monthly', 2.0),
-  createData('Netflix', '2 / 8', 'Monthly', 2.0),
-  createData('Netflix', '2 / 8', 'Monthly', 2.0),
-  createData('Netflix', '2 / 8', 'Monthly', 2.0)
-];
-
 function SearchTableHead() {
   return (
     <TableHead>
@@ -78,16 +59,17 @@ function SearchTable(props) {
         <Table className={classes.table} aria-labelledby="tableTitle">
           <SearchTableHead />
           <TableBody>
-            {TABLE_DATA.map((n, i) => (
+            {props.squads.map((squad, i) => (
               <TableRow hover key={i}>
                 <TableCell component="th" scope="row">
-                  {n.name}
+                  {squad.service}
                 </TableCell>
-                <TableCell numeric>{n.size}</TableCell>
-                <TableCell numeric>{n.duration}</TableCell>
                 <TableCell numeric>
-                  ${n.price}
-                  .00
+                  {squad.currentSize} / {squad.maximumSize}
+                </TableCell>
+                <TableCell numeric>monthly</TableCell>
+                <TableCell numeric>
+                  ${(squad.costPrice / 100).toFixed(2)}
                 </TableCell>
                 <TableCell>
                   <Button

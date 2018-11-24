@@ -40,9 +40,8 @@ function SquadList(props) {
         return (
           <Grid container direction="column" alignItems="center" spacing={24}>
             {data.user.squadMemberships.map(({ id, squad }) => (
-              <Grid item>
+              <Grid key={id} item>
                 <SquardCard
-                  key={id}
                   description={squad.description}
                   price={squad.costPrice}
                   service={squad.service}
