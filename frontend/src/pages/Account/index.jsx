@@ -22,9 +22,7 @@ function Account(props) {
           <Elements>
             <BillingSection />
           </Elements>
-          <Elements>
-            <PaymentSection />
-          </Elements>
+          <PaymentSection />
         </div>
       </Layout>
     </StripeProvider>
