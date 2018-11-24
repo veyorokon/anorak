@@ -12,6 +12,7 @@ export default function Routes() {
         <Route path="/dashboard" component={Pages.Dashboard} />
         <Route path="/login" component={Pages.Login} />
         <Route path="/signup" component={Pages.Signup} />
+        <Route path="/squads/:id" component={Pages.Squad} />
       </div>
     </Router>
   );
