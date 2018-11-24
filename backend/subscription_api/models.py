@@ -227,8 +227,9 @@ class SquadMember(models.Model):
     def deactivate_membership(self, wasTerminated=False):
         subscription = self.get_stripe_subscription()
         subscription.delete()
-        self.squad.current_size -= 1
-        self.squad.save()
+        if (self.status == SquadMemberStatus.SUBSCRIBED):
+            self.squad.current_size -= 1
+            self.squad.save()
         self.stripe_subscription_id = None
         if(wasTerminated):
             self.status = SquadMemberStatus.TERMINATED
@@ -282,5 +283,13 @@ def delete_squad(sender, instance=None, **kwargs):
         pass
     try:
         instance.deactivate()
+    except:
+        pass
+        
+# Signals for Squad model to delete Stripe objects
+@receiver(pre_delete, sender=SquadMember)
+def delete_member(sender, instance=None, **kwargs):
+    try:
+        instance.deactivate_membership()
     except:
         pass

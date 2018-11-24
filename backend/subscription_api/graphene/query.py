@@ -3,6 +3,7 @@ from . types import *
 from django.db.models import Q
 from subscription_api.models import *
 from graphql_jwt.decorators import login_required
+from django.db.models import F
 
 
 
@@ -15,7 +16,7 @@ class Query(graphene.ObjectType):
     
     
     def resolve_squad_search(self, info, text, **kwargs):
-        return Squad.objects.filter(Q(service__icontains=text) | Q(description__icontains=text)).filter(is_public=True).filter(is_active=True)
+        return Squad.objects.filter(Q(service__icontains=text) | Q(description__icontains=text)).filter(is_public=True).filter(is_active=True).filter(current_size__lt = F('maximum_size'))
         
     @login_required
     def resolve_get_secret(self, info, token, membershipID, **kwargs):
