@@ -95,7 +95,7 @@ class Squad(models.Model):
         
     def deactivate(self):
         for member in self.members.filter(status=SquadMemberStatus.SUBSCRIBED):
-            member.cancel_stripe_subscription(wasTerminated=True)
+            member.deactivate_membership(wasTerminated=True)
         self.is_active = False
         self.save()
         
@@ -169,16 +169,39 @@ class SquadMember(models.Model):
         cond2 = self.status == SquadMemberStatus.OWNER
         
         if cond1 or cond2:
-            return ValueError("Active membership already exists! Cancel membership before creating a new one.")
+            raise ValueError("An active membership for this squad already exists! Cancel membership before creating a new one or did you mean to update this membership?")
         if self.squad != None and self.squad != squad:
             raise ValueError("Cannot change squad. Create a new SquadMember instead.")
         self.status = SquadMemberStatus.SUBSCRIBED
         self.user = user
         self.squad = squad
         self.date_joined = timezone.now()
+        self.date_left = None
         self.create_stripe_subscription(
             squad=squad,
             user=user
+        )
+        self.squad.current_size += 1
+        self.squad.save()
+        return super(SquadMember, self).save(*args, **kwargs)
+        
+        
+    def create_invite_squad_membership(self, squad, user, *args, **kwargs):
+        """
+        Creates an invite for a prospective squad member
+        """
+        
+        self.status = SquadMemberStatus.INVITED
+        self.user = user
+        self.squad = squad
+        self.date_joined = timezone.now()
+        self.date_left = None
+        return super(SquadMember, self).save(*args, **kwargs)
+        
+    def confirm_invite(self):
+        self.create_stripe_subscription(
+            squad= self.squad,
+            user= self.user
         )
         self.squad.current_size += 1
         self.squad.save()
@@ -200,7 +223,7 @@ class SquadMember(models.Model):
             self.stripe_subscription_id
         )
         
-    def cancel_stripe_subscription(self, wasTerminated=False):
+    def deactivate_membership(self, wasTerminated=False):
         subscription = self.get_stripe_subscription()
         subscription.delete()
         self.squad.current_size -= 1
@@ -210,6 +233,7 @@ class SquadMember(models.Model):
             self.status = SquadMemberStatus.TERMINATED
         else:
             self.status = SquadMemberStatus.UNSUBSCRIBED
+        self.date_left = timezone.now()
         self.save()
         
 
@@ -253,5 +277,9 @@ def delete_stripe_plan(sender, instance=None, **kwargs):
 def delete_squad(sender, instance=None, **kwargs):
     try:
         instance.stripe_plan.delete()
+    except:
+        pass
+    try:
+        instance.deactivate()
     except:
         pass

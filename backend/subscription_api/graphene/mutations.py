@@ -13,7 +13,7 @@ def set_members_to_pending(squad):
     for member in squadMembers:
         member.status=SquadMemberStatus.PENDING
         try:
-            member.cancel_stripe_subscription()
+            member.deactivate_membership()
         except:
             pass
         member.save()
@@ -88,9 +88,93 @@ class UpdateSquad(graphene.Mutation):
             return UpdateSquad(squad=squad)
         except:
            raise ValueError("Squad not updated")
+           
+class CreateMembership(graphene.Mutation):
+    
+    class Arguments:
+        token = graphene.String(required=True)
+        squadID = graphene.Int(required=True)
+    
+    squadMembership =  graphene.Field(SquadMemberType)
+    
+    @login_required
+    def mutate(self, info, token, squadID, **kwargs):
+        
+        squad = Squad.objects.get(
+            id = squadID
+        )
+        
+        try:
+            squadMembership = SquadMember.objects.get(
+                squad = squad,
+                user = info.context.user
+            )
+        except:
+            squadMembership = SquadMember()
+        
+        try:
+            squadMembership.create_basic_squad_membership(squad=squad, user=info.context.user)
+            return CreateMembership(squadMembership=squadMembership)
+        except Exception as e:
+           return e
+           
+           
+class SquadInvite(graphene.Mutation):
+    
+    class Arguments:
+        token = graphene.String(required=True)
+        squadID = graphene.Int(required=True)
+        invitedUserEmail = graphene.String(required=True)
+    
+    squadMembership =  graphene.Field(SquadMemberType)
+    
+    @login_required
+    def mutate(self, info, token, squadID, invitedUserEmail, **kwargs):     
+        squad = Squad.objects.get(
+            id = squadID,
+            owner = info.context.user
+        )
+        invitedUser = User.objects.get(email=invitedUserEmail)   
+        
+        try:
+            activeMembership = SquadMember.objects.filter(
+                squad = squad,
+                user = invitedUser,
+                status__gte = SquadMemberStatus.SUBSCRIBED
+            )[0]
+            return ValueError("Active membership already exists!")
+        except:
+            pass
+            
+        try:
+            activeMembership = SquadMember.objects.filter(
+                squad = squad,
+                user = invitedUser,
+                status = SquadMemberStatus.INVITED
+            )[0]
+            return ValueError("Invite has already been sent!")
+        except:
+            pass
+            
+        
+        try:
+            squadMembership = SquadMember.objects.filter(
+                squad = squad,
+                user = invitedUser,
+            )[0]
+        except:
+            squadMembership = SquadMember()
+                
+        try:
+            squadMembership.create_invite_squad_membership(squad=squad, user=invitedUser)
+            return SquadInvite(squadMembership=squadMembership)
+        except Exception as e:
+           return e
         
 
 class Mutations(graphene.ObjectType):
     create_squad = CreateSquad.Field()
     update_squad = UpdateSquad.Field()
+    create_membership = CreateMembership.Field()
+    create_invite = SquadInvite.Field()
 
