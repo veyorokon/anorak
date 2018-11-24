@@ -11,6 +11,8 @@ class Query(graphene.ObjectType):
     
     get_secret = graphene.Field(graphene.String, token=graphene.String(required=True), membershipID=graphene.Int(required=True))
     
+    squad = graphene.Field(SquadType,token=graphene.String(required=True), squadID=graphene.Int(required=True))
+    
     
     def resolve_squad_search(self, info, text, **kwargs):
         return Squad.objects.filter(Q(service__icontains=text) | Q(description__icontains=text)).filter(is_public=True).filter(is_active=True)
@@ -24,3 +26,11 @@ class Query(graphene.ObjectType):
             return membership[0].squad.secret
         return None
         
+    @login_required
+    def resolve_squad(self, info, token, squadID):
+        user = info.context.user
+        squad = Squad.objects.get(
+            owner = user,
+            id = squadID
+        )
+        return squad
