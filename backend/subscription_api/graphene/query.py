@@ -13,7 +13,7 @@ class Query(graphene.ObjectType):
     
     
     def resolve_squad_search(self, info, text, **kwargs):
-        return Squad.objects.filter(Q(service__icontains=text) | Q(description__icontains=text)).filter(is_public=True)
+        return Squad.objects.filter(Q(service__icontains=text) | Q(description__icontains=text)).filter(is_public=True).filter(is_active=True)
         
     @login_required
     def resolve_get_secret(self, info, token, membershipID, **kwargs):

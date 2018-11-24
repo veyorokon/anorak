@@ -87,10 +87,17 @@ class Squad(models.Model):
     stripe_plan = models.OneToOneField(StripePlan, default=None, 
         null=True, on_delete=models.CASCADE, related_name='squad')
     is_public = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     
     @property
     def squad_service_id(self):
         return self.stripe_plan.stripe_plan_id
+        
+    def deactivate(self):
+        for member in self.members.filter(status=SquadMemberStatus.SUBSCRIBED):
+            member.cancel_stripe_subscription(wasTerminated=True)
+        self.is_active = False
+        self.save()
         
     
     def save(self, *args, **kwargs):
@@ -107,10 +114,11 @@ class Squad(models.Model):
 class SquadMemberStatus(enum.Enum):
     KICKED = 0
     UNSUBSCRIBED = 1
-    PENDING = 2
-    INVITED = 3
-    SUBSCRIBED = 4
-    OWNER = 5
+    TERMINATED = 2
+    PENDING = 3
+    INVITED = 4
+    SUBSCRIBED = 5
+    OWNER = 6
     
     def validate(self, status):
         if(status >= self.SUBSCRIBED):
@@ -156,7 +164,11 @@ class SquadMember(models.Model):
         """
         Creates a membership for new squad members
         """
-        if self.status == SquadMemberStatus.SUBSCRIBED or self.status == SquadMemberStatus.OWNER:
+        cond1 = (self.status == SquadMemberStatus.SUBSCRIBED) and self.stripe_subscription_id != None
+        
+        cond2 = self.status == SquadMemberStatus.OWNER
+        
+        if cond1 or cond2:
             return ValueError("Active membership already exists! Cancel membership before creating a new one.")
         if self.squad != None and self.squad != squad:
             raise ValueError("Cannot change squad. Create a new SquadMember instead.")
@@ -188,13 +200,16 @@ class SquadMember(models.Model):
             self.stripe_subscription_id
         )
         
-    def cancel_stripe_subscription(self):
+    def cancel_stripe_subscription(self, wasTerminated=False):
         subscription = self.get_stripe_subscription()
         subscription.delete()
         self.squad.current_size -= 1
         self.squad.save()
         self.stripe_subscription_id = None
-        self.status = SquadMemberStatus.UNSUBSCRIBED
+        if(wasTerminated):
+            self.status = SquadMemberStatus.TERMINATED
+        else:
+            self.status = SquadMemberStatus.UNSUBSCRIBED
         self.save()
         
 
