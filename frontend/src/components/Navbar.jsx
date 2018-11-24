@@ -21,7 +21,7 @@ function Navbar(props) {
   const { classes } = props;
   return (
     <AppBar position="static">
-      <Toolbar className={classes.toolbar}>
+      <Toolbar className={classes.toolbar} variant="dense">
         <Button
           component={Link}
           to="/create"

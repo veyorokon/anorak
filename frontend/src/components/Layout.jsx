@@ -1,34 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 import Navbar from './Navbar';
 import SquadList from './SquadList';
 
 const styles = theme => ({
-  content: {
-    display: 'flex'
+  grid: {
+    width: 'auto',
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit
   },
-  left: {
-    width: '20%',
-    minWidth: 260,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginRight: 32,
-    marginLeft: 16
-  },
-  leftTitle: {
-    marginTop: 32,
-    marginBottom: 6
-  },
-  right: {
-    width: '80%',
-    marginRight: 16
-  },
-  rightTitle: {
-    marginTop: 32,
+  title: {
+    marginTop: 28,
     marginBottom: 6
   }
 });
@@ -36,24 +22,24 @@ const styles = theme => ({
 function Layout(props) {
   const { children, classes, rightTitle } = props;
   return (
-    <div>
+    <React.Fragment>
       <Navbar />
-      <div className={classes.content}>
-        <div className={classes.left}>
-          <Typography className={classes.leftTitle} align="center" variant="h6">
+      <Grid container spacing={24} className={classes.grid}>
+        <Grid item md={3}>
+          <Typography className={classes.title} align="center" variant="h6">
             My Squads
           </Typography>
           <SquadList />
-        </div>
+        </Grid>
 
-        <div className={classes.right}>
-          <Typography className={classes.rightTitle} align="left" variant="h6">
+        <Grid item md={9}>
+          <Typography className={classes.title} align="left" variant="h6">
             {rightTitle}
           </Typography>
           {children}
-        </div>
-      </div>
-    </div>
+        </Grid>
+      </Grid>
+    </React.Fragment>
   );
 }
 

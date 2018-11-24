@@ -17,6 +17,9 @@ const GET_SECRET = gql`
 `;
 
 const styles = {
+  card: {
+    width: 240
+  },
   cost: {
     marginBottom: 10
   }
@@ -44,13 +47,14 @@ class SquadCard extends React.Component {
   };
 
   render() {
+    const { classes } = this.props;
     return (
-      <Card>
+      <Card className={classes.card}>
         <CardContent>
           <Typography variant="h5" component="h2">
             {this.props.service}
           </Typography>
-          <Typography className={this.props.classes.cost} color="textSecondary">
+          <Typography className={classes.cost} color="textSecondary">
             ${(this.props.price / 100).toFixed(2)} / month
           </Typography>
           <Typography component="p">{this.props.description}</Typography>

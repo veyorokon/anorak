@@ -1,23 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
+import Grid from '@material-ui/core/Grid';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 
 import SquardCard from './SquadCard';
 
-const screenHeight = window.innerHeight * 0.83;
-
-const styles = theme => ({
-  squadList: {
-    maxHeight: screenHeight,
-    '& > *': {
-      marginBottom: 20
-    },
-    width: '100%'
-  }
-});
+const styles = theme => ({});
 
 const GET_USER = gql`
   query GetUser($token: String!) {
@@ -37,8 +27,7 @@ const GET_USER = gql`
 `;
 
 function SquadList(props) {
-  const { classes } = props;
-
+  // const { classes } = props;
   return (
     <Query
       query={GET_USER}
@@ -49,17 +38,19 @@ function SquadList(props) {
         if (error) return `Error! ${error.message}`;
 
         return (
-          <List className={classes.squadList}>
+          <Grid container direction="column" alignItems="center" spacing={24}>
             {data.user.squadMemberships.map(({ id, squad }) => (
-              <SquardCard
-                key={id}
-                description={squad.description}
-                price={squad.costPrice}
-                service={squad.service}
-                membershipID={squad.id}
-              />
+              <Grid item>
+                <SquardCard
+                  key={id}
+                  description={squad.description}
+                  price={squad.costPrice}
+                  service={squad.service}
+                  membershipID={squad.id}
+                />
+              </Grid>
             ))}
-          </List>
+          </Grid>
         );
       }}
     </Query>
