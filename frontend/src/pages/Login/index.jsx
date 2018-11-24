@@ -8,29 +8,38 @@ import FacebookButton from '../../components/FacebookButton';
 import LoginForm from './Form';
 import Header from './Header';
 
-const styles = theme => ({
-  layout: {
-    width: 'auto',
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-      width: 400,
+const styles = theme => {
+  const layoutWidth = 400;
+  const layoutSideMargin = theme.spacing.unit * 3;
+  return {
+    layout: {
+      width: layoutWidth,
       marginLeft: 'auto',
-      marginRight: 'auto'
+      marginRight: 'auto',
+      [theme.breakpoints.down(layoutWidth + layoutSideMargin * 2)]: {
+        width: 'auto',
+        marginLeft: layoutSideMargin,
+        marginRight: layoutSideMargin
+      }
+    },
+    paper: {
+      marginTop: theme.spacing.unit * 6,
+      marginBottom: theme.spacing.unit * 6,
+      [theme.breakpoints.down(layoutWidth + layoutSideMargin * 2)]: {
+        marginTop: theme.spacing.unit * 3,
+        marginBottom: theme.spacing.unit * 3
+      },
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
+        .spacing.unit * 3}px`
+    },
+    overline: {
+      marginTop: '28px'
     }
-  },
-  paper: {
-    marginTop: theme.spacing.unit * 8,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
-      .spacing.unit * 3}px`
-  },
-  overline: {
-    marginTop: '28px'
-  }
-});
+  };
+};
 
 function Login(props) {
   const { classes } = props;
