@@ -17,15 +17,11 @@ const UPDATE_SQUAD = gql`
     $squadID: Int!
     $secret: String
     $description: String
-    $maxSize: Int
-    $isPublic: Boolean
   ) {
     updateSquad(
       token: $token
       secret: $secret
       description: $description
-      maxSize: $maxSize
-      isPublic: $isPublic
       squadID: $squadID
     ) {
       squad {
@@ -56,8 +52,6 @@ class EditForm extends React.Component {
       variables: {
         token: window.localStorage.getItem('sessionToken'),
         description: values.description,
-        maxSize: values.maxSize,
-        isPublic: values.isPublic,
         secret: values.secret,
         squadID: this.props.squadId
       }
@@ -67,8 +61,6 @@ class EditForm extends React.Component {
   render() {
     const { classes } = this.props;
     formConfig.description.initialValue = this.props.description;
-    formConfig.isPublic.initialValue = this.props.isPublic;
-    formConfig.maxSize.initialValue = this.props.maxSize;
     formConfig.secret.initialValue = this.props.secret;
     return (
       <Paper className={classes.paper}>
@@ -100,15 +92,6 @@ class EditForm extends React.Component {
                       {renderField('secret', {
                         fullWidth: true
                       })}
-                    </Grid>
-                    <Grid item xs={12} className="fifth-step" sm={6}>
-                      {renderField('maxSize', {
-                        fullWidth: true
-                      })}
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                      {renderField('isPublic')}
                     </Grid>
                   </Grid>
 

@@ -10,8 +10,6 @@ const GET_SQUAD = gql`
     squad(token: $token, squadID: $squadID) {
       id
       description
-      isPublic
-      maximumSize
       secret
       service
     }
@@ -36,9 +34,7 @@ function Edit(props) {
           <Layout rightTitle="Squad Edit">
             <Form
               description={squad.description}
-              maxSize={squad.maximumSize}
               membershipID={squad.id}
-              isPublic={squad.isPublic}
               secret={squad.secret}
               service={squad.service}
               squadId={squad.id}

@@ -8,7 +8,14 @@ const MaterialUiInputComponent = ({ field, form, ...props }) => {
   if (props.type === 'checkbox') {
     return (
       <FormControlLabel
-        control={<Checkbox id={field.name} {...field} {...props} />}
+        control={
+          <Checkbox
+            id={field.name}
+            checked={form.values[field.name]}
+            {...field}
+            {...props}
+          />
+        }
         label={props.label}
       />
     );

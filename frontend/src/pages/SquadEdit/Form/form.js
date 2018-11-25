@@ -5,18 +5,6 @@ export default {
       required: true
     }
   },
-  isPublic: {
-    label: 'Public',
-    input: {
-      type: 'checkbox'
-    }
-  },
-  maxSize: {
-    label: 'Maximum Size',
-    input: {
-      required: true
-    }
-  },
   secret: {
     label: 'Secret',
     input: {
