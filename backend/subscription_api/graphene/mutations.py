@@ -61,8 +61,8 @@ class UpdateSquad(graphene.Mutation):
         squadID = graphene.Int(required=True)
         description = graphene.String(required=False)
         secret = graphene.String(required=False)
-        maximumSize = graphene.Int(required=False)
-        isPublic = graphene.Boolean(required=False)
+        #maximumSize = graphene.Int(required=False)
+        #isPublic = graphene.Boolean(required=False)
     
     squad =  graphene.Field(RestrictedSquadType)
     
