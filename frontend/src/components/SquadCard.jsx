@@ -7,14 +7,6 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
 import SquadCardModal from './SquadCardModal';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-
-const GET_SECRET = gql`
-  query GetSecret($token: String!, $membershipID: Int!) {
-    getSecret(token: $token, membershipID: $membershipID)
-  }
-`;
 
 const styles = {
   card: {
@@ -25,44 +17,27 @@ const styles = {
   }
 };
 
-class SquadCard extends React.Component {
-  getSecret = membershipID => {
-    return (
-      <Query
-        query={GET_SECRET}
-        variables={{
-          token: window.localStorage.getItem('sessionToken'),
-          membershipID
-        }}
-      >
-        {({ error, data, loading }) => (
-          <SquadCardModal
-            title={this.props.service}
-            membershipID={this.props.membershipID}
-            secret={!(error || loading) ? data.getSecret : 'unknown'}
-          />
-        )}
-      </Query>
-    );
-  };
-
-  render() {
-    const { classes } = this.props;
-    return (
-      <Card className={classes.card}>
-        <CardContent>
-          <Typography variant="h5" component="h2">
-            {this.props.service}
-          </Typography>
-          <Typography className={classes.cost} color="textSecondary">
-            ${(this.props.price / 100).toFixed(2)} / month
-          </Typography>
-          <Typography component="p">{this.props.description}</Typography>
-        </CardContent>
-        <CardActions>{this.getSecret(this.props.membershipID)}</CardActions>
-      </Card>
-    );
-  }
+function SquadCard(props) {
+  const { classes } = props;
+  return (
+    <Card className={classes.card}>
+      <CardContent>
+        <Typography variant="h5" component="h2">
+          {props.service}
+        </Typography>
+        <Typography className={classes.cost} color="textSecondary">
+          ${(props.price / 100).toFixed(2)} / month
+        </Typography>
+        <Typography component="p">{props.description}</Typography>
+      </CardContent>
+      <CardActions>
+        <SquadCardModal
+          title={props.service}
+          membershipID={props.membershipID}
+        />
+      </CardActions>
+    </Card>
+  );
 }
 
 SquadCard.propTypes = {
