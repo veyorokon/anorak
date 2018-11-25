@@ -236,17 +236,20 @@ class SquadMember(models.Model):
         )
         
         
-    def deactivate_membership(self, wasTerminated=False):
-        subscription = self.get_stripe_subscription()
-        subscription.delete()
+    def deactivate_membership(self, wasTerminated=False, *args, **kwargs):
+        if(self.status == SquadMemberStatus.OWNER):
+            raise ValueError("Cannot deactivate membership as squad owner! Deactivate squad instead.")
+            
         if (self.status == SquadMemberStatus.SUBSCRIBED):
+            subscription = self.get_stripe_subscription()
+            subscription.delete()
             self.squad.current_size -= 1
             self.squad.save()
-        self.stripe_subscription_id = None
-        if(wasTerminated):
-            self.status = SquadMemberStatus.TERMINATED
-        else:
-            self.status = SquadMemberStatus.UNSUBSCRIBED
+            self.stripe_subscription_id = None
+            if(wasTerminated):
+                self.status = SquadMemberStatus.TERMINATED
+            else:
+                self.status = SquadMemberStatus.UNSUBSCRIBED
         self.date_left = timezone.now()
         return super(SquadMember, self).save(*args, **kwargs)
         

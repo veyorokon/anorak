@@ -141,7 +141,7 @@ class SquadInvite(graphene.Mutation):
                 user = invitedUser,
                 status__gte = SquadMemberStatus.SUBSCRIBED
             )[0]
-            return ValueError("Active membership already exists!")
+            return ValueError("An active membership already exists!")
         except:
             pass
             
@@ -196,13 +196,45 @@ class HandleInvite(graphene.Mutation):
         squad = Squad.objects.get(id = squadID)
         squadMembership = SquadMember.objects.get(
             user = user,
-            squad = squad
+            squad = squad,
+            status = SquadMemberStatus.INVITED
         )
         if(wasAccepted):
             squadMembership.accept_invite()
         else:
             squadMembership.reject_invite()
         return HandleInvite(squadMembership=squadMembership)
+        
+        
+class DeactivateMembership(graphene.Mutation):
+    
+    class Arguments:
+        token = graphene.String(required=True)
+        squadID = graphene.Int(required=True)
+    
+    squadMembership =  graphene.Field(SquadMemberType)
+    
+    @login_required
+    def mutate(self, info, token, squadID, **kwargs):
+        
+        squad = Squad.objects.get(
+            id = squadID
+        )
+        
+        try:
+            squadMembership = SquadMember.objects.get(
+                squad = squad,
+                user = info.context.user,
+                status = SquadMemberStatus.SUBSCRIBED
+            )
+        except:
+            return ValueError("An active membership for this squad does not exist.")
+        
+        try:
+            squadMembership.deactivate_membership()
+            return DeactivateMembership(squadMembership=squadMembership)
+        except Exception as e:
+           return e
             
 
 class Mutations(graphene.ObjectType):
@@ -211,4 +243,5 @@ class Mutations(graphene.ObjectType):
     create_membership = CreateMembership.Field()
     create_invite = SquadInvite.Field()
     handle_invite = HandleInvite.Field()
+    deactivate_membership = DeactivateMembership.Field()
 
