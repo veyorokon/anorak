@@ -45,7 +45,7 @@ function SquadList(props) {
                   description={squad.description}
                   price={squad.costPrice}
                   service={squad.service}
-                  membershipID={squad.id}
+                  membershipID={id}
                 />
               </Grid>
             ))}
