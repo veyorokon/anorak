@@ -58,10 +58,6 @@ class StripePlan(models.Model):
         plan = self.get_stripe_plan()
         plan.delete()
         
-    def update_stripe_plan(self):
-        plan = self.get_stripe_plan()
-        #plan
-
 
 # Contains a Stripe product. 
 class Squad(models.Model):
