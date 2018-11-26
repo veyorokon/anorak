@@ -140,10 +140,10 @@ class LoginUser(graphene.Mutation):
 
 
 class Mutations(graphene.ObjectType):
-    user = CreateUser.Field()
-    facebook_user = FacebookUser.Field()
-    shipping_address = SetShippingAddress.Field()
-    set_stripe_card = StripeCard.Field()
-    preferred_payment_method = PreferredPaymentMethod.Field()
-    login_user = LoginUser.Field()
+    user = CreateUser.Field(description="Creates a new user")
+    facebook_user = FacebookUser.Field(description="Creates a new user with facebook data")
+    shipping_address = SetShippingAddress.Field(description="Set's the user's shipping address.")
+    set_stripe_card = StripeCard.Field(description="Creates a new stripe credit card for the user.")
+    preferred_payment_method = PreferredPaymentMethod.Field(description="Sets the user's desired method for receiving payment.")
+    login_user = LoginUser.Field(description="Logs the user in.")
     

@@ -8,11 +8,11 @@ from django.db.models import F
 
 
 class Query(graphene.ObjectType):
-    squad_search = graphene.List(RestrictedSquadType, text=graphene.String(required=True))
+    squad_search = graphene.List(RestrictedSquadType, text=graphene.String(required=True), description="Search active and public squads for key words in the service or description. Returns all squads with available space.")
     
-    get_secret = graphene.Field(graphene.String, token=graphene.String(required=True), membershipID=graphene.Int(required=True))
+    get_secret = graphene.Field(graphene.String, token=graphene.String(required=True), membershipID=graphene.Int(required=True), description="Returns the squad secret if the user has an active membership.")
     
-    squad = graphene.Field(SquadType,token=graphene.String(required=True), squadID=graphene.Int(required=True))
+    squad = graphene.Field(SquadType,token=graphene.String(required=True), squadID=graphene.Int(required=True), description="Return the squad if the user owns it.")
     
     
     def resolve_squad_search(self, info, text, **kwargs):

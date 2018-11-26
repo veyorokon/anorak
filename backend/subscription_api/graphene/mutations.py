@@ -47,12 +47,9 @@ class CreateSquad(graphene.Mutation):
             is_public=isPublic
         )
         
-        #try:
         squad.save()
         return CreateSquad(squad=squad)
-        # except:
-        #    raise ValueError("Squad not created")
-           
+
            
 class UpdateSquad(graphene.Mutation):
     
@@ -61,8 +58,6 @@ class UpdateSquad(graphene.Mutation):
         squadID = graphene.Int(required=True)
         description = graphene.String(required=False)
         secret = graphene.String(required=False)
-        #maximumSize = graphene.Int(required=False)
-        #isPublic = graphene.Boolean(required=False)
     
     squad =  graphene.Field(RestrictedSquadType)
     
@@ -76,11 +71,7 @@ class UpdateSquad(graphene.Mutation):
         
         values = {convert(key): val for key, val in kwargs.items()}
         try:
-            for key, val in values.items():
-                # if key == "cost_price":
-                #     val *= 100
-                #     set_members_to_pending(squad)
-                    
+            for key, val in values.items():                    
                 setattr(squad, key, val)
             squad.save()
             return UpdateSquad(squad=squad)
@@ -260,11 +251,18 @@ class DeactivateSquad(graphene.Mutation):
             
 
 class Mutations(graphene.ObjectType):
-    create_squad = CreateSquad.Field()
-    update_squad = UpdateSquad.Field()
-    create_membership = CreateMembership.Field()
-    create_invite = SquadInvite.Field()
-    handle_invite = HandleInvite.Field()
-    deactivate_membership = DeactivateMembership.Field()
-    deactivate_squad = DeactivateSquad.Field()
+    # Create a new squad
+    create_squad = CreateSquad.Field(description="Create a new squad.")
+    # Modify fields for a squad
+    update_squad = UpdateSquad.Field(description="Modify fields of a squad: i.e. description, secret.")
+    # Create membership used for joining squads users search for.
+    create_membership = CreateMembership.Field(description="Creates a membership for a squad a user has searched for.") 
+    # Create an invite for another user
+    create_invite = SquadInvite.Field(description="Create an invite from the squad owner to another user.")
+    # Join or reject invite to a squad
+    handle_invite = HandleInvite.Field(description="Join or reject invite to a squad.")
+    # Unisubscribe a member from the squad
+    deactivate_membership = DeactivateMembership.Field(description="Unsubscribe a member from the squad.")
+    # Deactivates the squad and terminates all members from the squad
+    deactivate_squad = DeactivateSquad.Field(description="Deactivates a squad and terminates all active member subscriptions.")
 
