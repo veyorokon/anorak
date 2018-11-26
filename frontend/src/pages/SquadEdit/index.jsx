@@ -1,9 +1,11 @@
 import React from 'react';
+import Grid from '@material-ui/core/Grid';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 
 import Layout from '../../components/Layout';
 import Form from './Form';
+import InviteForm from './InviteForm';
 
 const GET_SQUAD = gql`
   query GetSquad($token: String!, $squadID: Int!) {
@@ -31,14 +33,21 @@ function Edit(props) {
 
         const { squad } = data;
         return (
-          <Layout rightTitle="Squad Edit">
-            <Form
-              description={squad.description}
-              membershipID={squad.id}
-              secret={squad.secret}
-              service={squad.service}
-              squadId={squad.id}
-            />
+          <Layout rightTitle="Manage Squad">
+            <Grid container spacing={24}>
+              <Grid item xs={12}>
+                <Form
+                  description={squad.description}
+                  membershipID={squad.id}
+                  secret={squad.secret}
+                  service={squad.service}
+                  squadId={squad.id}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <InviteForm squadId={squad.id} />
+              </Grid>
+            </Grid>
           </Layout>
         );
       }}
