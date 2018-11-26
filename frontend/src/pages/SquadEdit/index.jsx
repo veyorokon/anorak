@@ -6,11 +6,20 @@ import { Query } from 'react-apollo';
 import Layout from '../../components/Layout';
 import Form from './Form';
 import InviteForm from './InviteForm';
+import Invites from './Invites';
 
 const GET_SQUAD = gql`
   query GetSquad($token: String!, $squadID: Int!) {
     squad(token: $token, squadID: $squadID) {
       id
+      members {
+        id
+        status
+        user {
+          id
+          email
+        }
+      }
       description
       secret
       service
@@ -32,6 +41,12 @@ function Edit(props) {
         if (error) return `Error! ${error.message}`;
 
         const { squad } = data;
+        const invites = squad.members
+          .filter(member => member.status === 'A_6')
+          .map(member => ({
+            id: member.id,
+            email: member.user.email
+          }));
         return (
           <Layout rightTitle="Manage Squad">
             <Grid container spacing={24}>
@@ -46,6 +61,9 @@ function Edit(props) {
               </Grid>
               <Grid item xs={12}>
                 <InviteForm squadId={squad.id} />
+              </Grid>
+              <Grid item xs={12}>
+                <Invites invites={invites} />
               </Grid>
             </Grid>
           </Layout>

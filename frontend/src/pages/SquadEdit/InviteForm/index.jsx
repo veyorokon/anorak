@@ -56,9 +56,7 @@ class InviteForm extends React.Component {
     const { classes } = this.props;
     return (
       <Paper className={classes.paper}>
-        <Typography className={classes.subtitle} variant="h6">
-          Invite Someone
-        </Typography>
+        <Typography variant="h6">Invite Someone</Typography>
 
         <Mutation mutation={CREATE_INVITE}>
           {createInvite => (
