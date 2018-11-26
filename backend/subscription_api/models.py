@@ -214,7 +214,7 @@ class SquadMember(models.Model):
         
         
     def create_stripe_subscription(self, squad, user):
-        if(squad.is_active):
+        if(squad.is_active and squad.current_size < squad.maximum_size):
             self.date_joined = timezone.now()
             self.date_left = None
             stripe_subscription = stripe.Subscription.create(
@@ -230,7 +230,7 @@ class SquadMember(models.Model):
             self.squad.current_size += 1
             self.squad.save()
             return True
-        raise ValueError("Cannot join an inactive squad!")
+        raise ValueError("Could not join the squad! Is the squad active and does it have room?")
         
         
     def get_stripe_subscription(self):
