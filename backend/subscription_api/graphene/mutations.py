@@ -109,7 +109,7 @@ class CreateMembership(graphene.Mutation):
            return e
            
            
-class SquadInvite(graphene.Mutation):
+class CreateInvite(graphene.Mutation):
     
     class Arguments:
         token = graphene.String(required=True)
@@ -258,7 +258,7 @@ class Mutations(graphene.ObjectType):
     # Create membership used for joining squads users search for.
     create_membership = CreateMembership.Field(description="Creates a membership for a squad a user has searched for.") 
     # Create an invite for another user
-    create_invite = SquadInvite.Field(description="Create an invite from the squad owner to another user.")
+    create_invite = CreateInvite.Field(description="Create an invite from the squad owner to another user.")
     # Join or reject invite to a squad
     handle_invite = HandleInvite.Field(description="Join or reject invite to a squad.")
     # Unisubscribe a member from the squad
