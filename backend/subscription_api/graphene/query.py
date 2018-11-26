@@ -25,7 +25,10 @@ class Query(graphene.ObjectType):
         membership = user.squad_memberships.filter(id=membershipID)
         statusVerification = SquadMemberStatus()
         if(membership and statusVerification.validate(membership[0].status)):
-            return membership[0].squad.secret
+            if(membership[0].squad.is_active):
+                return membership[0].squad.secret
+            else:
+                return "Squad has been deactivated by the owner and all subscriptions have been terminated."
         return None
         
     @login_required

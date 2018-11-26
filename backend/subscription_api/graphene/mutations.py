@@ -228,13 +228,35 @@ class DeactivateMembership(graphene.Mutation):
                 status = SquadMemberStatus.SUBSCRIBED
             )
         except:
-            return ValueError("An active membership for this squad does not exist.")
+            return ValueError("An active membership for this squad does not exist!")
         
         try:
             squadMembership.deactivate_membership()
             return DeactivateMembership(squadMembership=squadMembership)
         except Exception as e:
            return e
+           
+
+class DeactivateSquad(graphene.Mutation):
+    
+    class Arguments:
+        token = graphene.String(required=True)
+        squadID = graphene.Int(required=True)
+    
+    squad =  graphene.Field(RestrictedSquadType)
+    
+    @login_required
+    def mutate(self, info, token, squadID):
+        user = info.context.user
+        
+        squad = Squad.objects.get(
+            owner = user,
+            id = squadID,
+            is_active = True
+        )
+        
+        squad.deactivate()
+        return DeactivateSquad(squad = squad)
             
 
 class Mutations(graphene.ObjectType):
@@ -244,4 +266,5 @@ class Mutations(graphene.ObjectType):
     create_invite = SquadInvite.Field()
     handle_invite = HandleInvite.Field()
     deactivate_membership = DeactivateMembership.Field()
+    deactivate_squad = DeactivateSquad.Field()
 

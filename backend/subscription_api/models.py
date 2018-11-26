@@ -89,11 +89,11 @@ class Squad(models.Model):
     def squad_service_id(self):
         return self.stripe_plan.stripe_plan_id
         
-    def deactivate(self):
+    def deactivate(self,  *args, **kwargs):
         for member in self.members.filter(status=SquadMemberStatus.SUBSCRIBED):
             member.deactivate_membership(wasTerminated=True)
         self.is_active = False
-        self.save()
+        return super(Squad, self).save(*args, **kwargs)
         
     
     def save(self, *args, **kwargs):
@@ -174,14 +174,11 @@ class SquadMember(models.Model):
         self.status = SquadMemberStatus.SUBSCRIBED
         self.user = user
         self.squad = squad
-        self.date_joined = timezone.now()
-        self.date_left = None
         self.create_stripe_subscription(
             squad=squad,
             user=user
         )
-        self.squad.current_size += 1
-        self.squad.save()
+
         return super(SquadMember, self).save(*args, **kwargs)
         
         
@@ -189,14 +186,14 @@ class SquadMember(models.Model):
         """
         Creates an invite for a prospective squad member
         """
-        
-        self.status = SquadMemberStatus.INVITED
-        self.user = user
-        self.squad = squad
-        self.date_joined = timezone.now()
-        self.date_left = None
-        return super(SquadMember, self).save(*args, **kwargs)
-        
+        if(squad.is_active):
+            self.status = SquadMemberStatus.INVITED
+            self.user = user
+            self.squad = squad
+            self.date_joined = timezone.now()
+            self.date_left = None
+            return super(SquadMember, self).save(*args, **kwargs)
+        raise ValueError("Cannot invite users to inactive squads!")
         
     def accept_invite(self, *args, **kwargs):
         if(self.status == SquadMemberStatus.INVITED):
@@ -204,8 +201,7 @@ class SquadMember(models.Model):
                 squad= self.squad,
                 user= self.user
             )
-            self.squad.current_size += 1
-            self.squad.save()
+            
             return super(SquadMember, self).save(*args, **kwargs)
         return super(SquadMember, self)
         
@@ -218,16 +214,23 @@ class SquadMember(models.Model):
         
         
     def create_stripe_subscription(self, squad, user):
-        stripe_subscription = stripe.Subscription.create(
-            customer=user.stripe_customer.stripe_customer_id,
-            items=[
-                {
-                    "plan": squad.squad_service_id
-                }
-            ]
-        )
-        self.status = SquadMemberStatus.SUBSCRIBED
-        self.stripe_subscription_id = stripe_subscription.id
+        if(squad.is_active):
+            self.date_joined = timezone.now()
+            self.date_left = None
+            stripe_subscription = stripe.Subscription.create(
+                customer=user.stripe_customer.stripe_customer_id,
+                items=[
+                    {
+                        "plan": squad.squad_service_id
+                    }
+                ]
+            )
+            self.status = SquadMemberStatus.SUBSCRIBED
+            self.stripe_subscription_id = stripe_subscription.id
+            self.squad.current_size += 1
+            self.squad.save()
+            return True
+        raise ValueError("Cannot join an inactive squad!")
         
         
     def get_stripe_subscription(self):
