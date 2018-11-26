@@ -167,7 +167,7 @@ class CreateInvite(graphene.Mutation):
                 
         try:
             squadMembership.create_invite_squad_membership(squad=squad, user=invitedUser)
-            return SquadInvite(squadMembership=squadMembership)
+            return CreateInvite(squadMembership=squadMembership)
         except Exception as e:
            return e
            
