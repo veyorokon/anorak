@@ -122,7 +122,8 @@ class CreateInvite(graphene.Mutation):
     def mutate(self, info, token, squadID, invitedUserEmail, **kwargs):     
         squad = Squad.objects.get(
             id = squadID,
-            owner = info.context.user
+            owner = info.context.user,
+            is_active=True
         )
         invitedUser = User.objects.get(email=invitedUserEmail)   
         
