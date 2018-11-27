@@ -6,6 +6,9 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
+import Button from '@material-ui/core/Button';
+import { withRouter } from 'react-router-dom';
+
 import SquadCardModal from './SquadCardModal';
 
 const styles = {
@@ -30,11 +33,17 @@ function SquadCard(props) {
         </Typography>
         <Typography component="p">{props.description}</Typography>
       </CardContent>
-      <CardActions>
+      <CardActions style={{ justifyContent: 'space-between' }}>
         <SquadCardModal
           title={props.service}
           membershipID={props.membershipID}
         />
+        <Button
+          style={{ color: '#f8be00' }}
+          onClick={() => props.history.push('/squads/' + props.squadID)}
+        >
+          Manage
+        </Button>
       </CardActions>
     </Card>
   );
@@ -45,6 +54,7 @@ SquadCard.propTypes = {
   description: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   service: PropTypes.string.isRequired
+  // squadID: PropTypes.string.isRequired
 };
 
-export default withStyles(styles)(SquadCard);
+export default withStyles(styles)(withRouter(SquadCard));
