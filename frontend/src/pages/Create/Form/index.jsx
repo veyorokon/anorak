@@ -63,7 +63,8 @@ class CreateForm extends React.Component {
     steps: [
       {
         target: '.first-step',
-        content: 'This form allows you to create a squad!',
+        content:
+          'This form allows you to create your own subscription service, or a squad!',
         placement: 'top',
         event: 'hover'
       },
@@ -75,7 +76,7 @@ class CreateForm extends React.Component {
       {
         target: '.third-step',
         content:
-          'Then, tell us a bit about that service in one or two sentences. If you make this squad public, this is how other users can search for your squad so be descriptive.',
+          'Then, tell us a bit about that service in a brief description.',
         placement: 'bottom'
       },
       {
@@ -93,13 +94,25 @@ class CreateForm extends React.Component {
       {
         target: '.fourth-step',
         content:
-          'When a squad member leaves, you may want to renew/refresh/regenerate this information.',
+          'When a squad member leaves, you may want to renew/refresh/regenerate secret information. You can do that in the manage squad page.',
         placement: 'bottom'
       },
       {
         target: '.fifth-step',
         content:
-          'Lastly, set the maximum size of squad members you want and the price for your squad.',
+          'You can cap the maximum number of squad members or make the size unlimited.',
+        placement: 'bottom'
+      },
+      {
+        target: '.sixth-step',
+        content:
+          "Here you set the price per squad member. Members join your squad for access to the squad's secret information.",
+        placement: 'bottom'
+      },
+      {
+        target: '.seventh-step',
+        content:
+          'A public squad shows up in search. If you want an invite only squad, keep it private.',
         placement: 'bottom'
       }
     ]
@@ -137,7 +150,7 @@ class CreateForm extends React.Component {
           Create A Squad
         </Typography>
         <Typography className={classes.subtitle} variant="subtitle1">
-          Create your own squad.
+          Create your own subscription!
         </Typography>
 
         <Joyride
@@ -180,13 +193,13 @@ class CreateForm extends React.Component {
                         fullWidth: true
                       })}
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} className="sixth-step" sm={6}>
                       {renderField('costPrice', {
                         fullWidth: true
                       })}
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} className="seventh-step" sm={6}>
                       {renderField('isPublic')}
                     </Grid>
                   </Grid>

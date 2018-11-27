@@ -214,23 +214,31 @@ class SquadMember(models.Model):
         
         
     def create_stripe_subscription(self, squad, user):
-        if(squad.is_active and squad.current_size < squad.maximum_size):
-            self.date_joined = timezone.now()
-            self.date_left = None
-            stripe_subscription = stripe.Subscription.create(
-                customer=user.stripe_customer.stripe_customer_id,
-                items=[
-                    {
-                        "plan": squad.squad_service_id
-                    }
-                ]
-            )
-            self.status = SquadMemberStatus.SUBSCRIBED
-            self.stripe_subscription_id = stripe_subscription.id
-            self.squad.current_size += 1
-            self.squad.save()
-            return True
-        raise ValueError("Could not join the squad! Is the squad active and does it have room?")
+        if(squad.current_size >= squad.maximum_size):
+            self.status = SquadMemberStatus.TERMINATED
+            self.save()
+            raise ValueError("Could not join squad! The squad has reached maximum capacity.")
+        
+        if(not squad.is_active):
+            self.status = SquadMemberStatus.TERMINATED
+            self.save()
+            raise ValueError("Could not join squad! The squad is no longer active.")
+            
+        self.date_joined = timezone.now()
+        self.date_left = None
+        stripe_subscription = stripe.Subscription.create(
+            customer=user.stripe_customer.stripe_customer_id,
+            items=[
+                {
+                    "plan": squad.squad_service_id
+                }
+            ]
+        )
+        self.status = SquadMemberStatus.SUBSCRIBED
+        self.stripe_subscription_id = stripe_subscription.id
+        self.squad.current_size += 1
+        self.squad.save()
+        return True
         
         
     def get_stripe_subscription(self):

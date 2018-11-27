@@ -62,7 +62,7 @@ class UpdateSquad(graphene.Mutation):
     squad =  graphene.Field(RestrictedSquadType)
     
     @login_required
-    def mutate(self, info, token, squadID, **kwargs):
+    def mutate(self, info, token, squadID, description, secret, **kwargs):
         
         squad = Squad.objects.get(
             owner=info.context.user,
@@ -71,12 +71,13 @@ class UpdateSquad(graphene.Mutation):
         
         values = {convert(key): val for key, val in kwargs.items()}
         try:
-            for key, val in values.items():                    
-                setattr(squad, key, val)
+            for key, val in values.items():       
+                if (key != 'cost_price' and key != "maximum_size" and key != "date_created"):             
+                    setattr(squad, key, val)
             squad.save()
             return UpdateSquad(squad=squad)
         except:
-           raise ValueError("Squad not updated")
+           raise ValueError("Squad not updated!")
     
            
 class CreateMembership(graphene.Mutation):
