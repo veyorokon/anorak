@@ -1,5 +1,6 @@
 import graphene 
 from . types import * 
+from itertools import chain
 from django.db.models import Q
 from subscription_api.models import *
 from graphql_jwt.decorators import login_required
@@ -19,10 +20,23 @@ class Query(graphene.ObjectType):
     
     def resolve_squad_search(self, info, text, **kwargs):
         user = info.context.user
-        print(user)
-        searchOptions = Squad.objects.filter(Q(service__icontains=text) | Q(description__icontains=text)).filter(is_public=True).filter(is_active=True).filter(current_size__lt = F('maximum_size'))
+
+        excludeSquads = set()
+        searchMemberships = Squad.objects.filter(Q(service__icontains=text) | Q(description__icontains=text)).filter(is_public=True).filter(is_active=True).filter(current_size__lt = F('maximum_size'))
         
-        return searchOptions
+        print(searchMemberships)
+        if not user.is_anonymous:
+            squadsWithUserMembership = Squad.objects.filter(members__user=user, members__status__gte = SquadMemberStatus.SUBSCRIBED)
+            
+            squadsWithUserBan = Squad.objects.filter(members__user=user, members__status = SquadMemberStatus.BANNED)
+            
+            excludeSquads = list(chain(squadsWithUserMembership, squadsWithUserBan))
+            
+            print(excludeSquads)
+            
+        searchResults = set(searchMemberships).difference(set(excludeSquads))
+        
+        return searchResults
         
     @login_required
     def resolve_get_secret(self, info, token, membershipID, **kwargs):
@@ -50,9 +64,7 @@ class Query(graphene.ObjectType):
     def resolve_squad_memberships(self, info, token):
         user = info.context.user
         memberships = SquadMember.objects.filter(
-            Q(status=SquadMemberStatus.INVITED) |
-            Q(status=SquadMemberStatus.SUBSCRIBED) |
-            Q(status=SquadMemberStatus.OWNER),
+            status__gte=SquadMemberStatus.INVITED,
             user = user,
         )
         return memberships
