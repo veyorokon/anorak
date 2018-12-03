@@ -13,6 +13,7 @@ import AcceptInviteModal from './AcceptInviteModal';
 import DeclineInviteModal from './DeclineInviteModal';
 import LeaveModal from './LeaveModal';
 import SquadCardModal from './SquadCardModal';
+import SquadStatus from './SquadStatus';
 
 const styles = {
   card: {
@@ -20,6 +21,11 @@ const styles = {
   },
   cost: {
     marginBottom: 10
+  },
+  firstRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   }
 };
 
@@ -32,9 +38,12 @@ function SquadCard(props) {
   return (
     <Card className={classes.card}>
       <CardContent>
-        <Typography variant="h5" component="h2">
-          {props.service}
-        </Typography>
+        <div className={classes.firstRow}>
+          <Typography variant="h6" component="h2">
+            {props.service}
+          </Typography>
+          <SquadStatus status={props.status} />
+        </div>
         <Typography className={classes.cost} color="textSecondary">
           ${(props.price / 100).toFixed(2)} / month
         </Typography>
