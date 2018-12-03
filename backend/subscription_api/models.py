@@ -252,8 +252,11 @@ class SquadMember(models.Model):
             raise ValueError("Cannot deactivate membership as squad owner! Deactivate squad instead.")
             
         if (self.status == SquadMemberStatus.SUBSCRIBED):
-            subscription = self.get_stripe_subscription()
-            subscription.delete()
+            try:
+                subscription = self.get_stripe_subscription()
+                subscription.delete()
+            except:
+                pass
             self.squad.current_size -= 1
             self.squad.save()
             self.stripe_subscription_id = None

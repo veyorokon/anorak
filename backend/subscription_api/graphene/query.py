@@ -8,7 +8,7 @@ from django.db.models import F
 
 
 class Query(graphene.ObjectType):
-    squad_search = graphene.List(RestrictedSquadType, text=graphene.String(required=True), description="Search active and public squads for key words in the service or description. Returns all squads with available space.")
+    squad_search = graphene.List(RestrictedSquadType, token=graphene.String(required=False), text=graphene.String(required=True), description="Search active and public squads for key words in the service or description. Returns all squads with available space.")
     
     get_secret = graphene.Field(graphene.String, token=graphene.String(required=True), membershipID=graphene.Int(required=True), description="Returns the squad secret if the user has an active membership.")
     
@@ -18,7 +18,11 @@ class Query(graphene.ObjectType):
     
     
     def resolve_squad_search(self, info, text, **kwargs):
-        return Squad.objects.filter(Q(service__icontains=text) | Q(description__icontains=text)).filter(is_public=True).filter(is_active=True).filter(current_size__lt = F('maximum_size'))
+        user = info.context.user
+        print(user)
+        searchOptions = Squad.objects.filter(Q(service__icontains=text) | Q(description__icontains=text)).filter(is_public=True).filter(is_active=True).filter(current_size__lt = F('maximum_size'))
+        
+        return searchOptions
         
     @login_required
     def resolve_get_secret(self, info, token, membershipID, **kwargs):
