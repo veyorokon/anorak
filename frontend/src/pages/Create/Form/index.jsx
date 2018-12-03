@@ -106,7 +106,7 @@ class CreateForm extends React.Component {
       {
         target: '.sixth-step',
         content:
-          "Here you set the price per squad member. Members join your squad for access to the squad's secret information.",
+          "Members join for access to your squad's secret information. Members are automatically billed each month and you receive payment (less any fees) at the end of the month.",
         placement: 'bottom'
       },
       {

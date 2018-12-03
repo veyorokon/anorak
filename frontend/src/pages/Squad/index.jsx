@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 
 import Layout from '../../components/Layout';
-import SquadCard from '../../components/SquadCard';
+import SquadOverviewCard from '../../components/SquadOverviewCard';
 
 const GET_SQUAD = gql`
   query GetSquad($token: String!, $squadID: Int!) {
@@ -34,7 +34,7 @@ class SquadPage extends React.Component {
           const { squad } = data;
           return (
             <Layout rightTitle="Squad">
-              <SquadCard
+              <SquadOverviewCard
                 description={squad.description}
                 price={squad.costPrice}
                 service={squad.service}
