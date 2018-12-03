@@ -26,7 +26,7 @@ class Query(graphene.ObjectType):
         
         print(searchMemberships)
         if not user.is_anonymous:
-            squadsWithUserMembership = Squad.objects.filter(members__user=user, members__status__gte = SquadMemberStatus.SUBSCRIBED)
+            squadsWithUserMembership = Squad.objects.filter(members__user=user, members__status = SquadMemberStatus.SUBSCRIBED)
             
             squadsWithUserBan = Squad.objects.filter(members__user=user, members__status = SquadMemberStatus.BANNED)
             
