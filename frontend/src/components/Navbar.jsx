@@ -11,6 +11,9 @@ import { Link } from 'react-router-dom';
 import Logo from './Logo';
 
 const styles = theme => ({
+  createButton: {
+    marginRight: 10
+  },
   toolbar: {
     display: 'flex',
     justifyContent: 'space-between'
@@ -22,16 +25,27 @@ function Navbar(props) {
   return (
     <AppBar position="static">
       <Toolbar className={classes.toolbar} variant="dense">
-        <Button
-          component={Link}
-          to="/create"
-          variant="outlined"
-          color="secondary"
-          size="small"
-          className={classes.createButton}
-        >
-          Create Squad
-        </Button>
+        <div>
+          <Button
+            component={Link}
+            to="/create"
+            variant="outlined"
+            color="secondary"
+            size="small"
+            className={classes.createButton}
+          >
+            Create
+          </Button>
+          <Button
+            component={Link}
+            to="/"
+            variant="outlined"
+            color="secondary"
+            size="small"
+          >
+            Discover
+          </Button>
+        </div>
 
         <Logo />
 
