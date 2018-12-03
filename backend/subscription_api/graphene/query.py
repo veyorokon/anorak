@@ -14,6 +14,8 @@ class Query(graphene.ObjectType):
     
     squad = graphene.Field(SquadType,token=graphene.String(required=True), squadID=graphene.Int(required=True), description="Return the squad if the user owns it.")
     
+    squad_memberships = graphene.List(SquadMemberType, token=graphene.String(required=True), description="Returns a list of all: invites, subscriptions and owned squads.")
+    
     
     def resolve_squad_search(self, info, text, **kwargs):
         return Squad.objects.filter(Q(service__icontains=text) | Q(description__icontains=text)).filter(is_public=True).filter(is_active=True).filter(current_size__lt = F('maximum_size'))
@@ -39,3 +41,14 @@ class Query(graphene.ObjectType):
             id = squadID
         )
         return squad
+        
+    @login_required
+    def resolve_squad_memberships(self, info, token):
+        user = info.context.user
+        memberships = SquadMember.objects.filter(
+            Q(status=SquadMemberStatus.INVITED) |
+            Q(status=SquadMemberStatus.SUBSCRIBED) |
+            Q(status=SquadMemberStatus.OWNER),
+            user = user,
+        )
+        return memberships
