@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router-dom';
 
+import LeaveModal from './LeaveModal';
 import SquadCardModal from './SquadCardModal';
 
 const styles = {
@@ -46,6 +47,7 @@ function SquadCard(props) {
             Manage
           </Button>
         )}
+        {props.status === 'A_7' && <LeaveModal squadID={props.squadID} />}
       </CardActions>
     </Card>
   );
@@ -56,8 +58,8 @@ SquadCard.propTypes = {
   description: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   service: PropTypes.string.isRequired,
+  squadID: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired
-  // squadID: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(withRouter(SquadCard));
