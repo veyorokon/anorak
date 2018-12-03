@@ -21,6 +21,7 @@ const GET_USER = gql`
           description
           service
         }
+        status
       }
     }
   }
@@ -39,7 +40,7 @@ function SquadList(props) {
 
         return (
           <Grid container direction="column" alignItems="center" spacing={24}>
-            {data.user.squadMemberships.map(({ id, squad }) => (
+            {data.user.squadMemberships.map(({ id, squad, status }) => (
               <Grid key={id} item>
                 <SquardCard
                   description={squad.description}
@@ -47,6 +48,7 @@ function SquadList(props) {
                   service={squad.service}
                   membershipID={id}
                   squadID={squad.id}
+                  status={status}
                 />
               </Grid>
             ))}

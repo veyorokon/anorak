@@ -38,12 +38,14 @@ function SquadCard(props) {
           title={props.service}
           membershipID={props.membershipID}
         />
-        <Button
-          style={{ color: '#f8be00' }}
-          onClick={() => props.history.push('/squads/' + props.squadID)}
-        >
-          Manage
-        </Button>
+        {props.status === 'A_8' && (
+          <Button
+            style={{ color: '#f8be00' }}
+            onClick={() => props.history.push('/squads/' + props.squadID)}
+          >
+            Manage
+          </Button>
+        )}
       </CardActions>
     </Card>
   );
@@ -53,7 +55,8 @@ SquadCard.propTypes = {
   classes: PropTypes.object.isRequired,
   description: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
-  service: PropTypes.string.isRequired
+  service: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired
   // squadID: PropTypes.string.isRequired
 };
 
