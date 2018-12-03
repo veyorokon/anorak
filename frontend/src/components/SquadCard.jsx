@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router-dom';
 
+import AcceptInviteModal from './AcceptInviteModal';
+import DeclineInviteModal from './DeclineInviteModal';
 import LeaveModal from './LeaveModal';
 import SquadCardModal from './SquadCardModal';
 
@@ -23,6 +25,10 @@ const styles = {
 
 function SquadCard(props) {
   const { classes } = props;
+
+  const userIsInvited = props.status === 'A_6';
+  const userIsSubscribed = props.status === 'A_7';
+  const userIsOwner = props.status === 'A_8';
   return (
     <Card className={classes.card}>
       <CardContent>
@@ -35,11 +41,18 @@ function SquadCard(props) {
         <Typography component="p">{props.description}</Typography>
       </CardContent>
       <CardActions style={{ justifyContent: 'space-between' }}>
-        <SquadCardModal
-          title={props.service}
-          membershipID={props.membershipID}
-        />
-        {props.status === 'A_8' && (
+        {/* Button 1 */}
+        {userIsInvited && <AcceptInviteModal squadID={props.squadID} />}
+        {(userIsSubscribed || userIsOwner) && (
+          <SquadCardModal
+            title={props.service}
+            membershipID={props.membershipID}
+          />
+        )}
+
+        {/* Button 2 */}
+        {userIsInvited && <DeclineInviteModal squadID={props.squadID} />}
+        {userIsOwner && (
           <Button
             style={{ color: '#f8be00' }}
             onClick={() => props.history.push('/squads/' + props.squadID)}
@@ -47,7 +60,7 @@ function SquadCard(props) {
             Manage
           </Button>
         )}
-        {props.status === 'A_7' && <LeaveModal squadID={props.squadID} />}
+        {userIsSubscribed && <LeaveModal squadID={props.squadID} />}
       </CardActions>
     </Card>
   );
