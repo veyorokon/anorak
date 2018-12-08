@@ -10,7 +10,7 @@ const styles = theme => ({});
 function Dashboard(props) {
   // const { classes } = props;
   return (
-    <Layout rightTitle="Find a Squad">
+    <Layout>
       <SquadSearch />
     </Layout>
   );

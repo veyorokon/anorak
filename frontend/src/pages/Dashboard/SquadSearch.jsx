@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import gql from 'graphql-tag';
 import throttle from 'lodash/throttle';
 
@@ -9,10 +10,16 @@ import Search from '../../components/Search';
 import SearchTable from '../../components/SearchTable';
 
 const styles = theme => ({
-  search: {
+  searchSection: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
     marginBottom: '14px',
     marginLeft: '14px',
     marginRight: '14px'
+  },
+  subtitle: {
+    flexBasis: '25%'
   }
 });
 
@@ -38,7 +45,10 @@ function SquadSearch(props) {
         const reSearch = text => refetch({ text });
         return (
           <React.Fragment>
-            <div className={classes.search}>
+            <div className={classes.searchSection}>
+              <Typography className={classes.subtitle} variant="body2">
+                Create. Share. Subscribe.
+              </Typography>
               <Search onSearch={text => throttledSearch(text, reSearch)} />
             </div>
             <SearchTable squads={data.squadSearch || []} />

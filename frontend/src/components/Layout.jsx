@@ -33,9 +33,11 @@ function Layout(props) {
         </Grid>
 
         <Grid item md={9}>
-          <Typography className={classes.title} align="left" variant="h6">
-            {rightTitle}
-          </Typography>
+          {rightTitle && (
+            <Typography className={classes.title} align="left" variant="h6">
+              {rightTitle}
+            </Typography>
+          )}
           {children}
         </Grid>
       </Grid>
@@ -46,7 +48,7 @@ function Layout(props) {
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
   classes: PropTypes.object.isRequired,
-  rightTitle: PropTypes.string.isRequired
+  rightTitle: PropTypes.string
 };
 
 export default withStyles(styles)(Layout);
