@@ -20,12 +20,14 @@ const styles = theme => ({
     display: 'flex'
   },
   navbarLeft: {
-    flexBasis: '25%',
+    flexBasis: '23%',
     display: 'flex'
   },
   navbarRight: {
+    borderLeft: '1px solid grey',
+    paddingLeft: 40,
     display: 'flex',
-    flexBasis: '75%',
+    flexBasis: '77%',
     alignItems: 'center',
     justifyContent: 'space-between'
   },
