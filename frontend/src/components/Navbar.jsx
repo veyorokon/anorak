@@ -5,6 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { Link } from 'react-router-dom';
 
@@ -16,11 +17,24 @@ const styles = theme => ({
     marginRight: 10
   },
   toolbar: {
-    display: 'flex',
-    justifyContent: 'space-between'
+    display: 'flex'
   },
   navbarLeft: {
+    flexBasis: '25%',
     display: 'flex'
+  },
+  navbarRight: {
+    display: 'flex',
+    flexBasis: '75%',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  newText: {
+    color: 'white'
+  },
+  startHereSection: {
+    display: 'flex',
+    alignItems: 'baseline'
   }
 });
 
@@ -52,14 +66,25 @@ function Navbar(props) {
           </Button>
         </div>
 
-        <IconButton
-          color="secondary"
-          component={Link}
-          to="/account"
-          aria-label="Go to account page"
-        >
-          <AccountCircleIcon />
-        </IconButton>
+        <div className={classes.navbarRight}>
+          <div className={classes.startHereSection}>
+            <Typography className={classes.newText} variant="subtitle2">
+              New?
+            </Typography>
+            <Button variant="text" color="secondary" size="small">
+              Start here
+            </Button>
+          </div>
+
+          <IconButton
+            color="secondary"
+            component={Link}
+            to="/account"
+            aria-label="Go to account page"
+          >
+            <AccountCircleIcon />
+          </IconButton>
+        </div>
       </Toolbar>
     </AppBar>
   );
