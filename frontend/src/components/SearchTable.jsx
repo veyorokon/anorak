@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Typography from '@material-ui/core/Typography';
+
+import SquadUpModal from './SquadUpModal';
 
 const rows = [
   { id: 'name', numeric: false, label: 'Name' },
@@ -72,18 +72,11 @@ function SearchTable(props) {
                   ${(squad.costPrice / 100).toFixed(2)}
                 </TableCell>
                 <TableCell>
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    className={classes.button}
-                  >
-                    <Typography className={classes.white} noWrap>
-                      Squad
-                    </Typography>
-                    <Typography color="secondary" noWrap>
-                      Up
-                    </Typography>
-                  </Button>
+                  <SquadUpModal
+                    price={squad.costPrice}
+                    service={squad.service}
+                    squadID={squad.id}
+                  />
                 </TableCell>
               </TableRow>
             ))}
