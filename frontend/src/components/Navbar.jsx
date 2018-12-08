@@ -12,11 +12,15 @@ import Logo from './Logo';
 
 const styles = theme => ({
   createButton: {
+    marginLeft: 30,
     marginRight: 10
   },
   toolbar: {
     display: 'flex',
     justifyContent: 'space-between'
+  },
+  navbarLeft: {
+    display: 'flex'
   }
 });
 
@@ -25,7 +29,8 @@ function Navbar(props) {
   return (
     <AppBar position="static">
       <Toolbar className={classes.toolbar} variant="dense">
-        <div>
+        <div className={classes.navbarLeft}>
+          <Logo />
           <Button
             component={Link}
             to="/create"
@@ -46,8 +51,6 @@ function Navbar(props) {
             Discover
           </Button>
         </div>
-
-        <Logo />
 
         <IconButton
           color="secondary"
