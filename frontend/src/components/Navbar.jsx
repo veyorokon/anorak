@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { Link } from 'react-router-dom';
 
+import AccountButtons from './AccountButtons';
 import Logo from './Logo';
 
 const styles = theme => ({
@@ -78,14 +77,7 @@ function Navbar(props) {
             </Button>
           </div>
 
-          <IconButton
-            color="secondary"
-            component={Link}
-            to="/account"
-            aria-label="Go to account page"
-          >
-            <AccountCircleIcon />
-          </IconButton>
+          <AccountButtons />
         </div>
       </Toolbar>
     </AppBar>
