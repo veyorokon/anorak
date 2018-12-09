@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 const statusToText = {
+  A_0: 'Banned',
+  A_1: 'Kicked',
+  A_2: 'Rejected',
+  A_3: 'Unsubscribed',
+  A_4: 'Terminated',
   A_5: 'Pending',
   A_6: 'Invited',
   A_7: 'Subscribed',

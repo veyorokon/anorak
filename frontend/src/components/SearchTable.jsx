@@ -8,7 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import SquadUpModal from './SquadUpModal';
+import MainActionButton from './MainActionButton';
 
 const rows = [
   { id: 'name', numeric: false, label: 'Name' },
@@ -72,7 +72,7 @@ function SearchTable(props) {
                   ${(squad.costPrice / 100).toFixed(2)}
                 </TableCell>
                 <TableCell>
-                  <SquadUpModal
+                  <MainActionButton
                     price={squad.costPrice}
                     service={squad.service}
                     squadID={squad.id}

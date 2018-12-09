@@ -6,12 +6,8 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
-import Button from '@material-ui/core/Button';
-import { withRouter } from 'react-router-dom';
-
-import AcceptInviteModal from './AcceptInviteModal';
 import DeclineInviteModal from './DeclineInviteModal';
-import LeaveModal from './LeaveModal';
+import MainActionButton from './MainActionButton';
 import SquadCardModal from './SquadCardModal';
 import SquadStatus from './SquadStatus';
 
@@ -51,7 +47,7 @@ function SquadCard(props) {
       </CardContent>
       <CardActions style={{ justifyContent: 'space-between' }}>
         {/* Button 1 */}
-        {userIsInvited && <AcceptInviteModal squadID={props.squadID} />}
+        {userIsInvited && <DeclineInviteModal squadID={props.squadID} />}
         {(userIsSubscribed || userIsOwner) && (
           <SquadCardModal
             title={props.service}
@@ -60,16 +56,12 @@ function SquadCard(props) {
         )}
 
         {/* Button 2 */}
-        {userIsInvited && <DeclineInviteModal squadID={props.squadID} />}
-        {userIsOwner && (
-          <Button
-            style={{ color: '#f8be00' }}
-            onClick={() => props.history.push('/squads/' + props.squadID)}
-          >
-            Manage
-          </Button>
-        )}
-        {userIsSubscribed && <LeaveModal squadID={props.squadID} />}
+        <MainActionButton
+          service={props.service}
+          price={props.price}
+          squadID={props.squadID}
+          userStatus={props.status}
+        />
       </CardActions>
     </Card>
   );
@@ -84,4 +76,4 @@ SquadCard.propTypes = {
   status: PropTypes.string.isRequired
 };
 
-export default withStyles(styles)(withRouter(SquadCard));
+export default withStyles(styles)(SquadCard);
