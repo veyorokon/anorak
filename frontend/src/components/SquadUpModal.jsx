@@ -16,6 +16,7 @@ const CREATE_MEMBERSHIP = gql`
     createMembership(token: $token, squadID: $squadID) {
       squadMembership {
         id
+        status
       }
     }
   }

@@ -12,6 +12,7 @@ const HANDLE_INVITE = gql`
     handleInvite(token: $token, squadID: $squadID, wasAccepted: false) {
       squadMembership {
         id
+        status
       }
     }
   }
@@ -37,7 +38,6 @@ class DeclineInviteModal extends React.Component {
         squadID: this.props.squadID
       }
     });
-    this.setState({ open: false });
   };
 
   render() {

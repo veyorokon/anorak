@@ -26,6 +26,7 @@ const UPDATE_SQUAD = gql`
     ) {
       squad {
         id
+        description
       }
     }
   }

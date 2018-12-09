@@ -12,6 +12,7 @@ const DEACTIVATE_MEMBERSHIP = gql`
     deactivateMembership(token: $token, squadID: $squadID) {
       squadMembership {
         id
+        status
       }
     }
   }
@@ -37,7 +38,6 @@ class LeaveModal extends React.Component {
         squadID: this.props.squadID
       }
     });
-    this.setState({ open: false });
   };
 
   render() {
