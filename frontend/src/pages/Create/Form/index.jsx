@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
+import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
@@ -60,6 +63,7 @@ const styles = theme => ({
 class CreateForm extends React.Component {
   state = {
     run: false,
+    snackbarOpen: false,
     steps: [
       {
         target: '.first-step',
@@ -123,7 +127,7 @@ class CreateForm extends React.Component {
   }
 
   onSubmit = async (createSquad, values) => {
-    const { data } = await createSquad({
+    await createSquad({
       variables: {
         token: window.localStorage.getItem('sessionToken'),
         service: values.service,
@@ -134,91 +138,124 @@ class CreateForm extends React.Component {
         isPublic: values.isPublic
       }
     });
-    console.log(data);
+    this.setState({ snackbarOpen: true });
   };
 
   callback = data => {
     // const { action, index, type } = data;
   };
 
+  onSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ snackbarOpen: false });
+  };
+
   render() {
     const { classes } = this.props;
     const { steps, run } = this.state;
     return (
-      <Paper className={classes.paper}>
-        <Typography component="h2" variant="h5" gutterBottom>
-          Create A Squad
-        </Typography>
-        <Typography className={classes.subtitle} variant="subtitle1">
-          Create your own subscription!
-        </Typography>
+      <React.Fragment>
+        <Paper className={classes.paper}>
+          <Typography component="h2" variant="h5" gutterBottom>
+            Create A Squad
+          </Typography>
+          <Typography className={classes.subtitle} variant="subtitle1">
+            Create your own subscription!
+          </Typography>
 
-        <Joyride
-          steps={steps}
-          run={run}
-          callback={this.callback}
-          continuous={true}
-        />
+          <Joyride
+            steps={steps}
+            run={run}
+            callback={this.callback}
+            continuous={true}
+          />
 
-        <Mutation mutation={CREATE_SQUAD}>
-          {createSquad => (
-            <Form
-              config={formConfig}
-              onSubmit={async (values, { setSubmitting }) => {
-                await this.onSubmit(createSquad, values);
-                setSubmitting(false);
-              }}
+          <Mutation mutation={CREATE_SQUAD}>
+            {createSquad => (
+              <Form
+                config={formConfig}
+                onSubmit={async (values, { setSubmitting }) => {
+                  await this.onSubmit(createSquad, values);
+                  setSubmitting(false);
+                }}
+              >
+                {({ isSubmitting, renderField }) => (
+                  <div className="first-step">
+                    <Typography variant="subtitle1">Squad Form</Typography>
+                    <Grid container spacing={24}>
+                      <Grid item xs={12} className="second-step">
+                        {renderField('service', {
+                          fullWidth: true
+                        })}
+                      </Grid>
+                      <Grid item xs={12} className="third-step">
+                        {renderField('description', {
+                          fullWidth: true
+                        })}
+                      </Grid>
+                      <Grid item xs={12} className="fourth-step">
+                        {renderField('secret', {
+                          fullWidth: true
+                        })}
+                      </Grid>
+                      <Grid item xs={12} className="fifth-step" sm={6}>
+                        {renderField('maxSize', {
+                          fullWidth: true
+                        })}
+                      </Grid>
+                      <Grid item xs={12} className="sixth-step" sm={6}>
+                        {renderField('costPrice', {
+                          fullWidth: true
+                        })}
+                      </Grid>
+
+                      <Grid item xs={12} className="seventh-step" sm={6}>
+                        {renderField('isPublic')}
+                      </Grid>
+                    </Grid>
+
+                    <Button
+                      className={classes.button}
+                      color="primary"
+                      disabled={isSubmitting}
+                      type="submit"
+                      variant="outlined"
+                    >
+                      Create
+                    </Button>
+                  </div>
+                )}
+              </Form>
+            )}
+          </Mutation>
+        </Paper>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left'
+          }}
+          open={this.state.snackbarOpen}
+          autoHideDuration={6000}
+          onClose={this.onSnackbarClose}
+          ContentProps={{
+            'aria-describedby': 'message-id'
+          }}
+          message={<span id="message-id">You created a Squad!</span>}
+          action={
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              onClick={this.onSnackbarClose}
             >
-              {({ isSubmitting, renderField }) => (
-                <div className="first-step">
-                  <Typography variant="subtitle1">Squad Form</Typography>
-                  <Grid container spacing={24}>
-                    <Grid item xs={12} className="second-step">
-                      {renderField('service', {
-                        fullWidth: true
-                      })}
-                    </Grid>
-                    <Grid item xs={12} className="third-step">
-                      {renderField('description', {
-                        fullWidth: true
-                      })}
-                    </Grid>
-                    <Grid item xs={12} className="fourth-step">
-                      {renderField('secret', {
-                        fullWidth: true
-                      })}
-                    </Grid>
-                    <Grid item xs={12} className="fifth-step" sm={6}>
-                      {renderField('maxSize', {
-                        fullWidth: true
-                      })}
-                    </Grid>
-                    <Grid item xs={12} className="sixth-step" sm={6}>
-                      {renderField('costPrice', {
-                        fullWidth: true
-                      })}
-                    </Grid>
-
-                    <Grid item xs={12} className="seventh-step" sm={6}>
-                      {renderField('isPublic')}
-                    </Grid>
-                  </Grid>
-
-                  <Button
-                    className={classes.button}
-                    color="primary"
-                    disabled={isSubmitting}
-                    type="submit"
-                    variant="outlined"
-                  >
-                    Create
-                  </Button>
-                </div>
-              )}
-            </Form>
-          )}
-        </Mutation>
-      </Paper>
+              <CloseIcon />
+            </IconButton>
+          }
+        />
+      </React.Fragment>
     );
   }
 }
