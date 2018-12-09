@@ -30,7 +30,7 @@ class CreateSquad(graphene.Mutation):
         token = graphene.String(required=True)
         isPublic = graphene.Boolean(required=True)
     
-    squad =  graphene.Field(RestrictedSquadType)
+    squad =  graphene.Field(SquadType)
     
     @login_required
     def mutate(self, info, token, service, description, secret, costPrice, maxSize, isPublic):
@@ -59,7 +59,7 @@ class UpdateSquad(graphene.Mutation):
         description = graphene.String(required=False)
         secret = graphene.String(required=False)
     
-    squad =  graphene.Field(RestrictedSquadType)
+    squad =  graphene.Field(SquadType)
     
     @login_required
     def mutate(self, info, token, squadID, description, secret, **kwargs):
@@ -236,7 +236,7 @@ class DeactivateSquad(graphene.Mutation):
         token = graphene.String(required=True)
         squadID = graphene.Int(required=True)
     
-    squad =  graphene.Field(RestrictedSquadType)
+    squad =  graphene.Field(SquadType)
     
     @login_required
     def mutate(self, info, token, squadID):

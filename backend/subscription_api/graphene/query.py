@@ -9,11 +9,11 @@ from django.db.models import F
 
 
 class Query(graphene.ObjectType):
-    squad_search = graphene.List(RestrictedSquadType, token=graphene.String(required=False), text=graphene.String(required=True), description="Search active and public squads for key words in the service or description. Returns all squads with available space.")
+    squad_search = graphene.List(SquadType, token=graphene.String(required=False), text=graphene.String(required=True), description="Search active and public squads for key words in the service or description. Returns all squads with available space.")
     
     get_secret = graphene.Field(graphene.String, token=graphene.String(required=True), membershipID=graphene.Int(required=True), description="Returns the squad secret if the user has an active membership.")
     
-    squad = graphene.Field(SquadType,token=graphene.String(required=True), squadID=graphene.Int(required=True), description="Return the squad if the user owns it.")
+    squad = graphene.Field(SquadType,token=graphene.String(required=False), squadID=graphene.Int(required=True), description="Return the squad if the user owns it.")
     
     squad_memberships = graphene.List(SquadMemberType, token=graphene.String(required=True), description="Returns a list of all: invites, subscriptions and owned squads.")
     
@@ -51,11 +51,8 @@ class Query(graphene.ObjectType):
                 return "Squad has been deactivated by the owner and all subscriptions have been terminated."
         return None
         
-    @login_required
-    def resolve_squad(self, info, token, squadID):
-        user = info.context.user
+    def resolve_squad(self, info, squadID, token=None):
         squad = Squad.objects.get(
-            owner = user,
             id = squadID
         )
         return squad
