@@ -9,17 +9,27 @@ class SquadType(DjangoObjectType):
     
     class Meta:
         model = Squad
-        exclude_fields = ['secret', 'date_created', 'date_modified', 'stripe_plan']
+        exclude_fields = ['date_created', 'date_modified', 'stripe_plan']
     
     def resolve_members(self, info):
         if info.context.user == self.owner:
             return self.members
         return None
-        
     
     def resolve_owner(self, info):
         return '{0} {1}'.format(self.owner.first_name, self.owner.last_name)
         
+    def resolve_secret(self, info):
+        try:
+            membership = SquadMember.objects.get(
+                squad=self.id, 
+                user=info.context.user
+            )
+            if(membership.status == SquadMemberStatus.SUBSCRIBED):
+                return self.secret
+        except:
+            pass
+        return None
     
     def resolve_current_user_status(self, info):
         try:

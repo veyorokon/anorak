@@ -28,9 +28,9 @@ const styles = {
 function SquadCard(props) {
   const { classes } = props;
 
-  const userIsInvited = props.status === 'A_6';
-  const userIsSubscribed = props.status === 'A_7';
-  const userIsOwner = props.status === 'A_8';
+  const userIsInvited = props.status === 'invited';
+  const userIsSubscribed = props.status === 'subscribed';
+  const userIsOwner = props.status === 'owner';
   return (
     <Card className={classes.card}>
       <CardContent>

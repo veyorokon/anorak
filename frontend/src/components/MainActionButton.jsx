@@ -7,9 +7,9 @@ import LeaveModal from './LeaveModal';
 import SquadUpModal from './SquadUpModal';
 
 function MainActionButton(props) {
-  const userIsInvited = props.userStatus === 'A_6';
-  const userIsSubscribed = props.userStatus === 'A_7';
-  const userIsOwner = props.userStatus === 'A_8';
+  const userIsInvited = props.userStatus === 'invited';
+  const userIsSubscribed = props.userStatus === 'subscribed';
+  const userIsOwner = props.userStatus === 'owner';
 
   if (!props.userStatus) {
     return (
