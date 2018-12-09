@@ -43,7 +43,6 @@ class SquadMemberType(DjangoObjectType):
     def resolve_status(self, info):
         try:            
             memberRole = SquadMemberStatus.items()[self.status][0]
-            print(memberRole)
             return memberRole.lower()
         except:
             return None
