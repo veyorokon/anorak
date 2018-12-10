@@ -32,6 +32,7 @@ const SEARCH_SQUADS = gql`
       maximumSize
       service
       description
+      owner
     }
   }
 `;
@@ -48,7 +49,7 @@ function SquadSearch(props) {
           <React.Fragment>
             <div className={classes.searchSection}>
               <Typography className={classes.subtitle} variant="body2">
-                Create. Share. Subscribe.
+                Create. Discover. Subscribe.
               </Typography>
               <Search onSearch={text => throttledSearch(text, reSearch)} />
             </div>

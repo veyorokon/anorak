@@ -18,6 +18,9 @@ function MainActionButton(props) {
         service={props.service}
         squadID={props.squadID}
         description={props.description}
+        size={props.size}
+        capacity={props.capacity}
+        owner={props.owner}
       />
     );
   }

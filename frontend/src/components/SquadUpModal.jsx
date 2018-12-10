@@ -84,18 +84,24 @@ class SquadUpModal extends React.Component {
         >
           <DialogTitle id="responsive-dialog-title">
             {this.props.service}
+            <Typography
+              style={{ justifyContent: 'flex-end' }}
+              color="textSecondary"
+            >
+              {this.props.owner}
+            </Typography>
           </DialogTitle>
 
           <DialogContent>
             <Grid container spacing={24}>
-              <Grid item xs={12}>
+              <Grid item xs={12} style={{ display: 'block' }}>
                 <Typography>{this.props.description}</Typography>
               </Grid>
               <Grid item xs={6} color="textSecondary">
                 <Typography>Cost:</Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography className={classes.cost} color="textSecondary">
+                <Typography color="textSecondary">
                   ${(this.props.price / 100).toFixed(2)} / month
                 </Typography>
               </Grid>
@@ -108,19 +114,19 @@ class SquadUpModal extends React.Component {
                 </Typography>
               </Grid>
               <Grid item xs={6} color="textSecondary">
-                <Typography>Billed:</Typography>
+                <Typography>Size:</Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography className={classes.cost} color="textSecondary">
-                  Monthly
+                  {this.props.size}
                 </Typography>
               </Grid>
               <Grid item xs={6} color="textSecondary">
-                <Typography>Billed:</Typography>
+                <Typography>Capacity:</Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography className={classes.cost} color="textSecondary">
-                  Monthly
+                  {this.props.capacity}
                 </Typography>
               </Grid>
             </Grid>
@@ -129,11 +135,6 @@ class SquadUpModal extends React.Component {
           <DialogActions>
             <Grid container spacing={24}>
               <Grid item xs={6}>
-                <Button onClick={this.handleClose} color="primary">
-                  cancel
-                </Button>
-              </Grid>
-              <Grid item xs={6} color="textSecondary">
                 <Mutation mutation={CREATE_MEMBERSHIP}>
                   {createMembership => (
                     <Button
@@ -144,6 +145,11 @@ class SquadUpModal extends React.Component {
                     </Button>
                   )}
                 </Mutation>
+              </Grid>
+              <Grid item xs={6} color="textSecondary">
+                <Button onClick={this.handleClose} color="primary">
+                  cancel
+                </Button>
               </Grid>
             </Grid>
           </DialogActions>

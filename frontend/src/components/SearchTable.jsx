@@ -77,6 +77,9 @@ function SearchTable(props) {
                     service={squad.service}
                     squadID={squad.id}
                     description={squad.description}
+                    size={squad.currentSize}
+                    capacity={squad.maximumSize}
+                    owner={squad.owner}
                   />
                 </TableCell>
               </TableRow>
