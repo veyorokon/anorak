@@ -69,12 +69,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True)
     phone_number = models.CharField( max_length=17, blank=True, unique=True, 
         null=True)
-    facebook_id = models.CharField(_('facebook id'), max_length=30, blank=True, editable=False)
+    facebook_id = models.CharField(_('facebook id'), max_length=30, blank=True, null=True, editable=False)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, null=True, blank=True)
     address_shipping = models.OneToOneField(ShippingAddress, null=True, on_delete=models.SET_NULL, blank=True)
     date_joined = models.DateTimeField(_('date joined'), 
-        editable=True, auto_now_add=True)
+        editable=True, null=True, auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('staff'), default=False)
     stripe_customer = models.OneToOneField(StripeCustomer, null=True,
