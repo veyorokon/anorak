@@ -76,6 +76,7 @@ function SearchTable(props) {
                     price={squad.costPrice}
                     service={squad.service}
                     squadID={squad.id}
+                    description={squad.description}
                   />
                 </TableCell>
               </TableRow>

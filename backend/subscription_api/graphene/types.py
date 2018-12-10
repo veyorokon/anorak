@@ -25,7 +25,7 @@ class SquadType(DjangoObjectType):
                 squad=self.id, 
                 user=info.context.user
             )
-            if(membership.status == SquadMemberStatus.SUBSCRIBED):
+            if(membership.status >= SquadMemberStatus.SUBSCRIBED):
                 return self.secret
         except:
             pass

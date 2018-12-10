@@ -11,8 +11,6 @@ import Typography from '@material-ui/core/Typography';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
-import Grid from '@material-ui/core/Grid';
-
 const CREATE_MEMBERSHIP = gql`
   mutation CreateMembership($token: String!, $squadID: Int!) {
     createMembership(token: $token, squadID: $squadID) {
@@ -83,69 +81,32 @@ class SquadUpModal extends React.Component {
           aria-labelledby="responsive-dialog-title"
         >
           <DialogTitle id="responsive-dialog-title">
-            {this.props.service}
+            Confirm that you'd like to join this Squad
           </DialogTitle>
 
           <DialogContent>
-            <Grid container spacing={24}>
-              <Grid item xs={12}>
-                <Typography>{this.props.description}</Typography>
-              </Grid>
-              <Grid item xs={6} color="textSecondary">
-                <Typography>Cost:</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography className={classes.cost} color="textSecondary">
-                  ${(this.props.price / 100).toFixed(2)} / month
-                </Typography>
-              </Grid>
-              <Grid item xs={6} color="textSecondary">
-                <Typography>Billed:</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography className={classes.cost} color="textSecondary">
-                  Monthly
-                </Typography>
-              </Grid>
-              <Grid item xs={6} color="textSecondary">
-                <Typography>Billed:</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography className={classes.cost} color="textSecondary">
-                  Monthly
-                </Typography>
-              </Grid>
-              <Grid item xs={6} color="textSecondary">
-                <Typography>Billed:</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography className={classes.cost} color="textSecondary">
-                  Monthly
-                </Typography>
-              </Grid>
-            </Grid>
+            <Typography variant="subtitle1" component="h2">
+              {this.props.service}
+            </Typography>
+            <Typography className={classes.cost} color="textSecondary">
+              ${(this.props.price / 100).toFixed(2)} / month
+            </Typography>
           </DialogContent>
 
           <DialogActions>
-            <Grid container spacing={24}>
-              <Grid item xs={6}>
-                <Button onClick={this.handleClose} color="primary">
-                  cancel
+            <Button onClick={this.handleClose} color="primary">
+              cancel
+            </Button>
+            <Mutation mutation={CREATE_MEMBERSHIP}>
+              {createMembership => (
+                <Button
+                  onClick={() => this.onAcceptClick(createMembership)}
+                  color="secondary"
+                >
+                  SquadUp
                 </Button>
-              </Grid>
-              <Grid item xs={6} color="textSecondary">
-                <Mutation mutation={CREATE_MEMBERSHIP}>
-                  {createMembership => (
-                    <Button
-                      onClick={() => this.onAcceptClick(createMembership)}
-                      color="secondary"
-                    >
-                      SquadUp
-                    </Button>
-                  )}
-                </Mutation>
-              </Grid>
-            </Grid>
+              )}
+            </Mutation>
           </DialogActions>
         </Dialog>
       </div>

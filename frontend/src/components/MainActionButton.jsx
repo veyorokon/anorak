@@ -17,6 +17,7 @@ function MainActionButton(props) {
         price={props.price}
         service={props.service}
         squadID={props.squadID}
+        description={props.description}
       />
     );
   }

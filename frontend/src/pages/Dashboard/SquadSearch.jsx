@@ -31,6 +31,7 @@ const SEARCH_SQUADS = gql`
       currentSize
       maximumSize
       service
+      description
     }
   }
 `;
