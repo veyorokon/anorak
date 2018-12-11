@@ -25,11 +25,12 @@ function AccountButtons(props) {
       variant="text"
       color="secondary"
       size="small"
+      className="dashboard-tutorial-fourth"
     >
       Account
     </Button>
   ) : (
-    <div className={classes.notLoggedInSection}>
+    <div className={(classes.notLoggedInSection, 'dashboard-tutorial-fourth')}>
       <Button
         component={Link}
         to="/login"

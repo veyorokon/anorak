@@ -21,18 +21,19 @@ const styles = theme => ({
 
 function Layout(props) {
   const { children, classes, rightTitle } = props;
+
   return (
     <React.Fragment>
-      <Navbar />
+      <Navbar onStartClick={props.onStartClick} />
       <Grid container spacing={24} className={classes.grid}>
-        <Grid item md={3}>
+        <Grid item md={3} className="dashboard-tutorial-second">
           <Typography className={classes.title} align="center" variant="h6">
             My Squads
           </Typography>
           <SquadList />
         </Grid>
 
-        <Grid item md={9}>
+        <Grid item md={9} className="dashboard-tutorial-third">
           {rightTitle && (
             <Typography className={classes.title} align="left" variant="h6">
               {rightTitle}

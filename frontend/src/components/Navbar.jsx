@@ -41,6 +41,7 @@ const styles = theme => ({
 
 function Navbar(props) {
   const { classes } = props;
+
   return (
     <AppBar position="static">
       <Toolbar className={classes.toolbar} variant="dense">
@@ -72,7 +73,13 @@ function Navbar(props) {
             <Typography className={classes.newText} variant="subtitle2">
               New?
             </Typography>
-            <Button variant="text" color="secondary" size="small">
+            <Button
+              className="dashboard-tutorial-first"
+              variant="text"
+              color="secondary"
+              size="small"
+              onClick={() => props.onStartClick()}
+            >
               Start here
             </Button>
           </div>
