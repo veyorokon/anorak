@@ -13,7 +13,7 @@ const styles = theme => ({
 function Logo(props) {
   const { classes } = props;
   return (
-    <div className={classes.logo}>
+    <div className={classes.logo} style={{ paddingRight: 20 }}>
       <Typography variant="h5" color="inherit" noWrap component={Link} to="/">
         Squad
       </Typography>

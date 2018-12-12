@@ -8,6 +8,7 @@ function Search(props) {
       onChange={ev => props.onSearch(ev.target.value)}
       label="Search"
       type="search"
+      className="dashboard-tutorial-third"
     />
   );
 }

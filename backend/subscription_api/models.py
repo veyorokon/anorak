@@ -57,7 +57,13 @@ class StripePlan(models.Model):
         """
         plan = self.get_stripe_plan()
         plan.delete()
+    
         
+# Frequency of subscription billing
+class SquadServiceType(enum.Enum):
+    SECRET = 0
+    BOX = 1
+
 
 # Contains a Stripe product. 
 class Squad(models.Model):
@@ -66,13 +72,15 @@ class Squad(models.Model):
     #The encrypted secret. 
     description = models.CharField(max_length=128, null=True)
     #The encrypted secret. 
-    secret = EncryptedCharField(max_length=128, null=True)
+    secret = EncryptedCharField(max_length=128, null=True, blank=True)
     #Squad description
     service = models.CharField(max_length=16, null=True)
+    #The frequency of billing
+    service_type = enum.EnumField(SquadServiceType, default=SquadServiceType.SECRET)
     #The base price charged to SquadUp
     cost_price = models.IntegerField(null=False)
     #Squad maximum size
-    maximum_size = models.IntegerField(default=10)
+    maximum_size = models.IntegerField(default=None, null=True, blank=True)
     #Squad maximum size
     current_size = models.IntegerField(default=0)
     #Date that the subscription was created
@@ -102,6 +110,8 @@ class Squad(models.Model):
         '''
         if not self.id:
             self.date_created = timezone.now()
+        if not self.maximum_size:
+            self.maximum_size = None
         self.date_modified = timezone.now()
         return super(Squad, self).save(*args, **kwargs)
         
@@ -214,7 +224,7 @@ class SquadMember(models.Model):
         
         
     def create_stripe_subscription(self, squad, user):
-        if(squad.current_size >= squad.maximum_size):
+        if(squad.maximum_size and squad.current_size >= squad.maximum_size):
             self.status = SquadMemberStatus.TERMINATED
             self.save()
             raise ValueError("Could not join squad! The squad has reached maximum capacity.")

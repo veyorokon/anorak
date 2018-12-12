@@ -6,10 +6,19 @@ class SquadType(DjangoObjectType):
     
     current_user_status = graphene.String()
     owner = graphene.String()
+    service_type = graphene.String()
     
     class Meta:
         model = Squad
         exclude_fields = ['date_created', 'date_modified', 'stripe_plan']
+        
+    def resolve_service_type(self, info):
+        try:
+            service_type = SquadServiceType.items()[self.service_type][0]
+            
+            return service_type.lower()
+        except:
+            return None
     
     def resolve_members(self, info):
         if info.context.user == self.owner:

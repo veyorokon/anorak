@@ -43,7 +43,7 @@ class Dashboard extends React.Component {
           target: '.dashboard-tutorial-third',
           title: 'How Do I Find Squads?',
           content:
-            'Squad owners can send you invites or you can search for Squads created by other users here.',
+            'Squad owners can send you invites or you can search for services .',
           placement: 'left',
           disableBeacon: true
         },
@@ -51,7 +51,7 @@ class Dashboard extends React.Component {
           target: '.dashboard-tutorial-fourth',
           title: 'Is It Free To Create A Squad?',
           content:
-            "Yes! Squads are free to create. Just make sure you've selected how you'd like to be paid: (Paypal or Venmo)  in your Account page. Then in the Navbar, click the 'CREATE' button to get started.",
+            "Yes! Squads are free to create. Click the 'CREATE' button to get started.",
           placement: 'left',
           disableBeacon: true
         }
@@ -78,16 +78,7 @@ class Dashboard extends React.Component {
           run={run}
           callback={this.callback}
           continuous={true}
-          styles={{
-            options: {
-              arrowColor: '#fff',
-              backgroundColor: '#fff',
-              overlayColor: 'rgba(0, 0, 0, 0.4)',
-              primaryColor: '#000',
-              textColor: '#000',
-              maxWidth: 300
-            }
-          }}
+          showSkipButton={true}
           floaterProps={{ disableAnimation: true }}
         />
         <SquadSearch />

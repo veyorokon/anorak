@@ -41,6 +41,26 @@ const styles = theme => ({
 
 function Navbar(props) {
   const { classes } = props;
+  const isDash = props.onStartClick;
+  let tutorial = <div />;
+  if (isDash) {
+    tutorial = (
+      <div className={classes.startHereSection}>
+        <Typography className={classes.newText} variant="subtitle2">
+          New?
+        </Typography>
+        <Button
+          className="dashboard-tutorial-first"
+          variant="text"
+          color="secondary"
+          size="small"
+          onClick={() => props.onStartClick()}
+        >
+          Start here
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <AppBar position="static">
@@ -53,10 +73,11 @@ function Navbar(props) {
             variant="outlined"
             color="secondary"
             size="small"
-            className={classes.createButton}
+            className={(classes.createButton, 'dashboard-tutorial-fourth')}
           >
             Create
           </Button>
+          <div style={{ paddingRight: 20 }} />
           <Button
             component={Link}
             to="/"
@@ -67,22 +88,8 @@ function Navbar(props) {
             Discover
           </Button>
         </div>
-
         <div className={classes.navbarRight}>
-          <div className={classes.startHereSection}>
-            <Typography className={classes.newText} variant="subtitle2">
-              New?
-            </Typography>
-            <Button
-              className="dashboard-tutorial-first"
-              variant="text"
-              color="secondary"
-              size="small"
-              onClick={() => props.onStartClick()}
-            >
-              Start here
-            </Button>
-          </div>
+          {tutorial}
 
           <AccountButtons />
         </div>

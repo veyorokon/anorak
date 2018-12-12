@@ -33,7 +33,7 @@ function Layout(props) {
           <SquadList />
         </Grid>
 
-        <Grid item md={9} className="dashboard-tutorial-third">
+        <Grid item md={9}>
           {rightTitle && (
             <Typography className={classes.title} align="left" variant="h6">
               {rightTitle}

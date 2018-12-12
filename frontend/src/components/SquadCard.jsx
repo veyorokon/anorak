@@ -13,7 +13,7 @@ import SquadStatus from './SquadStatus';
 
 const styles = {
   card: {
-    width: 240
+    width: 320
   },
   cost: {
     marginBottom: 10

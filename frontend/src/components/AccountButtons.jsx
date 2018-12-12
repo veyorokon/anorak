@@ -30,7 +30,7 @@ function AccountButtons(props) {
       Account
     </Button>
   ) : (
-    <div className={(classes.notLoggedInSection, 'dashboard-tutorial-fourth')}>
+    <div className={classes.notLoggedInSection}>
       <Button
         component={Link}
         to="/login"
