@@ -9,6 +9,7 @@ function Search(props) {
       label="Search"
       type="search"
       className="dashboard-tutorial-third"
+      style={{ marginTop: 4 }}
     />
   );
 }

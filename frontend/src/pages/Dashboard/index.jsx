@@ -80,6 +80,7 @@ class Dashboard extends React.Component {
           continuous={true}
           showSkipButton={true}
           floaterProps={{ disableAnimation: true }}
+          reset={true}
         />
         <SquadSearch />
       </Layout>
