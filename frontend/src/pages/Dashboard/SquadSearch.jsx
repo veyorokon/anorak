@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import gql from 'graphql-tag';
 import throttle from 'lodash/throttle';
 
+import DashboardCard from '../../components/DashboardCard';
 import Search from '../../components/Search';
 import SearchTable from '../../components/SearchTable';
 
@@ -17,6 +18,15 @@ const styles = theme => ({
     marginBottom: '14px',
     marginLeft: '14px',
     marginRight: '14px'
+  },
+  resultsSection: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    '& > *': {
+      marginBottom: 10,
+      marginRight: 7
+    }
   },
   subtitle: {
     flexBasis: '25%'
@@ -53,6 +63,11 @@ function SquadSearch(props) {
                 Create. Discover. Subscribe.
               </Typography>
               <Search onSearch={text => throttledSearch(text, reSearch)} />
+            </div>
+            <div className={classes.resultsSection}>
+              {(data.squadSearch || []).map(squad => (
+                <DashboardCard key={squad.id} squad={squad} />
+              ))}
             </div>
             <SearchTable squads={data.squadSearch || []} />
           </React.Fragment>
