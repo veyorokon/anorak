@@ -40,13 +40,15 @@ function SquadCard(props) {
   const userIsOwner = props.status === 'owner';
   return (
     <Card className={classes.card}>
-      <CardMedia
-        component="img"
-        alt={props.service}
-        className={classes.media}
-        image={props.image}
-        title={props.service}
-      />
+      {props.image && (
+        <CardMedia
+          component="img"
+          alt={props.service}
+          className={classes.media}
+          image={props.image}
+          title={props.service}
+        />
+      )}
       <CardContent>
         <div className={classes.firstRow}>
           <Typography variant="h6" component="h2">

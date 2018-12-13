@@ -12,7 +12,7 @@ const styles = theme => ({
   card: {
     display: 'flex',
     justifyContent: 'space-between',
-    width: 300,
+    minWidth: 200,
     height: 200
   },
   details: {
@@ -64,11 +64,13 @@ function DashboardCard(props) {
           />
         </div>
       </div>
-      <CardMedia
-        className={classes.image}
-        image={squad.image}
-        title="Squad image"
-      />
+      {squad.image && (
+        <CardMedia
+          className={classes.image}
+          image={squad.image}
+          title="Squad image"
+        />
+      )}
     </Card>
   );
 }
