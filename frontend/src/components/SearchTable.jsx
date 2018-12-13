@@ -104,7 +104,9 @@ function SearchTable(props) {
                   {squad.service}
                 </TableCell>
                 <TableCell numeric>
-                  {squad.currentSize} / {squad.maximumSize}
+                  {squad.maximumSize
+                    ? `${squad.currentSize} / ${squad.maximumSize}`
+                    : '\u221E'}
                 </TableCell>
                 <TableCell numeric>monthly</TableCell>
                 <TableCell numeric>
