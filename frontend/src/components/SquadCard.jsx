@@ -11,6 +11,8 @@ import MainActionButton from './MainActionButton';
 import SquadCardModal from './SquadCardModal';
 import SquadStatus from './SquadStatus';
 
+import CardMedia from '@material-ui/core/CardMedia';
+
 const styles = {
   card: {
     width: 320
@@ -22,6 +24,10 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center'
+  },
+  media: {
+    // ⚠️ object-fit is not supported by IE 11.
+    objectFit: 'cover'
   }
 };
 
@@ -33,6 +39,13 @@ function SquadCard(props) {
   const userIsOwner = props.status === 'owner';
   return (
     <Card className={classes.card}>
+      <CardMedia
+        component="img"
+        alt={props.service}
+        className={classes.media}
+        image="https://i.imgur.com/CIBULCG.jpg"
+        title={props.service}
+      />
       <CardContent>
         <div className={classes.firstRow}>
           <Typography variant="h6" component="h2">

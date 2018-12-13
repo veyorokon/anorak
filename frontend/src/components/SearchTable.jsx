@@ -9,13 +9,20 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import MainActionButton from './MainActionButton';
+import CardMedia from '@material-ui/core/CardMedia';
 
 const rows = [
-  { id: 'name', numeric: false, label: 'Name' },
-  { id: 'size', numeric: true, label: 'Size' },
-  { id: 'duration', numeric: true, label: 'Duration' },
-  { id: 'price', numeric: true, label: 'Price' },
-  { id: 'button', numeric: false, label: '' }
+  {
+    id: 'image',
+    numeric: false,
+    label: null,
+    style: { height: 10, width: 30 }
+  },
+  { id: 'name', numeric: false, label: 'Name', style: {} },
+  { id: 'size', numeric: true, label: 'Size', style: {} },
+  { id: 'duration', numeric: true, label: 'Duration', style: {} },
+  { id: 'price', numeric: true, label: 'Price', style: {} },
+  { id: 'button', numeric: false, label: '', style: {} }
 ];
 
 function SearchTableHead() {
@@ -23,7 +30,7 @@ function SearchTableHead() {
     <TableHead>
       <TableRow>
         {rows.map(row => (
-          <TableCell key={row.id} numeric={row.numeric}>
+          <TableCell key={row.id} numeric={row.numeric} style={row.style}>
             {row.label}
           </TableCell>
         ))}
@@ -48,11 +55,30 @@ const styles = theme => ({
   },
   white: {
     color: 'white'
+  },
+  media: {
+    // ⚠️ object-fit is not supported by IE 11.
+    objectFit: 'scale-down',
+    height: 50,
+    borderRadius: 7
+  },
+  mediaCell: {
+    paddingLeft: 10,
+    paddingRight: 0,
+    paddingTop: 0,
+    paddingBottom: 0
+  },
+  buttonCell: {
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+    paddingBottom: 0
   }
 });
 
 function SearchTable(props) {
   const { classes } = props;
+
   return (
     <Paper>
       <div className={classes.tableWrapper}>
@@ -61,6 +87,19 @@ function SearchTable(props) {
           <TableBody>
             {props.squads.map((squad, i) => (
               <TableRow hover key={i}>
+                <TableCell
+                  className={classes.mediaCell}
+                  component="th"
+                  scope="row"
+                >
+                  <CardMedia
+                    component="img"
+                    alt={props.service}
+                    className={classes.media}
+                    image="https://i.imgur.com/CIBULCG.jpg"
+                    title={props.service}
+                  />
+                </TableCell>
                 <TableCell component="th" scope="row">
                   {squad.service}
                 </TableCell>
