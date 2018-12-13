@@ -13,6 +13,10 @@ export default {
       required: true
     }
   },
+  image: {
+    initialValue: '',
+    label: 'Image URL'
+  },
   isPublic: {
     initialValue: false,
     label: 'Public',
@@ -22,10 +26,7 @@ export default {
   },
   maxSize: {
     initialValue: '',
-    label: 'Maximum Size',
-    input: {
-      required: true
-    }
+    label: 'Maximum Size'
   },
   secret: {
     initialValue: '',

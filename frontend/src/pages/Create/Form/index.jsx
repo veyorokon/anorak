@@ -23,8 +23,9 @@ const CREATE_SQUAD = gql`
     $secret: String!
     $costPrice: Float!
     $description: String!
-    $maxSize: Int!
+    $maxSize: Int
     $isPublic: Boolean!
+    $image: String
   ) {
     createSquad(
       token: $token
@@ -34,6 +35,7 @@ const CREATE_SQUAD = gql`
       description: $description
       maxSize: $maxSize
       isPublic: $isPublic
+      image: $image
     ) {
       squad {
         id
@@ -85,36 +87,42 @@ class CreateForm extends React.Component {
       },
       {
         target: '.fourth-step',
-        content:
-          'Secrets are encrypted messages that only squad members can access.',
-        placement: 'bottom'
-      },
-      {
-        target: '.fourth-step',
-        content:
-          'If you make this squad public, make sure usernames and passwords are randomly generated and not credentials you use on other sites.',
-        placement: 'bottom'
-      },
-      {
-        target: '.fourth-step',
-        content:
-          'When a squad member leaves, you may want to renew/refresh/regenerate secret information. You can do that in the manage squad page.',
+        // TODO: Vahid needs to verify text
+        content: 'Here you can add an optional image for your Squad',
         placement: 'bottom'
       },
       {
         target: '.fifth-step',
         content:
-          'You can cap the maximum number of squad members or make the size unlimited.',
+          'Secrets are encrypted messages that only squad members can access.',
+        placement: 'bottom'
+      },
+      {
+        target: '.fifth-step',
+        content:
+          'If you make this squad public, make sure usernames and passwords are randomly generated and not credentials you use on other sites.',
+        placement: 'bottom'
+      },
+      {
+        target: '.fifth-step',
+        content:
+          'When a squad member leaves, you may want to renew/refresh/regenerate secret information. You can do that in the manage squad page.',
         placement: 'bottom'
       },
       {
         target: '.sixth-step',
         content:
-          "Members join for access to your squad's secret information. Members are automatically billed each month and you receive payment (less any fees) at the end of the month.",
+          'You can cap the maximum number of squad members or make the size unlimited.',
         placement: 'bottom'
       },
       {
         target: '.seventh-step',
+        content:
+          "Members join for access to your squad's secret information. Members are automatically billed each month and you receive payment (less any fees) at the end of the month.",
+        placement: 'bottom'
+      },
+      {
+        target: '.eighth-step',
         content:
           'A public squad shows up in search. If you want an invite only squad, keep it private.',
         placement: 'bottom'
@@ -127,17 +135,19 @@ class CreateForm extends React.Component {
   }
 
   onSubmit = async (createSquad, values) => {
-    await createSquad({
-      variables: {
-        token: window.localStorage.getItem('sessionToken'),
-        service: values.service,
-        secret: values.secret,
-        costPrice: values.costPrice,
-        description: values.description,
-        maxSize: values.maxSize,
-        isPublic: values.isPublic
-      }
-    });
+    const variables = {
+      token: window.localStorage.getItem('sessionToken'),
+      service: values.service,
+      secret: values.secret,
+      costPrice: values.costPrice,
+      description: values.description,
+      isPublic: values.isPublic
+    };
+    if (values.image) variables.image = values.image;
+    if (values.maxSize) variables.maxSize = values.maxSize;
+
+    await createSquad({ variables });
+
     this.setState({ snackbarOpen: true });
   };
 
@@ -197,22 +207,27 @@ class CreateForm extends React.Component {
                         })}
                       </Grid>
                       <Grid item xs={12} className="fourth-step">
+                        {renderField('image', {
+                          fullWidth: true
+                        })}
+                      </Grid>
+                      <Grid item xs={12} className="fifth-step">
                         {renderField('secret', {
                           fullWidth: true
                         })}
                       </Grid>
-                      <Grid item xs={12} className="fifth-step" sm={6}>
+                      <Grid item xs={12} className="sixth-step" sm={6}>
                         {renderField('maxSize', {
                           fullWidth: true
                         })}
                       </Grid>
-                      <Grid item xs={12} className="sixth-step" sm={6}>
+                      <Grid item xs={12} className="seventh-step" sm={6}>
                         {renderField('costPrice', {
                           fullWidth: true
                         })}
                       </Grid>
 
-                      <Grid item xs={12} className="seventh-step" sm={6}>
+                      <Grid item xs={12} className="eighth-step" sm={6}>
                         {renderField('isPublic')}
                       </Grid>
                     </Grid>
