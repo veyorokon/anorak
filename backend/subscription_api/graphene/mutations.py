@@ -26,15 +26,15 @@ class CreateSquad(graphene.Mutation):
         description = graphene.String(required=True)
         secret = graphene.String()
         costPrice = graphene.Float(required=True)
-        maxSize = graphene.Int(required=True)
+        maxSize = graphene.Int(required=False, default_value=None)
         token = graphene.String(required=True)
-        image = graphene.String(required=True)
+        image = graphene.String(required=False, default_value=None)
         isPublic = graphene.Boolean(required=True)
     
     squad =  graphene.Field(SquadType)
     
     @login_required
-    def mutate(self, info, token, service, description, secret, costPrice, maxSize, isPublic, image):
+    def mutate(self, info, token, service, description, secret, costPrice, isPublic, maxSize, image, **kwargs):
 
         costPrice = int(costPrice * 100)
         
@@ -58,18 +58,19 @@ class UpdateSquad(graphene.Mutation):
     class Arguments:
         token = graphene.String(required=True)
         squadID = graphene.Int(required=True)
-        description = graphene.String(required=False)
+        description = graphene.String(required=False, default_value=None)
         secret = graphene.String(required=False)
-        image = graphene.String(required=False)
+        image = graphene.String(required=False, default_value=None)
     
     squad =  graphene.Field(SquadType)
     
     @login_required
-    def mutate(self, info, token, squadID, description, secret, **kwargs):
+    def mutate(self, info, token, squadID, description, secret, image,  **kwargs):
         
         squad = Squad.objects.get(
             owner=info.context.user,
-            id = squadID
+            id = squadID,
+            image=image
         )
         
         values = {convert(key): val for key, val in kwargs.items()}

@@ -112,9 +112,9 @@ class Squad(models.Model):
         '''
         if not self.id:
             self.date_created = timezone.now()
-        if not self.maximum_size:
+        if not self.maximum_size or self.maximum_size == -1:
             self.maximum_size = None
-        if not self.image:
+        if not self.image or self.maximum_size=="":
             self.image = None
         self.date_modified = timezone.now()
         return super(Squad, self).save(*args, **kwargs)
