@@ -43,7 +43,7 @@ function SquadCard(props) {
         component="img"
         alt={props.service}
         className={classes.media}
-        image="https://i.imgur.com/CIBULCG.jpg"
+        image={props.image}
         title={props.service}
       />
       <CardContent>

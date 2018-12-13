@@ -20,6 +20,7 @@ const GET_USER = gql`
           costPrice
           description
           service
+          image
         }
         status
       }
@@ -49,6 +50,7 @@ function SquadList(props) {
                   membershipID={id}
                   squadID={squad.id}
                   status={status}
+                  image={squad.image}
                 />
               </Grid>
             ))}

@@ -96,7 +96,7 @@ function SearchTable(props) {
                     component="img"
                     alt={props.service}
                     className={classes.media}
-                    image="https://i.imgur.com/CIBULCG.jpg"
+                    image={squad.image}
                     title={props.service}
                   />
                 </TableCell>

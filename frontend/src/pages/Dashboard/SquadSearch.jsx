@@ -33,6 +33,7 @@ const SEARCH_SQUADS = gql`
       service
       description
       owner
+      image
     }
   }
 `;
