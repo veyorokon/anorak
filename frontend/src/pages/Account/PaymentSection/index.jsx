@@ -76,7 +76,9 @@ class PaymentSection extends React.Component {
               initialValues={{ paymentMethod: '' }}
               onSubmit={async (values, { setSubmitting }) => {
                 await this.onSubmit(preferredPaymentMethod, values);
-                setSubmitting(false);
+                setTimeout(() => {
+                  setSubmitting(false);
+                }, 600);
               }}
             >
               {({ isSubmitting, values }) => (

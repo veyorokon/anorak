@@ -189,7 +189,9 @@ class CreateForm extends React.Component {
                 config={formConfig}
                 onSubmit={async (values, { setSubmitting }) => {
                   await this.onSubmit(createSquad, values);
-                  setSubmitting(false);
+                  setTimeout(() => {
+                    setSubmitting(false);
+                  }, 600);
                 }}
               >
                 {({ isSubmitting, renderField }) => (

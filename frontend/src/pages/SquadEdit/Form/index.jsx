@@ -78,7 +78,9 @@ class EditForm extends React.Component {
               config={formConfig}
               onSubmit={async (values, { setSubmitting }) => {
                 await this.onSubmit(updateSquad, values);
-                setSubmitting(false);
+                setTimeout(() => {
+                  setSubmitting(false);
+                }, 600);
               }}
             >
               {({ isSubmitting, renderField }) => (
