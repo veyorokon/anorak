@@ -71,6 +71,8 @@ class Squad(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     #The encrypted secret. 
     description = models.CharField(max_length=128, null=True)
+    #URL for optional image
+    image = models.URLField(max_length=200, blank=True, null=True)
     #The encrypted secret. 
     secret = EncryptedCharField(max_length=128, null=True, blank=True)
     #Squad description
@@ -112,6 +114,8 @@ class Squad(models.Model):
             self.date_created = timezone.now()
         if not self.maximum_size:
             self.maximum_size = None
+        if not self.image:
+            self.image = None
         self.date_modified = timezone.now()
         return super(Squad, self).save(*args, **kwargs)
         
