@@ -28,12 +28,13 @@ class CreateSquad(graphene.Mutation):
         costPrice = graphene.Float(required=True)
         maxSize = graphene.Int(required=True)
         token = graphene.String(required=True)
+        image = graphene.String(required=True)
         isPublic = graphene.Boolean(required=True)
     
     squad =  graphene.Field(SquadType)
     
     @login_required
-    def mutate(self, info, token, service, description, secret, costPrice, maxSize, isPublic):
+    def mutate(self, info, token, service, description, secret, costPrice, maxSize, isPublic, image):
 
         costPrice = int(costPrice * 100)
         
@@ -44,7 +45,8 @@ class CreateSquad(graphene.Mutation):
             secret=secret,
             cost_price=costPrice,
             maximum_size=maxSize,
-            is_public=isPublic
+            is_public=isPublic,
+            image=image
         )
         
         squad.save()
@@ -58,6 +60,7 @@ class UpdateSquad(graphene.Mutation):
         squadID = graphene.Int(required=True)
         description = graphene.String(required=False)
         secret = graphene.String(required=False)
+        image = graphene.String(required=False)
     
     squad =  graphene.Field(SquadType)
     
