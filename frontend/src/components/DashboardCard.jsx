@@ -12,7 +12,7 @@ const styles = theme => ({
   card: {
     display: 'flex',
     justifyContent: 'space-between',
-    minWidth: 200,
+    width: 350,
     height: 200
   },
   details: {

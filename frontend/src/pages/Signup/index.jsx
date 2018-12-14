@@ -8,6 +8,10 @@ import FacebookButton from '../../components/FacebookButton';
 import SignupForm from './Form';
 import Header from './Header';
 
+var mixpanel = require('mixpanel-browser');
+
+mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
+
 const styles = theme => {
   const layoutWidth = 400;
   const layoutSideMargin = theme.spacing.unit * 3;
@@ -41,20 +45,32 @@ const styles = theme => {
   };
 };
 
-function Signup(props) {
-  const { classes } = props;
-  return (
-    <main className={classes.layout}>
-      <Paper className={classes.paper}>
-        <Header />
-        <FacebookButton text="Signup via Facebook" />
-        <Typography variant="overline" className={classes.overline}>
-          Or
-        </Typography>
-        <SignupForm />
-      </Paper>
-    </main>
-  );
+class Signup extends React.Component {
+  static propTypes = {
+    mixpanel: PropTypes.object.isRequired
+  };
+
+  componentDidMount() {
+    mixpanel.track('Signup Page Load');
+  }
+
+  render() {
+    return (
+      <main className={this.props.classes.layout}>
+        <Paper className={this.props.classes.paper}>
+          <Header />
+          <FacebookButton text="Signup via Facebook" />
+          <Typography
+            variant="overline"
+            className={this.props.classes.overline}
+          >
+            Or
+          </Typography>
+          <SignupForm />
+        </Paper>
+      </main>
+    );
+  }
 }
 
 Signup.propTypes = {

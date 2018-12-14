@@ -13,6 +13,9 @@ import { Field, Form, Formik } from 'formik';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
+var mixpanel = require('mixpanel-browser');
+mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
+
 const SET_PREFERRED_PAYMENT_METHOD = gql`
   mutation PreferredPaymentMethod($paymentMethod: String!, $token: String!) {
     preferredPaymentMethod(paymentMethod: $paymentMethod, token: $token) {
@@ -56,6 +59,7 @@ class PaymentSection extends React.Component {
         token: window.localStorage.getItem('sessionToken')
       }
     });
+    mixpanel.track('Payment Method Update');
     console.log(data);
   };
 

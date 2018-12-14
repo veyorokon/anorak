@@ -68,6 +68,7 @@ function SquadCard(props) {
           <SquadCardModal
             title={props.service}
             membershipID={props.membershipID}
+            squadID={props.squadID}
           />
         )}
 

@@ -7,6 +7,9 @@ import SquadSearch from './SquadSearch';
 
 import Joyride from 'react-joyride';
 
+var mixpanel = require('mixpanel-browser');
+mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
+
 const styles = theme => ({});
 
 class Dashboard extends React.Component {
@@ -64,8 +67,13 @@ class Dashboard extends React.Component {
     const { action, index, type } = data;
   };
 
+  componentDidMount() {
+    mixpanel.track('Dashboard Page Load');
+  }
+
   handleOnStartClick() {
     this.setState({ run: true });
+    mixpanel.track('Dashboard Tutorial Click');
   }
 
   render() {

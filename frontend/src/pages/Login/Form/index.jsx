@@ -10,6 +10,9 @@ import { withRouter } from 'react-router';
 import Form from '../../../lib/Form';
 import formConfig from './form';
 
+var mixpanel = require('mixpanel-browser');
+mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
+
 const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3
@@ -39,12 +42,18 @@ class LoginForm extends React.Component {
         }
       });
       window.localStorage.setItem('sessionToken', data.loginUser.token);
+      mixpanel.identify(values.email);
+      mixpanel.track('User Login');
       this.props.history.push('/dashboard');
     } catch (e) {
       console.log(e);
       this.setState({ error: true });
     }
   };
+
+  componentDidMount() {
+    mixpanel.track('Login Page Load');
+  }
 
   render() {
     const { classes } = this.props;

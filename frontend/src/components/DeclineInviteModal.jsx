@@ -7,6 +7,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
+var mixpanel = require('mixpanel-browser');
+mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
+
 const HANDLE_INVITE = gql`
   mutation HandleInvite($token: String!, $squadID: Int!) {
     handleInvite(token: $token, squadID: $squadID, wasAccepted: false) {
@@ -38,6 +41,7 @@ class DeclineInviteModal extends React.Component {
         squadID: this.props.squadID
       }
     });
+    mixpanel.track('Squad Invite Decline', { squad: this.props.squadID });
   };
 
   render() {

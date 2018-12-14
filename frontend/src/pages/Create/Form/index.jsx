@@ -16,6 +16,9 @@ import formConfig from './form';
 
 import Joyride from 'react-joyride';
 
+var mixpanel = require('mixpanel-browser');
+mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
+
 const CREATE_SQUAD = gql`
   mutation CreateSquad(
     $token: String!
@@ -71,8 +74,7 @@ class CreateForm extends React.Component {
         target: '.first-step',
         content:
           'This form allows you to create your own subscription service, or a squad!',
-        placement: 'top',
-        event: 'hover'
+        placement: 'top'
       },
       {
         target: '.second-step',
@@ -132,6 +134,7 @@ class CreateForm extends React.Component {
 
   componentDidMount() {
     this.setState({ run: true });
+    mixpanel.track('Squad Create Page Load');
   }
 
   onSubmit = async (createSquad, values) => {
@@ -147,12 +150,13 @@ class CreateForm extends React.Component {
     if (values.maxSize) variables.maxSize = values.maxSize;
 
     await createSquad({ variables });
-
+    mixpanel.track('Squad Create', { squad: values.id });
     this.setState({ snackbarOpen: true });
   };
 
   callback = data => {
     // const { action, index, type } = data;
+    mixpanel.track('Squad Create Tutorial Click');
   };
 
   onSnackbarClose = (event, reason) => {

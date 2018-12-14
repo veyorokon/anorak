@@ -11,6 +11,9 @@ import { Mutation } from 'react-apollo';
 import Form from '../../../lib/Form';
 import formConfig from './form';
 
+var mixpanel = require('mixpanel-browser');
+mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
+
 const UPDATE_SQUAD = gql`
   mutation UpdateSquad(
     $token: String!
@@ -57,6 +60,7 @@ class EditForm extends React.Component {
         squadID: this.props.squadId
       }
     });
+    mixpanel.track('Squad Update', { squad: this.props.squadID });
   };
 
   render() {
