@@ -253,6 +253,7 @@ class SquadMember(models.Model):
         self.status = SquadMemberStatus.SUBSCRIBED
         self.stripe_subscription_id = stripe_subscription.id
         self.squad.current_size += 1
+        self.is_listed = True
         self.squad.save()
         return True
         
