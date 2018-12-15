@@ -1,5 +1,6 @@
 from graphene_django.types import DjangoObjectType
 from core.models import * 
+from django.db.models import Q
 
 class StripeCustomerType(DjangoObjectType):
     class Meta:
@@ -17,6 +18,12 @@ class UserType(DjangoObjectType):
     
     def resolve_email(self, info):
         if info.context.user == self:
+            return self.email
+        queryUserSquads = info.context.user.owned_squads.all()
+        thisUserMemberships = set(list(self.squad_memberships.all()))
+        thisUserSquads = set([e.squad for e in thisUserMemberships])
+        isMember = set.intersection(thisUserSquads, queryUserSquads)
+        if isMember:
             return self.email
         return "Insufficient Permissions."
         

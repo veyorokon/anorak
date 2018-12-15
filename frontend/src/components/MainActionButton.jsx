@@ -3,7 +3,6 @@ import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router-dom';
 
 import AcceptInviteModal from './AcceptInviteModal';
-import LeaveModal from './LeaveModal';
 import SquadUpModal from './SquadUpModal';
 
 function MainActionButton(props) {
@@ -32,14 +31,24 @@ function MainActionButton(props) {
     return (
       <Button
         style={{ color: '#f8be00' }}
-        onClick={() => props.history.push('/squads/' + props.squadID)}
+        onClick={() =>
+          props.history.push('/squads/' + props.squadID + '/edit/')
+        }
       >
         Manage
       </Button>
     );
   }
   if (userIsSubscribed) {
-    return <LeaveModal squadID={props.squadID} />;
+    // return <LeaveModal squadID={props.squadID} />;
+    return (
+      <Button
+        style={{ color: '#f8be00' }}
+        onClick={() => props.history.push('/squads/' + props.squadID)}
+      >
+        Manage
+      </Button>
+    );
   }
 
   return null;

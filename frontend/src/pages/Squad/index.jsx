@@ -38,7 +38,7 @@ class SquadPage extends React.Component {
                 description={squad.description}
                 price={squad.costPrice}
                 service={squad.service}
-                membershipID={squad.id}
+                squadID={squad.id}
               />
             </Layout>
           );

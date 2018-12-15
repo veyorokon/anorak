@@ -52,7 +52,7 @@ class SquadCardModal extends React.Component {
               style={{ color: '#138A36' }}
               onClick={() => this.handleClickOpen(client)}
             >
-              Access
+              Secret
             </Button>
             <Dialog
               fullScreen={fullScreen}

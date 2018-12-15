@@ -154,7 +154,6 @@ class CreateForm extends React.Component {
 
   callback = data => {
     // const { action, index, type } = data;
-    mixpanel.track('Squad Create Tutorial Click');
   };
 
   render() {

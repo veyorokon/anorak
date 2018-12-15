@@ -64,11 +64,7 @@ function SquadSearch(props) {
               </Typography>
               <Search onSearch={text => throttledSearch(text, reSearch)} />
             </div>
-            <div className={classes.resultsSection}>
-              {(data.squadSearch || []).map(squad => (
-                <DashboardCard key={squad.id} squad={squad} />
-              ))}
-            </div>
+
             <SearchTable squads={data.squadSearch || []} />
           </React.Fragment>
         );

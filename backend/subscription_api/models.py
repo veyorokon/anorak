@@ -68,7 +68,7 @@ class SquadServiceType(enum.Enum):
 # Contains a Stripe product. 
 class Squad(models.Model):
     #User who owns this subscription product
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owned_squads")
     #The encrypted secret. 
     description = models.CharField(max_length=128, null=True)
     #URL for optional image

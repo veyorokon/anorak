@@ -49,7 +49,7 @@ class LeaveModal extends React.Component {
   render() {
     return (
       <div>
-        <Button style={{ color: 'grey' }} onClick={this.handleClickOpen}>
+        <Button style={{ color: 'red' }} onClick={this.handleClickOpen}>
           Leave
         </Button>
         <Dialog

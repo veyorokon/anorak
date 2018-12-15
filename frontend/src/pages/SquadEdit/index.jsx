@@ -42,7 +42,7 @@ function Edit(props) {
 
         const { squad } = data;
         const invites = squad.members
-          .filter(member => member.status === 'A_6')
+          .filter(member => member.status === 'invited')
           .map(member => ({
             id: member.id,
             email: member.user.email

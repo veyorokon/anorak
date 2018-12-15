@@ -15,14 +15,13 @@ class SquadType(DjangoObjectType):
     def resolve_service_type(self, info):
         try:
             service_type = SquadServiceType.items()[self.service_type][0]
-            
             return service_type.lower()
         except:
             return None
     
     def resolve_members(self, info):
         if info.context.user == self.owner:
-            return self.members
+            return self.members.all()
         return None
     
     def resolve_owner(self, info):
