@@ -23,6 +23,7 @@ const GET_USER = gql`
           image
         }
         status
+        isListed
       }
     }
   }
@@ -38,10 +39,17 @@ function SquadList(props) {
       {({ loading, error, data }) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
+        let memberships = [];
+        data.user.squadMemberships.forEach(elem => {
+          if (elem.isListed) {
+            memberships.push(elem);
+          }
+        });
+        console.log(memberships);
 
         return (
           <Grid container direction="column" alignItems="center" spacing={24}>
-            {data.user.squadMemberships.map(({ id, squad, status }) => (
+            {memberships.map(({ id, squad, status }) => (
               <Grid key={id} item>
                 <SquardCard
                   description={squad.description}

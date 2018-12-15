@@ -253,6 +253,7 @@ class UpdateMembershipListing(graphene.Mutation):
         except:
             return ValueError("An active membership for this squad does not exist!")
         squadMembership.is_listed = isListed
+        squadMembership.save()
         return UpdateMembershipListing(squadMembership=squadMembership)
 
            

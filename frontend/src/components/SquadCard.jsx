@@ -78,6 +78,7 @@ function SquadCard(props) {
           price={props.price}
           squadID={props.squadID}
           userStatus={props.status}
+          membershipID={props.membershipID}
         />
       </CardActions>
     </Card>
