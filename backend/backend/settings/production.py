@@ -22,7 +22,7 @@ FIELD_ENCRYPTION_KEY = environ_setting("FIELD_ENCRYPTION_KEY"),
 DEBUG = False
 
 
-ALLOWED_HOSTS=[
+ALLOWED_HOSTS+=[
     '.staging.squadup.xyz',
     '.squadup.xyz',
     '.preview.sh',
@@ -34,16 +34,27 @@ STRIPE_SQUADUP_PRODUCT = environ_setting("STRIPE_SQUADUP_PRODUCT"),
 
 GRAPHQL_JWT['JWT_VERIFY_EXPIRATION'] = True
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': environ_setting("DB_NAME"),
+#         'USER': environ_setting("DB_USER"),
+#         'PASSWORD': environ_setting("DB_PASSWORD"),
+#         'HOST': environ_setting("DB_HOST"),
+#         'PORT': environ_setting("DB_PORT"),
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': environ_setting("DB_NAME"),
-        'USER': environ_setting("DB_USER"),
-        'PASSWORD': environ_setting("DB_PASSWORD"),
-        'HOST': environ_setting("DB_HOST"),
-        'PORT': environ_setting("DB_PORT"),
-    }
-}
+     'default': {
+         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+         'NAME': 'admin',
+         'USER': 'admin',
+         'PASSWORD': 'Fg76V6d8Trzp',
+         'HOST': 'localhost',
+         'PORT': '5432',
+     }
+ }
 
 
 CORS_ORIGIN_ALLOW_ALL = False

@@ -22,7 +22,7 @@ FIELD_ENCRYPTION_KEY = 'g2z7GI3SaOnTNDCEZhy_46NWSzyUatriWt_ecPTjHNo='
 DEBUG = True
 
 
-ALLOWED_HOSTS =[
+ALLOWED_HOSTS+=[
     '127.0.0.1',
     'localhost',
 ]

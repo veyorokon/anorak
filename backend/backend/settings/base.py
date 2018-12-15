@@ -33,6 +33,7 @@ def environ_setting(name, default=None):
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+ALLOWED_HOSTS=['squadup.xyz', 'www.squadup.xyz']
 
 #Facebook
 FACEBOOK_CLIENT_ID = '1974089579550206'
