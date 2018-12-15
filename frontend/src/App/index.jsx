@@ -3,6 +3,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
+import 'typeface-roboto';
 
 import Routes from './Routes';
 

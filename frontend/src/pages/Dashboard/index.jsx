@@ -22,40 +22,40 @@ class Dashboard extends React.Component {
           target: '.dashboard-tutorial-first',
           title: 'Welcome to SquadUp!',
           content:
-            'The place to create, discover and subscribe to all your favorite subscription services.',
-          placement: 'top',
+            'Sometimes we share subscriptions with friends and family but collecting payments can be awkward.',
+          placement: 'bottom',
           disableBeacon: true
         },
         {
           target: '.dashboard-tutorial-first',
           title: "What's A Squad?",
           content:
-            'A Squad is a group of users who pay for access to some content.',
-          placement: 'top',
+            'Squads eliminate that awkwardness and let you create shared subscriptions.',
+          placement: 'bottom',
           disableBeacon: true
         },
         {
-          target: '.dashboard-tutorial-second',
-          title: 'How Do I Access My Squads?',
+          target: '.dashboard-tutorial-first',
+          title: 'How Does It Work?',
           content:
-            'All Squads you join or are invited to will appear here as an overview card.',
-          placement: 'right',
+            'All squad members pay at the beginning of the month. Squad owners get paid at the end of the month.',
+          placement: 'bottom',
           disableBeacon: true
         },
         {
-          target: '.dashboard-tutorial-third',
-          title: 'How Do I Find Squads?',
+          target: '.dashboard-tutorial-first',
+          title: 'SquadUp For What?',
           content:
-            'Squad owners can send you invites or you can search for services .',
-          placement: 'left',
+            'SquadUp for phone bills, rent and shared subscriptions. Squad owners can even share encrypted secrets with members.',
+          placement: 'bottom',
           disableBeacon: true
         },
         {
-          target: '.dashboard-tutorial-fourth',
-          title: 'Is It Free To Create A Squad?',
+          target: '.dashboard-tutorial-first',
+          title: 'Why SquadUp?',
           content:
-            "Yes! Squads are free to create. Click the 'CREATE' button to get started.",
-          placement: 'left',
+            'Manage all your reocurring payments in one place. Subscribe and cancel at the click of a button.',
+          placement: 'bottom',
           disableBeacon: true
         }
       ]
@@ -89,6 +89,11 @@ class Dashboard extends React.Component {
           showSkipButton={true}
           floaterProps={{ disableAnimation: true }}
           reset={true}
+          styles={{
+            options: {
+              primaryColor: '#2e2836'
+            }
+          }}
         />
         <SquadSearch />
       </Layout>

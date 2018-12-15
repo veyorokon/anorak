@@ -189,7 +189,9 @@ class CreateForm extends React.Component {
               >
                 {({ isSubmitting, renderField }) => (
                   <div className="first-step">
-                    <Typography variant="subtitle1">Squad Form</Typography>
+                    <Typography variant="subtitle1">
+                      SquadUp For What?
+                    </Typography>
                     <Grid container spacing={24}>
                       <Grid item xs={12} className="second-step">
                         {renderField('service', {
@@ -236,6 +238,13 @@ class CreateForm extends React.Component {
                     >
                       Create
                     </Button>
+                    <Typography
+                      color="textSecondary"
+                      style={{ marginTop: '10px' }}
+                    >
+                      SquadUp charges a flat 3% + 0.50 fee for credit card
+                      transactions.
+                    </Typography>
                   </div>
                 )}
               </Form>
