@@ -7,7 +7,6 @@ services:
     restart: always
     build: backend/
     working_dir: /app/backend/
-    #dockerfile: Dockerfile-compose
     command: bash -c "python check_db.py --service-name Postgres --ip database --port 5432 && 
         python manage.py migrate && 
         python manage.py runserver_plus 0.0.0.0:8000"
@@ -25,14 +24,3 @@ services:
     image: postgres
     ports:
       - "9432:5432"
-
-  # frontend:
-  #   build: frontend/
-  #   volumes:
-  #     - ./frontend/:/app/frontend
-  #   working_dir: /app/frontend/
-  #   command: sh ./expo.dev.sh
-  #   ports:
-  #     - "19002:19002"
-  #   environment:
-  #     - NODE_ENV=development
