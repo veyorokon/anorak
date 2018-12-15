@@ -20,16 +20,19 @@ const UPDATE_SQUAD = gql`
     $squadID: Int!
     $secret: String
     $description: String
+    $image: String
   ) {
     updateSquad(
       token: $token
       secret: $secret
       description: $description
       squadID: $squadID
+      image: $image
     ) {
       squad {
         id
         description
+        image
       }
     }
   }
@@ -57,7 +60,8 @@ class EditForm extends React.Component {
         token: window.localStorage.getItem('sessionToken'),
         description: values.description,
         secret: values.secret,
-        squadID: this.props.squadId
+        squadID: this.props.squadId,
+        image: values.image
       }
     });
     mixpanel.track('Squad Update', { squad: this.props.squadID });
@@ -67,6 +71,12 @@ class EditForm extends React.Component {
     const { classes } = this.props;
     formConfig.description.initialValue = this.props.description;
     formConfig.secret.initialValue = this.props.secret;
+    if (this.props.image) {
+      formConfig.image.initialValue = this.props.image;
+    } else {
+      formConfig.image.initialValue = '';
+    }
+
     return (
       <Paper className={classes.paper}>
         <Typography component="h2" variant="h5" gutterBottom>
@@ -97,6 +107,11 @@ class EditForm extends React.Component {
                     </Grid>
                     <Grid item xs={12} className="fourth-step">
                       {renderField('secret', {
+                        fullWidth: true
+                      })}
+                    </Grid>
+                    <Grid item xs={12}>
+                      {renderField('image', {
                         fullWidth: true
                       })}
                     </Grid>

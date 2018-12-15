@@ -10,5 +10,11 @@ export default {
     input: {
       required: true
     }
+  },
+  image: {
+    label: 'Image URL',
+    input: {
+      required: false
+    }
   }
 };
