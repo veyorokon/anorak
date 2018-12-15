@@ -145,6 +145,8 @@ class SquadMember(models.Model):
     squad = models.ForeignKey(Squad, on_delete=models.CASCADE, null=True, related_name="members")
     #The frequency of billing
     status = enum.EnumField(SquadMemberStatus, default=SquadMemberStatus.PENDING)
+    #Whether or not to list this squad membership on dashboard squad list
+    is_listed = models.BooleanField(default=True)
     #The stripe subscription id
     stripe_subscription_id = models.CharField(max_length=32, null=True, 
         blank=True)

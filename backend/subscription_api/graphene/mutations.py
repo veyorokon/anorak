@@ -233,6 +233,30 @@ class DeactivateMembership(graphene.Mutation):
         except Exception as e:
            return e
            
+           
+class UnlistMembership(graphene.Mutation):
+    
+    class Arguments:
+        token = graphene.String(required=True)
+        membershipID = graphene.Int(required=True)
+    
+    squadMembership =  graphene.Field(SquadMemberType)
+    
+    @login_required
+    def mutate(self, info, token, membershipID, **kwargs):
+
+        try:
+            squadMembership = SquadMember.objects.get(
+                id=membershipID
+            )
+        except:
+            return ValueError("An active membership for this squad does not exist!")
+        try:
+            squadMembership.is_listed = False
+            return UnlistMembership(squadMembership=squadMembership)
+        except Exception as e:
+           return e
+           
 
 class DeactivateSquad(graphene.Mutation):
     
@@ -271,4 +295,6 @@ class Mutations(graphene.ObjectType):
     deactivate_membership = DeactivateMembership.Field(description="Unsubscribe a member from the squad.")
     # Deactivates the squad and terminates all members from the squad
     deactivate_squad = DeactivateSquad.Field(description="Deactivates a squad and terminates all active member subscriptions.")
+    # Unlist the squad from the list
+    unlist_membership = UnlistMembership.Field(description="Unlist this squad membership from squad list on dashboard.")
 
