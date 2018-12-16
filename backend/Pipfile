@@ -21,7 +21,6 @@ django-extensions = "*"
 werkzeug = "*"
 django-jet = "*"
 django-feedparser = "*"
-plaid-python = "*"
 django-encrypted-model-fields = "*"
 
 [dev-packages]

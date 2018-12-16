@@ -39,6 +39,11 @@ ALLOWED_HOSTS=['squadup.xyz', 'www.squadup.xyz']
 FACEBOOK_CLIENT_ID = environ_setting('FACEBOOK_CLIENT_ID')
 FACEBOOK_CLIENT_SECRET = environ_setting('FACEBOOK_CLIENT_SECRET')
 
+SECRET_KEY = environ_setting("SECRET_KEY")
+FIELD_ENCRYPTION_KEY = environ_setting("FIELD_ENCRYPTION_KEY")
+
+STRIPE_ACCOUNT_SID = environ_setting("STRIPE_ACCOUNT_SID")
+STRIPE_SQUADUP_PRODUCT = environ_setting("STRIPE_SQUADUP_PRODUCT")
 
 # Application definition
 INSTALLED_APPS = [
@@ -60,6 +65,17 @@ INSTALLED_APPS = [
     'django_extensions',
     'encrypted_model_fields',
 ]
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': environ_setting('DB_NAME'),
+        'USER':  environ_setting('DB_NAME'),
+        'PASSWORD':  environ_setting('DB_PASSWORD', default=None),
+        'HOST':  environ_setting('DB_USER'),
+        'PORT':  environ_setting('DB_PORT')
+    }
+}
 
 GRAPHENE = {
     'SCHEMA': 'backend.schema.schema',
@@ -146,7 +162,6 @@ REST_FRAMEWORK = {
     ),
 }
 
-CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = (
     'http//:localhost:8000',

@@ -22,8 +22,12 @@ services:
         - "FACEBOOK_CLIENT_SECRET=8117c08eed5c3ec4fe3142ee9d704dc1"
         - "SECRET_KEY=v(m)6f0+s3d$o4lk$lli&un$e1a@bu3oww^9=s=ms)+@df23*r"
         - "FIELD_ENCRYPTION_KEY=g2z7GI3SaOnTNDCEZhy_46NWSzyUatriWt_ecPTjHNo="
-        - "STRIPE_ACCOUNT_SID=sk_live_Z74kfkdK1Ga6YOqYaypi9zC4"
-        - "STRIPE_SQUADUP_PRODUCT=prod_Drjkufpy6PtWEv"
+        - "STRIPE_ACCOUNT_SID=sk_test_9Xz79VxZxWJbanvxDAWLYmoN"
+        - "STRIPE_SQUADUP_PRODUCT=prod_DwkQeS0ynwmGnR"
+        - "DB_NAME=postgres"
+        - "DB_USER=postgres"
+        - "DB_HOST=database"
+        - "DB_PORT=5432"
 
   database:
     restart: always
