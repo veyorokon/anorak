@@ -40,7 +40,7 @@ class FacebookButton extends React.Component {
       }
     }).then(({ data }) => {
       window.localStorage.setItem('sessionToken', data.facebookUser.token);
-      mixpanel.identify(data.profile.email);
+      mixpanel.identify(data.facebookUser.email);
       mixpanel.track('Facebook Auth Click');
       this.props.history.push('/dashboard');
     });

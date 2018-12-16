@@ -36,8 +36,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 ALLOWED_HOSTS=['squadup.xyz', 'www.squadup.xyz']
 
 #Facebook
-FACEBOOK_CLIENT_ID = '1974089579550206'
-FACEBOOK_CLIENT_SECRET = '8117c08eed5c3ec4fe3142ee9d704dc1'
+FACEBOOK_CLIENT_ID = environ_setting('FACEBOOK_CLIENT_ID')
+FACEBOOK_CLIENT_SECRET = environ_setting('FACEBOOK_CLIENT_SECRET')
 
 
 # Application definition
