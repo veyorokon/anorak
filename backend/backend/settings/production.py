@@ -26,6 +26,16 @@ ALLOWED_HOSTS+=[
     '.preview.sh',
 ]
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': environ_setting('DB_NAME'),
+        'USER':  environ_setting('DB_USER'),
+        'PASSWORD':  environ_setting('DB_PASSWORD'),
+        'HOST':  environ_setting('DB_HOST'),
+        'PORT':  environ_setting('DB_PORT')
+    }
+}
 
 GRAPHQL_JWT['JWT_VERIFY_EXPIRATION'] = True
 

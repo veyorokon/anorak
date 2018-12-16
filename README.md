@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://github.com/veyorokon/SquadUp)
 
-SquadUp is a platform that allows users to create, manage, and share (CMS) subscription services.
+SquadUp is a platform that allows users to create, share and discover (CSD) subscription services.
 
   - Subscriptions can be any reocurring payment (rent, phone, Netflix etc.).
   - Squads encapsulate subscriptions so they can be CMS'ed on SquadUp.
@@ -29,6 +29,7 @@ SquadUp uses a number of open source and free tier projects to work properly:
 * [Graphene] - GraphQL framework for python
 * [Apollo] - Caching GraphQL client for GraphQL servers
 * [Material-UI] - React components that implement Google's Material Design.
+* [Stripe] - Python library for the Stripe API.
 
 ### Installation
 
@@ -38,8 +39,8 @@ Install the backend dependencies and build the container.
 
 ```sh
 $ cd ..
-$ docker-compose build
-$ docker-compose up
+$ docker-compose -f docker-compose-localhost.yaml build
+$ docker-compose -f docker-compose-localhost.yaml up
 ```
 
 If this is the first time after a fresh install, create a Django super user and follow the prompt.
@@ -89,6 +90,12 @@ For production environments...
 $ Install instructions needed.
 ```
 
+### Common Errors
+> could not translate host name "postgres" to address: Name or service not known
+
+Make sure you have added '127.0.0.1 postgres' to your /etc/hosts file.
+
+
 ### Todos
 
  - Write server install instructions
@@ -107,4 +114,5 @@ Proprietary, Private
    [Graphene]: <https://github.com/graphql-python/graphene>
    [Apollo]: <https://github.com/apollographql/apollo-client>
    [Material-UI]: <https://github.com/mui-org/material-ui>
+   [Stripe]: <https://github.com/stripe/stripe-python>
    

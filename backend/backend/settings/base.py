@@ -66,17 +66,6 @@ INSTALLED_APPS = [
     'encrypted_model_fields',
 ]
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': environ_setting('DB_NAME'),
-        'USER':  environ_setting('DB_NAME'),
-        'PASSWORD':  environ_setting('DB_PASSWORD', default=None),
-        'HOST':  environ_setting('DB_USER'),
-        'PORT':  environ_setting('DB_PORT')
-    }
-}
-
 GRAPHENE = {
     'SCHEMA': 'backend.schema.schema',
     'MIDDLEWARE': [

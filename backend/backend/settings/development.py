@@ -25,6 +25,16 @@ ALLOWED_HOSTS+=[
     'localhost',
 ]
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': environ_setting('DB_NAME'),
+        'USER':  environ_setting('DB_USER'),
+        'HOST':  environ_setting('DB_HOST'),
+        'PORT':  environ_setting('DB_PORT')
+    }
+}
+
 
 GRAPHQL_JWT['JWT_VERIFY_EXPIRATION'] = False
 
