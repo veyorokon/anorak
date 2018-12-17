@@ -121,6 +121,7 @@ function SearchTable(props) {
                     size={squad.currentSize}
                     capacity={squad.maximumSize}
                     owner={squad.owner}
+                    userStatus={squad.currentUserStatus}
                   />
                 </TableCell>
               </TableRow>

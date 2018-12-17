@@ -34,11 +34,12 @@ const styles = theme => ({
 });
 
 const SEARCH_SQUADS = gql`
-  query SearchSquads($text: String!) {
-    squadSearch(text: $text) {
+  query SearchSquads($text: String!, $token: String) {
+    squadSearch(text: $text, token: $token) {
       id
       costPrice
       currentSize
+      currentUserStatus
       maximumSize
       service
       description
@@ -53,7 +54,13 @@ const throttledSearch = throttle((text, reSearch) => reSearch(text), 700);
 function SquadSearch(props) {
   const { classes } = props;
   return (
-    <Query query={SEARCH_SQUADS} variables={{ text: '' }}>
+    <Query
+      query={SEARCH_SQUADS}
+      variables={{
+        text: '',
+        token: window.localStorage.getItem('sessionToken')
+      }}
+    >
       {({ data, refetch }) => {
         const reSearch = text => refetch({ text });
         return (
