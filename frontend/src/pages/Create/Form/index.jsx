@@ -10,6 +10,8 @@ import { Mutation } from 'react-apollo';
 
 import Snackbar from '../../../components/Snackbar';
 import Form from '../../../lib/Form';
+import { GET_USER } from '../../../components/SquadList';
+import { SEARCH_SQUADS } from '../../Dashboard/SquadSearch';
 import formConfig from './form';
 
 import Joyride from 'react-joyride';
@@ -176,7 +178,24 @@ class CreateForm extends React.Component {
             continuous={true}
           />
 
-          <Mutation mutation={CREATE_SQUAD}>
+          <Mutation
+            mutation={CREATE_SQUAD}
+            refetchQueries={[
+              {
+                query: GET_USER,
+                variables: {
+                  token: window.localStorage.getItem('sessionToken')
+                }
+              },
+              {
+                query: SEARCH_SQUADS,
+                variables: {
+                  text: '',
+                  token: window.localStorage.getItem('sessionToken')
+                }
+              }
+            ]}
+          >
             {createSquad => (
               <Form
                 config={formConfig}

@@ -9,7 +9,7 @@ import SquardCard from './SquadCard';
 
 const styles = theme => ({});
 
-const GET_USER = gql`
+export const GET_USER = gql`
   query GetUser($token: String!) {
     user(token: $token) {
       id

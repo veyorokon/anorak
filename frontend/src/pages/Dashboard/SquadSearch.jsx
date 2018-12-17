@@ -33,7 +33,7 @@ const styles = theme => ({
   }
 });
 
-const SEARCH_SQUADS = gql`
+export const SEARCH_SQUADS = gql`
   query SearchSquads($text: String!, $token: String) {
     squadSearch(text: $text, token: $token) {
       id
