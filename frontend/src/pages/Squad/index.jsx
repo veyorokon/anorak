@@ -10,6 +10,7 @@ const GET_SQUAD = gql`
     squad(token: $token, squadID: $squadID) {
       id
       costPrice
+      currentUserStatus
       description
       secret
       service
@@ -39,6 +40,7 @@ class SquadPage extends React.Component {
                 price={squad.costPrice}
                 service={squad.service}
                 squadID={squad.id}
+                userStatus={squad.currentUserStatus}
               />
             </Layout>
           );

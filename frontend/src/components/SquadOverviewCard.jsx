@@ -5,6 +5,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import DisbandModal from './DisbandModal';
 import LeaveModal from './LeaveModal';
 
 import { withRouter } from 'react-router-dom';
@@ -32,7 +33,12 @@ function SquadOverviewCard(props) {
         <Typography component="p">{props.description}</Typography>
       </CardContent>
       <CardActions style={{ justifyContent: 'space-between' }}>
-        <LeaveModal squadID={props.squadID} />;
+        {props.userStatus === 'owner' && (
+          <DisbandModal squadID={props.squadID} />
+        )}
+        {props.userStatus === 'subscribed' && (
+          <LeaveModal squadID={props.squadID} />
+        )}
       </CardActions>
     </Card>
   );
@@ -42,8 +48,9 @@ SquadOverviewCard.propTypes = {
   classes: PropTypes.object.isRequired,
   description: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
-  service: PropTypes.string.isRequired
-  // squadID: PropTypes.string.isRequired
+  service: PropTypes.string.isRequired,
+  squadID: PropTypes.string.isRequired,
+  userStatus: PropTypes.string
 };
 
 export default withStyles(styles)(withRouter(SquadOverviewCard));
