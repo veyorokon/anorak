@@ -7,6 +7,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
+import { GET_USER } from './SquadList';
+
 var mixpanel = require('mixpanel-browser');
 mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
 
@@ -23,7 +25,8 @@ const DEACTIVATE_MEMBERSHIP = gql`
 
 class LeaveModal extends React.Component {
   state = {
-    open: false
+    open: false,
+    isSubmitting: false
   };
 
   handleClickOpen = async client => {
@@ -35,6 +38,7 @@ class LeaveModal extends React.Component {
   };
 
   onYesClick = async deactivateMembership => {
+    this.setState({ isSubmitting: true });
     await deactivateMembership({
       variables: {
         token: window.localStorage.getItem('sessionToken'),
@@ -44,6 +48,9 @@ class LeaveModal extends React.Component {
     mixpanel.track('Squad Membership Deactivate', {
       squad: this.props.squadID
     });
+    setTimeout(() => {
+      this.setState({ open: false });
+    }, 600);
   };
 
   render() {
@@ -65,11 +72,23 @@ class LeaveModal extends React.Component {
             <Button onClick={this.handleClose} color="secondary">
               close
             </Button>
-            <Mutation mutation={DEACTIVATE_MEMBERSHIP}>
+            <Mutation
+              mutation={DEACTIVATE_MEMBERSHIP}
+              awaitRefetchQueries
+              refetchQueries={[
+                {
+                  query: GET_USER,
+                  variables: {
+                    token: window.localStorage.getItem('sessionToken')
+                  }
+                }
+              ]}
+            >
               {deactivateMembership => (
                 <Button
                   onClick={() => this.onYesClick(deactivateMembership)}
                   color="primary"
+                  disabled={this.state.isSubmitting}
                 >
                   Yes
                 </Button>
