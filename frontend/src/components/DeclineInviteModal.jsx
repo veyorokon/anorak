@@ -7,6 +7,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
+import { SEARCH_SQUADS } from '../pages/Dashboard/SquadSearch';
+
 var mixpanel = require('mixpanel-browser');
 mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
 
@@ -23,10 +25,11 @@ const HANDLE_INVITE = gql`
 
 class DeclineInviteModal extends React.Component {
   state = {
-    open: false
+    open: false,
+    isSubmitting: false
   };
 
-  handleClickOpen = async client => {
+  handleClickOpen = () => {
     this.setState({ open: true });
   };
 
@@ -35,6 +38,7 @@ class DeclineInviteModal extends React.Component {
   };
 
   onDeclineClick = async handleInvite => {
+    this.setState({ isSubmitting: true });
     await handleInvite({
       variables: {
         token: window.localStorage.getItem('sessionToken'),
@@ -42,6 +46,9 @@ class DeclineInviteModal extends React.Component {
       }
     });
     mixpanel.track('Squad Invite Decline', { squad: this.props.squadID });
+    setTimeout(() => {
+      this.setState({ open: false });
+    }, 600);
   };
 
   render() {
@@ -51,7 +58,6 @@ class DeclineInviteModal extends React.Component {
           Decline
         </Button>
         <Dialog
-          // fullScreen={fullScreen}
           open={this.state.open}
           onClose={this.handleClose}
           aria-labelledby="responsive-dialog-title"
@@ -63,11 +69,24 @@ class DeclineInviteModal extends React.Component {
             <Button onClick={this.handleClose} color="primary">
               close
             </Button>
-            <Mutation mutation={HANDLE_INVITE}>
+            <Mutation
+              mutation={HANDLE_INVITE}
+              awaitRefetchQueries
+              refetchQueries={[
+                {
+                  query: SEARCH_SQUADS,
+                  variables: {
+                    text: '',
+                    token: window.localStorage.getItem('sessionToken')
+                  }
+                }
+              ]}
+            >
               {handleInvite => (
                 <Button
                   onClick={() => this.onDeclineClick(handleInvite)}
                   color="secondary"
+                  disabled={this.state.isSubmitting}
                 >
                   Decline
                 </Button>
