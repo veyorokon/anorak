@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import gql from 'graphql-tag';
 import throttle from 'lodash/throttle';
 
-import DashboardCard from '../../components/DashboardCard';
 import Search from '../../components/Search';
 import SearchTable from '../../components/SearchTable';
 

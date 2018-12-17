@@ -12,7 +12,7 @@ import { CardElement, injectStripe } from 'react-stripe-elements';
 import Form from '../../../lib/Form';
 import formConfig from './form';
 
-var mixpanel = require('mixpanel-browser');
+const mixpanel = require('mixpanel-browser');
 mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
 
 const createOptions = () => {

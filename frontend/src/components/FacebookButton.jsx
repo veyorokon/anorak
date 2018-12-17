@@ -6,7 +6,7 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { FacebookProvider, LoginButton } from 'react-facebook';
 
-var mixpanel = require('mixpanel-browser');
+const mixpanel = require('mixpanel-browser');
 mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
 
 const GET_FACEBOOK_USER = gql`
@@ -17,7 +17,7 @@ const GET_FACEBOOK_USER = gql`
   }
 `;
 
-const styles = theme => ({
+const styles = {
   button: {
     backgroundColor: '#4267b2',
     borderRadius: 4,
@@ -29,7 +29,7 @@ const styles = theme => ({
     outline: 'none',
     width: 254
   }
-});
+};
 
 class FacebookButton extends React.Component {
   handleResponse = (data, facebookUser) => {

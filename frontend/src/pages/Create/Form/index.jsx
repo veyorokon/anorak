@@ -16,7 +16,7 @@ import formConfig from './form';
 
 import Joyride from 'react-joyride';
 
-var mixpanel = require('mixpanel-browser');
+const mixpanel = require('mixpanel-browser');
 mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
 
 const CREATE_SQUAD = gql`

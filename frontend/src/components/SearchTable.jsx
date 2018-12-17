@@ -92,13 +92,15 @@ function SearchTable(props) {
                   component="th"
                   scope="row"
                 >
-                  <CardMedia
-                    component="img"
-                    alt={props.service}
-                    className={classes.media}
-                    image={squad.image}
-                    title={props.service}
-                  />
+                  {squad.image && (
+                    <CardMedia
+                      component="img"
+                      alt={props.service}
+                      className={classes.media}
+                      image={squad.image}
+                      title={props.service}
+                    />
+                  )}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {squad.service}

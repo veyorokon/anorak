@@ -45,7 +45,6 @@ function SquadList(props) {
             memberships.push(elem);
           }
         });
-        console.log(memberships);
 
         return (
           <Grid container direction="column" alignItems="center" spacing={24}>
