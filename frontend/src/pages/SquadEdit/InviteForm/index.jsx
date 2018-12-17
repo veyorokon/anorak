@@ -27,6 +27,17 @@ const CREATE_INVITE = gql`
     ) {
       squadMembership {
         id
+        squad {
+          id
+          members {
+            id
+            status
+            user {
+              id
+              email
+            }
+          }
+        }
       }
     }
   }
