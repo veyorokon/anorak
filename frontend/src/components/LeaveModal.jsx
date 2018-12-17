@@ -29,7 +29,7 @@ class LeaveModal extends React.Component {
     isSubmitting: false
   };
 
-  handleClickOpen = async client => {
+  handleClickOpen = () => {
     this.setState({ open: true });
   };
 
@@ -60,7 +60,6 @@ class LeaveModal extends React.Component {
           Leave
         </Button>
         <Dialog
-          // fullScreen={fullScreen}
           open={this.state.open}
           onClose={this.handleClose}
           aria-labelledby="responsive-dialog-title"

@@ -22,7 +22,8 @@ const DEACTIVATE_SQUAD = gql`
 
 class LeaveModal extends React.Component {
   state = {
-    open: false
+    open: false,
+    isSubmitting: false
   };
 
   handleClickOpen = () => {
@@ -34,6 +35,7 @@ class LeaveModal extends React.Component {
   };
 
   onYesClick = async deactivateSquad => {
+    this.setState({ isSubmitting: true });
     await deactivateSquad({
       variables: {
         token: window.localStorage.getItem('sessionToken'),
@@ -43,6 +45,9 @@ class LeaveModal extends React.Component {
     mixpanel.track('Squad Deactivate', {
       squad: this.props.squadID
     });
+    setTimeout(() => {
+      this.setState({ open: false });
+    }, 600);
   };
 
   render() {
@@ -52,7 +57,6 @@ class LeaveModal extends React.Component {
           Disband
         </Button>
         <Dialog
-          // fullScreen={fullScreen}
           open={this.state.open}
           onClose={this.handleClose}
           aria-labelledby="responsive-dialog-title"
@@ -70,6 +74,7 @@ class LeaveModal extends React.Component {
                 <Button
                   onClick={() => this.onYesClick(deactivateSquad)}
                   color="primary"
+                  disabled={this.state.isSubmitting}
                 >
                   Yes
                 </Button>
