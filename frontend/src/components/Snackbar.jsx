@@ -4,16 +4,11 @@ import MaterialUiSnackbar from '@material-ui/core/Snackbar';
 import CloseIcon from '@material-ui/icons/Close';
 
 export default class Snackbar extends React.Component {
-  state = {
-    open: true
-  };
-
   onClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
-
-    this.setState({ open: false });
+    this.props.onClose(event);
   };
 
   render() {
@@ -23,7 +18,7 @@ export default class Snackbar extends React.Component {
           vertical: 'bottom',
           horizontal: 'left'
         }}
-        open={this.state.open}
+        open={this.props.open}
         autoHideDuration={6000}
         onClose={this.onClose}
         ContentProps={{

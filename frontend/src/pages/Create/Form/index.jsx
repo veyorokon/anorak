@@ -154,6 +154,10 @@ class CreateForm extends React.Component {
     this.setState({ snackbarOpen: true });
   };
 
+  onSnackbarClose = () => {
+    this.setState({ snackbarOpen: false });
+  };
+
   callback = data => {
     // const { action, index, type } = data;
   };
@@ -161,6 +165,7 @@ class CreateForm extends React.Component {
   render() {
     const { classes } = this.props;
     const { steps, run } = this.state;
+    console.log(this.state);
     return (
       <React.Fragment>
         <Paper className={classes.paper}>
@@ -270,7 +275,11 @@ class CreateForm extends React.Component {
             )}
           </Mutation>
         </Paper>
-        {this.state.showSnackbar && <Snackbar message="You created a Squad!" />}
+        <Snackbar
+          message="You created a Squad!"
+          onClose={this.onSnackbarClose}
+          open={this.state.snackbarOpen}
+        />
       </React.Fragment>
     );
   }
