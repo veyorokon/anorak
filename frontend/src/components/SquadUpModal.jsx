@@ -13,6 +13,9 @@ import { Mutation } from 'react-apollo';
 
 import Grid from '@material-ui/core/Grid';
 
+import { GET_USER } from './SquadList';
+import { SEARCH_SQUADS } from '../pages/Dashboard/SquadSearch';
+
 const CREATE_MEMBERSHIP = gql`
   mutation CreateMembership($token: String!, $squadID: Int!) {
     createMembership(token: $token, squadID: $squadID) {
@@ -135,7 +138,24 @@ class SquadUpModal extends React.Component {
           <DialogActions>
             <Grid container spacing={24}>
               <Grid item xs={6}>
-                <Mutation mutation={CREATE_MEMBERSHIP}>
+                <Mutation
+                  mutation={CREATE_MEMBERSHIP}
+                  refetchQueries={[
+                    {
+                      query: GET_USER,
+                      variables: {
+                        token: window.localStorage.getItem('sessionToken')
+                      }
+                    },
+                    {
+                      query: SEARCH_SQUADS,
+                      variables: {
+                        text: '',
+                        token: window.localStorage.getItem('sessionToken')
+                      }
+                    }
+                  ]}
+                >
                   {createMembership => (
                     <Button
                       onClick={() => this.onAcceptClick(createMembership)}

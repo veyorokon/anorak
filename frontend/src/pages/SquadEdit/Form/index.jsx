@@ -33,6 +33,7 @@ const UPDATE_SQUAD = gql`
         id
         description
         image
+        secret
       }
     }
   }
