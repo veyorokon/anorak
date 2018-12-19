@@ -23,10 +23,10 @@ from graphene_django.views import GraphQLView
 from . schema import schema
 
 urlpatterns = [
-    path('jet/', include('jet.urls', 'jet')),
-    path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
-    path('admin/', admin.site.urls),
-    path('graphql/',
+    path('api/jet/', include('jet.urls', 'jet')),
+    path('api/jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
+    path('api/admin/', admin.site.urls),
+    path('api/graphql/',
         csrf_exempt(GraphQLView.as_view(
             schema=schema,
             graphiql=settings.DEBUG

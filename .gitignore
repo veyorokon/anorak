@@ -12,6 +12,7 @@ src/backend/static/
 db.sqlite3
 squadupDev
 
+static_files
 
 *.log
 .nvm

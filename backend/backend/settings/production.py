@@ -20,19 +20,15 @@ from . base import *
 DEBUG = False
 
 
-ALLOWED_HOSTS+=[
-    '.staging.squadup.xyz',
-    '.squadup.xyz',
-    '.preview.sh',
-]
+#ALLOWED_HOSTS+=[]
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': environ_setting('DB_NAME'),
         'USER':  environ_setting('DB_USER'),
-        'PASSWORD':  environ_setting('DB_PASSWORD'),
         'HOST':  environ_setting('DB_HOST'),
+	'PASSWORD': environ_setting('DB_PASS'),
         'PORT':  environ_setting('DB_PORT')
     }
 }
