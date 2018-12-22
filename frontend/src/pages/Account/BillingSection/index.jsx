@@ -9,6 +9,7 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 
+import withSnackbar from '../../../lib/withSnackbar';
 import Form from '../../../lib/Form';
 import formConfig from './form';
 
@@ -86,93 +87,95 @@ class BillingSection extends React.Component {
       }
     });
     mixpanel.track('Billing Method Update');
-    console.log(data);
+    this.props.triggerSnackbar('Your billing information was updated.');
   };
 
   render() {
     const { classes } = this.props;
     return (
-      <Paper className={classes.paper}>
-        <Typography component="h2" variant="h5" gutterBottom>
-          Billing
-        </Typography>
-        <Typography className={classes.subtitle} variant="subtitle1">
-          How you pay for subscriptions.
-        </Typography>
+      <React.Fragment>
+        <Paper className={classes.paper}>
+          <Typography component="h2" variant="h5" gutterBottom>
+            Billing
+          </Typography>
+          <Typography className={classes.subtitle} variant="subtitle1">
+            How you pay for subscriptions.
+          </Typography>
 
-        <Mutation mutation={SET_STRIPE_CARD}>
-          {setStripeCard => (
-            <Form
-              config={formConfig}
-              onSubmit={async (values, { setSubmitting }) => {
-                await this.onSubmit(setStripeCard, values);
-                setTimeout(() => {
-                  setSubmitting(false);
-                }, 600);
-              }}
-            >
-              {({ isSubmitting, renderField }) => (
-                <div>
-                  <div className={classes.topForm}>
-                    <Typography variant="h6">Credit card</Typography>
-                    <div className={classes.stripeForm}>
-                      <CardElement {...createOptions()} />
+          <Mutation mutation={SET_STRIPE_CARD}>
+            {setStripeCard => (
+              <Form
+                config={formConfig}
+                onSubmit={async (values, { setSubmitting }) => {
+                  await this.onSubmit(setStripeCard, values);
+                  setTimeout(() => {
+                    setSubmitting(false);
+                  }, 600);
+                }}
+              >
+                {({ isSubmitting, renderField }) => (
+                  <div>
+                    <div className={classes.topForm}>
+                      <Typography variant="h6">Credit card</Typography>
+                      <div className={classes.stripeForm}>
+                        <CardElement {...createOptions()} />
+                      </div>
                     </div>
+
+                    <Typography variant="subtitle1">Address</Typography>
+                    <Grid container spacing={24}>
+                      <Grid item xs={12} sm={6}>
+                        {renderField('firstName', {
+                          fullWidth: true
+                        })}
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        {renderField('lastName', {
+                          fullWidth: true
+                        })}
+                      </Grid>
+                      <Grid item xs={12}>
+                        {renderField('address1', {
+                          fullWidth: true
+                        })}
+                      </Grid>
+                      <Grid item xs={12}>
+                        {renderField('address2', {
+                          fullWidth: true
+                        })}
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        {renderField('city', {
+                          fullWidth: true
+                        })}
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        {renderField('state', {
+                          fullWidth: true
+                        })}
+                      </Grid>
+                      {/* TODO: add proper country form */}
+                      <Grid item xs={12}>
+                        {renderField('country')}
+                      </Grid>
+                    </Grid>
+
+                    <Button
+                      className={classes.button}
+                      color="primary"
+                      disabled={isSubmitting}
+                      type="submit"
+                      variant="outlined"
+                    >
+                      Save
+                    </Button>
                   </div>
-
-                  <Typography variant="subtitle1">Address</Typography>
-                  <Grid container spacing={24}>
-                    <Grid item xs={12} sm={6}>
-                      {renderField('firstName', {
-                        fullWidth: true
-                      })}
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      {renderField('lastName', {
-                        fullWidth: true
-                      })}
-                    </Grid>
-                    <Grid item xs={12}>
-                      {renderField('address1', {
-                        fullWidth: true
-                      })}
-                    </Grid>
-                    <Grid item xs={12}>
-                      {renderField('address2', {
-                        fullWidth: true
-                      })}
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      {renderField('city', {
-                        fullWidth: true
-                      })}
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      {renderField('state', {
-                        fullWidth: true
-                      })}
-                    </Grid>
-                    {/* TODO: add proper country form */}
-                    <Grid item xs={12}>
-                      {renderField('country')}
-                    </Grid>
-                  </Grid>
-
-                  <Button
-                    className={classes.button}
-                    color="primary"
-                    disabled={isSubmitting}
-                    type="submit"
-                    variant="outlined"
-                  >
-                    Save
-                  </Button>
-                </div>
-              )}
-            </Form>
-          )}
-        </Mutation>
-      </Paper>
+                )}
+              </Form>
+            )}
+          </Mutation>
+        </Paper>
+      </React.Fragment>
     );
   }
 }
@@ -181,4 +184,4 @@ BillingSection.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default injectStripe(withStyles(styles)(BillingSection));
+export default injectStripe(withStyles(styles)(withSnackbar(BillingSection)));

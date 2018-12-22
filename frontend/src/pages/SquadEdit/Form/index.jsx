@@ -9,6 +9,7 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
 import Form from '../../../lib/Form';
+import withSnackbar from '../../../lib/withSnackbar';
 import formConfig from './form';
 
 const mixpanel = require('mixpanel-browser');
@@ -66,6 +67,7 @@ class EditForm extends React.Component {
       }
     });
     mixpanel.track('Squad Update', { squad: this.props.squadID });
+    this.props.triggerSnackbar('Your Squad was updated.');
   };
 
   render() {
@@ -141,4 +143,4 @@ EditForm.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(EditForm);
+export default withStyles(styles)(withSnackbar(EditForm));

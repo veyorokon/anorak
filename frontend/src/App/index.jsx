@@ -25,6 +25,7 @@ const theme = createMuiTheme({
 });
 
 const client = new ApolloClient({
+  // uri: 'http://localhost:8000/api/graphql/'
   uri: 'https://squadup.xyz/api/graphql/'
 });
 

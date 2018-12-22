@@ -8,8 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
-import Snackbar from '../../../components/Snackbar';
 import Form from '../../../lib/Form';
+import withSnackbar from '../../../lib/withSnackbar';
 import { GET_USER } from '../../../components/SquadList';
 import { SEARCH_SQUADS } from '../../Dashboard/SquadSearch';
 import formConfig from './form';
@@ -68,7 +68,6 @@ const styles = theme => ({
 class CreateForm extends React.Component {
   state = {
     run: false,
-    snackbarOpen: false,
     steps: [
       {
         target: '.first-step',
@@ -151,11 +150,7 @@ class CreateForm extends React.Component {
 
     await createSquad({ variables });
     mixpanel.track('Squad Create', { squad: values.id });
-    this.setState({ snackbarOpen: true });
-  };
-
-  onSnackbarClose = () => {
-    this.setState({ snackbarOpen: false });
+    this.props.triggerSnackbar('You created a Squad!');
   };
 
   callback = data => {
@@ -167,120 +162,111 @@ class CreateForm extends React.Component {
     const { steps, run } = this.state;
     console.log(this.state);
     return (
-      <React.Fragment>
-        <Paper className={classes.paper}>
-          <Typography component="h2" variant="h5" gutterBottom>
-            Create A Squad
-          </Typography>
-          <Typography className={classes.subtitle} variant="subtitle1">
-            Create your own subscription!
-          </Typography>
+      <Paper className={classes.paper}>
+        <Typography component="h2" variant="h5" gutterBottom>
+          Create A Squad
+        </Typography>
+        <Typography className={classes.subtitle} variant="subtitle1">
+          Create your own subscription!
+        </Typography>
 
-          <Joyride
-            steps={steps}
-            run={run}
-            callback={this.callback}
-            continuous={true}
-          />
+        <Joyride
+          steps={steps}
+          run={run}
+          callback={this.callback}
+          continuous={true}
+        />
 
-          <Mutation
-            mutation={CREATE_SQUAD}
-            refetchQueries={[
-              {
-                query: GET_USER,
-                variables: {
-                  token: window.localStorage.getItem('sessionToken')
-                }
-              },
-              {
-                query: SEARCH_SQUADS,
-                variables: {
-                  text: '',
-                  token: window.localStorage.getItem('sessionToken')
-                }
+        <Mutation
+          mutation={CREATE_SQUAD}
+          refetchQueries={[
+            {
+              query: GET_USER,
+              variables: {
+                token: window.localStorage.getItem('sessionToken')
               }
-            ]}
-          >
-            {createSquad => (
-              <Form
-                config={formConfig}
-                onSubmit={async (values, { setSubmitting }) => {
-                  await this.onSubmit(createSquad, values);
-                  setTimeout(() => {
-                    setSubmitting(false);
-                  }, 600);
-                }}
-              >
-                {({ isSubmitting, renderField }) => (
-                  <div className="first-step">
-                    <Typography variant="subtitle1">
-                      SquadUp For What?
-                    </Typography>
-                    <Grid container spacing={24}>
-                      <Grid item xs={12} className="second-step">
-                        {renderField('service', {
-                          fullWidth: true
-                        })}
-                      </Grid>
-                      <Grid item xs={12} className="third-step">
-                        {renderField('description', {
-                          fullWidth: true
-                        })}
-                      </Grid>
-                      <Grid item xs={12} className="fourth-step">
-                        {renderField('image', {
-                          fullWidth: true
-                        })}
-                      </Grid>
-                      <Grid item xs={12} className="fifth-step">
-                        {renderField('secret', {
-                          fullWidth: true
-                        })}
-                      </Grid>
-                      <Grid item xs={12} className="sixth-step" sm={6}>
-                        {renderField('maxSize', {
-                          fullWidth: true
-                        })}
-                      </Grid>
-                      <Grid item xs={12} className="seventh-step" sm={6}>
-                        {renderField('costPrice', {
-                          fullWidth: true
-                        })}
-                      </Grid>
-
-                      <Grid item xs={12} className="eighth-step" sm={6}>
-                        {renderField('isPublic')}
-                      </Grid>
+            },
+            {
+              query: SEARCH_SQUADS,
+              variables: {
+                text: '',
+                token: window.localStorage.getItem('sessionToken')
+              }
+            }
+          ]}
+        >
+          {createSquad => (
+            <Form
+              config={formConfig}
+              onSubmit={async (values, { setSubmitting }) => {
+                await this.onSubmit(createSquad, values);
+                setTimeout(() => {
+                  setSubmitting(false);
+                }, 600);
+              }}
+            >
+              {({ isSubmitting, renderField }) => (
+                <div className="first-step">
+                  <Typography variant="subtitle1">SquadUp For What?</Typography>
+                  <Grid container spacing={24}>
+                    <Grid item xs={12} className="second-step">
+                      {renderField('service', {
+                        fullWidth: true
+                      })}
+                    </Grid>
+                    <Grid item xs={12} className="third-step">
+                      {renderField('description', {
+                        fullWidth: true
+                      })}
+                    </Grid>
+                    <Grid item xs={12} className="fourth-step">
+                      {renderField('image', {
+                        fullWidth: true
+                      })}
+                    </Grid>
+                    <Grid item xs={12} className="fifth-step">
+                      {renderField('secret', {
+                        fullWidth: true
+                      })}
+                    </Grid>
+                    <Grid item xs={12} className="sixth-step" sm={6}>
+                      {renderField('maxSize', {
+                        fullWidth: true
+                      })}
+                    </Grid>
+                    <Grid item xs={12} className="seventh-step" sm={6}>
+                      {renderField('costPrice', {
+                        fullWidth: true
+                      })}
                     </Grid>
 
-                    <Button
-                      className={classes.button}
-                      color="primary"
-                      disabled={isSubmitting}
-                      type="submit"
-                      variant="outlined"
-                    >
-                      Create
-                    </Button>
-                    <Typography
-                      color="textSecondary"
-                      style={{ marginTop: '10px' }}
-                    >
-                      SquadUp charges a flat 3% + 0.50 fee for credit card
-                      transactions.
-                    </Typography>
-                  </div>
-                )}
-              </Form>
-            )}
-          </Mutation>
-        </Paper>
-        <Snackbar
-          message="You created a Squad!"
-          onClose={this.onSnackbarClose}
-          open={this.state.snackbarOpen}
-        />
-      </React.Fragment>
+                    <Grid item xs={12} className="eighth-step" sm={6}>
+                      {renderField('isPublic')}
+                    </Grid>
+                  </Grid>
+
+                  <Button
+                    className={classes.button}
+                    color="primary"
+                    disabled={isSubmitting}
+                    type="submit"
+                    variant="outlined"
+                  >
+                    Create
+                  </Button>
+                  <Typography
+                    color="textSecondary"
+                    style={{ marginTop: '10px' }}
+                  >
+                    SquadUp charges a flat 3% + 0.50 fee for credit card
+                    transactions.
+                  </Typography>
+                </div>
+              )}
+            </Form>
+          )}
+        </Mutation>
+      </Paper>
     );
   }
 }
@@ -289,4 +275,4 @@ CreateForm.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(CreateForm);
+export default withStyles(styles)(withSnackbar(CreateForm));

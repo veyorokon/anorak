@@ -9,6 +9,7 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
 import Form from '../../../lib/Form';
+import withSnackbar from '../../../lib/withSnackbar';
 import formConfig from './form';
 
 const mixpanel = require('mixpanel-browser');
@@ -68,6 +69,7 @@ class InviteForm extends React.Component {
       squad: this.props.squadID,
       invitedUserEmail: values.email
     });
+    this.props.triggerSnackbar('Your invite has been sent!');
   };
 
   render() {
@@ -120,4 +122,4 @@ InviteForm.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(InviteForm);
+export default withStyles(styles)(withSnackbar(InviteForm));

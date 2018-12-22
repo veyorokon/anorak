@@ -13,6 +13,8 @@ import { Field, Form, Formik } from 'formik';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
+import withSnackbar from '../../../lib/withSnackbar';
+
 const mixpanel = require('mixpanel-browser');
 mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
 
@@ -60,71 +62,73 @@ class PaymentSection extends React.Component {
       }
     });
     mixpanel.track('Payment Method Update');
-    console.log(data);
+    this.props.triggerSnackbar('Your payment method was updated.');
   };
 
   render() {
     const { classes } = this.props;
     return (
-      <Paper className={classes.paper}>
-        <Typography component="h2" variant="h5" align="left" gutterBottom>
-          Payment
-        </Typography>
-        <Typography className={classes.subtitle} variant="subtitle1">
-          How you get paid by squad members.
-        </Typography>
+      <React.Fragment>
+        <Paper className={classes.paper}>
+          <Typography component="h2" variant="h5" align="left" gutterBottom>
+            Payment
+          </Typography>
+          <Typography className={classes.subtitle} variant="subtitle1">
+            How you get paid by squad members.
+          </Typography>
 
-        <Mutation mutation={SET_PREFERRED_PAYMENT_METHOD}>
-          {preferredPaymentMethod => (
-            <Formik
-              initialValues={{ paymentMethod: '' }}
-              onSubmit={async (values, { setSubmitting }) => {
-                await this.onSubmit(preferredPaymentMethod, values);
-                setTimeout(() => {
-                  setSubmitting(false);
-                }, 600);
-              }}
-            >
-              {({ isSubmitting, values }) => (
-                <Form>
-                  <Grid container spacing={24}>
-                    <Grid item xs={12} sm={6}>
-                      <FormControl component="fieldset">
-                        <Field
-                          component={MaterialUiInputComponent}
-                          name="paymentMethod"
-                        >
-                          <FormControlLabel
-                            className={classes.firstOption}
-                            value="paypal"
-                            control={<Radio />}
-                            label="PayPal"
-                          />
-                          <FormControlLabel
-                            value="venmo"
-                            control={<Radio />}
-                            label="Venmo"
-                          />
-                        </Field>
-                      </FormControl>
+          <Mutation mutation={SET_PREFERRED_PAYMENT_METHOD}>
+            {preferredPaymentMethod => (
+              <Formik
+                initialValues={{ paymentMethod: '' }}
+                onSubmit={async (values, { setSubmitting }) => {
+                  await this.onSubmit(preferredPaymentMethod, values);
+                  setTimeout(() => {
+                    setSubmitting(false);
+                  }, 600);
+                }}
+              >
+                {({ isSubmitting, values }) => (
+                  <Form>
+                    <Grid container spacing={24}>
+                      <Grid item xs={12} sm={6}>
+                        <FormControl component="fieldset">
+                          <Field
+                            component={MaterialUiInputComponent}
+                            name="paymentMethod"
+                          >
+                            <FormControlLabel
+                              className={classes.firstOption}
+                              value="paypal"
+                              control={<Radio />}
+                              label="PayPal"
+                            />
+                            <FormControlLabel
+                              value="venmo"
+                              control={<Radio />}
+                              label="Venmo"
+                            />
+                          </Field>
+                        </FormControl>
+                      </Grid>
                     </Grid>
-                  </Grid>
 
-                  <Button
-                    className={classes.button}
-                    color="primary"
-                    disabled={isSubmitting}
-                    type="submit"
-                    variant="outlined"
-                  >
-                    Save
-                  </Button>
-                </Form>
-              )}
-            </Formik>
-          )}
-        </Mutation>
-      </Paper>
+                    <Button
+                      className={classes.button}
+                      color="primary"
+                      disabled={isSubmitting}
+                      type="submit"
+                      variant="outlined"
+                    >
+                      Save
+                    </Button>
+                  </Form>
+                )}
+              </Formik>
+            )}
+          </Mutation>
+        </Paper>
+      </React.Fragment>
     );
   }
 }
@@ -133,4 +137,4 @@ PaymentSection.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(PaymentSection);
+export default withStyles(styles)(withSnackbar(PaymentSection));
