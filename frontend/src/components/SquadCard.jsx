@@ -10,6 +10,7 @@ import DeclineInviteModal from './DeclineInviteModal';
 import MainActionButton from './MainActionButton';
 import SquadCardModal from './SquadCardModal';
 import SquadStatus from './SquadStatus';
+import withSnackbar from '../lib/withSnackbar';
 
 import CardMedia from '@material-ui/core/CardMedia';
 
@@ -63,7 +64,16 @@ function SquadCard(props) {
       </CardContent>
       <CardActions style={{ justifyContent: 'space-between' }}>
         {/* Button 1 */}
-        {userIsInvited && <DeclineInviteModal squadID={props.squadID} />}
+        {userIsInvited && (
+          <DeclineInviteModal
+            squadID={props.squadID}
+            onSuccess={() =>
+              props.triggerSnackbar(
+                `You successfully declined the invitation to ${props.service}.`
+              )
+            }
+          />
+        )}
         {(userIsSubscribed || userIsOwner) && (
           <SquadCardModal
             title={props.service}
@@ -94,4 +104,4 @@ SquadCard.propTypes = {
   status: PropTypes.string.isRequired
 };
 
-export default withStyles(styles)(SquadCard);
+export default withStyles(styles)(withSnackbar(SquadCard));

@@ -20,7 +20,7 @@ const DEACTIVATE_SQUAD = gql`
   }
 `;
 
-class LeaveModal extends React.Component {
+class DisbandModal extends React.Component {
   state = {
     open: false,
     isSubmitting: false
@@ -46,7 +46,9 @@ class LeaveModal extends React.Component {
       squad: this.props.squadID
     });
     setTimeout(() => {
-      this.setState({ open: false });
+      this.setState({ open: false }, () => {
+        this.props.onSuccess();
+      });
     }, 600);
   };
 
@@ -87,4 +89,4 @@ class LeaveModal extends React.Component {
   }
 }
 
-export default withMobileDialog()(LeaveModal);
+export default withMobileDialog()(DisbandModal);

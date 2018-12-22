@@ -47,7 +47,9 @@ class AcceptInviteModal extends React.Component {
     });
     mixpanel.track('Squad Invite Accept', { squad: this.props.squadID });
     setTimeout(() => {
-      this.setState({ open: false });
+      this.setState({ open: false }, () => {
+        this.props.onSuccess();
+      });
     }, 600);
   };
 

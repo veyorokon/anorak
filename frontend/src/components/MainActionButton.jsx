@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router-dom';
 
+import withSnackbar from '../lib/withSnackbar';
 import AcceptInviteModal from './AcceptInviteModal';
 import SquadUpModal from './SquadUpModal';
 
@@ -55,12 +56,26 @@ class MainActionButton extends React.Component {
           size={this.props.size}
           capacity={this.props.capacity}
           owner={this.props.owner}
+          onSuccess={() =>
+            this.props.triggerSnackbar(
+              `You successfully joined ${this.props.service}!`
+            )
+          }
         />
       );
     }
 
     if (userIsInvited) {
-      return <AcceptInviteModal squadID={this.props.squadID} />;
+      return (
+        <AcceptInviteModal
+          onSuccess={() =>
+            this.props.triggerSnackbar(
+              `You successfully joined ${this.props.service}!`
+            )
+          }
+          squadID={this.props.squadID}
+        />
+      );
     }
     if (userIsOwner) {
       return (
@@ -103,4 +118,4 @@ class MainActionButton extends React.Component {
   }
 }
 
-export default withRouter(MainActionButton);
+export default withRouter(withSnackbar(MainActionButton));

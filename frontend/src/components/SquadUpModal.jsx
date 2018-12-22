@@ -60,7 +60,9 @@ class SquadUpModal extends React.Component {
         squadID: this.props.squadID
       }
     });
-    this.setState({ open: false });
+    this.setState({ open: false }, () => {
+      this.props.onSuccess();
+    });
   };
 
   render() {
