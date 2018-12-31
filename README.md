@@ -61,13 +61,13 @@ $ exit
 Django Admin is available.
 
 ```sh
-127.0.0.1:8000/admin/
+127.0.0.1:8000/api/admin/
 ```
 
 GraphIQL is available on the backend in development environments.
 
 ```sh
-127.0.0.1:8000/graphql/
+127.0.0.1:8000/api/graphql/
 ```
 
 Install the frontend dependencies and devDependencies and start the server.
