@@ -31,7 +31,7 @@ export const GET_USER = gql`
 
 function SquadList(props) {
   // const { classes } = props;
-  return (
+  return window.localStorage.getItem('sessionToken') ? (
     <Query
       query={GET_USER}
       variables={{ token: window.localStorage.getItem('sessionToken') }}
@@ -65,6 +65,8 @@ function SquadList(props) {
         );
       }}
     </Query>
+  ) : (
+    <div />
   );
 }
 
