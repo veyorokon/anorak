@@ -39,8 +39,8 @@ Install the backend dependencies and build the container.
 
 ```sh
 $ cd ..
-$ docker-compose -f docker-compose-localhost.yaml build
-$ docker-compose -f docker-compose-localhost.yaml up
+$ docker-compose build
+$ docker-compose up
 ```
 
 If this is the first time after a fresh install, create a Django super user and follow the prompt.
