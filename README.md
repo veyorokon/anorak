@@ -38,7 +38,6 @@ SquadUp requires [Node.js](https://nodejs.org/) v8.11.4+ to run.
 Install the backend dependencies and build the container.
 
 ```sh
-$ cd ..
 $ docker-compose build
 $ docker-compose up
 ```
