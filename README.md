@@ -70,10 +70,9 @@ GraphIQL is available on the backend in development environments.
 127.0.0.1:8000/api/graphql/
 ```
 
-Configure Mixpanel and Stripe keys for local or server by running
+Configure Mixpanel and Stripe keys for 'local' or 'prod' by running e.g.:
 ```sh
 $ ./config prod
-$ ./config local
 ```
 
 Install the frontend dependencies and devDependencies and start the server.
