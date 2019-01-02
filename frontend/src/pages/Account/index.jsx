@@ -7,7 +7,7 @@ import BillingSection from './BillingSection';
 import Layout from '../../components/Layout';
 import PaymentSection from './PaymentSection';
 const mixpanel = require('mixpanel-browser');
-mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
+mixpanel.init('3800b7f2e3b6602f2bd7ee5c6e5dac42', { debug: true, verbose: 1 });
 mixpanel.track('Account Page Load');
 
 const styles = theme => ({
@@ -19,7 +19,7 @@ const styles = theme => ({
 function Account(props) {
   const { classes } = props;
   return (
-    <StripeProvider apiKey="pk_test_rLuroFoR4XKOxb3FbmJqTqrh">
+    <StripeProvider apiKey="pk_live_BpssZcKZdOznYcltmEYbu3EH">
       <Layout rightTitle="Account">
         <div className={classes.forms}>
           <Elements>

@@ -7,7 +7,6 @@ from graphql_jwt.decorators import login_required
 from django.db.models import F
 
 
-
 class Query(graphene.ObjectType):
     squad_search = graphene.List(SquadType, token=graphene.String(required=False), text=graphene.String(required=True), description="Search active and public squads for key words in the service or description. Returns all squads with available space.")
     

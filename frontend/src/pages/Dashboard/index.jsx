@@ -8,7 +8,7 @@ import SquadSearch from './SquadSearch';
 import Joyride from 'react-joyride';
 
 const mixpanel = require('mixpanel-browser');
-mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
+mixpanel.init('3800b7f2e3b6602f2bd7ee5c6e5dac42', { debug: true, verbose: 1 });
 
 const styles = theme => ({});
 
