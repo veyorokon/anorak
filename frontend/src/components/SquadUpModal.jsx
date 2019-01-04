@@ -65,6 +65,40 @@ class SquadUpModal extends React.Component {
     });
   };
 
+  getButton() {
+    if (this.props.size < this.props.capacity) {
+      return (
+        <Mutation
+          mutation={CREATE_MEMBERSHIP}
+          refetchQueries={[
+            {
+              query: GET_USER,
+              variables: {
+                token: window.localStorage.getItem('sessionToken')
+              }
+            },
+            {
+              query: SEARCH_SQUADS,
+              variables: {
+                text: '',
+                token: window.localStorage.getItem('sessionToken')
+              }
+            }
+          ]}
+        >
+          {createMembership => (
+            <Button
+              onClick={() => this.onAcceptClick(createMembership)}
+              color="secondary"
+            >
+              SquadUp
+            </Button>
+          )}
+        </Mutation>
+      );
+    }
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -140,33 +174,7 @@ class SquadUpModal extends React.Component {
           <DialogActions>
             <Grid container spacing={24}>
               <Grid item xs={6}>
-                <Mutation
-                  mutation={CREATE_MEMBERSHIP}
-                  refetchQueries={[
-                    {
-                      query: GET_USER,
-                      variables: {
-                        token: window.localStorage.getItem('sessionToken')
-                      }
-                    },
-                    {
-                      query: SEARCH_SQUADS,
-                      variables: {
-                        text: '',
-                        token: window.localStorage.getItem('sessionToken')
-                      }
-                    }
-                  ]}
-                >
-                  {createMembership => (
-                    <Button
-                      onClick={() => this.onAcceptClick(createMembership)}
-                      color="secondary"
-                    >
-                      SquadUp
-                    </Button>
-                  )}
-                </Mutation>
+                {this.getButton()}
               </Grid>
               <Grid item xs={6} color="textSecondary">
                 <Button onClick={this.handleClose} color="primary">
