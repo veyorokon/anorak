@@ -76,7 +76,7 @@ class Squad(models.Model):
     #The encrypted secret. 
     secret = EncryptedCharField(max_length=128, null=True, blank=True)
     #Squad description
-    service = models.CharField(max_length=16, null=True)
+    service = models.CharField(max_length=64, null=True)
     #The frequency of billing
     service_type = enum.EnumField(SquadServiceType, default=SquadServiceType.SECRET)
     #The base price charged to SquadUp
