@@ -10,7 +10,7 @@ class SquadType(DjangoObjectType):
     
     class Meta:
         model = Squad
-        exclude_fields = ['date_created', 'date_modified', 'stripe_plan']
+        exclude_fields = ['date_created', 'date_modified', 'stripe_plan', 'is_fake']
         
     def resolve_service_type(self, info):
         try:

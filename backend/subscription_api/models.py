@@ -94,6 +94,7 @@ class Squad(models.Model):
         null=True, on_delete=models.CASCADE, related_name='squad')
     is_public = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    is_fake = models.BooleanField(default=False)
     
     @property
     def squad_service_id(self):
