@@ -37,7 +37,9 @@ class CreateSquad(graphene.Mutation):
     def mutate(self, info, token, service, description, secret, costPrice, isPublic, maxSize, image, **kwargs):
 
         costPrice = int(costPrice * 100)
-        
+        if maxSize == -1:
+            maxSize = None
+            
         squad = Squad(
             owner=info.context.user,
             service=service,

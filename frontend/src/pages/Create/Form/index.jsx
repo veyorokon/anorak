@@ -141,7 +141,6 @@ class CreateForm extends React.Component {
       token: window.localStorage.getItem('sessionToken'),
       service: values.service,
       secret: values.secret,
-      costPrice: values.costPrice,
       description: values.description,
       isPublic: values.isPublic
     };
@@ -149,7 +148,14 @@ class CreateForm extends React.Component {
     else {
       variables.image = '';
     }
+    if (values.costPrice) variables.costPrice = values.costPrice;
+    else {
+      variables.costPrice = 0;
+    }
     if (values.maxSize) variables.maxSize = values.maxSize;
+    else {
+      variables.maxSize = -1;
+    }
 
     await createSquad({ variables });
     mixpanel.track('Squad Create', { squad: values.id });
