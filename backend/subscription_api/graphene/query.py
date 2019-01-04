@@ -22,7 +22,7 @@ class Query(graphene.ObjectType):
         excludeSquads = set()
         searchMemberships = Squad.objects.filter(Q(service__icontains=text) | Q(description__icontains=text)).filter(is_public=True).filter(is_active=True).filter(Q(maximum_size=None) | Q(current_size__lt = F('maximum_size')))
         
-        searchFakes = Squad.objects.filter(Q(service__icontains=text) | Q(description__icontains=text).filter(is_fake=True))   
+        searchFakes = Squad.objects.filter(Q(service__icontains=text) | Q(description__icontains=text)).filter(is_fake=True)
           
         if not user.is_anonymous:
             squadsWithUserBan = Squad.objects.filter(members__user=user, members__status = SquadMemberStatus.BANNED)
