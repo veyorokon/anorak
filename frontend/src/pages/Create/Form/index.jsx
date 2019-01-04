@@ -146,6 +146,9 @@ class CreateForm extends React.Component {
       isPublic: values.isPublic
     };
     if (values.image) variables.image = values.image;
+    else {
+      variables.image = '';
+    }
     if (values.maxSize) variables.maxSize = values.maxSize;
 
     await createSquad({ variables });

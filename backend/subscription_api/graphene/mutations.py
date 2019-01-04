@@ -28,7 +28,7 @@ class CreateSquad(graphene.Mutation):
         costPrice = graphene.Float(required=True)
         maxSize = graphene.Int(required=False, default_value=None)
         token = graphene.String(required=True)
-        image = graphene.String(required=False, default_value=None)
+        image = graphene.String(required=False)
         isPublic = graphene.Boolean(required=True)
     
     squad =  graphene.Field(SquadType)
