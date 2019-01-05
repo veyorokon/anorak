@@ -18,6 +18,10 @@ SquadUp frontend was created using [Create React App](https://facebook.github.io
   - **Cleanup Note**: Some of these components should be moved into a page's folder as they probably won't be shared among pages.
 - `src/lib` - Non-React logic or React components that are more concerned with logic and/or setup compared to a visual component.
 
+## Authentication
+
+Users are identified by a token named `sessionToken` which is stored using `window.localStorage`.
+
 ## Development
 
 ### Adding a new page
@@ -34,3 +38,21 @@ If the form is going to be similar to one of the already created forms, use the 
 2. Create a form config object (the format is specified in the `Form` component's documentation).
 3. Import that file and pass it into the `Form` component along with the `onSubmit` prop.
 4. Use the `renderField` function provided by the component to render the fields defined in the config file.
+
+### Adding a query
+
+[Apollo documentation](https://www.apollographql.com/docs/react/essentials/queries.html)
+
+### Adding a mutation
+
+[Apollo documentation](https://www.apollographql.com/docs/react/essentials/mutations.html)
+
+### Customizing Material-UI styling
+
+More thorough documentation could be found on the [Material-UI site](https://material-ui.com/customization/overrides/).
+
+1. Create a "theme" object where each key is the name of a class and each value is an object of css rules.
+2. Pass that into the `withStyles` HOC along with the component.
+3. Pass each defined class (located at `props.classes`) into the associated Material-UI component using the `className` prop.
+
+An example can be found in pretty much any component including `src/components/AccountButtons`.
