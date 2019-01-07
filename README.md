@@ -37,7 +37,7 @@ SquadUp requires [Node.js](https://nodejs.org/) v8.11.4+ to run.
 
 
 
-After *every* pull the code from Github, configure Mixpanel and Stripe keys for `local` or `server`. This step is for analytics and separates development from production data on our Mixpanel and Stripe dashboards.
+After *every* pull from Github, configure Mixpanel and Stripe keys for `local` or `server`. This step is for analytics and separates development from production data on our Mixpanel and Stripe dashboards.
 ```sh
 $ ./config local
 ```
