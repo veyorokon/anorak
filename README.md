@@ -35,21 +35,34 @@ SquadUp uses a number of open source and free tier projects to work properly:
 
 SquadUp requires [Node.js](https://nodejs.org/) v8.11.4+ to run.
 
-Install the backend dependencies and build the container.
+Install the backend dependencies by building the container.
 
 ```sh
 $ docker-compose build
+```
+
+To start a docker container for the backend run the following. The terminal window will then show both the database container and the backend container starting each in their own container named: backend and database; respectively.
+
+```sh
 $ docker-compose up
 ```
 
-If this is the first time after a fresh install, create a Django super user and follow the prompt.
-
+Leave the previous terminal window and open a new terminal window. If this is the first time after a fresh install, create a Django super user. Since Django was installed in the backend container, you have to connect/login to that container.
 ```sh
 $ docker-compose exec backend bash
+```
+
+Your terminal window will display something like the following:
+```
+root@9da9ed996eb5:/app/backend#
+```
+
+You have connected to the backend container and now have access to its environment. Assuming this is your first time, create a new Django superuser.
+```sh
 $ ./manage.py createsuperuser
 ```
 
-While still inside the backend container, make migrations. Exit this container after this step.
+While still inside the backend container, make migrations and migrate them to the database. Exit this container after this step.
 
 ```sh
 $ ./manage.py makemigrations
@@ -57,21 +70,21 @@ $ ./manage.py migrate
 $ exit
 ```
 
-Django Admin is available.
+Django Admin is available via the following URL:
 
 ```sh
 127.0.0.1:8000/api/admin/
 ```
 
-GraphIQL is available on the backend in development environments.
+GraphIQL is available on the backend *only* in development environments.
 
 ```sh
 127.0.0.1:8000/api/graphql/
 ```
 
-Configure Mixpanel and Stripe keys for 'local' or 'prod' by running e.g.:
+Configure Mixpanel and Stripe keys for 'local' or 'server'. This step is for analytics and separates development from production data. This should be done after every 'git pull' by running e.g.:
 ```sh
-$ ./config prod
+$ ./config local
 ```
 
 Install the frontend dependencies and devDependencies and start the server.
