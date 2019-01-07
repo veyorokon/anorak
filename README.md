@@ -49,25 +49,25 @@ $ ./config local
 
 Docker container is used for version control for the backend and database. Docker Compose creates isolated environments as mini virtual machines making them portable and preventing version clashes. 
 
-After you have [installed Docker Compose](https://docs.docker.com/compose/install/) you can create two separate containers for the backend which contains the server logic and a separate container for the postgres database. Build the backend and database into individual containers.
+After you have [installed Docker Compose](https://docs.docker.com/compose/install/) you can create two containers: one for the backend which contains the API server logic and a separate container for the postgres database. Build the backend and database into individual containers.
 
 ```sh
 $ docker-compose build
 ```
 
-Running the build command with existing containers just updates their packages/versions. Data in the database container will not be deleted.
+Running the build command with existing containers applies any package version updates. Data in the that container will not be deleted.
 
-The `docker-compose.yml` file specifies which and how containers will start/build and contains thier bash environment variables. The default `DJANGO_SETTINGS_MODULE` is set to development. 
+The `docker-compose.yml` file specifies which and how containers will start/build and also contains bash environment variables. For the `backend` container, the default `DJANGO_SETTINGS_MODULE` is set to development. 
 
-The command to start docker the `backend` and `database` containers is:
+The command to start the `backend` and `database` containers is:
 
 ```sh
 $ docker-compose up
 ```
 
-Your terminal window will now show any output from the programs running on both containers and can be used for debugging. 
+Your terminal window will now show any output/messages/errors from programs running on the containers. 
 
-Leave this window and open a new terminal window. If this is the first time after a fresh install, create a Django super user. Since Django was installed in the `backend` container, you have to connect/login to the `backend` container. Execute the `bash` command on the `backend` container to connect to its bash shell: 
+Leave this window and open a new terminal. Execute the `bash` command on the `backend` container to connect to its bash shell: 
 ```sh
 $ docker-compose exec backend bash
 ```
@@ -102,14 +102,7 @@ The `backend` container has a GUI for GraphQL called GraphIQL. This allows you t
 127.0.0.1:8000/api/graphql/
 ```
 
-To stop the `backend` and `database` containers, click back on the terminal window running them and press `control + c`If you get an `ERROR: Aborting.` message run:
-```sh
-docker-compose stop
-```
-
-**Because containers are set to `restart: always` in the `docker-compose.yml`, Docker containers will automatically start on boot. Until fixed, you will need to manually stop them using the command above each time you restart `Docker` or your computer.**
-
-Install the frontend dependencies and devDependencies and start the server.
+Install the frontend dependencies and start the `frontend` server. Open a new terminal and run:
 
 ```sh
 $ cd frontend
@@ -117,13 +110,23 @@ $ npm install -d
 $ npm start
 ```
 
-Verify the deployment of frontend by navigating to localhost port 3000 in your preferred browser. **If you're on Mac, Mixpanel will not work in Chrome but it works in Safari for some reason.**
+You should now have two terminal windows: one running the dockerized `backend` with the `database` and another running the `frontend` from the previous step. Verify this by navigating to localhost port 3000 in your web browser. **If you're on Mac testing Mixpanel, note it will not work in Chrome but it works in Safari for some reason.**
 
 ```sh
 127.0.0.1:3000
 ```
 
-For production environments...
+To stop the `frontend`, go back to the terminal window running it. Then, press `control + c`.
+
+To stop the `backend` and `database` containers, go back to the terminal window running them. Then, press `control + c`. If you get an `ERROR: Aborting.` message run:
+```sh
+docker-compose stop
+```
+
+**Because containers are set to `restart: always` in the `docker-compose.yml`, Docker containers will automatically start on boot. Until fixed, you will need to manually stop them using the command above each time you restart `Docker` or your computer.**
+
+
+### For production environments...
 
 ```sh
 $ Install instructions needed.
