@@ -12,7 +12,6 @@ SquadUp is a platform that allows users to create, share and discover (CSD) subs
 
   - Squad card images are now optionally available.
 
-
 You can also:
   - Create squads for free.
   - Invite members to your squad.
@@ -21,21 +20,27 @@ You can also:
 
 SquadUp uses a number of open source and free tier projects to work properly:
 
-* [ReactJS] - Front end JS framework
-* [Django] - Backend framework built with python
-* [npm] - Package manager for installing ReactJS modules
-* [Mixpanel] - User data analytics and tracking
-* [Docker] - Platform independent portable development
-* [Graphene] - GraphQL framework for python
-* [Apollo] - Caching GraphQL client for GraphQL servers
+* [ReactJS] - Front end JS framework.
+* [Django] - Backend framework built with python.
+* [npm] - Package manager for installing ReactJS modules.
+* [Mixpanel] - User data analytics and tracking.
+* [Docker] - Platform independent portable development.
+* [GraphQL] - Query language for APIs.
+* [Graphene] - GraphQL framework for python.
+* [GraphIQL] - An in-browser IDE for exploring GraphQL.
+* [Apollo] - Caching GraphQL client for GraphQL servers.
 * [Material-UI] - React components that implement Google's Material Design.
 * [Stripe] - Python library for the Stripe API.
+* [Postgres] - SQL relational database. 
+
+### SquadUp's Three Distinct Components:
+  - The database - Stores user/squad data using [Postgres](https://www.postgresql.org/).
+  - The backend - Hosts a [GraphQL](https://graphql.org/) API to access data in the database.
+  - The frontend - Serves the web browser UI that interfaces with the backend's API.
 
 ### Local Installation & Development
 
 SquadUp requires [Node.js](https://nodejs.org/) v8.11.4+ to run.
-
-
 
 After *every* pull from Github, configure Mixpanel and Stripe keys for `local` or `server`. This step is for analytics and separates development from production data on our Mixpanel and Stripe dashboards.
 ```sh
@@ -91,13 +96,13 @@ With your Django superuser, you can access the Django Admin locally with:
 127.0.0.1:8000/api/admin/
 ```
 
-The backend container has a GUI for GraphQL called GraphIQL. This allows you to debug GraphQL queries/mutations. Note, this is **only** available in development environments.
+The `backend` container has a GUI for GraphQL called GraphIQL. This allows you to debug GraphQL queries/mutations. Note, this is **only** available in development environments.
 
 ```sh
 127.0.0.1:8000/api/graphql/
 ```
 
-To stop the `backend` and `database` containers, click back on the terminal window running them and press `control + c`. If you get an `ERROR: Aborting.` message run:
+To stop the `backend` and `database` containers, click back on the terminal window running them and press `control + c`If you get an `ERROR: Aborting.` message run:
 ```sh
 docker-compose stop
 ```
@@ -149,4 +154,7 @@ License
    [Apollo]: <https://github.com/apollographql/apollo-client>
    [Material-UI]: <https://github.com/mui-org/material-ui>
    [Stripe]: <https://github.com/stripe/stripe-python>
+   [GraphQL]: <https://graphql.org/>
+   [GraphIQL]: <https://github.com/graphql/graphiql>
+   [Postgres]: <https://www.postgresql.org/>
    
