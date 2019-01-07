@@ -37,18 +37,18 @@ SquadUp requires [Node.js](https://nodejs.org/) v8.11.4+ to run.
 
 
 
-After *every* pull the code from Github, configure Mixpanel and Stripe keys for 'local' or 'server'. This step is for analytics and separates development from production data on our Mixpanel and Stripe dashboards.
+After *every* pull the code from Github, configure Mixpanel and Stripe keys for `local` or `server`. This step is for analytics and separates development from production data on our Mixpanel and Stripe dashboards.
 ```sh
 $ ./config local
 ```
 
-Install the backend dependencies by building the container.
+Docker container is used for version control for the backend and database and to make the code protable and platform independent. Install the backend dependencies by building the container.
 
 ```sh
 $ docker-compose build
 ```
 
-To start a docker container for the backend run the following. The terminal window will then show both the database container and the backend container starting each in their own container named: backend and database; respectively.
+The `docker-compose.yml` file specifies which and how containers will start. The command to start docker containers is:
 
 ```sh
 $ docker-compose up
@@ -97,7 +97,7 @@ $ npm install -d
 $ npm start
 ```
 
-Verify the deployment of frontend by navigating to localhost port 3000 in your preferred browser. *Mixpanel integrations will not work in Chrome but works in Safari.*
+Verify the deployment of frontend by navigating to localhost port 3000 in your preferred browser. **If on Mac, Mixpanel integrations will not work in Chrome but works in Safari.**
 
 ```sh
 127.0.0.1:3000
@@ -122,7 +122,7 @@ Make sure you have added '127.0.0.1 postgres' to your /etc/hosts file.
 License
 ----
 
-Proprietary, Private
+***Proprietary, Please Keep Private***
 
 
    [ReactJS]: <https://github.com/facebook/react>
