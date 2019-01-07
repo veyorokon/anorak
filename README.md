@@ -35,6 +35,13 @@ SquadUp uses a number of open source and free tier projects to work properly:
 
 SquadUp requires [Node.js](https://nodejs.org/) v8.11.4+ to run.
 
+
+
+After you pull the code from Github, configure Mixpanel and Stripe keys for 'local' or 'server'. This step is for analytics and separates development from production data on mixpanel.com and stripe.com. #This should be done after every 'git pull' by running e.g.:
+```sh
+$ ./config local
+```
+
 Install the backend dependencies by building the container.
 
 ```sh
@@ -52,12 +59,12 @@ Leave the previous terminal window and open a new terminal window. If this is th
 $ docker-compose exec backend bash
 ```
 
-Your terminal window will display something like the following:
-```
-root@9da9ed996eb5:/app/backend#
+You will be connected to the bash terminal in the backend container and your terminal window will display something like the following:
+```sh
+root@9daded436eb5:/app/backend#
 ```
 
-You have connected to the backend container and now have access to its environment. Assuming this is your first time, create a new Django superuser.
+If this is your first time, create a new Django superuser.
 ```sh
 $ ./manage.py createsuperuser
 ```
@@ -80,11 +87,6 @@ GraphIQL is available on the backend *only* in development environments.
 
 ```sh
 127.0.0.1:8000/api/graphql/
-```
-
-Configure Mixpanel and Stripe keys for 'local' or 'server'. This step is for analytics and separates development from production data. This should be done after every 'git pull' by running e.g.:
-```sh
-$ ./config local
 ```
 
 Install the frontend dependencies and devDependencies and start the server.
