@@ -6,7 +6,7 @@ import Form from './Form';
 
 function Create() {
   return (
-    <StripeProvider apiKey="pk_live_BpssZcKZdOznYcltmEYbu3EH">
+    <StripeProvider apiKey="pk_test_rLuroFoR4XKOxb3FbmJqTqrh">
       <Layout rightTitle="Squad Creation">
         <Elements>
           <Form />
