@@ -31,7 +31,7 @@ SquadUp uses a number of open source and free tier projects to work properly:
 * [Material-UI] - React components that implement Google's Material Design.
 * [Stripe] - Python library for the Stripe API.
 
-### Installation
+### Local Installation & Development
 
 SquadUp requires [Node.js](https://nodejs.org/) v8.11.4+ to run.
 
@@ -77,13 +77,13 @@ $ ./manage.py migrate
 $ exit
 ```
 
-Django Admin is available via the following URL:
+With your new superuser, you can access the Django Admin via:
 
 ```sh
 127.0.0.1:8000/api/admin/
 ```
 
-GraphIQL is available on the backend *only* in development environments.
+The backend container has a GUI for GraphQL called GraphIQL. This allows you to debug GraphQL queries/mutations. Note, this is *only* available in development environments.
 
 ```sh
 127.0.0.1:8000/api/graphql/
@@ -97,7 +97,7 @@ $ npm install -d
 $ npm start
 ```
 
-Verify the deployment of frontend by navigating to localhost port 3000 in your preferred browser. **If on Mac, Mixpanel integrations will not work in Chrome but works in Safari.**
+Verify the deployment of frontend by navigating to localhost port 3000 in your preferred browser. **If you're on Mac, Mixpanel will not work in Chrome but it works in Safari for some reason.**
 
 ```sh
 127.0.0.1:3000
