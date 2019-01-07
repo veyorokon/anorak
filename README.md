@@ -42,34 +42,42 @@ After *every* pull from Github, configure Mixpanel and Stripe keys for `local` o
 $ ./config local
 ```
 
-Docker container is used for version control for the backend and database and to make the code protable and platform independent. Install the backend dependencies by building the container.
+Docker container is used for version control for the backend and database. Docker Compose creates isolated environments as mini virtual machines making them portable and preventing version clashes. 
+
+After you have [installed Docker Compose](https://docs.docker.com/compose/install/) you can create two separate containers for the backend which contains the server logic and a separate container for the postgres database. Build the backend and database into individual containers.
 
 ```sh
 $ docker-compose build
 ```
 
-The `docker-compose.yml` file specifies which and how containers will start. The command to start docker containers is:
+Running the build command with existing containers just updates their packages/versions. Data in the database container will not be deleted.
+
+The `docker-compose.yml` file specifies which and how containers will start/build and contains thier bash environment variables. The default `DJANGO_SETTINGS_MODULE` is set to development. 
+
+The command to start docker the `backend` and `database` containers is:
 
 ```sh
 $ docker-compose up
 ```
 
-Leave the previous terminal window and open a new terminal window. If this is the first time after a fresh install, create a Django super user. Since Django was installed in the backend container, you have to connect/login to that container.
+Your terminal window will now show any output from the programs running on both containers and can be used for debugging. 
+
+Leave this window and open a new terminal window. If this is the first time after a fresh install, create a Django super user. Since Django was installed in the `backend` container, you have to connect/login to the `backend` container. Execute the `bash` command on the `backend` container to connect to its bash shell: 
 ```sh
 $ docker-compose exec backend bash
 ```
 
-You will be connected to the bash terminal in the backend container and your terminal window will display something like the following:
+You should be connected to the `backend` container's bash and your terminal window will look something like:
 ```sh
 root@9daded436eb5:/app/backend#
 ```
 
-If this is your first time, create a new Django superuser.
+If this is your first time, create a new Django superuser and follow the prompt.
 ```sh
 $ ./manage.py createsuperuser
 ```
 
-While still inside the backend container, make migrations and migrate them to the database. Exit this container after this step.
+While still inside the backend container, make migrations and migrate them to the `database` container. Exit this container after this step.
 
 ```sh
 $ ./manage.py makemigrations
@@ -77,17 +85,24 @@ $ ./manage.py migrate
 $ exit
 ```
 
-With your new superuser, you can access the Django Admin via:
+With your Django superuser, you can access the Django Admin locally with:
 
 ```sh
 127.0.0.1:8000/api/admin/
 ```
 
-The backend container has a GUI for GraphQL called GraphIQL. This allows you to debug GraphQL queries/mutations. Note, this is *only* available in development environments.
+The backend container has a GUI for GraphQL called GraphIQL. This allows you to debug GraphQL queries/mutations. Note, this is **only** available in development environments.
 
 ```sh
 127.0.0.1:8000/api/graphql/
 ```
+
+To stop the `backend` and `database` containers, click back on the terminal window running them and press `control + c`. If you get an `ERROR: Aborting.` message run:
+```sh
+docker-compose stop
+```
+
+**Because containers are set to `restart: always` in the `docker-compose.yml`, Docker containers will automatically start on boot. Until fixed, you will need to manually stop them using the command above each time you restart `Docker` or your computer.**
 
 Install the frontend dependencies and devDependencies and start the server.
 
