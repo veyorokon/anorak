@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-import Layout from '../../components/Layout';
+import Layout from '../../components/v1/Layout';
 import SquadSearch from './SquadSearch';
 
 import Joyride from 'react-joyride';

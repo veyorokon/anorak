@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Elements, StripeProvider } from 'react-stripe-elements';
 
 import BillingSection from './BillingSection';
-import Layout from '../../components/Layout';
+import Layout from '../../components/v1/Layout';
 import PaymentSection from './PaymentSection';
 const mixpanel = require('mixpanel-browser');
 mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });

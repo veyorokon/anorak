@@ -7,14 +7,14 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
-import { SEARCH_SQUADS } from '../pages/Dashboard/SquadSearch';
+import { SEARCH_SQUADS } from '../../pages/Dashboard/SquadSearch';
 
 const mixpanel = require('mixpanel-browser');
 mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
 
 const HANDLE_INVITE = gql`
   mutation HandleInvite($token: String!, $squadID: Int!) {
-    handleInvite(token: $token, squadID: $squadID, wasAccepted: true) {
+    handleInvite(token: $token, squadID: $squadID, wasAccepted: false) {
       squadMembership {
         id
         status
@@ -23,7 +23,7 @@ const HANDLE_INVITE = gql`
   }
 `;
 
-class AcceptInviteModal extends React.Component {
+class DeclineInviteModal extends React.Component {
   state = {
     open: false,
     isSubmitting: false
@@ -37,7 +37,7 @@ class AcceptInviteModal extends React.Component {
     this.setState({ open: false });
   };
 
-  onAcceptClick = async handleInvite => {
+  onDeclineClick = async handleInvite => {
     this.setState({ isSubmitting: true });
     await handleInvite({
       variables: {
@@ -45,7 +45,7 @@ class AcceptInviteModal extends React.Component {
         squadID: this.props.squadID
       }
     });
-    mixpanel.track('Squad Invite Accept', { squad: this.props.squadID });
+    mixpanel.track('Squad Invite Decline', { squad: this.props.squadID });
     setTimeout(() => {
       this.setState({ open: false }, () => {
         this.props.onSuccess();
@@ -56,8 +56,8 @@ class AcceptInviteModal extends React.Component {
   render() {
     return (
       <div>
-        <Button style={{ color: 'green' }} onClick={this.handleClickOpen}>
-          Accept
+        <Button style={{ color: 'grey' }} onClick={this.handleClickOpen}>
+          Decline
         </Button>
         <Dialog
           open={this.state.open}
@@ -65,7 +65,7 @@ class AcceptInviteModal extends React.Component {
           aria-labelledby="responsive-dialog-title"
         >
           <DialogTitle id="responsive-dialog-title">
-            Confirm that you'd like to accept this invitation
+            Confirm that you'd like to decline this invitation
           </DialogTitle>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
@@ -86,11 +86,11 @@ class AcceptInviteModal extends React.Component {
             >
               {handleInvite => (
                 <Button
-                  onClick={() => this.onAcceptClick(handleInvite)}
+                  onClick={() => this.onDeclineClick(handleInvite)}
                   color="secondary"
                   disabled={this.state.isSubmitting}
                 >
-                  Accept
+                  Decline
                 </Button>
               )}
             </Mutation>
@@ -101,4 +101,4 @@ class AcceptInviteModal extends React.Component {
   }
 }
 
-export default withMobileDialog()(AcceptInviteModal);
+export default withMobileDialog()(DeclineInviteModal);

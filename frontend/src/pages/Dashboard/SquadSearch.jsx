@@ -6,8 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import gql from 'graphql-tag';
 import throttle from 'lodash/throttle';
 
-import Search from '../../components/Search';
-import SearchTable from '../../components/SearchTable';
+import Search from '../../components/v1/Search';
+import SearchTable from '../../components/v1/SearchTable';
 
 const styles = theme => ({
   searchSection: {

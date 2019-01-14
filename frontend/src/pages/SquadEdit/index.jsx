@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 
-import Layout from '../../components/Layout';
+import Layout from '../../components/v1/Layout';
 import Form from './Form';
 import InviteForm from './InviteForm';
 import Invites from './Invites';

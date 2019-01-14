@@ -2,8 +2,8 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 
-import Layout from '../../components/Layout';
-import SquadOverviewCard from '../../components/SquadOverviewCard';
+import Layout from '../../components/v1/Layout';
+import SquadOverviewCard from '../../components/v1/SquadOverviewCard';
 
 const GET_SQUAD = gql`
   query GetSquad($token: String!, $squadID: Int!) {

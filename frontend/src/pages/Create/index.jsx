@@ -1,7 +1,7 @@
 import React from 'react';
 import { Elements, StripeProvider } from 'react-stripe-elements';
 
-import Layout from '../../components/Layout';
+import Layout from '../../components/v1/Layout';
 import Form from './Form';
 
 function Create() {

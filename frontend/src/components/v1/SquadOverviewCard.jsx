@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 
 import DisbandModal from './DisbandModal';
 import LeaveModal from './LeaveModal';
-import withSnackbar from '../lib/withSnackbar';
+import withSnackbar from '../../lib/withSnackbar';
 
 const styles = {
   card: {

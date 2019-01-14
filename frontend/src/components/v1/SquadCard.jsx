@@ -10,7 +10,7 @@ import DeclineInviteModal from './DeclineInviteModal';
 import MainActionButton from './MainActionButton';
 import SquadCardModal from './SquadCardModal';
 import SquadStatus from './SquadStatus';
-import withSnackbar from '../lib/withSnackbar';
+import withSnackbar from '../../lib/withSnackbar';
 
 import CardMedia from '@material-ui/core/CardMedia';
 

@@ -14,7 +14,7 @@ import { Mutation } from 'react-apollo';
 import Grid from '@material-ui/core/Grid';
 
 import { GET_USER } from './SquadList';
-import { SEARCH_SQUADS } from '../pages/Dashboard/SquadSearch';
+import { SEARCH_SQUADS } from '../../pages/Dashboard/SquadSearch';
 
 const CREATE_MEMBERSHIP = gql`
   mutation CreateMembership($token: String!, $squadID: Int!) {

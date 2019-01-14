@@ -137,6 +137,10 @@ $ Install instructions needed.
 
 Make sure you have added '127.0.0.1 postgres' to your /etc/hosts file.
 
+> Cannot read squad search of undefined `data.squadSearch`
+
+In frontend/src/App/index.jsx, make sure you have the correct host: `uri: http://localhost:8000/api/graphql/`
+
 
 ### Todos
 

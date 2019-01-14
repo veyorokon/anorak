@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router-dom';
 
-import withSnackbar from '../lib/withSnackbar';
+import withSnackbar from '../../lib/withSnackbar';
 import AcceptInviteModal from './AcceptInviteModal';
 import SquadUpModal from './SquadUpModal';
 

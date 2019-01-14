@@ -10,7 +10,7 @@ import { Mutation } from 'react-apollo';
 
 import Form from '../../../lib/Form';
 import withSnackbar from '../../../lib/withSnackbar';
-import { GET_USER } from '../../../components/SquadList';
+import { GET_USER } from '../../../components/v1/SquadList';
 import { SEARCH_SQUADS } from '../../Dashboard/SquadSearch';
 import formConfig from './form';
 
