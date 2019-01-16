@@ -4,11 +4,6 @@ import TextareaAutosize from 'react-autosize-textarea';
 import Megaphone from '../../assets/icons/basic/megaphone';
 
 class Navbar extends React.Component {
-  constructor(props) {
-    super(props);
-    // create a ref to store the textInput DOM element
-    this.textInput = React.createRef();
-  }
   state = {
     expanded: false,
     submit: false,
@@ -113,7 +108,6 @@ class Navbar extends React.Component {
                   rows={this.state.rows}
                   onChange={this.onChange}
                   value={this.state.feedback}
-                  ref={this.textInput}
                   class="feedback-box "
                 />
               </div>

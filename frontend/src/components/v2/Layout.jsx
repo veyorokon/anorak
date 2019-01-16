@@ -24,7 +24,9 @@ class Layout extends React.Component {
             <div class="body-content-wrapper">
               {this.props.TitleCard}
               {this.props.Content.map(item => {
-                return <span key={item.Title}> {item}</span>;
+                return (
+                  <React.Fragment key={item.Title}> {item}</React.Fragment>
+                );
               })}
             </div>
           </div>
