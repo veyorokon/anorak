@@ -8,38 +8,17 @@ function ContentCard(props) {
         <div class="body-content-card-header">
           <div class="card-text-h2">{props.title}</div>
         </div>
-        <div class="body-content-card-content">
-          <table class="content-table">
-            <thead class="content-table-header-wrapper">
-              <th class="content-table-header">Name</th>
-              <th class="content-table-header">Size</th>
-              <th class="content-table-header">Capacity</th>
-              <th class="content-table-header">Price</th>
-              <th class="content-table-header">Created</th>
-              <th class="content-table-header">Secret</th>
-            </thead>
-
-            <tbody class="content-table-body-wrapper">
-              <tr class="content-table-body-row">
-                <td class="content-table-body-cell">test</td>
-                <td class="content-table-body-cell">test</td>
-                <td class="content-table-body-cell">test</td>
-                <td class="content-table-body-cell">test</td>
-                <td class="content-table-body-cell">test</td>
-                <td class="content-table-body-cell">test</td>
-              </tr>
-              <tr class="content-table-body-row">
-                <td class="content-table-body-cell">test</td>
-                <td class="content-table-body-cell">test</td>
-                <td class="content-table-body-cell">test</td>
-                <td class="content-table-body-cell">test</td>
-                <td class="content-table-body-cell">test</td>
-                <td class="content-table-body-cell">test</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="body-content-card-content">{props.content}</div>
+        <div class="body-content-card-footer">
+          <div class="body-content-card-footer-navigation">
+            <div class="body-content-card-footer-navigation-option text-link text-link-box">
+              Previous
+            </div>
+            <div class="body-content-card-footer-navigation-option text-link text-link-box">
+              Next
+            </div>
+          </div>
         </div>
-        <div class="body-content-card-footer">footer</div>
       </div>
     </Paper>
   );
