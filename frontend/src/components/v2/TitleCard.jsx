@@ -1,6 +1,5 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import DashboardIcon from '../../assets/icons/basic/dashboard';
 
 function TitleCard(props) {
@@ -9,20 +8,20 @@ function TitleCard(props) {
       <div class="card-content-wrapper">
         <div class="body-title-card-content">
           <div class="body-title-card-header">
-            <Typography variant="h6" gutterBottom>
+            <div class="card-text-h1 vertical-flex title-card-flex">
               Welcome To Your SquadUp Dashboard!
-            </Typography>
-            <Typography variant="subtitle1" gutterBottom>
+            </div>
+            <div class="card-text-subtitle vertical-flex">
               Create. Share. Subscribe.
-            </Typography>
+            </div>
           </div>
           <div class="body-title-card-footer">
-            <Typography variant="button" gutterBottom>
+            <div class="card-text-link vertical-flex text-link">
               Create a squad
-            </Typography>
-            <Typography variant="caption" gutterBottom>
+            </div>
+            <div class="card-text-caption vertical-flex">
               You currently have no new notifications.
-            </Typography>
+            </div>
           </div>
         </div>
       </div>

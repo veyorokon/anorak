@@ -17,6 +17,7 @@
     "prettier": "^1.14.3",
     "react": "^16.6.0",
     "react-apollo": "^2.2.4",
+    "react-autosize-textarea": "^6.0.0",
     "react-dom": "^16.6.0",
     "react-facebook": "^6.0.15",
     "react-joyride": "^2.0.0-15",

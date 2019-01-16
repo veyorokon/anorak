@@ -30,8 +30,8 @@ class Layout extends React.Component {
           <div class="body-right">
             <div class="body-content-wrapper">
               <TitleCard />
-              <ContentCard />
-              <ContentCard />
+              <ContentCard title="Owned" />
+              <ContentCard title="Joined" />
             </div>
           </div>
         </div>
