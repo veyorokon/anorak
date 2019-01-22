@@ -6,14 +6,8 @@ export default function Routes() {
   return (
     <Router>
       <div>
-        <Route path="/" exact component={Pages.Dashboard} />
-        <Route path="/account" component={Pages.Account} />
-        <Route path="/create" component={Pages.Create} />
+        <Route path="/" exact component={Pages.Landing} />
         <Route path="/dashboard" component={Pages.Dashboard} />
-        <Route path="/login" component={Pages.Login} />
-        <Route path="/signup" component={Pages.Signup} />
-        <Route path="/squads/:id" exact component={Pages.Squad} />
-        <Route path="/squads/:id/edit" component={Pages.SquadEdit} />
       </div>
     </Router>
   );

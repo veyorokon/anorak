@@ -1,0 +1,14 @@
+.Dashboard-Container {
+}
+.Body-Left {
+  display: flex;
+  flex: 1 1 auto;
+  display: flex;
+  width: 20%;
+}
+.Body-Right {
+  flex: 5 1 auto;
+  display: flex;
+  max-width: 80%;
+  align-items: center;
+}

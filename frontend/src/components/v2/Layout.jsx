@@ -1,8 +1,7 @@
 import React from 'react';
-import '../../Stylesheets/main.css';
+import '../../Stylesheets/v2/main.css';
 import NavBar from '../../components/v2/Navbar';
 import SideMenu from '../../components/v2/SideMenu';
-import TitleCard from '../../components/v2/TitleCard';
 
 const mixpanel = require('mixpanel-browser');
 mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });

@@ -25,6 +25,7 @@
     "react-scripts": "2.0.5",
     "react-spinners": "^0.4.7",
     "react-stripe-elements": "^2.0.1",
+    "react-svg": "^7.2.4",
     "typeface-roboto": "0.0.54"
   },
   "scripts": {
@@ -52,5 +53,6 @@
       "prettier --single-quote --write",
       "git add"
     ]
-  }
+  },
+  "devDependencies": {}
 }

@@ -1,0 +1,76 @@
+.Bubble-Gradient {
+  background-image: url('../../assets/background/landingOvals.svg');
+}
+
+.Full {
+  height: -webkit-fill-available;
+  display: flex;
+  flex-direction: column;
+}
+
+.Flex {
+  display: flex;
+  flex: var(--row) var(--col) auto;
+  flex-direction: var(--dir);
+}
+
+.Logo-Header {
+  font-family: HurmeGeometricSans1-Bold;
+  font-size: var(--size);
+  letter-spacing: 0.86px;
+}
+.Subtitle {
+  font-family: HurmeGeometricSans1-Light;
+  font-size: 24px;
+  color: #ffffff;
+  letter-spacing: 0.22px;
+}
+.Theme-Yellow {
+  color: #f8be00;
+}
+.Theme-White {
+  color: #fff;
+}
+.Justify {
+  display: flex;
+  justify-content: var(--justify);
+}
+
+.Align {
+  display: flex;
+  align-items: var(--align);
+}
+.Padded {
+  padding: var(--padding); /*Top, Right, Bottom, Left */
+}
+
+.Feature-Title-1 {
+  font-family: HurmeGeometricSans1-Light;
+  font-size: 32px;
+  color: #79c8f2;
+  letter-spacing: 0;
+}
+.Feature-Title-2 {
+  font-family: HurmeGeometricSans1-Light;
+  font-size: 32px;
+  color: #d978ff;
+  letter-spacing: 0;
+}
+.Feature-Title-3 {
+  font-family: HurmeGeometricSans1-Light;
+  font-size: 32px;
+  color: #78c8f3;
+  letter-spacing: 0;
+}
+.Feature-Description {
+  font-family: HurmeGeometricSans1-Light;
+  font-size: 16px;
+  color: #ffffff;
+  letter-spacing: 0;
+  text-align: center;
+  line-height: 28px;
+}
+.Feature-Icon {
+  display: flex;
+  justify-content: center;
+}

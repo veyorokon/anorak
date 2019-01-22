@@ -1,0 +1,18 @@
+
+<svg width="66px" height="36px" viewBox="0 0 66 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="-63.6052258%" y1="-45.2091739%" x2="100.758557%" y2="99.9039585%" id="linearGradient-1">
+            <stop stop-color="#3023AE" offset="0%"></stop>
+            <stop stop-color="#6DB2D7" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-228.000000, -661.000000)" fill="url(#linearGradient-1)">
+            <g id="Text" transform="translate(120.000000, 573.000000)">
+                <g id="Text_col_1" transform="translate(0.000000, 88.000000)">
+                    <path d="M147,0 L135.6,15 L144.3,26.4 L139.5,30 C134.4,23.4 126,12 126,12 L108,36 L174,36 L147,0 L147,0 Z" id="Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

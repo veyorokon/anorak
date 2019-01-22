@@ -145,8 +145,10 @@
   align-items: flex-end;
   flex: 1 1 auto; /* width, height */
   margin: 5px 20px 5px 20px; /*Top, Right, Bottom, Left */
-  justify-content: flex-end;
   display: flex;
+}
+.body-content-card-footer-flex-end {
+  justify-content: flex-end;
 }
 .body-content-card-footer-navigation {
   font-family: HurmeGeometricSans1-SemiBold;
@@ -163,12 +165,16 @@
   justify-content: center;
 }
 .text-link-box {
-  border: 0.3px solid #e2e2e2;
+  border: 0.4px solid #e2e2e2;
   border-radius: 6px;
-  box-shadow: 0 1px 1px 0 rgba(162, 162, 162, 0.2) !important;
+  box-shadow: 0 1px 1px 0 rgba(162, 162, 162, 0.3) !important;
   background-color: #fdfdfd;
-  padding: 3px;
+  padding: 5px;
   align-items: center;
+}
+.text-link-box:hover {
+  border: 0.5px solid #e2e2e2;
+  box-shadow: 0 1px 2px 0 rgba(162, 162, 162, 0.3) !important;
 }
 .text-link {
   color: #1050ff;
@@ -230,7 +236,7 @@
 }
 .card-text-h2 {
   font-family: HurmeGeometricSans1-Regular;
-  font-size: 14px;
+  font-size: 16px;
   color: #838383;
 }
 .card-text-subtitle {
@@ -310,4 +316,87 @@
 }
 .content-table-body-wrapper:hover {
   cursor: pointer;
+}
+
+/*  Discover Page  */
+.discovery-box-wrapper {
+  padding: 7% 20% 10% 0%; /*Top, Right, Bottom, Left */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.discover-column-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.discovery-icon-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.discovery-text-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.discovery-text-h1 {
+  padding: 7% 0% 3% 0%; /*Top, Right, Bottom, Left */
+  font-family: HurmeGeometricSans1-Regular;
+  font-size: 34px;
+  text-transform: uppercase;
+}
+.discovery-text-subtitle {
+  font-family: HurmeGeometricSans1-Light;
+  font-size: 18px;
+  color: #000000;
+  letter-spacing: 0;
+  text-align: center;
+  line-height: 20px;
+}
+
+.account-content {
+  display: flex;
+  width: 100%;
+}
+.account-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  flex: 1 1 auto;
+  padding: 2% 0px 0px 5%;
+}
+.account-field-row {
+  display: flex;
+  align-items: baseline;
+  padding: 0 0 2% 0;
+}
+.account-field-label {
+  font-family: HurmeGeometricSans1-Light;
+  font-size: 14px;
+  color: #4a4a4a;
+  letter-spacing: 0;
+}
+.account-field-value {
+  font-family: HurmeGeometricSans1-Regular;
+  font-size: 14px;
+  color: #000000;
+  letter-spacing: 0;
+  padding: 0 0 0 3%;
+}
+.account-field-address-wrapper {
+  padding: 1% 0 0 0%;
+  font-family: HurmeGeometricSans1-Regular;
+  font-size: 14px;
+  color: #000000;
+  letter-spacing: 0;
+  line-height: 19px;
+}
+.account-field-address-box {
+  padding: 1% 0 0 0;
+}
+
+.button-icon {
+  width: 10px;
+  margin: 3px 5px 0 0; /*Top, Right, Bottom, Left */
 }
