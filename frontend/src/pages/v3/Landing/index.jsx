@@ -1,8 +1,10 @@
 import React from 'react';
 import '../../../Stylesheets/v3/main.css';
+import './style.css';
+
 import { ReactComponent as Mountain } from '../../../assets/icons/basic/mountain.svg';
 import { ReactComponent as Fire } from '../../../assets/icons/basic/fire.svg';
-import { ReactComponent as Share } from '../../../assets/icons/basic/share.svg';
+import { ReactComponent as Subscribe } from '../../../assets/icons/basic/share.svg';
 
 const mixpanel = require('mixpanel-browser');
 mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
@@ -15,112 +17,56 @@ class Landing extends React.Component {
   render() {
     return (
       <div className="Full">
-        <div className="Bubble-Gradient">
-          <div className="Full Padded" style={{ '--padding': '7%' }}>
-            <div className="Flex" style={{ '--row': '1', '--col': '1' }}>
+        <div className="Full Bubble-Gradient">
+          <div
+            className="Padded Landing-Content-Container"
+            style={{ '--padding': '7%' }}
+          >
+            <div className="Landing-Content-Row Landing-Top">
               <div
-                className="Logo-Header Align Flex"
+                className="Logo-Header Align"
                 style={{ '--align': 'flex-end', '--size': '95px' }}
               >
                 <span className="Theme-Yellow">Squad</span>
                 <span className="Theme-White">Up</span>
               </div>
             </div>
-
-            <div
-              className="Flex"
-              style={{ '--row': '1', '--col': '1', '--dir': 'column' }}
-            >
-              <div
-                className="Flex"
-                style={{ '--row': '1', '--col': '1', '--dir': 'row' }}
-              >
+            <div className="Landing-Content-Row">
+              <div className="Subtitle-Container">
                 <span className="Theme-White Subtitle">
                   Shared Subscriptions
                 </span>
               </div>
-
-              <div
-                className="Flex Padded"
-                style={{
-                  '--row': '1',
-                  '--col': '1',
-                  '--dir': 'row',
-                  '--padding': '0 0 0 5%'
-                }}
-              >
-                <div
-                  className="Flex Padded Justify"
-                  style={{
-                    '--row': '1',
-                    '--col': '1',
-                    '--dir': 'column',
-                    '--padding': '0 5% 0 5%',
-                    '--justify': 'flex-end'
-                  }}
-                >
+              <div className="Feature-Container">
+                <div className="Feature-Odd">
                   <div className="Feature-Icon">
                     <Mountain />
                   </div>
-                  <div
-                    className="Feature-Title-1 Justify"
-                    style={{ '--justify': 'center' }}
-                  >
-                    Create
-                  </div>
+                  <div className="Feature-Title-1 ">Start</div>
                   <div className="Feature-Description">
-                    Create a group subscription with a squad and members will
-                    automatically pay you every month.
+                    Easily spin up a new subscription account or connect an
+                    existing subscription to manage it in one place.
                   </div>
                 </div>
-                <div
-                  className="Flex Padded Justify"
-                  style={{
-                    '--row': '1',
-                    '--col': '1',
-                    '--dir': 'column',
-                    '--padding': '0 5% 0 5%',
-                    '--justify': 'flex-start'
-                  }}
-                >
+                <div className="Feature-Even">
                   <div className="Feature-Icon">
                     <Fire />
                   </div>
-                  <div
-                    className="Feature-Title-2 Justify"
-                    style={{ '--justify': 'center' }}
-                  >
-                    Share
-                  </div>
+                  <div className="Feature-Title-1 ">Share</div>
                   <div className="Feature-Description">
-                    Invite friends and family to your squads and securely share
-                    any account or login information needed for the shared
-                    service.
+                    Turn your subscription into a squad - or a group
+                    subscription where everyone automatically pays each month.
                   </div>
                 </div>
-                <div
-                  className="Flex Padded Justify"
-                  style={{
-                    '--row': '1',
-                    '--col': '1',
-                    '--dir': 'column',
-                    '--padding': '0 5% 0 5%',
-                    '--justify': 'flex-end'
-                  }}
-                >
+
+                <div className="Feature-Odd">
                   <div className="Feature-Icon">
-                    <Share />
+                    <Subscribe />
                   </div>
-                  <div
-                    className="Feature-Title-3 Justify"
-                    style={{ '--justify': 'center' }}
-                  >
-                    Subscribe
-                  </div>
+                  <div className="Feature-Title-1 ">Subscribe</div>
                   <div className="Feature-Description">
-                    Manage all your subscriptions, phone bills or rent in one
-                    simple interface. Cancel and subscribe at the click of a
-                    button.
+                    Discover new subscription services and subscribe to amazing
+                    content from the SquadUp universe.
                   </div>
                 </div>
               </div>

@@ -8,5 +8,5 @@ export { default as Signup } from './Signup';
 export { default as Squad } from './Squad';
 export { default as SquadEdit } from './SquadEdit';
 
-export { default as Dashboard } from './v3/Dashboard';
+export { default as Dashboard } from './v4/Dashboard';
 export { default as Landing } from './v3/Landing';

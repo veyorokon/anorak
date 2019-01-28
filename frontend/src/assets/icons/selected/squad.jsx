@@ -8,7 +8,7 @@ export default () => (
       fill="none"
       fill-rule="evenodd"
     >
-      <g id="Menu_Item/Squads/Selected" fill="#4A90E2">
+      <g id="Menu_Item/Squads/Selected" fill="#2E2736">
         <g id="Icon/Squad/Selected">
           <g id="business-affiliate-network">
             <path

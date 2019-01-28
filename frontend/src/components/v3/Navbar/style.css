@@ -10,14 +10,15 @@
   background: #f4f6f7;
 }
 .Header-Container {
-  flex: 0 1 65px;
+  flex: 0 1 96px;
   display: flex;
   background: #2a1542;
 }
 .Header-Left {
   flex: 1 1 auto;
   display: flex;
-  width: 20%;
+  min-width: 15%;
+  align-items: center;
 }
 .Header-Right {
   flex: 5 1 auto;
@@ -29,9 +30,18 @@
   display: flex;
   width: 85%;
   height: inherit;
-  margin: 0 0 0 5%; /*Top, Right, Bottom, Left */
-  height: 40px;
+  margin: 0 0 0 0%; /*Top, Right, Bottom, Left */
+  height: 50px;
   align-items: start;
+  padding-left: 2%;
+}
+
+.Header-Logo-Wrapper {
+  display: flex;
+  width: 85%;
+  height: inherit;
+  height: 40px;
+  justify-content: center;
 }
 
 .Feedback-Wrapper {
@@ -57,4 +67,5 @@
   flex: 1 1 auto;
   align-items: flex-end;
   max-width: fit-content;
+  cursor: pointer;
 }

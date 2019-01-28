@@ -1,7 +1,8 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import TextareaAutosize from 'react-autosize-textarea';
-import Megaphone from '../../assets/icons/basic/megaphone';
+import Megaphone from '../../../assets/icons/basic/megaphone';
+import './style.css';
 
 class Navbar extends React.Component {
   state = {
@@ -9,7 +10,7 @@ class Navbar extends React.Component {
     submit: false,
     rows: 1,
     feedback: '',
-    placeholder: 'Have any feedback?',
+    placeholder: 'Have any feedback for this page?',
     value: '',
     navStyle: {
       fontFamily: 'HurmeGeometricSans1-Regular',
@@ -19,9 +20,9 @@ class Navbar extends React.Component {
       borderRadius: '3px',
       fontSize: '14px',
       color: '#838383',
-      width: '250px',
+      width: '300px',
       zIndex: 1,
-      lineHeight: '30px',
+      lineHeight: '40px',
       marginLeft: '15px',
       paddingRight: '30px'
     }
@@ -72,7 +73,7 @@ class Navbar extends React.Component {
   onBlur = event => {
     event.preventDefault();
     var navStyle = { ...this.state.navStyle };
-    navStyle.lineHeight = '30px';
+    navStyle.lineHeight = '40px';
     navStyle.marginTop = '0px';
 
     if (event.target.classList.contains('Box')) {
@@ -97,12 +98,12 @@ class Navbar extends React.Component {
     return (
       <div className="Header-Container">
         <div className="Header-Left">
-          <div className="Flex" style={{ '--row': '1' }}>
+          <div className="Header-Logo-Wrapper">
             <div
-              className="Logo-Header Justify Align Flex"
+              className="Logo-Header Justify Align "
               style={{
                 '--align': 'center',
-                '--size': '26px',
+                '--size': '24px',
                 '--justify': 'center'
               }}
             >
@@ -122,11 +123,11 @@ class Navbar extends React.Component {
                   rows={this.state.rows}
                   onChange={this.onChange}
                   value={this.state.feedback}
-                  className="Feedback-Box "
+                  class="Feedback-Box"
                 />
               </div>
               {this.state.expanded && (
-                <div className="Feedback-Submit Feedback-Fox Card-Text-Link">
+                <div className="Feedback-Submit Feedback-Box Card-Text-Link">
                   Submit
                 </div>
               )}
