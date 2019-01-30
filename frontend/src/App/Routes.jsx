@@ -6,7 +6,7 @@ export default function Routes() {
   return (
     <Router>
       <div>
-        <Route path="/" exact component={Pages.Landing} />
+        <Route path="/" exact component={Pages.LandingPage} />
         <Route path="/home" component={Pages.Dashboard} />
       </div>
     </Router>

@@ -10,3 +10,4 @@ export { default as SquadEdit } from './SquadEdit';
 
 export { default as Dashboard } from './v4/Dashboard';
 export { default as Landing } from './v3/Landing';
+export { default as LandingPage } from './v4/LandingPage';
