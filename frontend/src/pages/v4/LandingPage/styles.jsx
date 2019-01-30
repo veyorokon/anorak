@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
 export const FullContainer = styled.div`
-  height: -webkit-fill-available;
+  /* height: -webkit-fill-available; */
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 `;
 
 export const FlexRowDiv = styled.div`
@@ -68,6 +69,7 @@ export const Image = styled.img`
 `;
 
 export const MidFoldContainer = styled.div`
+  border: 2px solid mistyrose;
   width: 90%;
   margin: 0 auto;
   display: flex;
@@ -80,4 +82,10 @@ export const PText = styled.p`
   font-size: 1rem;
   color: #828282;
   width: 60%;
+`;
+
+export const FlexRowSpaced = styled(FlexRowDiv)`
+  justify-content: space-between;
+  width: 70%;
+  margin-top: 45px;
 `;

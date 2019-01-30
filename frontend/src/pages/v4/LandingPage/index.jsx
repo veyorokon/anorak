@@ -20,8 +20,10 @@ import {
   MidFoldContainer,
   FlexRowDiv,
   PText,
-  Diamond
+  Diamond,
+  FlexRowSpaced
 } from './styles.jsx';
+import IconCard from '../../../components/v3/IconCard';
 
 const mixpanel = require('mixpanel-browser');
 mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
@@ -82,6 +84,11 @@ class LandingPage extends Component {
             more in your Squad, the lower the cost each Squad member pays for
             the subscription.
           </PText>
+          <FlexRowSpaced>
+            <IconCard icon="arrow" title="Hello World" />
+            <IconCard icon="note" title="Hello World" />
+            <IconCard icon="globe" title="Hello World" />
+          </FlexRowSpaced>
         </MidFoldContainer>
       </FullContainer>
     );
