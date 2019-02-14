@@ -4,7 +4,7 @@ version: '3'
 services:
 
   backend:
-    restart: always
+    restart: 'never'
     build: backend/
     working_dir: /app/backend/
     command: bash -c "python check_db.py --service-name Postgres --ip database --port 5432 && 
@@ -30,7 +30,7 @@ services:
         - "DB_PORT=5432"
 
   database:
-    restart: always
+    restart: 'never'
     image: postgres
     ports:
       - "9432:5432"
