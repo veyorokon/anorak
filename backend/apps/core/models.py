@@ -18,18 +18,26 @@ jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 
-class ShippingAddress(models.Model):
+class Address(models.Model):
     line_1 = models.CharField(max_length=32, null=True, blank=True)
     line_2 = models.CharField(max_length=32, null=True, blank=True)
     city = models.CharField(max_length=32, null=True, blank=True)
     state = models.CharField(max_length=32, null=True, blank=True)
     zip = models.IntegerField(null=True, blank=True)
-    
+        
     def __str__(self):
         output = "{} {}. {}, {} {}".format(
             self.line_1, self.line_2, self.city, self.state, self.zip
         )
         return output.upper()
+
+class ShippingAddress(Address):
+    class Meta:
+        proxy = True
+
+class BillingAddress(Address):
+    class Meta:
+        proxy = True
 
 
 class StripeCustomer(models.Model):
@@ -72,14 +80,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     facebook_id = models.CharField(_('facebook id'), max_length=30, blank=True, null=True, editable=False)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, null=True, blank=True)
-    address_shipping = models.OneToOneField(ShippingAddress, null=True, on_delete=models.SET_NULL, blank=True)
+    address_shipping = models.OneToOneField(ShippingAddress, null=True, on_delete=models.SET_NULL, blank=True, related_name="address_shipping")
+    address_billing = models.OneToOneField(BillingAddress, null=True, on_delete=models.SET_NULL, blank=True, related_name="address_billing")
     date_joined = models.DateTimeField(_('date joined'), 
         editable=True, null=True, auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('staff'), default=False)
     stripe_customer = models.OneToOneField(StripeCustomer, null=True,
         on_delete=models.SET_NULL, related_name='user')
-    payment_method =models.CharField(max_length=32, blank=True, null=True)
     
     objects = UserManager()
 

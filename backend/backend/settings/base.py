@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-
+import sys
 ##########################################################################
 ## Helper function for environmental settings
 ##########################################################################
@@ -32,6 +32,7 @@ def environ_setting(name, default=None):
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 ALLOWED_HOSTS=['squadup.xyz', 'www.squadup.xyz']
 
@@ -60,6 +61,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'core',
     'corsheaders',
+    'subscription',
+    'accounting',
+    'request',
     'graphene_django',
     'django_extensions',
     'encrypted_model_fields',

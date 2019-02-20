@@ -18,7 +18,7 @@ function Footer({ ...props }) {
             &copy; {1900 + new Date().getYear()}{" "}
             <a href="https://www.creative-tim.com" className={classes.a}>
               SquadUp
-            </a>, a place for all your subscriptions
+            </a>, all of your subscriptions in one place
           </span>
         </p>
       </div>

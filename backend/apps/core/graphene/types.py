@@ -14,72 +14,56 @@ class ShippingAddressType(DjangoObjectType):
 class UserType(DjangoObjectType):
     class Meta:
         model = User
-        exclude_fields = ['stripe_customer']
+        exclude_fields = ['stripe_customer', 'password', 'is_superuser', 'is_staff']
     
     def resolve_email(self, info):
-        if info.context.user == self:
-            return self.email
-        queryUserSquads = info.context.user.owned_squads.all()
-        thisUserMemberships = set(list(self.squad_memberships.all()))
-        thisUserSquads = set([e.squad for e in thisUserMemberships])
-        isMember = set.intersection(thisUserSquads, queryUserSquads)
-        if isMember:
+        if info.context.user == self or info.context.user.is_staff:
             return self.email
         return "Insufficient Permissions."
         
     def resolve_shipping_address(self, info):
-        if info.context.user == self:
-            return self.shipping_address
+        if info.context.user == self or info.context.user.is_staff:
+            return self.address_shipping
         return "Insufficient Permissions."
         
     def resolve_facebook_id(self, info):
-        if info.context.user == self:
+        if info.context.user == self or info.context.user.is_staff:
             return self.facebook_id
         return "Insufficient Permissions."
         
     def resolve_facebook_id(self, info):
-        if info.context.user == self:
+        if info.context.user == self or info.context.user.is_staff:
             return self.facebook_id
         return "Insufficient Permissions."
         
     def resolve_phone_number(self, info):
-        if info.context.user == self:
+        if info.context.user == self or info.context.user.is_staff:
             return self.phone_number
         return "Insufficient Permissions."
         
     def resolve_is_active(self, info):
-        if info.context.user == self:
+        if info.context.user == self or info.context.user.is_staff:
             return self.is_active
         return "Insufficient Permissions."
         
     def resolve_is_staff(self, info):
-        if info.context.user == self:
+        if info.context.user == self or info.context.user.is_staff:
             return self.is_staff
         return "Insufficient Permissions."
 
     def resolve_payment_method(self, info):
-        if info.context.user == self:
+        if info.context.user == self or info.context.user.is_staff:
             return self.payment_method
         return "Insufficient Permissions."
         
     def resolve_id(self, info):
-        if info.context.user == self:
+        if info.context.user == self or info.context.user.is_staff:
             return self.id
         return "Insufficient Permissions."
         
     def resolve_date_joined(self, info):
-        if info.context.user == self:
+        if info.context.user == self or info.context.user.is_staff:
             return self.date_joined
-        return None
-        
-    def resolve_squad_memberships(self, info):
-        if info.context.user == self:
-            return self.squad_memberships
-        return None
-        
-    def resolve_squad_set(self, info):
-        if info.context.user == self:
-            return self.squad_set
         return None
     
     def resolve_last_login(self, info):
