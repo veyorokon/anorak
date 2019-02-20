@@ -33,7 +33,7 @@ def environ_setting(name, default=None):
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-ALLOWED_HOSTS=['squadup.xyz', 'www.squadup.xyz']
+ALLOWED_HOSTS=['Anorak.xyz', 'www.Anorak.xyz']
 
 #Facebook
 FACEBOOK_CLIENT_ID = environ_setting('FACEBOOK_CLIENT_ID')
@@ -43,7 +43,7 @@ SECRET_KEY = environ_setting("SECRET_KEY")
 FIELD_ENCRYPTION_KEY = environ_setting("FIELD_ENCRYPTION_KEY")
 
 STRIPE_ACCOUNT_SID = environ_setting("STRIPE_ACCOUNT_SID")
-STRIPE_SQUADUP_PRODUCT = environ_setting("STRIPE_SQUADUP_PRODUCT")
+STRIPE_Anorak_PRODUCT = environ_setting("STRIPE_Anorak_PRODUCT")
 
 # Application definition
 INSTALLED_APPS = [
@@ -153,8 +153,8 @@ REST_FRAMEWORK = {
 
 
 CORS_ORIGIN_WHITELIST = (
-    'squadup.xyz',
-    'www.squadup.xyz'
+    'Anorak.xyz',
+    'www.Anorak.xyz'
 )
 
 # Internationalization

@@ -34,7 +34,7 @@ def environ_setting(name, default=None):
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
-ALLOWED_HOSTS=['squadup.xyz', 'www.squadup.xyz']
+ALLOWED_HOSTS=['SquadUp.xyz', 'www.SquadUp.xyz']
 
 #Facebook
 FACEBOOK_CLIENT_ID = environ_setting('FACEBOOK_CLIENT_ID')

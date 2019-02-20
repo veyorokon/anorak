@@ -66,7 +66,7 @@ class Landing extends React.Component {
                   <div className="Feature-Title-1 ">Subscribe</div>
                   <div className="Feature-Description">
                     Discover new subscription services and subscribe to amazing
-                    content from the SquadUp universe.
+                    content from the Anorak universe.
                   </div>
                 </div>
               </div>

@@ -40,7 +40,7 @@ const styles = theme => ({
   }
 });
 
-class SquadUpModal extends React.Component {
+class AnorakModal extends React.Component {
   state = {
     open: false
   };
@@ -91,7 +91,7 @@ class SquadUpModal extends React.Component {
               onClick={() => this.onAcceptClick(createMembership)}
               color="secondary"
             >
-              SquadUp
+              Anorak
             </Button>
           )}
         </Mutation>
@@ -189,11 +189,11 @@ class SquadUpModal extends React.Component {
   }
 }
 
-SquadUpModal.propTypes = {
+AnorakModal.propTypes = {
   classes: PropTypes.object.isRequired,
   price: PropTypes.number.isRequired,
   service: PropTypes.string.isRequired,
   squadID: PropTypes.string.isRequired
 };
 
-export default withMobileDialog()(withStyles(styles)(SquadUpModal));
+export default withMobileDialog()(withStyles(styles)(AnorakModal));

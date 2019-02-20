@@ -7,6 +7,8 @@ import BubbleChart from "@material-ui/icons/BubbleChart";
 import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
 import ExitToApp from "@material-ui/icons/ExitToApp";
+import ArrowForward from "@material-ui/icons/ArrowForward";
+
 // core components/views
 import DashboardPage from "views/Dashboard/Dashboard.jsx";
 import UserProfile from "views/UserProfile/UserProfile.jsx";
@@ -16,6 +18,7 @@ import Icons from "views/Icons/Icons.jsx";
 import Maps from "views/Maps/Maps.jsx";
 import NotificationsPage from "views/Notifications/Notifications.jsx";
 import Logout from "views/Logout/Logout.jsx";
+import Login from "views/Login/Login.jsx";
 
 const dashboardRoutes = [
   {
@@ -32,6 +35,13 @@ const dashboardRoutes = [
     icon: Person,
     component: UserProfile
   },
+  {
+    path: "/login",
+    sidebarName: "Login",
+    navbarName: "Login",
+    icon: ArrowForward,
+    component: Login
+  },  
   {
     path: "/logout",
     sidebarName: "Logout",

@@ -27,7 +27,7 @@ function Header(props) {
         <LockIcon />
       </Avatar>
       <Typography component="h1" variant="h4" className={classes.title}>
-        SquadUp
+        Anorak
       </Typography>
       <Typography
         align="center"
@@ -35,7 +35,7 @@ function Header(props) {
         className={classes.subtitle}
       >
         Create your own subscription service and share it with family and
-        friends or the SquadUp universe.
+        friends or the Anorak universe.
       </Typography>
     </React.Fragment>
   );

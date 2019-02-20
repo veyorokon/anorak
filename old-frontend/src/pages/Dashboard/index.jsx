@@ -20,7 +20,7 @@ class Dashboard extends React.Component {
       steps: [
         {
           target: '.dashboard-tutorial-first',
-          title: 'Welcome to SquadUp!',
+          title: 'Welcome to Anorak!',
           content:
             'Sometimes we share subscriptions with friends and family but collecting payments can be awkward.',
           placement: 'bottom',
@@ -44,15 +44,15 @@ class Dashboard extends React.Component {
         },
         {
           target: '.dashboard-tutorial-first',
-          title: 'SquadUp For What?',
+          title: 'Anorak For What?',
           content:
-            'SquadUp for phone bills, rent and shared subscriptions. Squad owners can even share encrypted secrets with members.',
+            'Anorak for phone bills, rent and shared subscriptions. Squad owners can even share encrypted secrets with members.',
           placement: 'bottom',
           disableBeacon: true
         },
         {
           target: '.dashboard-tutorial-first',
-          title: 'Why SquadUp?',
+          title: 'Why Anorak?',
           content:
             'Manage all your reocurring payments in one place. Subscribe and cancel at the click of a button.',
           placement: 'bottom',

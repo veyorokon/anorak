@@ -82,7 +82,7 @@ class Dashboard extends React.Component {
   getTitleCard() {
     return (
       <TitleCard
-        title="Welcome To Your SquadUp Dashboard!"
+        title="Welcome To Your Anorak Dashboard!"
         subTitle="Create. Share. Subscribe."
         action="Create a squad"
         notifications="You currently have no new notifications."
