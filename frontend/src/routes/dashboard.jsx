@@ -18,38 +18,29 @@ import Icons from "views/Icons/Icons.jsx";
 import Maps from "views/Maps/Maps.jsx";
 import NotificationsPage from "views/Notifications/Notifications.jsx";
 import Logout from "views/Logout/Logout.jsx";
-import Login from "views/Login/Login.jsx";
 
 const dashboardRoutes = [
+    {
+      path: "/dashboard/user",
+      sidebarName: "User Profile",
+      navbarName: "Profile",
+      icon: Person,
+      component: UserProfile
+    },
+    {
+      path: "/dashboard/logout",
+      sidebarName: "Logout",
+      navbarName: "Logout",
+      icon: ExitToApp,
+      component: Logout
+  },
   {
     path: "/dashboard",
     sidebarName: "Dashboard",
     navbarName: "Subscription Dashboard",
     icon: Dashboard,
     component: DashboardPage
-  },
-  {
-    path: "/user",
-    sidebarName: "User Profile",
-    navbarName: "Profile",
-    icon: Person,
-    component: UserProfile
-  },
-  {
-    path: "/login",
-    sidebarName: "Login",
-    navbarName: "Login",
-    icon: ArrowForward,
-    component: Login
-  },  
-  {
-    path: "/logout",
-    sidebarName: "Logout",
-    navbarName: "Logout",
-    icon: ExitToApp,
-    component: Logout
-  },  
-  { redirect: true, path: "/", to: "/dashboard", navbarName: "Redirect" }
+  }
 ];
 
 export default dashboardRoutes;
