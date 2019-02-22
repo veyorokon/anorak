@@ -12,7 +12,7 @@ import Footer from "components/Footer/Footer.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import Button from "components/CustomButtons/Button.jsx";
-import HeaderLinks from "components/Header/HeaderLinks.jsx";
+import HeaderLinks from "components/Header/HeaderLandingLinks.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
 
 import landingPageStyle from "assets/jss/material-kit-react/views/landingPage.jsx";
@@ -22,7 +22,7 @@ import ProductSection from "./Sections/ProductSection.jsx";
 import TeamSection from "./Sections/TeamSection.jsx";
 import WorkSection from "./Sections/WorkSection.jsx";
 
-const dashboardRoutes = [];
+const landingRoutes = [];
 
 class LandingPage extends React.Component {
   render() {
@@ -31,8 +31,8 @@ class LandingPage extends React.Component {
       <div>
         <Header
           color="transparent"
-          routes={dashboardRoutes}
-          brand="Material Kit React"
+          routes={landingRoutes}
+          brand="Anorak"
           rightLinks={<HeaderLinks />}
           fixed
           changeColorOnScroll={{
@@ -45,24 +45,12 @@ class LandingPage extends React.Component {
           <div className={classes.container}>
             <GridContainer>
               <GridItem xs={12} sm={12} md={6}>
-                <h1 className={classes.title}>Your Story Starts With Us.</h1>
+                <h1 className={classes.title}>Anorak</h1>
                 <h4>
-                  Every landing page needs a small description after the big
-                  bold title, that's why we added this text here. Add here all
-                  the information that can make you or your product create the
-                  first impression.
+                  Subscriptions are a hassle and everyone needs an easier way to manage them. With Anorak, you can subscribe, cancel, share and discover subscriptions from one place.
                 </h4>
                 <br />
-                <Button
-                  color="danger"
-                  size="lg"
-                  href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <i className="fas fa-play" />
-                  Watch video
-                </Button>
+                
               </GridItem>
             </GridContainer>
           </div>

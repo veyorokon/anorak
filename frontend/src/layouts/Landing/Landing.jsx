@@ -11,7 +11,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Header from "components/Header/Header.jsx";
 import landingRoutes from "routes/landing.jsx";
 import landingStyle from "assets/jss/material-dashboard-react/layouts/landingStyle.jsx";
-
+import "assets/scss/material-kit-react.scss?v=1.4.0";
 
 const switchRoutes = (
   <Switch>
@@ -62,10 +62,7 @@ class App extends React.Component {
   render() {
     const { classes, ...rest } = this.props;
     return (
-
-              <div className={classes.container}>{switchRoutes}</div>
-          
-         
+      <div className={classes.container}>{switchRoutes}</div>
     );
   }
 }

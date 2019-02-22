@@ -11,9 +11,6 @@ const appStyle = theme => ({
     height: "100vh"
   },
   mainPanel: {
-    [theme.breakpoints.up("md")]: {
-      width: `100%`
-    },
     
     overflow: "auto",
     position: "relative",
@@ -28,7 +25,10 @@ const appStyle = theme => ({
     padding: "30px 15px",
     minHeight: "calc(100vh - 123px)"
   },
-  container,
+  container:{
+      paddingLeft: "unset",
+      paddingRight: "unset"
+  },
   map: {
     marginTop: "70px"
   }

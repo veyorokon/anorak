@@ -20,7 +20,8 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mobileOpen: false
+      mobileOpen: false,
+      showBrand: false
     };
     this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
     this.headerColorChange = this.headerColorChange.bind(this);
@@ -43,6 +44,7 @@ class Header extends React.Component {
       document.body
         .getElementsByTagName("header")[0]
         .classList.add(classes[changeColorOnScroll.color]);
+        this.setState({showBrand: true});
     } else {
       document.body
         .getElementsByTagName("header")[0]
@@ -50,6 +52,7 @@ class Header extends React.Component {
       document.body
         .getElementsByTagName("header")[0]
         .classList.remove(classes[changeColorOnScroll.color]);
+        this.setState({showBrand: false});
     }
   }
   componentWillUnmount() {
@@ -73,13 +76,13 @@ class Header extends React.Component {
       [classes.absolute]: absolute,
       [classes.fixed]: fixed
     });
-    const brandComponent = <Button className={classes.title}>{brand}</Button>;
+    const brandComponent = <Button id="brand" className={classes.title}>{this.state.showBrand ? brand : null}</Button>;
     return (
       <AppBar className={appBarClasses}>
         <Toolbar className={classes.container}>
-          {leftLinks !== undefined ? brandComponent : null}
+          {(leftLinks !== undefined) ? brandComponent : null}
           <div className={classes.flex}>
-            {leftLinks !== undefined ? (
+            {(leftLinks !== undefined) ? (
               <Hidden smDown implementation="css">
                 {leftLinks}
               </Hidden>

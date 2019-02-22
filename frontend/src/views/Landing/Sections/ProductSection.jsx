@@ -3,9 +3,11 @@ import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 // @material-ui/icons
-import Chat from "@material-ui/icons/Chat";
-import VerifiedUser from "@material-ui/icons/VerifiedUser";
+import Subscriptions from "@material-ui/icons/Subscriptions";
+import GroupAdd from "@material-ui/icons/GroupAdd";
 import Fingerprint from "@material-ui/icons/Fingerprint";
+import EnhancedEncryption from "@material-ui/icons/EnhancedEncryption";
+
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
@@ -20,13 +22,9 @@ class ProductSection extends React.Component {
       <div className={classes.section}>
         <GridContainer justify="center">
           <GridItem xs={12} sm={12} md={8}>
-            <h2 className={classes.title}>Let's talk product</h2>
+            <h2 className={classes.title}>Meet Your New Subscription Manager</h2>
             <h5 className={classes.description}>
-              This is the paragraph where you can write more details about your
-              product. Keep you user engaged by providing meaningful
-              information. Remember that by this time, the user is curious,
-              otherwise he wouldn't scroll to get here. Add a button if you want
-              the user to see more.
+              Track your billing expenses to see how much you're spending. Securely store your subscription passwords so you never lose track of them again. Invite family to share access to services or limit access to accounts on your terms.
             </h5>
           </GridItem>
         </GridContainer>
@@ -34,28 +32,28 @@ class ProductSection extends React.Component {
           <GridContainer>
             <GridItem xs={12} sm={12} md={4}>
               <InfoArea
-                title="Free Chat"
-                description="Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough."
-                icon={Chat}
+                title="Subscription Dashboard"
+                description="An intuitive layout provides instant access to your accounts and the ability to add subscriptions at any time."
+                icon={Subscriptions}
                 iconColor="info"
                 vertical
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={4}>
               <InfoArea
-                title="Verified Users"
-                description="Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough."
-                icon={VerifiedUser}
-                iconColor="success"
+                title="Password Vault"
+                description="AES-256 bit encryption and salted hashes keep your passwords secure without the need to remember them."
+                icon={EnhancedEncryption}
+                iconColor="danger"
                 vertical
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={4}>
               <InfoArea
-                title="Fingerprint"
-                description="Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough."
-                icon={Fingerprint}
-                iconColor="danger"
+                title="Share Accounts"
+                description="You decide how you share subscriptions by inviting friends or family and control their access on your terms."
+                icon={GroupAdd}
+                iconColor="success"
                 vertical
               />
             </GridItem>
