@@ -20,7 +20,7 @@ import landingPageStyle from "assets/jss/material-kit-react/views/landingPage.js
 // Sections for this page
 import ProductSection from "./Sections/ProductSection.jsx";
 import TeamSection from "./Sections/TeamSection.jsx";
-import WorkSection from "./Sections/WorkSection.jsx";
+import CallToAction from "./Sections/CallToAction.jsx";
 
 const landingRoutes = [];
 
@@ -41,16 +41,25 @@ class LandingPage extends React.Component {
           }}
           {...rest}
         />
-        <Parallax filter image={require("assets/img/landing-bg.jpg")}>
+        <Parallax filter image={require("assets/img/landing-bg-old.jpg")}>
           <div className={classes.container}>
             <GridContainer>
               <GridItem xs={12} sm={12} md={6}>
                 <h1 className={classes.title}>Anorak</h1>
                 <h4>
-                  Subscriptions are a hassle and everyone needs an easier way to manage them. With Anorak, you can subscribe, cancel, share and discover subscriptions from one place.
+                  Subscriptions are a hassle and everyone needs an easier way to manage them. With Anorak, you have one place for all your subscriptions.
                 </h4>
                 <br />
-                
+                <Button
+                  color="danger"
+                  size="lg"
+                  href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <i className="fas fa-play" />
+                  Get Started
+                </Button>
               </GridItem>
             </GridContainer>
           </div>
@@ -58,8 +67,7 @@ class LandingPage extends React.Component {
         <div className={classNames(classes.main, classes.mainRaised)}>
           <div className={classes.container}>
             <ProductSection />
-            <TeamSection />
-            <WorkSection />
+            <CallToAction />
           </div>
         </div>
         <Footer />

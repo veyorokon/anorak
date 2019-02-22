@@ -50,7 +50,7 @@ class ProductSection extends React.Component {
             </GridItem>
             <GridItem xs={12} sm={12} md={4}>
               <InfoArea
-                title="Share Accounts"
+                title="Shared Accounts"
                 description="You decide how you share subscriptions by inviting friends or family and control their access on your terms."
                 icon={GroupAdd}
                 iconColor="success"

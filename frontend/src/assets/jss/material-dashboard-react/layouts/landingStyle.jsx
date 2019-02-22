@@ -1,15 +1,12 @@
 import {
   drawerWidth,
   transition,
-  container
+  container,
+  h4
 } from "assets/jss/material-dashboard-react.jsx";
 
 const appStyle = theme => ({
-  wrapper: {
-    position: "relative",
-    top: "0",
-    height: "100vh"
-  },
+  
   mainPanel: {
     
     overflow: "auto",
@@ -25,9 +22,10 @@ const appStyle = theme => ({
     padding: "30px 15px",
     minHeight: "calc(100vh - 123px)"
   },
-  container:{
-      paddingLeft: "unset",
-      paddingRight: "unset"
+  wrapper: {
+    zIndex: "12",
+    color: "#FFFFFF",
+    ...container
   },
   map: {
     marginTop: "70px"

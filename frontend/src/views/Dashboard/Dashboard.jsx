@@ -55,7 +55,7 @@ class Dashboard extends React.Component {
           </CardIcon>
           </CardHeader>
           <CardBody>
-            <h4 className={classes.cardTitle}>Welcome, Vahid</h4>
+            <h4 className={classes.cardTitle}>Welcome, John</h4>
             <p className={classes.cardCategory}>
                 Manage all your subscriptions in one simple interface. Cancel and subscribe at the click of a button.
             </p>
