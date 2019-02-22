@@ -6,20 +6,20 @@ import ChartistGraph from "react-chartist";
 import withStyles from "@material-ui/core/styles/withStyles";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import AccessTime from "@material-ui/icons/AccessTime";
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
-import Button from "components/CustomButtons/Button.jsx";
+import GridItem from "components/material-dashboard/Grid/GridItem.jsx";
+import GridContainer from "components/material-dashboard/Grid/GridContainer.jsx";
+import Card from "components/material-dashboard/Card/Card.jsx";
+import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
+import CardBody from "components/material-dashboard/Card/CardBody.jsx";
+import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
+import Button from "components/material-dashboard/CustomButtons/Button.jsx";
 import CardActions from '@material-ui/core/CardActions';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import footerStyle from "assets/jss/material-dashboard-react/components/footerStyle.jsx";
 import DashboardIcon from "assets/svg/dashboardVector";
 import AddIcon from '@material-ui/icons/Add';
 import Icon from "@material-ui/core/Icon";
-import CardIcon from "components/Card/CardIcon.jsx";
+import CardIcon from "components/material-dashboard/Card/CardIcon.jsx";
 
 import {
   dailySalesChart,

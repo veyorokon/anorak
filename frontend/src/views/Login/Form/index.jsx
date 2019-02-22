@@ -7,7 +7,7 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { withRouter } from 'react-router';
 
-import Form from "components/Form/Form.jsx";
+import Form from "components/material-dashboard/Form/Form.jsx";
 import formConfig from './form';
 
 const mixpanel = require('mixpanel-browser');

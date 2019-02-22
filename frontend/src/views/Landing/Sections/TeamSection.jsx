@@ -7,12 +7,12 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
 
 // core components
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import Button from "components/CustomButtons/Button.jsx";
-import Card from "components/Card/Card.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
+import GridContainer from "components/material-landing/Grid/GridContainer.jsx";
+import GridItem from "components/material-landing/Grid/GridItem.jsx";
+import Button from "components/material-landing/CustomButtons/Button.jsx";
+import Card from "components/material-landing/Card/Card.jsx";
+import CardBody from "components/material-landing/Card/CardBody.jsx";
+import CardFooter from "components/material-landing/Card/CardFooter.jsx";
 
 import teamStyle from "assets/jss/material-kit-react/views/landingPageSections/teamStyle.jsx";
 

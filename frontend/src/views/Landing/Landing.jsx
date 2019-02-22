@@ -7,13 +7,13 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
 
 // core components
-import Header from "components/Header/HeaderLanding.jsx";
-import Footer from "components/Footer/Footer.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import Button from "components/CustomButtons/Button.jsx";
-import HeaderLinks from "components/Header/HeaderLandingLinks.jsx";
-import Parallax from "components/Parallax/Parallax.jsx";
+import Header from "components/material-landing/Header/HeaderLanding.jsx";
+import Footer from "components/material-landing/Footer/Footer.jsx";
+import GridContainer from "components/material-landing/Grid/GridContainer.jsx";
+import GridItem from "components/material-landing/Grid/GridItem.jsx";
+import Button from "components/material-landing/CustomButtons/Button.jsx";
+import HeaderLinks from "components/material-landing/Header/HeaderLandingLinks.jsx";
+import Parallax from "components/material-landing/Parallax/Parallax.jsx";
 
 import landingPageStyle from "assets/jss/material-kit-react/views/landingPage.jsx";
 

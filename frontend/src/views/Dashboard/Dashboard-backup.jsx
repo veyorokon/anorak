@@ -18,17 +18,17 @@ import BugReport from "@material-ui/icons/BugReport";
 import Code from "@material-ui/icons/Code";
 import Cloud from "@material-ui/icons/Cloud";
 // core components
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import Table from "components/Table/Table.jsx";
-import Tasks from "components/Tasks/Tasks.jsx";
-import CustomTabs from "components/CustomTabs/CustomTabs.jsx";
-import Danger from "components/Typography/Danger.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardIcon from "components/Card/CardIcon.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
+import GridItem from "components/material-dashboard/Grid/GridItem.jsx";
+import GridContainer from "components/material-dashboard/Grid/GridContainer.jsx";
+import Table from "components/material-dashboard/Table/Table.jsx";
+import Tasks from "components/material-dashboard/Tasks/Tasks.jsx";
+import CustomTabs from "components/material-dashboard/CustomTabs/CustomTabs.jsx";
+import Danger from "components/material-dashboard/Typography/Danger.jsx";
+import Card from "components/material-dashboard/Card/Card.jsx";
+import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
+import CardIcon from "components/material-dashboard/Card/CardIcon.jsx";
+import CardBody from "components/material-dashboard/Card/CardBody.jsx";
+import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
 
 import { bugs, website, server } from "variables/general.jsx";
 

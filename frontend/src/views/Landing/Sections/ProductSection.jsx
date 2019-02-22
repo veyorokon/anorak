@@ -9,9 +9,9 @@ import Fingerprint from "@material-ui/icons/Fingerprint";
 import EnhancedEncryption from "@material-ui/icons/EnhancedEncryption";
 
 // core components
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import InfoArea from "components/InfoArea/InfoArea.jsx";
+import GridContainer from "components/material-landing/Grid/GridContainer.jsx";
+import GridItem from "components/material-landing/Grid/GridItem.jsx";
+import InfoArea from "components/material-landing/InfoArea/InfoArea.jsx";
 
 import productStyle from "assets/jss/material-kit-react/views/landingPageSections/productStyle.jsx";
 

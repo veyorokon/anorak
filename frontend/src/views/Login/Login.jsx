@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-import FacebookButton from  "components/FacebookButton/FacebookButton.jsx";
+import FacebookButton from  "components/material-dashboard/FacebookButton/FacebookButton.jsx";
 import LoginForm from './Form';
 import Header from './Header';
 
