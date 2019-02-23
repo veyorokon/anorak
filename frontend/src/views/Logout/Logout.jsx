@@ -5,14 +5,14 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Close from "@material-ui/icons/Close";
 import Check from "@material-ui/icons/Check";
 // core components
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import Danger from "components/Typography/Danger.jsx";
-import Success from "components/Typography/Success.jsx";
-import Button from "components/CustomButtons/Button.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardBody from "components/Card/CardBody.jsx";
+import GridItem from "components/material-dashboard/Grid/GridItem.jsx";
+import GridContainer from "components/material-dashboard/Grid/GridContainer.jsx";
+import Danger from "components/material-dashboard/Typography/Danger.jsx";
+import Success from "components/material-dashboard/Typography/Success.jsx";
+import Button from "components/material-dashboard/CustomButtons/Button.jsx";
+import Card from "components/material-dashboard/Card/Card.jsx";
+import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
+import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 
 const styles = {
   cardCategoryWhite: {

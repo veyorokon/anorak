@@ -7,6 +7,8 @@ import BubbleChart from "@material-ui/icons/BubbleChart";
 import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
 import ExitToApp from "@material-ui/icons/ExitToApp";
+import ArrowForward from "@material-ui/icons/ArrowForward";
+
 // core components/views
 import DashboardPage from "views/Dashboard/Dashboard.jsx";
 import UserProfile from "views/UserProfile/UserProfile.jsx";
@@ -18,28 +20,29 @@ import NotificationsPage from "views/Notifications/Notifications.jsx";
 import Logout from "views/Logout/Logout.jsx";
 
 const dashboardRoutes = [
+    {
+      path: "/dashboard/user",
+      sidebarName: "User Profile",
+      navbarName: "Profile",
+      icon: Person,
+      component: UserProfile
+    },
+    
   {
     path: "/dashboard",
     sidebarName: "Dashboard",
     navbarName: "Subscription Dashboard",
     icon: Dashboard,
     component: DashboardPage
-  },
-  {
-    path: "/user",
-    sidebarName: "User Profile",
-    navbarName: "Profile",
-    icon: Person,
-    component: UserProfile
-  },
-  {
-    path: "/logout",
-    sidebarName: "Logout",
-    navbarName: "Logout",
-    icon: ExitToApp,
-    component: Logout
-  },  
-  { redirect: true, path: "/", to: "/dashboard", navbarName: "Redirect" }
+},
+{
+  path: "/dashboard/logout",
+  sidebarName: "Logout",
+  navbarName: "Logout",
+  icon: ExitToApp,
+  component: Logout
+},
+ { redirect: true, path: "/logout", to: "/dashboard/logout", navbarName: "Anorak" },
 ];
 
 export default dashboardRoutes;

@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 
 import withSnackbar from '../../lib/withSnackbar';
 import AcceptInviteModal from './AcceptInviteModal';
-import SquadUpModal from './SquadUpModal';
+import AnorakModal from './AnorakModal';
 
 import gql from 'graphql-tag';
 
@@ -48,7 +48,7 @@ class MainActionButton extends React.Component {
 
     if (!this.props.userStatus) {
       return (
-        <SquadUpModal
+        <AnorakModal
           price={this.props.price}
           service={this.props.service}
           squadID={this.props.squadID}

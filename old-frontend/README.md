@@ -1,10 +1,10 @@
-# SquadUp Frontend
+# Anorak Frontend
 
-Checkout the main README for a general overview of SquadUp including technologies used and installation.
+Checkout the main README for a general overview of Anorak including technologies used and installation.
 
 ## Source
 
-SquadUp frontend was created using [Create React App](https://facebook.github.io/create-react-app/). The original README has been renamed to README_CRA.
+Anorak frontend was created using [Create React App](https://facebook.github.io/create-react-app/). The original README has been renamed to README_CRA.
 
 ## Layout
 

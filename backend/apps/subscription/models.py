@@ -32,6 +32,8 @@ class SubscriptionService(models.Model):
     date_created = models.DateTimeField(editable=False)
     #Date that the service was modified
     date_modified = models.DateTimeField(editable=False)
+    #If this service is currently available for subscribers
+    is_available = models.BooleanField(default=False)
     
     class Meta:
         db_table = "Subscription_Services"
@@ -44,6 +46,50 @@ class SubscriptionService(models.Model):
             self.date_created = timezone.now()
         self.date_modified = timezone.now()
         return super(SubscriptionService, self).save(*args, **kwargs)
+        
+    def __str__(self):
+        return self.name
+
+# Frequency of subscription billing
+class PlanBillingFrequency(enum.Enum):
+    DAY = 0
+    WEEK = 1
+    MONTH = 2
+    
+class SubscriptionPricingPlan(models.Model):
+    #serice this pricing plan is attached to
+    service = models.ForeignKey(SubscriptionService, on_delete=models.CASCADE, related_name="pricing_plans")
+    #The current amount of the plan
+    amount = models.FloatField(default=0.0)
+    #The option to void the invoice
+    is_active = models.BooleanField(default=False)
+    #Date that the pricing plan was created
+    date_created = models.DateTimeField(editable=False)
+    #Date that the pricing plan was modified
+    date_modified = models.DateTimeField(editable=False)
+    #Date that the pricing plan was canceled and updated
+    date_canceled = models.DateTimeField(editable=False, null=True, blank=True)
+    #The frequency of billing
+    billing_frequency = enum.EnumField(PlanBillingFrequency, default=PlanBillingFrequency.MONTH)
+    #Maximum size for the service
+    maximum_size = models.IntegerField(default=None, null=True, blank=True)
+    
+    class Meta:
+        db_table = "Subscription_Pricing_Plans"
+        unique_together = ('service', 'amount','maximum_size')
+    
+    def save(self, *args, **kwargs):
+        ''' 
+        On save, update timestamps 
+        '''
+        if not self.id:
+            self.date_created = timezone.now()
+        self.date_modified = timezone.now()
+        return super(SubscriptionPricingPlan, self).save(*args, **kwargs)
+        
+            
+    def __str__(self):
+        return str(self.service) +": "+str(self.amount)+" billed monthly"
 
 
 # Status for the subscription account
@@ -58,7 +104,9 @@ class SubscriptionAccount(models.Model):
     #User who is responsible and pays if other members miss.
     responsible_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subscription_accounts")
     #User who owns this subscription
-    service = models.ForeignKey(SubscriptionService, on_delete=models.PROTECT, related_name="subscription_accounts")
+    service = models.ForeignKey(SubscriptionService, on_delete=models.CASCADE, related_name="subscription_accounts")
+    #User who owns this subscription
+    price_plan = models.ForeignKey(SubscriptionPricingPlan, on_delete=models.PROTECT, related_name="subscription_accounts", null=True,)
     #The encrypted username
     username = EncryptedCharField(max_length=128, null=True, blank=True)
     #The encrypted password. 

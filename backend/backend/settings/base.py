@@ -34,7 +34,7 @@ def environ_setting(name, default=None):
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
-ALLOWED_HOSTS=['squadup.xyz', 'www.squadup.xyz']
+ALLOWED_HOSTS=['SquadUp.xyz', 'www.SquadUp.xyz']
 
 #Facebook
 FACEBOOK_CLIENT_ID = environ_setting('FACEBOOK_CLIENT_ID')
@@ -44,7 +44,7 @@ SECRET_KEY = environ_setting("SECRET_KEY")
 FIELD_ENCRYPTION_KEY = environ_setting("FIELD_ENCRYPTION_KEY")
 
 STRIPE_ACCOUNT_SID = environ_setting("STRIPE_ACCOUNT_SID")
-STRIPE_SQUADUP_PRODUCT = environ_setting("STRIPE_SQUADUP_PRODUCT")
+STRIPE_ANORAK_PRODUCT = environ_setting("STRIPE_ANORAK_PRODUCT")
 
 # Application definition
 INSTALLED_APPS = [

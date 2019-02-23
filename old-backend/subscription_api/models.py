@@ -24,22 +24,22 @@ class StripePlan(models.Model):
     stripe_plan_id = models.CharField(max_length=32, null=True, blank=True)
     #The frequency of billing
     billing_frequency = enum.EnumField(Frequency, default=Frequency.MONTH)
-    #The SquadUp percent fee if any
+    #The Anorak percent fee if any
     cost_cc_percent_fee = models.FloatField(default=0.03)
-    #The SquadUp constant fee
+    #The Anorak constant fee
     cost_cc_constant_fee = models.FloatField(default=0.5)
     #Any taxes associated with the cost of the service
     tax_rate = models.FloatField(default=0)
     
     def create_stripe_plan(self, cost_price, *args, **kwargs):
         """
-        Creates a stripe pricing plan attached to global squadup product
+        Creates a stripe pricing plan attached to global Anorak product
         """
         if not self.id:
             stripe_plan_id = stripe.Plan.create(
                 amount=cost_price,
                 interval="month",
-                product=settings.STRIPE_SQUADUP_PRODUCT,
+                product=settings.STRIPE_Anorak_PRODUCT,
                 currency="usd",
             )
             self.stripe_plan_id = stripe_plan_id.id
@@ -79,7 +79,7 @@ class Squad(models.Model):
     service = models.CharField(max_length=64, null=True)
     #The frequency of billing
     service_type = enum.EnumField(SquadServiceType, default=SquadServiceType.SECRET)
-    #The base price charged to SquadUp
+    #The base price charged to Anorak
     cost_price = models.IntegerField(null=False)
     #Squad maximum size
     maximum_size = models.IntegerField(default=None, null=True, blank=True)

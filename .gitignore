@@ -10,7 +10,7 @@ frontend/ios/*
 
 src/backend/static/
 db.sqlite3
-squadupDev
+AnorakDev
 
 static_files
 
