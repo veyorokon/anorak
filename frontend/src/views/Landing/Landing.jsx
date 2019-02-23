@@ -22,7 +22,6 @@ import ProductSection from "./Sections/ProductSection.jsx";
 import TeamSection from "./Sections/TeamSection.jsx";
 import CallToAction from "./Sections/CallToAction.jsx";
 
-const landingRoutes = [];
 
 class LandingPage extends React.Component {
   render() {
@@ -31,7 +30,6 @@ class LandingPage extends React.Component {
       <div>
         <Header
           color="transparent"
-          routes={landingRoutes}
           brand="Anorak"
           rightLinks={<HeaderLinks />}
           fixed
@@ -57,7 +55,7 @@ class LandingPage extends React.Component {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <i className="fas fa-play" />
+                  <i className="fas fa-rocket" />&nbsp;
                   Get Started
                 </Button>
               </GridItem>

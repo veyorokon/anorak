@@ -11,7 +11,7 @@ const authRoutes = [
     component: Login
   },  
   { redirect: true, path: "/auth", to: "/auth/login", navbarName: "Anorak" },
-
+   { redirect: true, path: "/login", to: "/auth/login", navbarName: "Anorak" },
 ];
 
 export default authRoutes;

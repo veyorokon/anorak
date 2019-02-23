@@ -27,20 +27,22 @@ const dashboardRoutes = [
       icon: Person,
       component: UserProfile
     },
-    {
-      path: "/dashboard/logout",
-      sidebarName: "Logout",
-      navbarName: "Logout",
-      icon: ExitToApp,
-      component: Logout
-  },
+    
   {
     path: "/dashboard",
     sidebarName: "Dashboard",
     navbarName: "Subscription Dashboard",
     icon: Dashboard,
     component: DashboardPage
-  }
+},
+{
+  path: "/dashboard/logout",
+  sidebarName: "Logout",
+  navbarName: "Logout",
+  icon: ExitToApp,
+  component: Logout
+},
+ { redirect: true, path: "/logout", to: "/dashboard/logout", navbarName: "Anorak" },
 ];
 
 export default dashboardRoutes;

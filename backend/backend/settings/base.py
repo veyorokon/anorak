@@ -44,7 +44,7 @@ SECRET_KEY = environ_setting("SECRET_KEY")
 FIELD_ENCRYPTION_KEY = environ_setting("FIELD_ENCRYPTION_KEY")
 
 STRIPE_ACCOUNT_SID = environ_setting("STRIPE_ACCOUNT_SID")
-STRIPE_SQUADUP_PRODUCT = environ_setting("STRIPE_SQUADUP_PRODUCT")
+STRIPE_ANORAK_PRODUCT = environ_setting("STRIPE_ANORAK_PRODUCT")
 
 # Application definition
 INSTALLED_APPS = [

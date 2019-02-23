@@ -30,41 +30,7 @@ const switchRoutes = (
 );
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      mobileOpen: false
-    };
-    this.resizeFunction = this.resizeFunction.bind(this);
-  }
-  handleDrawerToggle = () => {
-    this.setState({ mobileOpen: !this.state.mobileOpen });
-  };
-  getRoute() {
-    return this.props.location.pathname !== "/maps";
-  }
-  resizeFunction() {
-    if (window.innerWidth >= 960) {
-      this.setState({ mobileOpen: false });
-    }
-  }
-  componentDidMount() {
-    if (navigator.platform.indexOf("Win") > -1) {
-      const ps = new PerfectScrollbar(this.refs.mainPanel);
-    }
-    window.addEventListener("resize", this.resizeFunction);
-  }
-  componentDidUpdate(e) {
-    if (e.history.location.pathname !== e.location.pathname) {
-      this.refs.mainPanel.scrollTop = 0;
-      if (this.state.mobileOpen) {
-        this.setState({ mobileOpen: false });
-      }
-    }
-  }
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.resizeFunction);
-  }
+  
   render() {
     const { classes, ...rest } = this.props;
     return (

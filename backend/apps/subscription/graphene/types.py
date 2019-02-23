@@ -8,6 +8,11 @@ class SubscriptionType(DjangoObjectType):
         model = SubscriptionService
         exclude_fields = []
 
+class SubscriptionPricingPlanType(DjangoObjectType):
+    class Meta:
+        model = SubscriptionPricingPlan
+        exclude_fields = []
+
 class SubscriptionAccountType(DjangoObjectType):
     class Meta:
         model = SubscriptionAccount
