@@ -27,7 +27,7 @@ import {
 } from "variables/charts.jsx";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
-
+import { withRouter } from 'react-router-dom';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 const GET_USER = gql`
@@ -118,7 +118,7 @@ class Dashboard extends React.Component {
           </CardHeader>
           <CardBody add>
             <p className={classes.cardCategory}>
-            <Button action round aria-label="Add">
+            <Button action round aria-label="Add" onClick={()=>{this.props.history.push('/dashboard/connect');}}>
                 <AddIcon className={classes.extendedIcon} />
                 Add
               </Button>
@@ -180,4 +180,4 @@ Dashboard.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(dashboardStyle)(Dashboard);
+export default withStyles(dashboardStyle)(withRouter(Dashboard));

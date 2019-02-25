@@ -1,6 +1,8 @@
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
+import AddBox from "@material-ui/icons/AddBox";
+
 // import ContentPaste from "@material-ui/icons/ContentPaste";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
 import BubbleChart from "@material-ui/icons/BubbleChart";
@@ -18,31 +20,37 @@ import Icons from "views/Icons/Icons.jsx";
 import Maps from "views/Maps/Maps.jsx";
 import NotificationsPage from "views/Notifications/Notifications.jsx";
 import Logout from "views/Logout/Logout.jsx";
+import Connect from "views/Connect/Connect.jsx";
 
 const dashboardRoutes = [
     {
-      path: "/dashboard/user",
-      sidebarName: "User Profile",
-      navbarName: "Profile",
-      icon: Person,
-      component: UserProfile
+      path: "/dashboard/home",
+      sidebarName: "Dashboard",
+      navbarName: "Subscription Dashboard",
+      icon: Dashboard,
+      component: DashboardPage
+  }, 
+    {
+      path: "/dashboard/connect",
+      sidebarName: "Add Subscription",
+      navbarName: "Subscribe",
+      icon: AddBox,
+      component: Connect
     },
-    
-  {
-    path: "/dashboard",
-    sidebarName: "Dashboard",
-    navbarName: "Subscription Dashboard",
-    icon: Dashboard,
-    component: DashboardPage
-},
-{
-  path: "/dashboard/logout",
-  sidebarName: "Logout",
-  navbarName: "Logout",
-  icon: ExitToApp,
-  component: Logout
-},
- { redirect: true, path: "/logout", to: "/dashboard/logout", navbarName: "Anorak" },
+      {
+        path: "/dashboard/user",
+        sidebarName: "User Profile",
+        navbarName: "Profile",
+        icon: Person,
+        component: UserProfile
+      }, 
+    {
+      path: "/dashboard/logout",
+      sidebarName: "Logout",
+      navbarName: "Logout",
+      icon: ExitToApp,
+      component: Logout
+    }
 ];
 
 export default dashboardRoutes;

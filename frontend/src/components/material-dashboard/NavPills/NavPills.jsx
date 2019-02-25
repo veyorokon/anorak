@@ -25,6 +25,9 @@ class NavPills extends React.Component {
   }
   handleChange = (event, active) => {
     this.setState({ active });
+    if(this.props.setValCallBack){
+        this.props.setValCallBack(active);
+    }
   };
   handleChangeIndex = index => {
     this.setState({ active: index });
@@ -36,10 +39,12 @@ class NavPills extends React.Component {
       direction,
       color,
       horizontal,
-      alignCenter
+      alignCenter,
+      isScrolling
     } = this.props;
     const flexContainerClasses = classNames({
-      [classes.flexContainer]: true,
+      [classes.flexContainer]: !isScrolling,
+      [classes.scrollContainer]: isScrolling,
       [classes.horizontalDisplay]: horizontal !== undefined
     });
     const tabButtons = (
@@ -61,6 +66,7 @@ class NavPills extends React.Component {
           }
           const pillsClasses = classNames({
             [classes.pills]: true,
+            [classes.margined]: isScrolling,
             [classes.horizontalPills]: horizontal !== undefined,
             [classes.pillsWithIcons]: prop.tabIcon !== undefined
           });
@@ -73,7 +79,7 @@ class NavPills extends React.Component {
                 root: pillsClasses,
                 labelContainer: classes.labelContainer,
                 label: classes.label,
-                selected: classes[color]
+                selected: classes[color],
               }}
             />
           );
@@ -124,7 +130,8 @@ NavPills.propTypes = {
     PropTypes.shape({
       tabButton: PropTypes.string,
       tabIcon: PropTypes.func,
-      tabContent: PropTypes.node
+      tabContent: PropTypes.node,
+      tabMargin: PropTypes.bool
     })
   ).isRequired,
   color: PropTypes.oneOf([
