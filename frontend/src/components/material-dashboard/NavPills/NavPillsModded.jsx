@@ -43,7 +43,8 @@ class NavPills extends React.Component {
       color,
       horizontal,
       alignCenter,
-      isScrolling
+      isScrolling,
+      transparent
     } = this.props;
     const flexContainerClasses = classNames({
       [classes.flexContainer]: !isScrolling,
@@ -107,6 +108,17 @@ class NavPills extends React.Component {
         </SwipeableViews>
       </div>
     );
+    if(transparent){
+        return horizontal !== undefined ? (
+          <GridContainer>
+            <GridItem {...horizontal.contentGrid}>{tabContent}</GridItem>
+          </GridContainer>
+        ) : (
+          <div>
+            {tabContent}
+          </div>
+        );
+    }
     return horizontal !== undefined ? (
       <GridContainer>
         <GridItem {...horizontal.tabsGrid}>{tabButtons}</GridItem>
@@ -130,6 +142,7 @@ NavPills.propTypes = {
   classes: PropTypes.object.isRequired,
   // index of the default active pill
   active: PropTypes.number,
+  transparent: PropTypes.boolean,
   tabs: PropTypes.arrayOf(
     PropTypes.shape({
       tabButton: PropTypes.string,
@@ -144,7 +157,7 @@ NavPills.propTypes = {
     "danger",
     "success",
     "info",
-    "rose"
+    "rose",
   ]),
   direction: PropTypes.string,
   horizontal: PropTypes.shape({

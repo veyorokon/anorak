@@ -27,14 +27,41 @@ import NavPills from "components/material-dashboard/NavPills/NavPills.jsx";
 import NavPillsModded from "components/material-dashboard/NavPills/NavPillsModded.jsx";
 
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
-import { Mutation } from 'react-apollo';
 
-import { getToken } from "lib/utility";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Confirmation from "./Sections/Confirmation.jsx";
 
 
-import {CREATE_SUBSCRIPTION_ACCOUNT} from "lib/mutations";
+// import gql from 'graphql-tag';
+// 
+// const CREATE_SUBSCRIPTION_ACCOUNT = gql`
+// mutation SubscriptionAccountMutation(
+//     $token:String!, 
+//     $serviceKey:Int!, 
+//     $planKey:Int!, 
+//     $username:String!, 
+//     $password:String!
+// ) {
+//     subscriptionAccount(
+//         token:$token, 
+//         serviceKey:$serviceKey, 
+//         planKey:$planKey, 
+//         password:$password, 
+//         username:$username)
+//         {
+//       subscriptionAccount {
+//         id
+//         dateCreated
+//         dateModified
+//         statusAccount
+//         service{
+//           name
+//         }
+//       }
+//     }
+// }
+// `;
+
 
 const styles = {
   cardCategoryWhite: {
@@ -68,7 +95,6 @@ constructor(props){
         isGenerateDisabled:false,
         planSelected: 0,
         activeStep: 0,
-        username: 'veyorokon@gmail.com'
     }
 }
 
@@ -408,22 +434,6 @@ updateShowing = () => {
     this.setState({activeStep:current});
 }
 
-onSubmit = async (createSubscriptionAccount, values) => {
-  const variables = {
-    token: getToken(),
-    serviceKey: 1,
-    planKey: 3,
-    password: this.state.ownPassword,
-    username: this.state.username,
-  };
-  
-  console.log(variables)
-  await createSubscriptionAccount({ variables });
-  // mixpanel.track('Squad Create', { squad: values.id });
-  // this.props.triggerSnackbar('You created a Squad!');
-};
-
-
 render(){
       const { classes } = this.props;
       var isGenDisabled = this.state.isGenerateDisabled;
@@ -434,79 +444,71 @@ render(){
           isShowingFirst = "initial"
       }
       return (
-      <Mutation mutation={CREATE_SUBSCRIPTION_ACCOUNT}>
-        {createSubscriptionAccount => (
-            <div>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12} lg={12}>
-                  <Card>
-                  <NavPillsModded
-                      active={this.state.activeStep}
-                      transparent
-                    setValCallBack={this.props.setValCallBack}
-                    tabs={[
-                      {
-                        tabContent: (
-                            
-                          <span style={{display:isShowingFirst}}>
-                          <CardHeader color="success">
-                            <h4 className={classes.cardTitleWhite}>Add A Subscription</h4>
-                            <p className={classes.cardCategoryWhite}>Create a new or connect an existing account</p>
-                          </CardHeader>
-                          {this.existingSection(classes)}
+        <div>
+          <GridContainer>
+            <GridItem xs={12} sm={12} md={12} lg={12}>
+              <Card>
+              <NavPillsModded
+                  active={this.state.activeStep}
+                  transparent
+                setValCallBack={this.props.setValCallBack}
+                color="transparent"
+                tabs={[
+                  {
+                    tabContent: (
+                        
+                      <span style={{display:isShowingFirst}}>
+                      <CardHeader color="success">
+                        <h4 className={classes.cardTitleWhite}>Add A Subscription</h4>
+                        <p className={classes.cardCategoryWhite}>Create a new or connect an existing account</p>
+                      </CardHeader>
+                      {this.existingSection(classes)}
+                      
+                      {this.subscriptionSection(classes)}
+                      
+                      {!this.state.isExisting && this.planSection(classes)}
+                      
+                      {this.loginSection(classes, isGenDisabled, generatedPassword)}
                           
-                          {this.subscriptionSection(classes)}
-                          
-                          {!this.state.isExisting && this.planSection(classes)}
-                          
-                          {this.loginSection(classes, isGenDisabled, generatedPassword)}
-                              
-                            
-                          </span>
-                        )
-                      },
-                      {
-                        tabContent: (
-                          <span>
-                          <CardHeader >
-                            <h4 >Review Your Subscription Account:</h4>
-                            <p >Please confirm everything is correct.</p>
-                          </CardHeader>
-                          <CardBody>
-                              <Confirmation />
-                            </CardBody>                        
-                          </span>
-                        )
-                      },
-                    ]}
-                  />
-                                
-                    <CardFooter />
-                  </Card>
-                  {(activeStep ? 
-                      <span>
-                          <Button onClick={this.updateShowing} color="gray">
-                            Back
-                          </Button>
-                          <Button onClick={async (values) => {
-                            await this.onSubmit(createSubscriptionAccount, values);
-                            setTimeout(() => {
-                            }, 600);
-                          }}
-                           color="success">
-                            Confirm
-                          </Button>
+                        
                       </span>
-                      :  
+                    )
+                  },
+                  {
+                    tabContent: (
+                      <span>
+                      <CardHeader >
+                        <h4 >Review Your Subscription Account:</h4>
+                        <p >Please confirm everything is correct.</p>
+                      </CardHeader>
+                      <CardBody>
+                          <Confirmation />
+                        </CardBody>                        
+                      </span>
+                    )
+                  },
+                ]}
+              />
+                            
+                <CardFooter />
+              </Card>
+              {(activeStep ? 
+                  <span>
+                      <Button onClick={this.updateShowing} color="gray">
+                        Back
+                      </Button>
                       <Button onClick={this.updateShowing} color="success">
-                        Next
-                      </Button> 
-                  )}
-                </GridItem>
-              </GridContainer>
-            </div>
-        )}
-        </Mutation>
+                        Confirm
+                      </Button>
+                  </span>
+                  :  
+                  <Button onClick={this.updateShowing} color="success">
+                    Next
+                  </Button> 
+              )}
+            </GridItem>
+          </GridContainer>
+        </div>
       );
   }
 }
