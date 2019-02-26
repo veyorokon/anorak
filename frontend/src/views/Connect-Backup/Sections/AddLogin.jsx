@@ -26,28 +26,12 @@ import Button from "components/material-dashboard/CustomButtons/Button.jsx";
 class AddLogin extends React.Component {
 constructor(props){
     super(props);
-    this.state = {
-        active: 0,
-  };
+    
 }
-
-updateDisabled = () => {
-    var disabled = this.props.isGenerateDisabled;
-    if(disabled && this.state.active){
-        this.setState({active: 0});
-    }
-    return this.props.isGenerateDisabled;
-}
-
-updateActive = (val) => {
-    this.setState({
-        active: val
-    })
-}
-  
+ 
   render() {
-    const { classes, handleCopy, generatedPassword, setOwnPassword } = this.props;
-    var isDisabled = this.updateDisabled(this.props.isGenerateDisabled);
+    const { classes, active, isGenerateDisabled, generatedPassword, setOwnPassword } = this.props;
+    
     return (
         <div className={classes.container}>
           <div id="navigation-pills">
@@ -57,9 +41,9 @@ updateActive = (val) => {
               </h3>
             </div>
             <NavPills
-              setValCallBack={this.updateActive}
+              setValCallBack={this.props.setValCallBack}
               color="primary"
-              active={this.state.active}
+              active={this.props.getActive}
               tabs={[
                 {
                   tabButton: "Set",
@@ -89,7 +73,7 @@ updateActive = (val) => {
                 {
                   tabButton: "Generate",
                   tabIcon: AddBox,
-                  disabled: isDisabled,
+                  disabled: isGenerateDisabled,
                   tabContent: (
                     <span>
                       <p>
@@ -106,14 +90,15 @@ updateActive = (val) => {
                                 fullWidth: true,
                               }}
                               inputProps={{
-                                  placeholder:generatedPassword,
+                                  placeHolder:generatedPassword,
                                   value: generatedPassword
                               }}
                             />
                           </GridItem>
                           <GridItem xs={4} sm={4} md={4}>
+                          
                           <CopyToClipboard text={generatedPassword}
-                          onCopy={handleCopy}>
+                          onCopy={this.handleCopy}>
                           <Button color="transparent">Copy</Button>
                         </CopyToClipboard>
                              

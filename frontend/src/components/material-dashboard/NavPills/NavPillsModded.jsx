@@ -58,7 +58,7 @@ class NavPills extends React.Component {
           flexContainer: flexContainerClasses,
           indicator: classes.displayNone
         }}
-        value={this.state.active}
+        value={this.props.active}
         onChange={this.handleChange}
         centered={alignCenter}
       >
@@ -94,7 +94,7 @@ class NavPills extends React.Component {
       <div className={classes.contentWrapper}>
         <SwipeableViews
           axis={direction === "rtl" ? "x-reverse" : "x"}
-          index={this.state.active}
+          index={this.props.active}
           onChangeIndex={this.handleChangeIndex}
         >
           {tabs.map((prop, key) => {
