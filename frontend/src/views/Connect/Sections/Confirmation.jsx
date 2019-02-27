@@ -35,7 +35,7 @@ const styles = {
 };
 
 function Confirmation(props) {
-  const { classes } = props;
+  const { classes, service, size, price, password } = props;
   return (
     <div>
       <GridContainer>
@@ -47,13 +47,13 @@ function Confirmation(props) {
                 <GridItem xs={12} sm={12} md={5}>
                   <CustomInput
                     labelText="Service"
-                    id="company-disabled"
+                    id="service"
                     formControlProps={{
                       fullWidth: true
                     }}
                     inputProps={{
                       disabled: true,
-                      value:'Netflix'
+                      value:service
                     }}
                   />
                 </GridItem>
@@ -61,7 +61,7 @@ function Confirmation(props) {
                 <GridItem xs={12} sm={6} md={3}>
                   <CustomInput
                     labelText="Username"
-                    id="email-address"
+                    id="username"
                     formControlProps={{
                       fullWidth: true
                     }}
@@ -80,7 +80,7 @@ function Confirmation(props) {
                     }}
                     inputProps={{
                       disabled: true,
-                      value:'vE232050$'
+                      value:password
                     }}
                   />
                 </GridItem>
@@ -90,33 +90,33 @@ function Confirmation(props) {
                   <GridItem xs={4} sm={4} md={4}>
                     <CustomInput
                       labelText="Size"
-                      id="plan"
+                      id="size"
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
                         disabled: true,
-                        value:'Individual'
+                        value:size
                       }}
                     />
                   </GridItem>
                   <GridItem xs={4} sm={4} md={4}>
                     <CustomInput
                       labelText="Price"
-                      id="plan"
+                      id="price"
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
                         disabled: true,
-                        value:'$14.75'
+                        value:price
                       }}
                     />
                   </GridItem>
                   <GridItem xs={4} sm={4} md={4}>
                     <CustomInput
                       labelText="Duration"
-                      id="password"
+                      id="duration"
                       formControlProps={{
                         fullWidth: true
                       }}

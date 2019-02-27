@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from 'prop-types';
+
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -9,7 +11,6 @@ import CustomInput from "components/material-dashboard/CustomInput/CustomInput.j
 import Button from "components/material-dashboard/CustomButtons/Button.jsx";
 import Card from "components/material-dashboard/Card/Card.jsx";
 import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
-import CardAvatar from "components/material-dashboard/Card/CardAvatar.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
 import { Elements, StripeProvider } from 'react-stripe-elements';
@@ -28,12 +29,13 @@ import NavPillsModded from "components/material-dashboard/NavPills/NavPillsModde
 
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
 import { Mutation } from 'react-apollo';
+import { Query } from 'react-apollo';
 
 import { getToken } from "lib/utility";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Confirmation from "./Sections/Confirmation.jsx";
 
-
+import {USER, SUBSCRIPTION_SERVICES} from "lib/queries";
 import {CREATE_SUBSCRIPTION_ACCOUNT} from "lib/mutations";
 
 const styles = {
@@ -55,7 +57,7 @@ const styles = {
   }
 };
 
-class Connect extends React.Component {
+class ConnectContent extends React.Component {
 constructor(props){
     super(props)
     this.state={
@@ -68,7 +70,7 @@ constructor(props){
         isGenerateDisabled:false,
         planSelected: 0,
         activeStep: 0,
-        username: 'veyorokon@gmail.com'
+        services: this.props.services
     }
 }
 
@@ -247,7 +249,7 @@ loginSection = (classes, isGenDisabled, generatedPassword) => {
                         Let Anorak set a randomly generated password.
                       </p>
                       
-                        <GridContainer style={{display: "flex", "align-items": "baseline", width:"100%"}}>
+                        <GridContainer style={{display: "flex", "alignItems": "baseline", width:"100%"}}>
                           <GridItem xs={6} sm={6} md={4} lg={8}>
                             <CustomInput
                               labelText="Password"
@@ -287,7 +289,22 @@ loginSection = (classes, isGenDisabled, generatedPassword) => {
     )
 }
 
-subscriptionSection = (classes) => {
+subscriptionSection = (classes) => {    
+    var tabs = (this.state.services.map(service => (
+          {
+            tabButton: service.name,
+            tabIcon: AddBox,
+            marginedTab: true,
+            tabContent: (
+              <span>
+                <p>
+                  {service.name} streaming service for content on demand.
+                </p>
+              </span>
+            )
+          }
+      )))
+            
     return(
         <div className={classes.container}>
           <div id="navigation-pills">
@@ -299,56 +316,7 @@ subscriptionSection = (classes) => {
                 <NavPills
                     setValCallBack={this.setSubscription}
                   color="success"
-                  tabs={[
-                    {
-                      tabButton: "Netflix",
-                      tabIcon: AddBox,
-                      marginedTab: true,
-                      tabContent: (
-                        <span>
-                          <p>
-                            Netflix streaming service for videos and movies on demand.
-                          </p>
-                        </span>
-                      )
-                    },
-                    {
-                      tabButton: "HBO",
-                      tabIcon: AddBox,
-                      marginedTab: true,
-                      tabContent: (
-                        <span>
-                          <p>
-                            HBO streaming service for videos and movies on demand.
-                          </p>
-                        </span>
-                      )
-                    },
-                    {
-                      tabButton: "Hulu",
-                      tabIcon: AddBox,
-                      marginedTab: true,
-                      tabContent: (
-                        <span>
-                          <p>
-                            Hulu streaming service for videos and movies on demand.
-                          </p>
-                        </span>
-                      )
-                    },
-                    {
-                      tabButton: "Spotify",
-                      tabIcon: AddBox,
-                      marginedTab: true,
-                      tabContent: (
-                        <span>
-                          <p>
-                            Spotify streaming service for music on demand.
-                          </p>
-                        </span>
-                      )
-                    }
-                  ]}
+                  tabs={tabs}
                 />
               
           </div>
@@ -357,6 +325,38 @@ subscriptionSection = (classes) => {
 }
 
 planSection = (classes) => {
+    var selectedService = this.state.subscription;
+    var pricingPlans = this.state.services[selectedService].pricingPlans;
+    var tabs = (pricingPlans.map(plan => {
+        if(plan.maximumSize === 1){
+            return {
+              tabButton: "Individual",
+              tabIcon: Person,
+              marginedTab: true,
+              tabContent: (
+                <span>
+                  <p>
+                    Individual monthly plan for ${plan.amount}. Allows streaming for only 1 session.
+                  </p>
+                </span>
+              )
+            }
+        }
+        return {
+          tabButton: "Group",
+          tabIcon: Group,
+          marginedTab: true,
+          tabContent: (
+            <span>
+              <p>
+                Group monthly plan for ${plan.amount}. Allows streaming for  {plan.maximumSize} simultaneous sessions.
+              </p>
+            </span>
+          )
+        }
+        
+    }))
+      
     return(
         <div className={classes.container}>
           <div id="navigation-pills">
@@ -369,32 +369,7 @@ planSection = (classes) => {
                     active={this.state.planSelected}
                     setValCallBack={this.setPlan}
                   color="success"
-                  tabs={[
-                    {
-                      tabButton: "Individual",
-                      tabIcon: AddBox,
-                      marginedTab: true,
-                      tabContent: (
-                        <span>
-                          <p>
-                            Individual monthly plan for $14.00. Allows streaming for one session.
-                          </p>
-                        </span>
-                      )
-                    },
-                    {
-                      tabButton: "Group",
-                      tabIcon: Person,
-                      marginedTab: true,
-                      tabContent: (
-                        <span>
-                            <p>
-                              Group monthly plan for $18.00. Allows streaming for up to two simultaneous/concurrent sessions.
-                            </p>
-                        </span>
-                      )
-                    }
-                  ]}
+                  tabs={tabs}
                 />
               
           </div>
@@ -409,20 +384,46 @@ updateShowing = () => {
 }
 
 onSubmit = async (createSubscriptionAccount, values) => {
+    var subscription = this.state.subscription;
+    var plan = this.state.planSelected;
+    var planPK = this.state.services[subscription].pricingPlans[plan].id;
+    var subscriptionPK = this.state.services[subscription].id;
+    // Note that the username will default to the current user's email
   const variables = {
     token: getToken(),
-    serviceKey: 1,
-    planKey: 3,
+    serviceKey: subscriptionPK,
+    planKey: planPK,
     password: this.state.ownPassword,
-    username: this.state.username,
+    username: '',
   };
   
-  console.log(variables)
   await createSubscriptionAccount({ variables });
   // mixpanel.track('Squad Create', { squad: values.id });
   // this.props.triggerSnackbar('You created a Squad!');
 };
 
+getServiceName = () =>{
+    var selected = this.state.subscription;
+    return this.state.services[selected].name;
+}
+
+getServiceSize = () =>{
+    var plan = this.state.planSelected;
+    var selected = this.state.subscription;
+    return this.state.services[selected].pricingPlans[plan].maximumSize;
+}
+
+getPrice = () =>{
+    var plan = this.state.planSelected;
+    var selected = this.state.subscription;
+    return '$'+this.state.services[selected].pricingPlans[plan].amount;
+}
+
+getPassword = () =>{
+    var isUsingGen = this.state.isGeneratedPassword;
+    if(isUsingGen) return this.state.generatedPassword;
+    return this.state.ownPassword;
+}
 
 render(){
       const { classes } = this.props;
@@ -434,81 +435,117 @@ render(){
           isShowingFirst = "initial"
       }
       return (
-      <Mutation mutation={CREATE_SUBSCRIPTION_ACCOUNT}>
-        {createSubscriptionAccount => (
-            <div>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12} lg={12}>
-                  <Card>
-                  <NavPillsModded
-                      active={this.state.activeStep}
-                      transparent
-                    setValCallBack={this.props.setValCallBack}
-                    tabs={[
-                      {
-                        tabContent: (
+          <Mutation mutation={CREATE_SUBSCRIPTION_ACCOUNT}
+          refetchQueries={[
+            {
+              query: USER,
+              variables: {
+                token: getToken()
+              }
+            }
+          ]}>
+          {createSubscriptionAccount => (
+              
+          <div>
+            <GridContainer>
+              <GridItem xs={12} sm={12} md={12} lg={12}>
+                <Card>
+                <NavPillsModded
+                  active={this.state.activeStep}
+                  transparent
+                  setValCallBack={this.props.setValCallBack}
+                  tabs={[
+                    {
+                      tabContent: (
+                          
+                        <span style={{display:isShowingFirst}}>
+                        <CardHeader color="success">
+                          <h4 className={classes.cardTitleWhite}>Add A Subscription</h4>
+                          <p className={classes.cardCategoryWhite}>Create a new or connect an existing account</p>
+                        </CardHeader>
+                        {this.existingSection(classes)}
+                        
+                        {this.subscriptionSection(classes)}
+                        
+                        {!this.state.isExisting && this.planSection(classes)}
+                        
+                        {this.loginSection(classes, isGenDisabled, generatedPassword)}
                             
-                          <span style={{display:isShowingFirst}}>
-                          <CardHeader color="success">
-                            <h4 className={classes.cardTitleWhite}>Add A Subscription</h4>
-                            <p className={classes.cardCategoryWhite}>Create a new or connect an existing account</p>
-                          </CardHeader>
-                          {this.existingSection(classes)}
                           
-                          {this.subscriptionSection(classes)}
-                          
-                          {!this.state.isExisting && this.planSection(classes)}
-                          
-                          {this.loginSection(classes, isGenDisabled, generatedPassword)}
+                        </span>
+                      )
+                    },
+                    {
+                      tabContent: (
+                        <span>
+                        <CardHeader >
+                          <h4 >Review Your Subscription Account:</h4>
+                          <p >Please confirm everything is correct.</p>
+                        </CardHeader>
+                        <CardBody>
+                            <Confirmation 
+                            service={this.getServiceName()} size={this.getServiceSize()}
+                            price={this.getPrice()}
+                            password={this.getPassword()}
+                            />
+                          </CardBody>                        
+                        </span>
+                      )
+                    },
+                  ]}
+                />
                               
-                            
-                          </span>
-                        )
-                      },
-                      {
-                        tabContent: (
-                          <span>
-                          <CardHeader >
-                            <h4 >Review Your Subscription Account:</h4>
-                            <p >Please confirm everything is correct.</p>
-                          </CardHeader>
-                          <CardBody>
-                              <Confirmation />
-                            </CardBody>                        
-                          </span>
-                        )
-                      },
-                    ]}
-                  />
-                                
-                    <CardFooter />
-                  </Card>
-                  {(activeStep ? 
-                      <span>
-                          <Button onClick={this.updateShowing} color="gray">
-                            Back
-                          </Button>
-                          <Button onClick={async (values) => {
-                            await this.onSubmit(createSubscriptionAccount, values);
-                            setTimeout(() => {
-                            }, 600);
-                          }}
-                           color="success">
-                            Confirm
-                          </Button>
-                      </span>
-                      :  
-                      <Button onClick={this.updateShowing} color="success">
-                        Next
-                      </Button> 
-                  )}
-                </GridItem>
-              </GridContainer>
-            </div>
-        )}
-        </Mutation>
+                  <CardFooter />
+                </Card>
+                {(activeStep ? 
+                    <span>
+                        <Button onClick={this.updateShowing} >
+                          Back
+                        </Button>
+                        <Button onClick={async (values) => {
+                          await this.onSubmit(createSubscriptionAccount, values);
+                          setTimeout(() => {
+                          }, 600);
+                        }}
+                         color="success">
+                          Confirm
+                        </Button>
+                    </span>
+                    :  
+                    <Button onClick={this.updateShowing} color="success">
+                      Next
+                    </Button> 
+                )}
+              </GridItem>
+            </GridContainer>
+          </div>              
+          )}
+          </Mutation>
+        
       );
   }
 }
 
+
+function Connect(props) {
+ const { classes } = props;
+
+  return (
+      <Query query={SUBSCRIPTION_SERVICES}>
+      {({ loading, error, data }) => {
+        if (loading) return 'Loading...';
+        if (error) return `Error! ${error.message}`;
+        const services = data.subscriptionServices;
+        return(
+            <ConnectContent classes={classes} services={services}/>
+        )
+    }}
+        
+      </Query>
+  );
+}
+
+Connect.propTypes = {
+  classes: PropTypes.object.isRequired
+};
 export default withStyles(pillsStyle)(Connect);

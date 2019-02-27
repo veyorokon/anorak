@@ -77,6 +77,7 @@ class SubscriptionPricingPlan(models.Model):
     class Meta:
         db_table = "Subscription_Pricing_Plans"
         unique_together = ('service', 'amount','maximum_size')
+        ordering = ['maximum_size']
     
     def save(self, *args, **kwargs):
         ''' 

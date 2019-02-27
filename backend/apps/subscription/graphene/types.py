@@ -6,12 +6,12 @@ from subscription.models import *
 class SubscriptionType(DjangoObjectType):
     class Meta:
         model = SubscriptionService
-        exclude_fields = []
+        exclude_fields = ["subscription_accounts"]
 
 class SubscriptionPricingPlanType(DjangoObjectType):
     class Meta:
         model = SubscriptionPricingPlan
-        exclude_fields = []
+        exclude_fields = ["subscription_accounts", "service"]
 
 class SubscriptionAccountType(DjangoObjectType):
     class Meta:
