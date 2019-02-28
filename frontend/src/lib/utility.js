@@ -89,9 +89,9 @@ export function getMemberStatus(value){
 }
 
 export function getMemberColor(value){
-    if (value === 'A_0') return 'gray';
-    if (value === 'A_1') return 'gray';
-    if (value === 'A_2') return 'gray';
+    if (value === 'A_0') return 'danger';
+    if (value === 'A_1') return 'danger';
+    if (value === 'A_2') return 'danger';
     if (value === 'A_3') return 'warning';
     if (value === 'A_4') return 'warning';
     if (value === 'A_5') return 'warning';
@@ -105,8 +105,8 @@ export function getAccountStatus(value){
     if (value === 'A_3') return 'Active';
 }
 export function getAccountColor(value){
-    if (value === 'A_0') return 'gray';
-    if (value === 'A_1') return 'gray';
+    if (value === 'A_0') return 'danger';
+    if (value === 'A_1') return 'muted';
     if (value === 'A_2') return 'warning';
     if (value === 'A_3') return 'success';
 }

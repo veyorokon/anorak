@@ -21,9 +21,9 @@ function Info({ ...props }) {
         </div>
       );
   }
-  if(color=="warning"){
+  if(color=="danger"){
       return (
-        <div className={classes.defaultFontStyle + " " + classes.warningText}>
+        <div className={classes.defaultFontStyle + " " + classes.dangerText}>
                   {children}
         </div>
       );
@@ -31,6 +31,20 @@ function Info({ ...props }) {
   if(color=="success"){
       return (
         <div className={classes.defaultFontStyle + " " + classes.successText}>
+                  {children}
+        </div>
+      );
+  }
+  if(color=="warning"){
+      return (
+        <div className={classes.defaultFontStyle + " " + classes.warningText}>
+                  {children}
+        </div>
+      );
+  }
+  if(color=="muted"){
+      return (
+        <div className={classes.defaultFontStyle + " " + classes.mutedText}>
                   {children}
         </div>
       );
