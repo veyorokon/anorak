@@ -77,3 +77,36 @@ export function stringToPosetiveInt(value, defValue = 0) {
   const val = stringToInt(value, defValue);
   return val > -1 ? val : defValue;
 }
+
+export function getMemberStatus(value){
+    if (value === 'A_0') return 'Terminated';
+    if (value === 'A_1') return 'Kicked';
+    if (value === 'A_2') return 'Canceled';
+    if (value === 'A_3') return 'Pending Update';
+    if (value === 'A_4') return 'Pending Invite';
+    if (value === 'A_5') return 'Pending Creation';
+    if (value === 'A_6') return 'Active';
+}
+
+export function getMemberColor(value){
+    if (value === 'A_0') return 'gray';
+    if (value === 'A_1') return 'gray';
+    if (value === 'A_2') return 'gray';
+    if (value === 'A_3') return 'warning';
+    if (value === 'A_4') return 'warning';
+    if (value === 'A_5') return 'warning';
+    if (value === 'A_6') return 'success';
+}
+
+export function getAccountStatus(value){
+    if (value === 'A_0') return 'Terminated';
+    if (value === 'A_1') return 'Canceled';
+    if (value === 'A_2') return 'Pending';
+    if (value === 'A_3') return 'Active';
+}
+export function getAccountColor(value){
+    if (value === 'A_0') return 'gray';
+    if (value === 'A_1') return 'gray';
+    if (value === 'A_2') return 'warning';
+    if (value === 'A_3') return 'success';
+}

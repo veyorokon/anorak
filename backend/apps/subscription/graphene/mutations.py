@@ -26,7 +26,7 @@ class SubscriptionAccountMutation(graphene.Mutation):
                 pk=planKey
             )
         )[0]
-        account.username = username
+        account.username = info.context.user.email
         account.password = password
         account.save()
         return SubscriptionAccountMutation(

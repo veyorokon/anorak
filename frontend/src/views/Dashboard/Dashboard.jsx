@@ -19,41 +19,21 @@ import footerStyle from "assets/jss/material-dashboard-react/components/footerSt
 import AddIcon from '@material-ui/icons/Add';
 import Icon from "@material-ui/core/Icon";
 import CardIcon from "components/material-dashboard/Card/CardIcon.jsx";
-
+import Success from "components/material-dashboard/Typography/Success.jsx";
+import Typography from "components/material-dashboard/Typography/Typography.jsx"
 import {
   dailySalesChart,
   emailsSubscriptionChart,
   completedTasksChart
 } from "variables/charts.jsx";
 
+import CardModal from "components/material-dashboard/CardModal/CardModal";
+import { getMemberStatus, getMemberColor, getToken } from "lib/utility";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 import { withRouter } from 'react-router-dom';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
-const GET_USER = gql`
-query user($token: String!) {
-    user(token: $token) {
-        id
-        email
-        firstName
-        lastName
-        subscriptionMemberships{
-          id
-          statusMemberhip
-          subscriptionAccount{
-            statusAccount
-            pricePlan{
-                amount
-            }
-            service{
-              id
-              name
-            }
-          }
-        }
-    }
-}
-`;
+import {USER} from "lib/queries";
 
 class Dashboard extends React.Component {
   state = {
@@ -70,23 +50,22 @@ class Dashboard extends React.Component {
     const { classes } = this.props;
     return window.localStorage.getItem('sessionToken') ? (
       <Query
-        query={GET_USER}
+        query={USER}
         variables={{ token: window.localStorage.getItem('sessionToken') }}
+        fetchPolicy='no-cache'
       >
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
           let memberships = [];
-          
           data.user.subscriptionMemberships.forEach(elem => {
               memberships.push(elem);
           });
-          console.log(memberships)
+          console.log(data)
           return (
         <div>
       <GridContainer>
       <GridItem xs={12} sm={6} md={6} lg={6}>
-      
         <Card main>
         <CardHeader stats color="success" icon>
           <CardIcon color="primary">
@@ -133,16 +112,20 @@ class Dashboard extends React.Component {
         </Card>
       </GridItem>
       
-        {memberships.map(({ id, subscriptionAccount }) => (
-          <GridItem id={id} xs={12} sm={6} md={6} lg={6}>
+        {memberships.map(({id, statusMembership, subscriptionAccount}) => {
+            var color = getMemberColor(statusMembership);
+          return(<GridItem key={id} xs={12} sm={6} md={6} lg={6}>
             <Card subscription>
-            <CardHeader subscription>
-            <CardIcon className={classes.subscriptionCardIcon} color="success">
+            <CardHeader>
+            <CardIcon className={classes.subscriptionCardIcon} color={color}>
             </CardIcon>
             <span className={classes.cardInLine}>
-                <h5 className={classes.subscriptionHeader}>Active</h5>                
+                
+                <h5
+                 ><Typography color={color}>{getMemberStatus(statusMembership)}</Typography></h5> 
+                               
                 <h5 className={classes.cardCategoryWhite}>
-                    {subscriptionAccount.pricePlan.amount}
+                    ${subscriptionAccount.pricePlan.amount}
                 </h5>
             </span>
             </CardHeader>
@@ -152,17 +135,15 @@ class Dashboard extends React.Component {
               <CardFooter>
               <span className={classes.cardInLine}>
                
-               <Button size="md" color="transparent" >
-                 <span className={classes.cardCategoryWhite}>Account</span>
-               </Button>
-               <Button size="md" color="transparent" >
+               <CardModal membershipID={id} title={"Account Login"}/>
+               <Button color="transparent" >
                  <span className={classes.cardCategoryWhite}>Manage</span>
                </Button>
                </span>      
               </CardFooter>
             </Card>
-          </GridItem>
-          )
+          </GridItem>)
+      }
         )}
         
       </GridContainer>
