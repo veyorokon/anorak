@@ -77,6 +77,7 @@ class SubscriptionPricingPlan(models.Model):
     class Meta:
         db_table = "Subscription_Pricing_Plans"
         unique_together = ('service', 'amount','maximum_size')
+        ordering = ['maximum_size']
     
     def save(self, *args, **kwargs):
         ''' 
@@ -140,9 +141,15 @@ class MembershipStatus(enum.Enum):
     TERMINATED = 0 # If we cancel their membership
     KICKED = 1 # If the responsible user cancels their membership
     CANCELED = 2 # If they cancel their membership
-    PENDING = 3 # If the account needs to be processed
-    INVITED = 4 # If the responsible user sent an invite
-    ACTIVE = 5 # If the user has an active subscription membership
+    PENDING_UPDATING = 3 # If the account needs to be processed
+    PENDING_INVITED = 4 # If the account needs to be processed
+    PENDING_CREATED = 5 # If the responsible user sent an invite
+    ACTIVE = 6 # If the user has an active subscription membership
+    
+    def validate(self, status):
+        if(status >= self.PENDING_CREATED):
+            return True
+        return False
     
 
 class SubscriptionMember(models.Model):
@@ -150,7 +157,7 @@ class SubscriptionMember(models.Model):
     #The subscription account of which this is a member.
     subscription_account = models.ForeignKey(SubscriptionAccount, on_delete=models.CASCADE, related_name="subscribers")
     #The status of the user subscription 
-    status_memberhip = enum.EnumField(MembershipStatus, default=MembershipStatus.PENDING)
+    status_membership = enum.EnumField(MembershipStatus, default=MembershipStatus.PENDING_UPDATING)
     #Date that the subscription was created
     date_created = models.DateTimeField(editable=False)
     #Date that the subscription was modified

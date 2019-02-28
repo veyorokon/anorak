@@ -43,7 +43,8 @@ class NavPills extends React.Component {
       color,
       horizontal,
       alignCenter,
-      isScrolling
+      isScrolling,
+      transparent
     } = this.props;
     const flexContainerClasses = classNames({
       [classes.flexContainer]: !isScrolling,
@@ -58,7 +59,7 @@ class NavPills extends React.Component {
           flexContainer: flexContainerClasses,
           indicator: classes.displayNone
         }}
-        value={this.state.active}
+        value={this.props.active}
         onChange={this.handleChange}
         centered={alignCenter}
       >
@@ -94,7 +95,7 @@ class NavPills extends React.Component {
       <div className={classes.contentWrapper}>
         <SwipeableViews
           axis={direction === "rtl" ? "x-reverse" : "x"}
-          index={this.state.active}
+          index={this.props.active}
           onChangeIndex={this.handleChangeIndex}
         >
           {tabs.map((prop, key) => {
@@ -107,6 +108,17 @@ class NavPills extends React.Component {
         </SwipeableViews>
       </div>
     );
+    if(transparent){
+        return horizontal !== undefined ? (
+          <GridContainer>
+            <GridItem {...horizontal.contentGrid}>{tabContent}</GridItem>
+          </GridContainer>
+        ) : (
+          <div>
+            {tabContent}
+          </div>
+        );
+    }
     return horizontal !== undefined ? (
       <GridContainer>
         <GridItem {...horizontal.tabsGrid}>{tabButtons}</GridItem>
@@ -144,7 +156,7 @@ NavPills.propTypes = {
     "danger",
     "success",
     "info",
-    "rose"
+    "rose",
   ]),
   direction: PropTypes.string,
   horizontal: PropTypes.shape({

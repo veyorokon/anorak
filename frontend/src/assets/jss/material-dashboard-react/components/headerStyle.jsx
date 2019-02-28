@@ -26,10 +26,6 @@ const headerStyle = theme => ({
     transition: "all 150ms ease 0s",
     minHeight: "50px",
     display: "block",
-    [theme.breakpoints.up("lg")]: {
-      width: `100%`,
-      paddingRight: "calc(5% + 15px)"
-    },
   },
   container: {
     ...container,

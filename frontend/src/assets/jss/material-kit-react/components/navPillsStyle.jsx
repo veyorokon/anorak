@@ -20,6 +20,12 @@ const navPillsStyle = theme => ({
       flexWrap: "wrap"
     }
   },
+  scrollContainer: {
+    flexWrap: "unset",
+    overflow: "-moz-scrollbars-vertical",
+    overflowX: "scroll",
+    background: "rgba(49,50,64,0.01)",
+  },
   displayNone: {
     display: "none !important"
   },
@@ -34,7 +40,7 @@ const navPillsStyle = theme => ({
     position: "relative",
     display: "block",
     borderRadius: "30px",
-    minWidth: "100px",
+    minWidth: "90px",
     textAlign: "center",
     transition: "all .3s",
     padding: "10px 15px",
@@ -44,6 +50,7 @@ const navPillsStyle = theme => ({
     maxWidth: "100%",
     margin: "0 5px"
   },
+  margined:{margin:"8px"},
   pillsWithIcons: {
     borderRadius: "4px"
   },
@@ -127,7 +134,7 @@ const navPillsStyle = theme => ({
   alignCenter: {
     alignItems: "center",
     justifyContent: "center"
-  }
+}
 });
 
 export default navPillsStyle;

@@ -6,13 +6,20 @@ from subscription.models import *
 
 class Query(graphene.ObjectType):
     subscription_services = graphene.List(SubscriptionType)
-    subscription_memberships = graphene.List(SubscriptionMemberType, token=graphene.String(required=True))
+    account_credentials = graphene.Field(SubscriptionAccountLoginType, token = graphene.String(required=True), membershipKey = graphene.Int(required=True), description="Returns the squad secret if the user has an active membership.")
     
     def resolve_subscription_services(self, info, **kwargs):
         return SubscriptionService.objects.all()
-    
+        
     @login_required
-    def resolve_subscription_memberships(self, info, token,**kwargs):
-        return SubscriptionMember.objects.filter(
-            user = info.context.user
-        )
+    def resolve_account_credentials(self, info, token, membershipKey, **kwargs):
+        user = info.context.user
+        try:
+            membership = SubscriptionMember.objects.get(pk=membershipKey, user=info.context.user)
+        except:
+            return None
+        status = membership.status_membership
+        statusVerification = MembershipStatus()
+        if(statusVerification.validate(status)):
+            return membership.subscription_account
+        return None

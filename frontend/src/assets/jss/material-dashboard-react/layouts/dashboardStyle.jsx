@@ -14,10 +14,6 @@ const appStyle = theme => ({
     [theme.breakpoints.up("md")]: {
       width: `calc(100% - ${drawerWidth}px)`
     },
-    [theme.breakpoints.up("lg")]: {
-      width: `calc(90% - ${drawerWidth}px)`,
-      paddingRight: "5%"
-    },
     overflow: "auto",
     position: "relative",
     float: "right",
