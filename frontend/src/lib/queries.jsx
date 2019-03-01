@@ -56,6 +56,7 @@ query user($token: String!) {
 }
 `;
 
+
 const ACCOUNT_CREDENTIALS = gql`
 query AccountCredentials($token:String!, $membershipKey:Int!){
   accountCredentials(token:$token, membershipKey:$membershipKey){

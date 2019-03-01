@@ -21,6 +21,7 @@ import Maps from "views/Maps/Maps.jsx";
 import NotificationsPage from "views/Notifications/Notifications.jsx";
 import Logout from "views/Logout/Logout.jsx";
 import Connect from "views/Connect/Connect.jsx";
+import Manage from "views/Manage/Manage.jsx";
 
 const dashboardRoutes = [
     {
@@ -30,6 +31,7 @@ const dashboardRoutes = [
       icon: Dashboard,
       component: DashboardPage
   }, 
+  
     {
       path: "/dashboard/connect",
       sidebarName: "Add Subscription",

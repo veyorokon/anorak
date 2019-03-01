@@ -51,7 +51,7 @@ class Dashboard extends React.Component {
     return window.localStorage.getItem('sessionToken') ? (
       <Query
         query={USER}
-        variables={{ token: window.localStorage.getItem('sessionToken') }}
+        variables={{ token: getToken()}}
         fetchPolicy='no-cache'
       >
         {({ loading, error, data }) => {
