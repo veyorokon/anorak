@@ -110,3 +110,9 @@ export function getAccountColor(value){
     if (value === 'A_2') return 'warning';
     if (value === 'A_3') return 'success';
 }
+
+const stripeAPIKey = "pk_test_rLuroFoR4XKOxb3FbmJqTqrh";
+
+const mixpanel = require('mixpanel-browser');
+mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
+export {mixpanel, stripeAPIKey}

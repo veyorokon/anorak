@@ -1,29 +1,24 @@
 from graphene_django.types import DjangoObjectType
 from core.models import * 
-from django.db.models import Q
-
+    
 class StripeCustomerType(DjangoObjectType):
     class Meta:
         model = StripeCustomer
         exclude_fields = ['stripe_customer_id', 'stripe_credit_card_id']
 
-class ShippingAddressType(DjangoObjectType):
-    class Meta:
-        model = ShippingAddress
-
 class UserType(DjangoObjectType):
     class Meta:
         model = User
-        exclude_fields = ['stripe_customer', 'password', 'is_superuser', 'is_staff']
+        exclude_fields = ['is_superuser', 'is_staff']
+    
+    def resolve_stripe_customer(self, info):
+        if info.context.user == self:
+            return self.stripe_customer
+        return None
     
     def resolve_email(self, info):
         if info.context.user == self or info.context.user.is_staff:
             return self.email
-        return "Insufficient Permissions."
-        
-    def resolve_shipping_address(self, info):
-        if info.context.user == self or info.context.user.is_staff:
-            return self.address_shipping
         return "Insufficient Permissions."
         
     def resolve_facebook_id(self, info):

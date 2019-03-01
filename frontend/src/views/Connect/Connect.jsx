@@ -393,7 +393,7 @@ onSubmit = async (createSubscriptionAccount, values) => {
     token: getToken(),
     serviceKey: subscriptionPK,
     planKey: planPK,
-    password: this.state.ownPassword,
+    password: this.getPassword(),
     username: '',
   };
   

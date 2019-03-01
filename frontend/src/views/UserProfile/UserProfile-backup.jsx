@@ -17,9 +17,7 @@ import {stripeAPIKey, getToken} from "lib/utility";
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 import {USER} from "lib/queries";
-import { SET_STRIPE_CARD, UPDATE_USER } from "lib/mutations";
-import Form from 'components/material-dashboard/Form/Form';
-import withSnackbar from 'components/material-dashboard/Form/withSnackbar';
+import {SET_STRIPE_CARD} from "lib/mutations";
 
 const styles = {
   cardCategoryWhite: {
@@ -59,70 +57,61 @@ const createOptions = () => {
 
 class _CardForm extends React.Component {
     onSubmit = async (setStripeCard, values) => {
-     var firstName = this.props.addressVal('firstNameOnCard');
-     var lastName = this.props.addressVal('lastNameOnCard');
       const { token } = await this.props.stripe.createToken({
-        name: this.props.addressVal('name_on_card'),
-        address_line1: this.props.addressVal('address_line1'),
-        address_line2: this.props.addressVal('address_line2'),
-        address_city: this.props.addressVal('address_city'),
-        address_state: this.props.addressVal('address_state'),
-        address_country: this.props.addressVal('address_country')
-    });
-    
-    const { data } = await setStripeCard({
-      variables: {
-        token: getToken(),
-        cardToken: token.id
-      }
-    });      
+        name: `john hamliet`,
+        address_line1: "123 vill street",
+        address_line2: "",
+        address_city: "your mom",
+        address_state: "CA",
+        address_country: "USA"
+      });
+      // TODO: send stripe token as well
+      const { data } = await setStripeCard({
+        variables: {
+          token: getToken(),
+          cardToken: token.id
+        }
+      });
       // Add mixpanel here
-      this.props.triggerSnackbar('Your billing information was updated.');
- };
+     };
       
   render() {
     return (
         <Mutation mutation={SET_STRIPE_CARD}>
           {setStripeCard => (
               
-      <Form onSubmit={async (values, { setSubmitting }) => {
+      <form onSubmit={async (values) => {
         await this.onSubmit(setStripeCard, values);
-        setTimeout(() => {
-          setSubmitting(false);
-        }, 600);
       }}>
-      {({ isSubmitting, renderField }) => (
-          <div>
-          <GridItem style={{border: "solid #000", borderWidth:" 0 1px", marginBottom:"15px"}} xs={12} sm={12} md={12}>
-            <p>Would you like to update your card?</p>
-            <CardElement {...createOptions()} />
-             </GridItem>
-             <Button style={{marginLeft: "-12px", marginBottom:"-12px"}} color="info" disabled={isSubmitting} type="submit">Save Changes</Button>
-            </div>
-         )}
-      </Form>
+      <GridItem style={{border: "solid #000", borderWidth:" 0 1px", marginBottom:"15px"}} xs={12} sm={12} md={12}>
+      <p>Would you like to update your card?</p>
+          <CardElement {...createOptions()} />
+         </GridItem>
+         <Button style={{marginLeft: "-12px", marginBottom:"-12px"}} color="info" type="submit">Save Changes</Button>
+      </form>
       )}
     </Mutation>
     )
   }
 }
-const CardForm = injectStripe(withSnackbar(_CardForm));
+const CardForm = injectStripe(_CardForm);
+
 
 class UserProfileContent extends React.Component {
     constructor(props){
         super(props)
         var user = this.props.user;
-        var stripe = this.props.user.stripeCustomer;
         this.state={
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            name_on_card: stripe.name,
-            address_line1: stripe.line1,
-            address_line2: stripe.line2,
-            address_city: stripe.city,
-            address_state: stripe.state,
-            address_country: stripe.country,
+            firstNameOnCard: '',
+            lastNameOnCard: '',
+            line1: '',
+            line2: '',
+            city: '',
+            state: '',
+            country: ''
         }
     }
     
@@ -131,50 +120,18 @@ class UserProfileContent extends React.Component {
           obj[event.target.id] = event.target.value;
           this.setState(obj);
     }
-    
-    getAddressVal = (key) =>{
-        return this.state[key];
+    test = () => {
+        console.log(this.state)
     }
-    
-    onSubmit = async (updateUser) => {
-      const variables = {
-        token: getToken(),
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-      };
-      
-      await updateUser({ variables });
-      // mixpanel.track('Squad Create', { squad: values.id });
-      // this.props.triggerSnackbar('You created a Squad!');
-    };
     
     render(){
       const { classes } = this.props;
       const firstName = this.state.firstName;
       const lastName = this.state.lastName;
       const email = this.state.email;
-      
-      const name_on_card = this.state.name_on_card;
-      const address_line1 = this.state.address_line1;
-      const address_line2 = this.state.address_line2;
-      const address_city = this.state.address_city;
-      const address_state = this.state.address_state;
-      const address_country = this.state.address_country;
-      
       return (
         <React.Fragment>
           <GridContainer>
-          
-          <Mutation mutation={UPDATE_USER}
-          refetchQueries={[
-            {
-              query: USER,
-              variables: {
-                token: getToken()
-              }
-            }
-          ]}>
-          {updateUser => (
             <GridItem xs={12} sm={12} md={4}>
               <Card>
                 <CardHeader color="info">
@@ -208,6 +165,7 @@ class UserProfileContent extends React.Component {
                         }}
                       />
                     </GridItem>
+                    
                     <GridItem xs={12} sm={12} md={12}>
                       <CustomInput
                         labelText="Email"
@@ -224,18 +182,10 @@ class UserProfileContent extends React.Component {
                     </GridContainer>              
                 </CardBody>
                 <CardFooter>
-                  <Button onClick={async () => {
-                    await this.onSubmit(updateUser);
-                    setTimeout(() => {
-                    }, 600);
-                  }} color="info">Save</Button>
+                  <Button onClick={this.test} color="info">Save</Button>
                 </CardFooter>
               </Card>
             </GridItem>
-        )}
-        </Mutation>
-      
-            
                         
             <GridItem xs={12} sm={12} md={8}>
               <Card>
@@ -246,54 +196,51 @@ class UserProfileContent extends React.Component {
                   <GridContainer>
                   <GridItem xs={12} sm={6} md={6}>
                     <CustomInput
-                      labelText="Name On Card"
-                      id="name_on_card"
+                      labelText="First Name On Card"
+                      id="firstNameOnCard"
                       onChange={this.onChangeHandler}
                       formControlProps={{
                         fullWidth: true
-                      }}
-                      inputProps={{
-                          value: name_on_card
                       }}
                     />
                   </GridItem>
-                  
-                  <GridItem xs={12} sm={12} md={12}>
+                  <GridItem xs={12} sm={6} md={6}>
                     <CustomInput
-                      labelText="Address Line 1"
-                      id="address_line1"
+                      labelText="Last Name On Card"
+                      id="lastNameOnCard"
                       onChange={this.onChangeHandler}
                       formControlProps={{
                         fullWidth: true
                       }}
-                      inputProps={{
-                          value: address_line1
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={12}>
+                    <CustomInput
+                      labelText="Address Line 1"
+                      id="line1"
+                      onChange={this.onChangeHandler}
+                      formControlProps={{
+                        fullWidth: true
                       }}
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={12}>
                     <CustomInput
                       labelText="Address Line 2"
-                      id="address_line2"
+                      id="line2"
                       onChange={this.onChangeHandler}
                       formControlProps={{
                         fullWidth: true
-                      }}
-                      inputProps={{
-                          value: address_line2
                       }}
                     />
                   </GridItem>
                     <GridItem xs={12} sm={4} md={4}>
                       <CustomInput
                         labelText="City"
-                        id="address_city"
+                        id="city"
                         onChange={this.onChangeHandler}
                         formControlProps={{
                           fullWidth: true
-                        }}
-                        inputProps={{
-                            value: address_city
                         }}
                       />
                     </GridItem>
@@ -301,26 +248,20 @@ class UserProfileContent extends React.Component {
                     <GridItem xs={12} sm={4} md={4}>
                       <CustomInput
                         labelText="State"
-                        id="address_state"
+                        id="state"
                         onChange={this.onChangeHandler}
                         formControlProps={{
                           fullWidth: true
-                        }}
-                        inputProps={{
-                            value: address_state
                         }}
                       />
                     </GridItem>
                     <GridItem xs={12} sm={4} md={4}>
                       <CustomInput
                         labelText="Country"
-                        id="address_country"
+                        id="country"
                         onChange={this.onChangeHandler}
                         formControlProps={{
                           fullWidth: true
-                        }}
-                        inputProps={{
-                            value: address_country
                         }}
                       />
                     </GridItem>
@@ -331,7 +272,7 @@ class UserProfileContent extends React.Component {
                 <GridItem xs={12} sm={12} md={12}>
                 
                   <Elements>
-                      <CardForm addressVal={this.getAddressVal}/>
+                      <CardForm/>
                   </Elements>
                  
                 </GridItem>    

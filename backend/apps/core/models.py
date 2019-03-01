@@ -17,27 +17,28 @@ from rest_framework_jwt.settings import api_settings
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
+from django.utils import timezone
 
-class Address(models.Model):
-    line_1 = models.CharField(max_length=32, null=True, blank=True)
-    line_2 = models.CharField(max_length=32, null=True, blank=True)
-    city = models.CharField(max_length=32, null=True, blank=True)
-    state = models.CharField(max_length=32, null=True, blank=True)
-    zip = models.IntegerField(null=True, blank=True)
-        
-    def __str__(self):
-        output = "{} {}. {}, {} {}".format(
-            self.line_1, self.line_2, self.city, self.state, self.zip
-        )
-        return output.upper()
-
-class ShippingAddress(Address):
-    class Meta:
-        proxy = True
-
-class BillingAddress(Address):
-    class Meta:
-        proxy = True
+# class Address(models.Model):
+#     line_1 = models.CharField(max_length=32, null=True, blank=True)
+#     line_2 = models.CharField(max_length=32, null=True, blank=True)
+#     city = models.CharField(max_length=32, null=True, blank=True)
+#     state = models.CharField(max_length=32, null=True, blank=True)
+#     zip = models.IntegerField(null=True, blank=True)
+# 
+#     def __str__(self):
+#         output = "{} {}. {}, {} {}".format(
+#             self.line_1, self.line_2, self.city, self.state, self.zip
+#         )
+#         return output.upper()
+# 
+# class ShippingAddress(Address):
+#     class Meta:
+#         proxy = True
+# 
+# class BillingAddress(Address):
+#     class Meta:
+#         proxy = True
 
 
 class StripeCustomer(models.Model):
@@ -45,6 +46,18 @@ class StripeCustomer(models.Model):
     stripe_customer_id = models.CharField(max_length=32, null=True, blank=True)
     #The stripe plan id
     stripe_credit_card_id = models.CharField(max_length=32, null=True, blank=True)
+    #Date that the service was created
+    date_created = models.DateTimeField(editable=False)
+    #Date that the service was modified
+    date_modified = models.DateTimeField(editable=False)
+    #If the user has at least one card on file
+    has_card_on_file = models.BooleanField(default=False)
+    name = models.CharField(max_length=64, null=True, blank=True)
+    line_1 = models.CharField(max_length=32, null=True, blank=True)
+    line_2 = models.CharField(max_length=32, null=True, blank=True)
+    city = models.CharField(max_length=32, null=True, blank=True)
+    state = models.CharField(max_length=32, null=True, blank=True)
+    country = models.CharField(max_length=32, null=True, blank=True)
         
     def create_stripe_customer(self):
         data = stripe.Customer.create(
@@ -64,12 +77,35 @@ class StripeCustomer(models.Model):
         customer =self.get_stripe_customer()
         customer.delete()
         
+        
     def link_card(self, token):
         customer = self.get_stripe_customer()
-        customer.sources.create(
+        try:
+            lastCard = customer.sources.list(limit=3, object='card')['data'][0].id
+            customer.sources.retrieve(lastCard).delete()
+        except:
+            pass
+        source = customer.sources.create(
             source=token
         )
-
+        self.has_card_on_file = True
+        self.line_1 = source.address_line1
+        self.line_2 = source.address_line2
+        self.city = source.address_city
+        self.state = source.address_state
+        self.country = source.country
+        self.name = source.name
+        self.save()
+        
+    def save(self, *args, **kwargs):
+        ''' 
+        On save, update timestamps 
+        '''
+        if not self.id:
+            self.date_created = timezone.now()
+        self.date_modified = timezone.now()
+        return super(StripeCustomer, self).save(*args, **kwargs)
+        
 
 class User(AbstractBaseUser, PermissionsMixin):
 
@@ -80,8 +116,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     facebook_id = models.CharField(_('facebook id'), max_length=30, blank=True, null=True, editable=False)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, null=True, blank=True)
-    address_shipping = models.OneToOneField(ShippingAddress, null=True, on_delete=models.SET_NULL, blank=True, related_name="address_shipping")
-    address_billing = models.OneToOneField(BillingAddress, null=True, on_delete=models.SET_NULL, blank=True, related_name="address_billing")
     date_joined = models.DateTimeField(_('date joined'), 
         editable=True, null=True, auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)
