@@ -35,6 +35,7 @@ query user($token: String!) {
             state
             country
             name
+            lastFour
         }
         
         subscriptionMemberships{

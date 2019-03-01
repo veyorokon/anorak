@@ -19,27 +19,6 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 from django.utils import timezone
 
-# class Address(models.Model):
-#     line_1 = models.CharField(max_length=32, null=True, blank=True)
-#     line_2 = models.CharField(max_length=32, null=True, blank=True)
-#     city = models.CharField(max_length=32, null=True, blank=True)
-#     state = models.CharField(max_length=32, null=True, blank=True)
-#     zip = models.IntegerField(null=True, blank=True)
-# 
-#     def __str__(self):
-#         output = "{} {}. {}, {} {}".format(
-#             self.line_1, self.line_2, self.city, self.state, self.zip
-#         )
-#         return output.upper()
-# 
-# class ShippingAddress(Address):
-#     class Meta:
-#         proxy = True
-# 
-# class BillingAddress(Address):
-#     class Meta:
-#         proxy = True
-
 
 class StripeCustomer(models.Model):
     #The stripe customer id
@@ -58,6 +37,7 @@ class StripeCustomer(models.Model):
     city = models.CharField(max_length=32, null=True, blank=True)
     state = models.CharField(max_length=32, null=True, blank=True)
     country = models.CharField(max_length=32, null=True, blank=True)
+    last_four = models.IntegerField(null=True, blank=True)
         
     def create_stripe_customer(self):
         data = stripe.Customer.create(
@@ -95,6 +75,7 @@ class StripeCustomer(models.Model):
         self.state = source.address_state
         self.country = source.country
         self.name = source.name
+        self.last_four = source.last4
         self.save()
         
     def save(self, *args, **kwargs):

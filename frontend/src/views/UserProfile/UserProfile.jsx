@@ -47,7 +47,7 @@ const createOptions = () => {
         letterSpacing: '0.025em',
         fontFamily: 'inherit',
         '::placeholder': {
-          color: '#aab7c4'
+          color: '#aab7c4',
         }
       },
       invalid: {
@@ -58,6 +58,13 @@ const createOptions = () => {
 };
 
 class _CardForm extends React.Component {
+    constructor(props){
+        super(props)
+        
+        this.state={
+            submitted: false
+        }
+    }
     onSubmit = async (setStripeCard, values) => {
      var firstName = this.props.addressVal('firstNameOnCard');
      var lastName = this.props.addressVal('lastNameOnCard');
@@ -67,7 +74,7 @@ class _CardForm extends React.Component {
         address_line2: this.props.addressVal('address_line2'),
         address_city: this.props.addressVal('address_city'),
         address_state: this.props.addressVal('address_state'),
-        address_country: this.props.addressVal('address_country')
+        address_country: this.props.addressVal('address_country'),
     });
     
     const { data } = await setStripeCard({
@@ -77,8 +84,10 @@ class _CardForm extends React.Component {
       }
     });      
       // Add mixpanel here
+      this.setState({submitted:true})
       this.props.triggerSnackbar('Your billing information was updated.');
  };
+
       
   render() {
     return (
@@ -86,20 +95,32 @@ class _CardForm extends React.Component {
           {setStripeCard => (
               
       <Form onSubmit={async (values, { setSubmitting }) => {
-        await this.onSubmit(setStripeCard, values);
+        await this.onSubmit(setStripeCard);
         setTimeout(() => {
           setSubmitting(false);
         }, 600);
       }}>
-      {({ isSubmitting, renderField }) => (
-          <div>
+      {({ isSubmitting }) => {
+          var color = "info";
+          var text = "Update Billing";
+          var last_four = this.props.addressVal('last_four');
+          var label_text = "You don't have an active card";
+          if(last_four){
+             label_text = "Your current card ends in: "+last_four;
+          }
+          if(this.state.submitted){
+              color = "success";
+              text = "Success"
+          }
+          return(<div>
           <GridItem style={{border: "solid #000", borderWidth:" 0 1px", marginBottom:"15px"}} xs={12} sm={12} md={12}>
-            <p>Would you like to update your card?</p>
+            <p>Would you like to update your card? <label>{label_text}</label></p>
+            
             <CardElement {...createOptions()} />
              </GridItem>
-             <Button style={{marginLeft: "-12px", marginBottom:"-12px"}} color="info" disabled={isSubmitting} type="submit">Save Changes</Button>
-            </div>
-         )}
+             <Button style={{marginLeft: "-12px", marginBottom:"-12px"}} color={color} disabled={isSubmitting || this.state.submitted} type="submit">{text}</Button>
+            </div>)
+        }}
       </Form>
       )}
     </Mutation>
@@ -108,11 +129,12 @@ class _CardForm extends React.Component {
 }
 const CardForm = injectStripe(withSnackbar(_CardForm));
 
-class UserProfileContent extends React.Component {
+class _UserProfileContent extends React.Component {
     constructor(props){
         super(props)
         var user = this.props.user;
         var stripe = this.props.user.stripeCustomer;
+
         this.state={
             firstName: user.firstName,
             lastName: user.lastName,
@@ -123,12 +145,16 @@ class UserProfileContent extends React.Component {
             address_city: stripe.city,
             address_state: stripe.state,
             address_country: stripe.country,
+            last_four: stripe.lastFour,
+            submitted: false,
+            updatedProfile: false,
         }
     }
     
     onChangeHandler = (event) => {
           var obj  = {}
           obj[event.target.id] = event.target.value;
+          obj.updatedProfile = true;
           this.setState(obj);
     }
     
@@ -144,6 +170,8 @@ class UserProfileContent extends React.Component {
       };
       
       await updateUser({ variables });
+      this.setState({submitted: true});
+      this.props.triggerSnackbar('Your profile has been updated.');
       // mixpanel.track('Squad Create', { squad: values.id });
       // this.props.triggerSnackbar('You created a Squad!');
     };
@@ -175,7 +203,22 @@ class UserProfileContent extends React.Component {
             }
           ]}>
           {updateUser => (
-            <GridItem xs={12} sm={12} md={4}>
+              <Form onSubmit={async (values, { setSubmitting }) => {
+                await this.onSubmit(updateUser, values);
+                setTimeout(() => {
+                  setSubmitting(false);
+                }, 600);
+              }}>
+              
+              {({ isSubmitting }) => {
+                  var color = "info";
+                  var text = "Save Changes";
+                  if(this.state.submitted){
+                      color = "success";
+                      text = "Success"
+                  }
+                  return(
+                      <GridItem xs={12} sm={12} md={4}>
               <Card>
                 <CardHeader color="info">
                   <h4 className={classes.cardTitleWhite}>User Profile</h4>
@@ -224,14 +267,12 @@ class UserProfileContent extends React.Component {
                     </GridContainer>              
                 </CardBody>
                 <CardFooter>
-                  <Button onClick={async () => {
-                    await this.onSubmit(updateUser);
-                    setTimeout(() => {
-                    }, 600);
-                  }} color="info">Save</Button>
+                  <Button color={color} disabled={isSubmitting || this.state.submitted || !this.state.updatedProfile} type="submit">{text}</Button>
                 </CardFooter>
               </Card>
-            </GridItem>
+            </GridItem>)
+        }}
+      </Form>
         )}
         </Mutation>
       
@@ -244,7 +285,7 @@ class UserProfileContent extends React.Component {
                 </CardHeader>
                 <CardBody>
                   <GridContainer>
-                  <GridItem xs={12} sm={6} md={6}>
+                  <GridItem xs={12} sm={12} md={12}>
                     <CustomInput
                       labelText="Name On Card"
                       id="name_on_card"
@@ -343,6 +384,8 @@ class UserProfileContent extends React.Component {
       );
     }
 }
+
+const UserProfileContent = withSnackbar(_UserProfileContent);
 
 
 function UserProfile(props) {
