@@ -35,12 +35,11 @@ handleOpen = async client => {
       membershipKey: this.state.membershipID
     }
   });
-  console.log(data)
   if(data.accountCredentials){
       this.setState({ username: data.accountCredentials.username, password: data.accountCredentials.password, open: true });
   }
   else{
-       this.setState({ username: "We need to verify some things first...", password: "We need to verify some things first...", open: true });
+       this.setState({ username: "You need an active membership...", password: "You need an active membership...", open: true });
   }
   };
   render() {

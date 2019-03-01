@@ -26,7 +26,7 @@ export default class From extends React.Component {
           type: PropTypes.string
         })
       })
-    ).isRequired,
+    ),
     onSubmit: PropTypes.func.isRequired
   };
 

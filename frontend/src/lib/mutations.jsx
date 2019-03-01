@@ -44,4 +44,26 @@ const GET_FACEBOOK_USER = gql`
   }
 `;
 
-export { CREATE_SUBSCRIPTION_ACCOUNT, LOGIN_USER, GET_FACEBOOK_USER }
+const SET_STRIPE_CARD = gql`
+  mutation SetStripeCard($token: String!, $cardToken: String!) {
+    setStripeCard(token: $token, cardToken: $cardToken) {
+      stripeCustomer {
+        id
+      }
+    }
+  }
+`;
+
+const UPDATE_USER = gql`
+    mutation UpdateUser($token: String!, $firstName:String!,$lastName:String!) {
+      updateUser(token: $token, firstName:$firstName, lastName:$lastName) {
+        user{
+          id
+          firstName
+          lastName
+        }
+      }
+    }
+`;
+
+export { CREATE_SUBSCRIPTION_ACCOUNT, LOGIN_USER, GET_FACEBOOK_USER, SET_STRIPE_CARD, UPDATE_USER }

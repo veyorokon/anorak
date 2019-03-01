@@ -44,7 +44,7 @@ class LoginForm extends React.Component {
       window.localStorage.setItem('sessionToken', data.loginUser.token);
       mixpanel.identify(values.email);
       mixpanel.track('User Login');
-      this.props.history.push('/dashboard');
+      this.props.history.push('/dashboard/home');
     } catch (e) {
       console.log(e);
       this.setState({ error: true });

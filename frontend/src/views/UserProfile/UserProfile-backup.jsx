@@ -47,7 +47,7 @@ const createOptions = () => {
         letterSpacing: '0.025em',
         fontFamily: 'inherit',
         '::placeholder': {
-          color: '#aab7c4',
+          color: '#aab7c4'
         }
       },
       invalid: {
@@ -60,7 +60,6 @@ const createOptions = () => {
 class _CardForm extends React.Component {
     constructor(props){
         super(props)
-        
         this.state={
             submitted: false
         }
@@ -87,7 +86,6 @@ class _CardForm extends React.Component {
       this.setState({submitted:true})
       this.props.triggerSnackbar('Your billing information was updated.');
  };
-
       
   render() {
     return (
@@ -95,27 +93,21 @@ class _CardForm extends React.Component {
           {setStripeCard => (
               
       <Form onSubmit={async (values, { setSubmitting }) => {
-        await this.onSubmit(setStripeCard);
+        await this.onSubmit(setStripeCard, values);
         setTimeout(() => {
           setSubmitting(false);
         }, 600);
       }}>
       {({ isSubmitting }) => {
           var color = "info";
-          var text = "Update Billing";
-          var last_four = this.props.addressVal('last_four');
-          var label_text = "You don't have an active card";
-          if(last_four){
-             label_text = "Your current card ends in: "+last_four;
-          }
+          var text = "Save Changes";
           if(this.state.submitted){
               color = "success";
               text = "Success"
           }
           return(<div>
           <GridItem style={{border: "solid #000", borderWidth:" 0 1px", marginBottom:"15px"}} xs={12} sm={12} md={12}>
-            <p>Would you like to update your card? <label>{label_text}</label></p>
-            
+            <p>Would you like to update your card?</p>
             <CardElement {...createOptions()} />
              </GridItem>
              <Button style={{marginLeft: "-12px", marginBottom:"-12px"}} color={color} disabled={isSubmitting || this.state.submitted} type="submit">{text}</Button>
@@ -129,12 +121,11 @@ class _CardForm extends React.Component {
 }
 const CardForm = injectStripe(withSnackbar(_CardForm));
 
-class _UserProfileContent extends React.Component {
+class UserProfileContent extends React.Component {
     constructor(props){
         super(props)
         var user = this.props.user;
         var stripe = this.props.user.stripeCustomer;
-
         this.state={
             firstName: user.firstName,
             lastName: user.lastName,
@@ -145,16 +136,13 @@ class _UserProfileContent extends React.Component {
             address_city: stripe.city,
             address_state: stripe.state,
             address_country: stripe.country,
-            last_four: stripe.lastFour,
-            submitted: false,
-            updatedProfile: false,
+            submitted: false
         }
     }
     
     onChangeHandler = (event) => {
           var obj  = {}
           obj[event.target.id] = event.target.value;
-          obj.updatedProfile = true;
           this.setState(obj);
     }
     
@@ -203,22 +191,7 @@ class _UserProfileContent extends React.Component {
             }
           ]}>
           {updateUser => (
-              <Form onSubmit={async (values, { setSubmitting }) => {
-                await this.onSubmit(updateUser, values);
-                setTimeout(() => {
-                  setSubmitting(false);
-                }, 600);
-              }}>
-              
-              {({ isSubmitting }) => {
-                  var color = "info";
-                  var text = "Save Changes";
-                  if(this.state.submitted){
-                      color = "success";
-                      text = "Success"
-                  }
-                  return(
-                      <GridItem xs={12} sm={12} md={4}>
+            <GridItem xs={12} sm={12} md={4}>
               <Card>
                 <CardHeader color="info">
                   <h4 className={classes.cardTitleWhite}>User Profile</h4>
@@ -267,12 +240,14 @@ class _UserProfileContent extends React.Component {
                     </GridContainer>              
                 </CardBody>
                 <CardFooter>
-                  <Button color={color} disabled={isSubmitting || this.state.submitted || !this.state.updatedProfile} type="submit">{text}</Button>
+                  <Button onClick={async () => {
+                    await this.onSubmit(updateUser);
+                    setTimeout(() => {
+                    }, 600);
+                  }} color="info">Save</Button>
                 </CardFooter>
               </Card>
-            </GridItem>)
-        }}
-      </Form>
+            </GridItem>
         )}
         </Mutation>
       
@@ -385,8 +360,6 @@ class _UserProfileContent extends React.Component {
     }
 }
 
-const UserProfileContent = withSnackbar(_UserProfileContent);
-
 
 function UserProfile(props) {
      const { classes } = props;
@@ -410,4 +383,4 @@ function UserProfile(props) {
         </Query>
      )
 }
-export default withStyles(styles)(UserProfile);
+export default withSnackbar(withStyles(styles)(UserProfile));

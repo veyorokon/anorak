@@ -56,12 +56,11 @@ class Dashboard extends React.Component {
       >
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
-          if (error) return `Error! ${error.message}`;
+          if (error) return `Error! ${error.message}`; //redirect on error
           let memberships = [];
           data.user.subscriptionMemberships.forEach(elem => {
               memberships.push(elem);
           });
-          console.log(data)
           return (
         <div>
       <GridContainer>

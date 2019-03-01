@@ -28,7 +28,7 @@ class FacebookUser(graphene.Mutation):
         except:
             raise ValueError("User not created")
         
-class CreateUser(graphene.Mutation):
+class User(graphene.Mutation):
     
     class Arguments:
         email = graphene.String(required=True)
@@ -39,11 +39,12 @@ class CreateUser(graphene.Mutation):
     token =  graphene.String()
     
     def mutate(self, info, email, password, firstName, lastName):
-        user = User(
+        
+        user = User.objects.get_or_create(
             email=email,
             first_name=firstName,
             last_name=lastName
-        )
+        )[0]
         user.set_password(password)
         try:
             user.save()
@@ -51,24 +52,6 @@ class CreateUser(graphene.Mutation):
             return CreateUser(token=token)
         except:
             raise ValueError("User not created")
-            
-class UpdateUser(graphene.Mutation):
-    
-    class Arguments:
-        token=graphene.String(required=True)
-        firstName = graphene.String()
-        lastName = graphene.String()
-    
-    user = graphene.Field(UserType)
-    
-    @login_required
-    def mutate(self, info, token, firstName, lastName):
-        user = info.context.user
-        user.first_name = firstName
-        user.last_name = lastName
-        user.save()
-        return UpdateUser(user=user)
-        
 
 class StripeCard(graphene.Mutation):
     
@@ -106,8 +89,7 @@ class LoginUser(graphene.Mutation):
 
 
 class Mutations(graphene.ObjectType):
-    user = CreateUser.Field(description="Creates a new user")
-    update_user = UpdateUser.Field(description="Updates an existing user")
+    user = User.Field(description="Creates or updates the user.")
     facebook_user = FacebookUser.Field(description="Creates a new user with facebook data")
     set_stripe_card = StripeCard.Field(description="Creates a new stripe credit card for the user.")
     login_user = LoginUser.Field(description="Logs the user in.")

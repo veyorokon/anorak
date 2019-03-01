@@ -39,8 +39,8 @@ const dashboardRoutes = [
     },
       {
         path: "/dashboard/user",
-        sidebarName: "User Profile",
-        navbarName: "Profile",
+        sidebarName: "Account",
+        navbarName: "Account",
         icon: Person,
         component: UserProfile
       }, 

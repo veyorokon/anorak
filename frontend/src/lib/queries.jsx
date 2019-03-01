@@ -26,6 +26,18 @@ query user($token: String!) {
         email
         firstName
         lastName
+        stripeCustomer{
+            id
+            hasCardOnFile
+            line1
+            line2
+            city
+            state
+            country
+            name
+            lastFour
+        }
+        
         subscriptionMemberships{
           id
           statusMembership
