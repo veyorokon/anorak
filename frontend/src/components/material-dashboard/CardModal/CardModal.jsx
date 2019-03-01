@@ -35,7 +35,6 @@ handleOpen = async client => {
       membershipKey: this.state.membershipID
     }
   });
-  console.log(data)
   if(data.accountCredentials){
       this.setState({ username: data.accountCredentials.username, password: data.accountCredentials.password, open: true });
   }
