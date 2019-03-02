@@ -40,8 +40,12 @@ query user($token: String!) {
         
         subscriptionMemberships{
           id
+          dateCreated
+          dateModified
           statusMembership
           subscriptionAccount{
+            id
+            dateCreated
             statusAccount
             pricePlan{
                 amount
@@ -49,6 +53,10 @@ query user($token: String!) {
             service{
               id
               name
+            }
+            responsibleUser{
+                firstName
+                lastName
             }
           }
         }

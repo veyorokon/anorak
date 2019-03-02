@@ -82,7 +82,6 @@ CustomInput.propTypes = {
   error: PropTypes.bool,
   success: PropTypes.bool,
   type: PropTypes.string,
-  labelText: PropTypes.node,
 };
 
 export default withStyles(customInputStyle)(CustomInput);

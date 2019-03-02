@@ -135,7 +135,7 @@ class Dashboard extends React.Component {
               <span className={classes.cardInLine}>
                
                <CardModal membershipID={id} title={"Account Login"}/>
-               <Button color="transparent" >
+               <Button onClick={()=>{this.props.history.push('manage/'+id);}} color="transparent" >
                  <span className={classes.cardCategoryWhite}>Manage</span>
                </Button>
                </span>      

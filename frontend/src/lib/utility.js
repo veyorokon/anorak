@@ -111,6 +111,27 @@ export function getAccountColor(value){
     if (value === 'A_3') return 'success';
 }
 
+export function calcAnorakFee(value){
+    return  (value * 0.03 + 0.50).toFixed(2);
+}
+
+export function formatDateTime(value){
+    return value.split("T")[0];
+}
+
+export function getRenewalDate(value){
+    if (value === 'A_0') return 'N/a';
+    if (value === 'A_1') return 'N/a';
+    var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+    var month = m + 1;
+    var year = y;
+    var day = new Date(year, month, 0).getDate();
+    if (month < 10) month = '0'+month;
+    if (day < 10) day = '0'+day;
+    var output = year+'-'+month+'-'+day;
+    return output;
+}
+
 const stripeAPIKey = "pk_test_rLuroFoR4XKOxb3FbmJqTqrh";
 
 const mixpanel = require('mixpanel-browser');

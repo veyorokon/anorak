@@ -14,7 +14,7 @@ import Sidebar from "components/material-dashboard/Sidebar/Sidebar.jsx";
 
 import dashboardRoutes from "routes/dashboard.jsx";
 
-import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
+import manageStyle from "assets/jss/material-dashboard-react/layouts/manageStyle.jsx";
 import Manage from "views/Manage/Manage";
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
@@ -102,4 +102,4 @@ App.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(dashboardStyle)(App);
+export default withStyles(manageStyle)(App);
