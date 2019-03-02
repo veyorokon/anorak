@@ -40,8 +40,12 @@ query user($token: String!) {
         
         subscriptionMemberships{
           id
+          dateCreated
+          dateModified
           statusMembership
           subscriptionAccount{
+            id
+            dateCreated
             statusAccount
             pricePlan{
                 amount
@@ -50,11 +54,16 @@ query user($token: String!) {
               id
               name
             }
+            responsibleUser{
+                firstName
+                lastName
+            }
           }
         }
     }
 }
 `;
+
 
 const ACCOUNT_CREDENTIALS = gql`
 query AccountCredentials($token:String!, $membershipKey:Int!){

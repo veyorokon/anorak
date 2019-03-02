@@ -1,6 +1,5 @@
 from graphene_django.types import DjangoObjectType
 from core.models import * 
-from django.db.models import Q
 from subscription.models import *
 from graphene_django.registry import Registry
 

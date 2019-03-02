@@ -66,4 +66,16 @@ const UPDATE_USER = gql`
     }
 `;
 
-export { CREATE_SUBSCRIPTION_ACCOUNT, LOGIN_USER, GET_FACEBOOK_USER, SET_STRIPE_CARD, UPDATE_USER }
+const REQUEST_ACCOUNT_CANCELLATION = gql`
+    mutation RequestCancellationMutation($token:String!, $memberKey:Int!,$accountKey:Int!){
+      requestCancellation(token:$token, memberKey:$memberKey, accountKey:$accountKey){
+        managementRequest{
+          id
+          status
+          requestedAction
+        }
+      }
+    }
+`;
+
+export { CREATE_SUBSCRIPTION_ACCOUNT, LOGIN_USER, GET_FACEBOOK_USER, SET_STRIPE_CARD, UPDATE_USER, REQUEST_ACCOUNT_CANCELLATION }

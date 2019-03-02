@@ -51,7 +51,7 @@ class Dashboard extends React.Component {
     return window.localStorage.getItem('sessionToken') ? (
       <Query
         query={USER}
-        variables={{ token: window.localStorage.getItem('sessionToken') }}
+        variables={{ token: getToken()}}
         fetchPolicy='no-cache'
       >
         {({ loading, error, data }) => {
@@ -135,7 +135,7 @@ class Dashboard extends React.Component {
               <span className={classes.cardInLine}>
                
                <CardModal membershipID={id} title={"Account Login"}/>
-               <Button color="transparent" >
+               <Button onClick={()=>{this.props.history.push('manage/'+id);}} color="transparent" >
                  <span className={classes.cardCategoryWhite}>Manage</span>
                </Button>
                </span>      
