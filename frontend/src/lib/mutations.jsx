@@ -44,14 +44,12 @@ const GET_FACEBOOK_USER = gql`
   }
 `;
 
-const SET_STRIPE_CARD = gql`
-  mutation SetStripeCard($token: String!, $cardToken: String!) {
-    setStripeCard(token: $token, cardToken: $cardToken) {
-      stripeCustomer {
-        id
+const CREATE_USER = gql`
+    mutation CreateUser($email:String!, $firstName:String!, $lastName:String, $password:String!){
+      createUser(email:$email, firstName:$firstName, lastName:$lastName, password:$password){
+        token
       }
     }
-  }
 `;
 
 const UPDATE_USER = gql`
@@ -66,6 +64,16 @@ const UPDATE_USER = gql`
     }
 `;
 
+const SET_STRIPE_CARD = gql`
+  mutation SetStripeCard($token: String!, $cardToken: String!) {
+    setStripeCard(token: $token, cardToken: $cardToken) {
+      stripeCustomer {
+        id
+      }
+    }
+  }
+`;
+
 const REQUEST_ACCOUNT_CANCELLATION = gql`
     mutation RequestCancellationMutation($token:String!, $memberKey:Int!,$accountKey:Int!){
       requestCancellation(token:$token, memberKey:$memberKey, accountKey:$accountKey){
@@ -78,4 +86,4 @@ const REQUEST_ACCOUNT_CANCELLATION = gql`
     }
 `;
 
-export { CREATE_SUBSCRIPTION_ACCOUNT, LOGIN_USER, GET_FACEBOOK_USER, SET_STRIPE_CARD, UPDATE_USER, REQUEST_ACCOUNT_CANCELLATION }
+export { CREATE_SUBSCRIPTION_ACCOUNT, LOGIN_USER, GET_FACEBOOK_USER, SET_STRIPE_CARD, UPDATE_USER, REQUEST_ACCOUNT_CANCELLATION, CREATE_USER }
