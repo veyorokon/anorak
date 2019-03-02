@@ -47,6 +47,7 @@ class _ManageContent extends React.Component {
         };
         await requestCancellation({ variables });
         this.setState({submitted: true});
+        this.props.triggerSnackbar('Your cancellation request has been sent.');
     };
     
     render(){
