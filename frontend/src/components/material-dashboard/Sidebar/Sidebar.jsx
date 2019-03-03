@@ -15,12 +15,27 @@ import Icon from "@material-ui/core/Icon";
 import HeaderLinks from "components/material-dashboard/Header/HeaderLinks.jsx";
 
 import sidebarStyle from "assets/jss/material-dashboard-react/components/sidebarStyle.jsx";
+import {clearToken, getToken} from "lib/utility";
 
 const Sidebar = ({ ...props }) => {
   // verifies if routeName is the one active (in browser input)
   function activeRoute(routeName) {
     return props.location.pathname.indexOf(routeName) > -1 ? true : false;
   }
+  
+  function checkLogout(routeName){
+      if (routeName === "/dashboard/logout"){
+          clearToken()
+      }
+  }
+  
+  function getLogout(routeName){
+      if (routeName === "/dashboard/logout" || !getToken()){
+          return "/"
+      }
+      return routeName
+  }
+  
   const { classes, color, logo, image, logoText, routes } = props;
   var links = (
     <List className={classes.list}>
@@ -28,7 +43,7 @@ const Sidebar = ({ ...props }) => {
         if (prop.redirect) return null;
         var activePro = " ";
         var listItemClasses;
-        if (prop.path === "/logout") {
+        if (prop.path === "/dashboard/logout") {
           activePro = classes.activePro + " ";
           listItemClasses = classNames({
             [" " + classes[color]]: true
@@ -43,10 +58,11 @@ const Sidebar = ({ ...props }) => {
         });
         return (
           <NavLink
-            to={prop.path}
+            to={getLogout(prop.path)}
             className={activePro + classes.item}
             activeClassName="active"
             key={key}
+            onClick={()=>checkLogout(prop.path)}
           >
             <ListItem button className={classes.itemLink + listItemClasses}>
               <ListItemIcon className={classes.itemIcon + whiteFontClasses}>
