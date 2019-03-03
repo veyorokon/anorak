@@ -17,13 +17,15 @@ class SubscriptionAccountMutation(graphene.Mutation):
     
     @login_required
     def mutate(self, info, serviceKey, planKey, token, username, password, **kwargs):
+        service = SubscriptionService.objects.get(
+            pk=serviceKey
+        )
         account = SubscriptionAccount.objects.get_or_create(
             responsible_user = info.context.user,
-            service = SubscriptionService.objects.get(
-                pk=serviceKey
-            ),
+            service = service,
             price_plan = SubscriptionPricingPlan.objects.get(
-                pk=planKey
+                pk = planKey,
+                service = service
             )
         )[0]
         account.username = info.context.user.email

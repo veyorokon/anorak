@@ -19,7 +19,6 @@ import landingPageStyle from "assets/jss/material-kit-react/views/landingPage.js
 
 // Sections for this page
 import ProductSection from "./Sections/ProductSection.jsx";
-import TeamSection from "./Sections/TeamSection.jsx";
 import CallToAction from "./Sections/CallToAction.jsx";
 
 

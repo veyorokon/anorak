@@ -6,8 +6,12 @@ class SubscriptionConfig(AppConfig):
     
     def ready(self):
         from . import signals
-        from subscription.models import SubscriptionAccount
+        from subscription.models import SubscriptionAccount, SubscriptionMember
         post_save.connect(
             signals.create_account_subscription_member, 
             sender=SubscriptionAccount
+        )
+        post_save.connect(
+            signals.create_invoice_item,
+            sender=SubscriptionMember
         )

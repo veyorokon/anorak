@@ -84,10 +84,10 @@ class CallToAction extends React.Component {
       <div className={classes.section}>
         <GridContainer justify="center">
           <GridItem cs={12} sm={12} md={8}>
-            <h2 className={classes.title}>Start Today</h2>
-            <h4 className={classes.description}>
-              Create your account and start managing your subscriptions today.
-            </h4>
+              <h2 className={classes.title}>Create Your Account For Free</h2>
+              <h5 className={classes.description}>
+                It's free to create an Anorak account! For each subscription, Anorak charges a monthly 3% + 0.50 cent management fee up to a max of $5.00 combined for all your subscriptions.
+              </h5>
         <Mutation mutation={CREATE_USER}>
           {createUser => (
           <Form onSubmit={async (values, { setSubmitting }) => {
