@@ -14,6 +14,7 @@ import GridItem from "components/material-landing/Grid/GridItem.jsx";
 import Button from "components/material-landing/CustomButtons/Button.jsx";
 import HeaderLinks from "components/material-landing/Header/HeaderLandingLinks.jsx";
 import Parallax from "components/material-landing/Parallax/Parallax.jsx";
+import ScrollableAnchor from 'react-scrollable-anchor'
 
 import landingPageStyle from "assets/jss/material-kit-react/views/landingPage.jsx";
 
@@ -64,7 +65,9 @@ class LandingPage extends React.Component {
         <div className={classNames(classes.main, classes.mainRaised)}>
           <div className={classes.container}>
             <ProductSection />
-            <CallToAction />
+            <ScrollableAnchor id={'signup'}>
+                <CallToAction />
+          </ScrollableAnchor>
           </div>
         </div>
         <Footer />
