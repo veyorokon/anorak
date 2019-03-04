@@ -22,6 +22,8 @@ Anorak uses a number of open source and free tier projects to work properly:
 
 * [ReactJS] - Front end JS framework.
 * [Django] - Backend framework built with python.
+* [RabbitMQ] - Messaging queue for Django and Celery.
+* [Celery] - The task scheduler for recurring tasks (subscription billing).
 * [npm] - Package manager for installing ReactJS modules.
 * [Mixpanel] - User data analytics and tracking.
 * [Docker] - Platform independent portable development.
@@ -33,14 +35,15 @@ Anorak uses a number of open source and free tier projects to work properly:
 * [Stripe] - Python library for the Stripe API.
 * [Postgres] - SQL relational database. 
 
-### Anorak's Three Distinct Components:
+### Anorak's Four Distinct Components:
   - The database - Stores user/squad data using [Postgres](https://www.postgresql.org/).
+  - The RabbitMQ - The messaging queue is the medium of exchange for Celery tasks and Django.
   - The backend - Hosts a [GraphQL](https://graphql.org/) API to access data in the database.
   - The frontend - Serves the web browser UI that interfaces with the backend's API.
 
 ### Local Installation & Development
 
-Anorak requires [Node.js](https://nodejs.org/) v8.11.4+ to run.
+Anorak requires [Node.js](https://nodejs.org/) v8.11.4+ to run. the frontend. The RabbitMQ Container (https://dev.to/usamaashraf/microservices--rabbitmq-on-docker-e2f) was a fork from [here].
 
 After *every* pull from Github, configure Mixpanel and Stripe keys for `local` or `server`. This step is for analytics and separates development from production data on our Mixpanel and Stripe dashboards.
 ```sh
@@ -154,6 +157,8 @@ License
 
    [ReactJS]: <https://github.com/facebook/react>
    [Django]: <https://github.com/django/django>
+   [RabbitMQ]: <https://github.com/rabbitmq>
+   [Celery]: <https://github.com/celery/celery>
    [npm]: <https://github.com/npm/cli>
    [Mixpanel]: <https://github.com/mixpanel/mixpanel-js>
    [Docker]: <https://github.com/docker>
