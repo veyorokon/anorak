@@ -64,6 +64,43 @@ query user($token: String!) {
 }
 `;
 
+const USER_INVOICES = gql`
+query user($token: String!) {
+  user(token: $token) {
+    firstName
+    lastName
+    email
+    stripeCustomer{
+        line1
+        line2
+        city
+        state
+        country
+        lastFour
+    }
+    invoices{
+      id
+      dateFor
+      dateCreated
+      items{
+        usage
+        amount
+        subscriptionMember{
+          subscriptionAccount{
+            pricePlan{
+              amount
+            }
+            service{
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+}
+`;
+
 
 const ACCOUNT_CREDENTIALS = gql`
 query AccountCredentials($token:String!, $membershipKey:Int!){
@@ -74,4 +111,4 @@ query AccountCredentials($token:String!, $membershipKey:Int!){
 }
 `;
 
-export { SUBSCRIPTION_SERVICES, USER, ACCOUNT_CREDENTIALS }
+export { USER_INVOICES, SUBSCRIPTION_SERVICES, USER, ACCOUNT_CREDENTIALS }

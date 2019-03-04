@@ -5,58 +5,28 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { renderToStaticMarkup } from 'react-dom/server';
 import Invoice from "components/material-dashboard/Invoice/Invoice";
 import Card from "components/material-dashboard/Card/Card";
+import {USER_INVOICES} from "lib/queries";
+import { Query } from 'react-apollo';
+import {getToken,calcAnorakFee} from "lib/utility"
 
-const invoice = {
-    createdDate: '2018-03-16',
-    dueDate: '2018-04-16',
-    paymentMethod: 'PayPal',
-    id: 'ABCD-1234',
-    description: 'Post-show cravings',
-    items: [
-      {
-        description: 'Shake Shack',
-        amount: 9.59,
-      },
-      {
-        description: 'Crinkle Cut Fries',
-        amount: 2.99,
-      },
-      {
-        description: 'Strawberry Shake',
-        amount: 5.29,
-      },
-    ],
-  };
-  
-  const customer = {
-    name: 'Lin-Manuel Miranda',
-    email: 'me@linmanuel.com',
-    address: [
-      '226 W 46th St',
-      'New York, NY 10036',
-    ],
-    logoUrl: 'http://p.fod4.com/p/media/c9c34f4e09/JqdTM3oTiqTcrbFoLdxb_Hamilton_200x200.jpg',
-  };
+const company =
+        {
+          name: 'iAnorak',
+          address: [
+            '1600 Villa Street',
+            'Mountain View, CA 94041',
+          ],
+          email: 'support@ianorak.com',
+          logoUrl: 'https://www.shakeshack.com/wp-content/themes/shakeshack/images/shakeshack_logo.png',
+      };
 
-  const company = {
-    name: 'Shake Shack',
-    address: [
-      'Madison Square Park',
-      'New York, NY 10010',
-    ],
-    email: 'contact@shakeshack.com',
-    logoUrl: 'https://www.shakeshack.com/wp-content/themes/shakeshack/images/shakeshack_logo.png',
-  };
-
-
-function InvoiceList(props) {
-     const { classes } = props;
+function _InvoiceCard(props) {
+     const { classes, invoice, customer, company } = props;
      return(
          <Invoice
           invoice={invoice}
           customer={customer}
           company={company}
-          style={{background:'white'}}
           notes={(
             <p>
               If you have any questions, please
@@ -66,4 +36,117 @@ function InvoiceList(props) {
         />
      )
 }
+
+const InvoiceCard = _InvoiceCard;
+
+class InvoiceList extends React.Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            total: 0.0
+        }
+    }
+    
+    customer = (user) =>{
+        const customer = user.stripeCustomer;
+        const line1 = customer.line1 || '';
+        const line2 = customer.line2 || '';
+        const city = customer.city || '';
+        const state = customer.state || '';
+        const country = customer.country || '';
+        return(
+            {
+              name: `${user.firstName} ${user.lastName}`,
+              email: `${user.email}`,
+              address: [
+                `${line1}`,
+                `${line2}`,
+                `${city} ${state} ${country}`,
+              ],
+              logoUrl: 'http://p.fod4.com/p/media/c9c34f4e09/JqdTM3oTiqTcrbFoLdxb_Hamilton_200x200.jpg',
+            }
+        )
+    }
+    
+    getAccount = (data) =>{
+        return data.subscriptionMember.subscriptionAccount;
+    }
+    
+    calcTotal = (items) =>{
+        var total = 0.0;
+        for (var i =0; i < items.length; i++){
+            total += items[i].amount;
+        }
+        
+        return total;
+    }
+    
+    invoice = (user) => {
+        const invoiceData = user.invoices[0];
+        const customer = user.stripeCustomer;
+        const card = user.stripeCustomer.lastFour || '';
+        
+        
+        var fee = parseFloat(calcAnorakFee(this.calcTotal(invoiceData.items)));
+        
+        const items = (invoiceData.items.map(item =>(
+            {
+              description: this.getAccount(item).service.name +` ${this.getAccount(item).pricePlan.amount} Monthly`,
+              usage: item.usage+' days',
+              amount: item.amount,
+            }
+        )));
+        items.push({
+            description: "Anorak Fee",
+            usage: "-",
+            amount: fee
+        });
+        return(
+            {
+                createdDate: `${invoiceData.dateCreated}`,
+                dueDate: `${invoiceData.dateFor}`,
+                paymentMethod: `Credit Card`,
+                id: '',
+                description: 'Subscription Service Management',
+                items: items,
+            }
+        )
+    }
+    
+    render(){
+        const token = getToken();
+        return token 
+            ? (
+              <Query
+                query={USER_INVOICES}
+                variables={{ token: token}}
+                fetchPolicy='no-cache'
+              >
+                {({ loading, error, data }) => {
+                  if (loading) return 'Loading...';
+                  if (error) return `Error! ${error.message}`; 
+                  if (data.user.invoices[0].items.length > 0){
+                  return (
+                        <InvoiceCard 
+                        invoice={this.invoice(data.user)} 
+                        customer={this.customer(data.user)} 
+                        company={company}
+                        />
+                    )
+                }
+                    return(
+                        <div />
+                    )
+                }}
+            </Query>
+            )
+            :
+            (
+                <div />
+            )
+    }
+}
+
+
+
 export default InvoiceList;

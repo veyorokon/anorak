@@ -67,7 +67,10 @@ const styles = `
 .invoice-box table tr.item.last td{
   border-bottom:none;
 }
-.invoice-box table tr.total td:nth-child(2){
+.last{
+    text-align:right;
+}
+.invoice-box table tr.total td:nth-child(3){
   background:#eee;
   font-weight:bold;
 }
@@ -115,7 +118,7 @@ export default function Invoice({
           <table cellPadding="0" cellSpacing="0">
             <tbody>
               <tr className="top">
-                <td colSpan="2">
+                <td colSpan="3">
                   <table>
                     <tbody>
                       <tr>
@@ -136,7 +139,7 @@ export default function Invoice({
                 </td>
               </tr>
               <tr className="information">
-                <td colSpan="2">
+                <td colSpan="3">
                   <table>
                     <tbody>
                       <tr>
@@ -144,6 +147,7 @@ export default function Invoice({
                           <div className="subheading">Bill To</div>
                           <EntityInfo entity={customer} />
                         </td>
+                        
                         <td>
                           <table className="invoice-information">
                             <tbody>
@@ -184,6 +188,7 @@ export default function Invoice({
               {invoice.description && [
                 <tr className="heading" key="heading">
                   <td className="subheading" colSpan="2">Description</td>
+                  <td />
                 </tr>,
                 <tr className="details" key="details">
                   <td colSpan="2">{invoice.description}</td>
@@ -191,21 +196,25 @@ export default function Invoice({
               ]}
               <tr className="heading">
                 <td className="subheading">Item</td>
+                <td className="subheading">Usage</td>
                 <td />
               </tr>
               {items.map((item) => (
                 <tr className="item" key={item.description}>
                   <td>{item.description}</td>
-                  <td>{formatCurrency(item.amount)}</td>
+                  <td>{item.usage}</td>
+                  <td className="last">{formatCurrency(item.amount)}</td>
                 </tr>
               ))}
               <tr className="total">
+                <td />
                 <td />
                 <td>
                   <table>
                     <tbody>
                       <tr>
                         <td className="subheading">Total</td>
+                        <td />
                         <td>{formatCurrency(totalAmount)}</td>
                       </tr>
                     </tbody>

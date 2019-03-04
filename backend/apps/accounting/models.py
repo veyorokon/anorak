@@ -33,6 +33,7 @@ class Invoice(models.Model):
     
     class Meta:
         db_table = "Invoices"
+        ordering = ['date_for']
         unique_together = ('user', 'date_for')
         
     def set_date_for_from_today(self):
