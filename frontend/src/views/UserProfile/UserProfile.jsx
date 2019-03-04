@@ -159,6 +159,9 @@ class _UserProfileContent extends React.Component {
     }
     
     getAddressVal = (key) =>{
+        if (this.state[key] === null){
+            return '';
+        }
         return this.state[key];
     }
     
@@ -173,21 +176,19 @@ class _UserProfileContent extends React.Component {
       this.setState({submitted: true});
       this.props.triggerSnackbar('Your profile has been updated.');
       // mixpanel.track('Squad Create', { squad: values.id });
-      // this.props.triggerSnackbar('You created a Squad!');
     };
     
     render(){
       const { classes } = this.props;
-      const firstName = this.state.firstName;
-      const lastName = this.state.lastName;
-      const email = this.state.email;
-      
-      const name_on_card = this.state.name_on_card;
-      const address_line1 = this.state.address_line1;
-      const address_line2 = this.state.address_line2;
-      const address_city = this.state.address_city;
-      const address_state = this.state.address_state;
-      const address_country = this.state.address_country;
+      const firstName = this.getAddressVal('firstName');
+      const lastName =this.getAddressVal('lastName');
+      const email =this.getAddressVal('email');
+      const name_on_card = this.getAddressVal('name_on_card');
+      const address_line1 = this.getAddressVal('address_line1');
+      const address_line2 = this.getAddressVal('address_line2');
+      const address_city = this.getAddressVal('address_city');
+      const address_state = this.getAddressVal('address_state');
+      const address_country = this.getAddressVal('address_country');
       
       return (
         <React.Fragment>
@@ -218,7 +219,7 @@ class _UserProfileContent extends React.Component {
                       text = "Success"
                   }
                   return(
-                      <GridItem xs={12} sm={12} md={4}>
+                      <GridItem xs={12} sm={12} md={12}>
               <Card>
                 <CardHeader color="info">
                   <h4 className={classes.cardTitleWhite}>User Profile</h4>

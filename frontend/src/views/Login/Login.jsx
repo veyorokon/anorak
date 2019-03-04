@@ -48,7 +48,7 @@ function Login(props) {
       <Paper className={classes.paper}>
         <Header />
         <FacebookButton text="Login via Facebook" />
-        <Typography variant="overline" className={classes.overline}>
+        <Typography className={classes.overline}>
           Or
         </Typography>
         <LoginForm />

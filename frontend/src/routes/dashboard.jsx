@@ -2,6 +2,8 @@
 import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
 import AddBox from "@material-ui/icons/AddBox";
+import Receipt from "@material-ui/icons/Receipt";
+
 
 // import ContentPaste from "@material-ui/icons/ContentPaste";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
@@ -22,6 +24,7 @@ import NotificationsPage from "views/Notifications/Notifications.jsx";
 import Logout from "views/Logout/Logout.jsx";
 import Connect from "views/Connect/Connect.jsx";
 import Manage from "views/Manage/Manage.jsx";
+import InvoiceList from "views/Invoice/Invoice.jsx";
 
 const dashboardRoutes = [
     {
@@ -45,6 +48,13 @@ const dashboardRoutes = [
         navbarName: "Account",
         icon: Person,
         component: UserProfile
+      }, 
+      {
+        path: "/dashboard/invoices",
+        sidebarName: "Invoices",
+        navbarName: "Invoices",
+        icon: Receipt,
+        component: InvoiceList
       }, 
     {
       path: "/dashboard/logout",

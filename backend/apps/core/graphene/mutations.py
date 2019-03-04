@@ -106,7 +106,7 @@ class LoginUser(graphene.Mutation):
 
 
 class Mutations(graphene.ObjectType):
-    user = CreateUser.Field(description="Creates a new user")
+    create_user = CreateUser.Field(description="Creates a new user")
     update_user = UpdateUser.Field(description="Updates an existing user")
     facebook_user = FacebookUser.Field(description="Creates a new user with facebook data")
     set_stripe_card = StripeCard.Field(description="Creates a new stripe credit card for the user.")

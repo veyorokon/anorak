@@ -6,6 +6,8 @@ from subscription.graphene.mutations import Mutations as SubscriptionMutations
 from subscription.graphene.query import Query as SubscriptionQuery
 from request.graphene.mutations import Mutations as RequestMutation
 
+from accounting.graphene.types import *
+
 class Mutations(CoreMutations, SubscriptionMutations, RequestMutation):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()

@@ -37,6 +37,7 @@ import Confirmation from "./Sections/Confirmation.jsx";
 
 import {USER, SUBSCRIPTION_SERVICES} from "lib/queries";
 import {CREATE_SUBSCRIPTION_ACCOUNT} from "lib/mutations";
+import withSnackbar from 'components/material-dashboard/Form/withSnackbar';
 
 const styles = {
   cardCategoryWhite: {
@@ -57,7 +58,7 @@ const styles = {
   }
 };
 
-class ConnectContent extends React.Component {
+class _ConnectContent extends React.Component {
 constructor(props){
     super(props)
     this.state={
@@ -70,7 +71,8 @@ constructor(props){
         isGenerateDisabled:false,
         planSelected: 0,
         activeStep: 0,
-        services: this.props.services
+        services: this.props.services,
+        submitted: false
     }
 }
 
@@ -227,7 +229,7 @@ loginSection = (classes, isGenDisabled, generatedPassword) => {
                         <GridItem xs={6} sm={6} md={4} lg={8}>
                           <CustomInput
                             labelText="Password"
-                            id="password"
+                            id="setpassword"
                             type={"password"}
                             onChange={this.setOwnPassword}
                             formControlProps={{
@@ -253,7 +255,7 @@ loginSection = (classes, isGenDisabled, generatedPassword) => {
                           <GridItem xs={6} sm={6} md={4} lg={8}>
                             <CustomInput
                               labelText="Password"
-                              id="password"
+                              id="genpassword"
                               formControlProps={{
                                   disabled: true,
                                 fullWidth: true,
@@ -397,7 +399,15 @@ onSubmit = async (createSubscriptionAccount, values) => {
     username: '',
   };
   
-  await createSubscriptionAccount({ variables });
+  this.setState({submitted:true});
+  try{
+      await createSubscriptionAccount({ variables });
+      this.props.triggerSnackbar('Subscribed! A new subscription was added to your dashboard.');
+  }catch{
+      this.props.triggerSnackbar('Sorry, an additional subscription account could not be created.');
+  }
+  
+
   // mixpanel.track('Squad Create', { squad: values.id });
   // this.props.triggerSnackbar('You created a Squad!');
 };
@@ -507,6 +517,7 @@ render(){
                           setTimeout(() => {
                           }, 600);
                         }}
+                        disabled={this.state.submitted}
                          color="success">
                           Confirm
                         </Button>
@@ -525,6 +536,7 @@ render(){
       );
   }
 }
+const ConnectContent = withSnackbar(_ConnectContent);
 
 
 function Connect(props) {
