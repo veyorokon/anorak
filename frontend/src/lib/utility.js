@@ -112,7 +112,9 @@ export function getAccountColor(value){
 }
 
 export function calcAnorakFee(value){
-    return  (value * 0.03 + 0.50).toFixed(2);
+    var fee =  (value * 0.03 + 0.50).toFixed(2);
+    if (fee <= 5.00) return fee;
+    return (5.00).toFixed(2);
 }
 
 export function formatDateTime(value){
