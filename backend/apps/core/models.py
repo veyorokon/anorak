@@ -58,9 +58,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class StripeCustomer(models.Model):
     #The user for this customer 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="stripe_customer")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="stripe_customer")
     #The stripe customer id
     stripe_customer_id = models.CharField(max_length=32, null=True, blank=True)
+    #The stripe customer's subscription to Anorak
+    stripe_subscription_id = models.CharField(max_length=32, null=True, blank=True)
     #The stripe plan id
     stripe_credit_card_id = models.CharField(max_length=32, null=True, blank=True)
     #Date that the service was created
@@ -88,6 +90,19 @@ class StripeCustomer(models.Model):
     def get_stripe_customer(self):
         customer = stripe.Customer.retrieve(self.stripe_customer_id)
         return customer
+        
+    def get_stripe_subscription(self):
+        subscription = stripe.Subscription.retrieve(
+            id=self.stripe_subscription_id
+        )
+        return subscription
+    
+    def get_stripe_latest_invoice(self):
+        subscription = self.get_stripe_subscription()
+        invoice = stripe.Invoice.retrieve(
+            id=subscription.latest_invoice
+        )
+        return invoice
         
     def delete_customer(self):
         """

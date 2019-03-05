@@ -288,8 +288,7 @@
         },
         "pycparser": {
             "hashes": [
-                "sha256:a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3",
-                "sha256:bd7708a0aea470c35a01f34541a4d318d99dee2d19318408e6eda51e7e5da38b"
+                "sha256:a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3"
             ],
             "version": "==2.19"
         },
@@ -354,11 +353,11 @@
         },
         "twilio": {
             "hashes": [
-                "sha256:61bd7d266ee589f5363666f6395709adb8287e90315219b7f7a34c3ececeb473",
-                "sha256:6ce4d5ea09695b621f65cb9c8cc4b6d1b5593507a4ee76de6e3347328c266a1b"
+                "sha256:bdb505eee11454f9a2900984c57d4d7f4d39d4e660d0f40a58e1f4483ca9d7de",
+                "sha256:ff2efdbfe3b0eaf3f4665b6a2cdefd46ae1d23e5400f44749d3b5ffbfa803fc2"
             ],
             "index": "pypi",
-            "version": "==6.24.1"
+            "version": "==6.25.0"
         },
         "unidecode": {
             "hashes": [
