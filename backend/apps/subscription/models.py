@@ -191,6 +191,8 @@ class SubscriptionMember(models.Model):
     date_modified = models.DateTimeField(editable=False)
     #Date that the subscription was created
     date_canceled = models.DateTimeField(editable=False, null=True, blank=True)
+    #The stripe subscription item id
+    stripe_subscription_item_id = models.CharField(max_length=32, null=True)
     
     def get_existing_subscription_items(self):
         subscriptionItems = []
@@ -198,8 +200,20 @@ class SubscriptionMember(models.Model):
         for subscriptionItem in subscriptions['items']['data']:
             subscriptionItems.append(subscriptionItem.id)
         return subscriptionItems
+        
+    def get_subscription(self):
+        return self.user.stripe_customer.get_stripe_subscription()
+        
+    def set_stripe_subscription_item_id(self, subscriptions=None):
+        if subscription == None:
+            subscriptions = self.get_subscription()
+        planID = self.subscription_account.price_plan.stripe_plan
+        itemID = None
+        for subscriptionItem in subscriptions['items']['data']:
+            if subscriptionItem['plan'].id == planID:
+                itemID = subscriptionItem.id
+        self.stripe_subscription_item_id = itemID
             
-    
     def add_to_stripe_subscription(self):
         subscription = self.user.stripe_customer.stripe_subscription_id
         planID = self.subscription_account.price_plan.stripe_plan
@@ -217,7 +231,14 @@ class SubscriptionMember(models.Model):
             items=updatedItems, 
             billing_cycle_anchor='unchanged'
         )
-    
+        self.set_stripe_subscription_item_id(subscriptions=updated)
+        
+    def cancel_stripe_subscription(self):
+        subscriptionID = self.stripe_subscription_item_id
+        if subscriptionID == None:
+            raise ValueError("Stripe subscription item id is not set!")
+        si = stripe.SubscriptionItem.retrieve(subscriptionID)
+        si.delete()
     
     def save(self, *args, **kwargs):
         ''' 
@@ -231,4 +252,3 @@ class SubscriptionMember(models.Model):
     
     class Meta:
         db_table = "Subscriptions"
-        
