@@ -1,9 +1,13 @@
 from django.db import models
 from core.models import User
+from django.conf import settings
 from django.utils import timezone
 from django_enumfield import enum
 from encrypted_model_fields.fields import EncryptedCharField
+from backend.utility import *
 
+import stripe
+stripe.api_key = settings.STRIPE_ACCOUNT_SID
 
 # Frequency of subscription billing
 class ServiceType(enum.Enum):
@@ -138,13 +142,14 @@ class SubscriptionAccount(models.Model):
 
 # Status for the subscription account
 class MembershipStatus(enum.Enum):
-    TERMINATED = 0 # If we cancel their membership
+    PAYMENT_FAILED = 0 # If their payment has failed
     KICKED = 1 # If the responsible user cancels their membership
     CANCELED = 2 # If they cancel their membership
-    PENDING_UPDATING = 3 # If the account needs to be processed
-    PENDING_INVITED = 4 # If the account needs to be processed
-    PENDING_CREATED = 5 # If the responsible user sent an invite
-    ACTIVE = 6 # If the user has an active subscription membership
+    PENDING = 3 # General Pending State
+    PENDING_INVITED = 4 # If the responsible user sent an invite
+    PENDING_CREATED = 5 # If the account needs to be processed
+    PENDING_UPDATING = 6 # If the account is being updated
+    ACTIVE = 7 # If the user has an active subscription membership
     
     def validate(self, status):
         if(status >= self.PENDING_CREATED):
@@ -157,13 +162,14 @@ class SubscriptionMember(models.Model):
     #The subscription account of which this is a member.
     subscription_account = models.ForeignKey(SubscriptionAccount, on_delete=models.CASCADE, related_name="subscribers")
     #The status of the user subscription 
-    status_membership = enum.EnumField(MembershipStatus, default=MembershipStatus.PENDING_UPDATING)
+    status_membership = enum.EnumField(MembershipStatus, default=MembershipStatus.PENDING)
     #Date that the subscription was created
     date_created = models.DateTimeField(editable=False)
     #Date that the subscription was modified
     date_modified = models.DateTimeField(editable=False)
     #Date that the subscription was created
     date_canceled = models.DateTimeField(editable=False, null=True, blank=True)
+    
     
     def save(self, *args, **kwargs):
         ''' 
