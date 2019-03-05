@@ -32,7 +32,7 @@ def get_first_day_next_month_epoch():
     
 def get_last_day_of_month_epoch():
     lastDay = get_last_day(today())
-    return get_epoch(lastDay)
+    return get_last_day_epoch(lastDay)
     
 def get_first_day_of_next_month():
     return get_last_day(today()) + timedelta(days=1)

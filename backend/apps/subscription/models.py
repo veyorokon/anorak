@@ -38,9 +38,18 @@ class SubscriptionService(models.Model):
     date_modified = models.DateTimeField(editable=False)
     #If this service is currently available for subscribers
     is_available = models.BooleanField(default=False)
+    #The stripe product for this service
+    stripe_product = models.CharField(max_length=32)
     
     class Meta:
         db_table = "Subscription_Services"
+        
+    def create_stripe_product(self):
+        product = stripe.Product.create(
+            name=self.name,
+            type='service',
+        )
+        self.stripe_product = product.id
     
     def save(self, *args, **kwargs):
         ''' 
@@ -48,6 +57,7 @@ class SubscriptionService(models.Model):
         '''
         if not self.id:
             self.date_created = timezone.now()
+            self.create_stripe_product()
         self.date_modified = timezone.now()
         return super(SubscriptionService, self).save(*args, **kwargs)
         
@@ -77,11 +87,22 @@ class SubscriptionPricingPlan(models.Model):
     billing_frequency = enum.EnumField(PlanBillingFrequency, default=PlanBillingFrequency.MONTH)
     #Maximum size for the service
     maximum_size = models.IntegerField(default=None, null=True, blank=True)
+    #The stripe product for this service
+    stripe_plan = models.CharField(max_length=32)
     
     class Meta:
         db_table = "Subscription_Pricing_Plans"
         unique_together = ('service', 'amount','maximum_size')
         ordering = ['maximum_size']
+        
+    def create_stripe_plan(self):
+        plan = stripe.Plan.create(
+            amount = int(self.amount*100),
+            product = self.service.stripe_product,
+            interval="month",
+            currency="usd",
+        )
+        self.stripe_plan = plan.id
     
     def save(self, *args, **kwargs):
         ''' 
@@ -89,6 +110,7 @@ class SubscriptionPricingPlan(models.Model):
         '''
         if not self.id:
             self.date_created = timezone.now()
+            self.create_stripe_plan()
         self.date_modified = timezone.now()
         return super(SubscriptionPricingPlan, self).save(*args, **kwargs)
         
@@ -170,6 +192,32 @@ class SubscriptionMember(models.Model):
     #Date that the subscription was created
     date_canceled = models.DateTimeField(editable=False, null=True, blank=True)
     
+    def get_existing_subscription_items(self):
+        subscriptionItems = []
+        subscriptions = self.user.stripe_customer.get_stripe_subscription()
+        for subscriptionItem in subscriptions['items']['data']:
+            subscriptionItems.append(subscriptionItem.id)
+        return subscriptionItems
+            
+    
+    def add_to_stripe_subscription(self):
+        subscription = self.user.stripe_customer.stripe_subscription_id
+        planID = self.subscription_account.price_plan.stripe_plan
+        existingItems = self.get_existing_subscription_items()
+        updatedItems = []
+        newItem = {'plan': planID}
+        for item in existingItems:
+            updatedItems.append({
+                'id':item
+            })
+        updatedItems.append(newItem)
+        
+        updated = stripe.Subscription.modify(
+            subscription, 
+            items=updatedItems, 
+            billing_cycle_anchor='unchanged'
+        )
+    
     
     def save(self, *args, **kwargs):
         ''' 
@@ -177,8 +225,10 @@ class SubscriptionMember(models.Model):
         '''
         if not self.id:
             self.date_created = timezone.now()
+            self.add_to_stripe_subscription()
         self.date_modified = timezone.now()
         return super(SubscriptionMember, self).save(*args, **kwargs)
     
     class Meta:
         db_table = "Subscriptions"
+        

@@ -1,6 +1,5 @@
 from django.db import models
 from core.models import User
-from django.db.models import Q
 from django.conf import settings
 from django.utils import timezone
 from . managers import InvoiceManager
