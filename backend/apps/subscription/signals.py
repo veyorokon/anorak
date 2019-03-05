@@ -1,6 +1,6 @@
 from django.dispatch import receiver
-from django.db.models.signals import post_save
-from subscription.models import SubscriptionMember, SubscriptionAccount, MembershipStatus
+from django.db.models.signals import post_save, pre_delete
+from subscription.models import SubscriptionMember, SubscriptionAccount, MembershipStatus, SubscriptionPricingPlan
 from accounting.models import Invoice, InvoiceItem
 
 #Create member for new account
@@ -24,3 +24,15 @@ def create_invoice_item(sender, instance, created, **kwargs):
             invoice = invoice,
             subscription_member = instance
         )
+
+# Delete the Stripe customer from the model
+@receiver(pre_delete, sender=SubscriptionPricingPlan)
+def delete_stripe_plan(sender, instance=None, **kwargs):
+    instance.delete_stripe_plan()
+
+
+# Delete the Stripe customer from the model
+@receiver(pre_delete, sender=SubscriptionMember)
+def delete_subscription_membership(sender, instance=None, **kwargs):
+    instance.cancel()
+    

@@ -54,16 +54,6 @@ class Invoice(models.Model):
         return stripe.Invoice.retrieve(
             id=self.stripe_invoice
         )
-    
-    def build_invoice(self):
-        memberships = self.user.subscription_memberships.all().filter(
-            status_membership__gte = MembershipStatus.PENDING_CREATED
-        )
-        for membership in memberships:
-            InvoiceItem.objects.get_or_create(
-                invoice =self,
-                subscription_member = membership
-            )
         
     def save(self, *args, **kwargs):
         ''' 

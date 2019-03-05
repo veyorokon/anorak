@@ -38,18 +38,10 @@ class SubscriptionService(models.Model):
     date_modified = models.DateTimeField(editable=False)
     #If this service is currently available for subscribers
     is_available = models.BooleanField(default=False)
-    #The stripe product for this service
-    stripe_product = models.CharField(max_length=32)
     
     class Meta:
         db_table = "Subscription_Services"
         
-    def create_stripe_product(self):
-        product = stripe.Product.create(
-            name=self.name,
-            type='service',
-        )
-        self.stripe_product = product.id
     
     def save(self, *args, **kwargs):
         ''' 
@@ -57,7 +49,6 @@ class SubscriptionService(models.Model):
         '''
         if not self.id:
             self.date_created = timezone.now()
-            self.create_stripe_product()
         self.date_modified = timezone.now()
         return super(SubscriptionService, self).save(*args, **kwargs)
         
@@ -88,21 +79,44 @@ class SubscriptionPricingPlan(models.Model):
     #Maximum size for the service
     maximum_size = models.IntegerField(default=None, null=True, blank=True)
     #The stripe product for this service
-    stripe_plan = models.CharField(max_length=32)
+    stripe_plan = models.CharField(max_length=32, blank=True, editable=False)
     
     class Meta:
         db_table = "Subscription_Pricing_Plans"
         unique_together = ('service', 'amount','maximum_size')
         ordering = ['maximum_size']
         
+    def get_stripe_plan(self):
+        return stripe.Plan.retrieve(self.stripe_plan)
+        
+    def get_stripe_product(self):
+        product = self.get_stripe_plan().product
+        return stripe.Product.retrieve(product)
+        
+    def get_product_name(self):
+        name = self.service.name
+        if self.maximum_size > 1:
+            return name + ' - Family Plan ('+str(self.maximum_size)+' users)'
+        return name + ' - Individual Plan'
+        
     def create_stripe_plan(self):
+        name = self.get_product_name()
         plan = stripe.Plan.create(
             amount = int(self.amount*100),
-            product = self.service.stripe_product,
+            product = {
+                'name': name
+            },
             interval="month",
             currency="usd",
         )
         self.stripe_plan = plan.id
+    
+    def delete_stripe_plan(self):
+        product = self.get_stripe_product()
+        plan = stripe.Plan.retrieve(self.stripe_plan)
+        plan.delete()
+        product.delete()
+        
     
     def save(self, *args, **kwargs):
         ''' 
@@ -151,7 +165,7 @@ class SubscriptionAccount(models.Model):
     
     class Meta:
         db_table = "Subscription_Accounts"
-        
+            
     def save(self, *args, **kwargs):
         ''' 
         On save, update timestamps 
@@ -205,7 +219,7 @@ class SubscriptionMember(models.Model):
         return self.user.stripe_customer.get_stripe_subscription()
         
     def set_stripe_subscription_item_id(self, subscriptions=None):
-        if subscription == None:
+        if subscriptions == None:
             subscriptions = self.get_subscription()
         planID = self.subscription_account.price_plan.stripe_plan
         itemID = None
@@ -233,12 +247,19 @@ class SubscriptionMember(models.Model):
         )
         self.set_stripe_subscription_item_id(subscriptions=updated)
         
-    def cancel_stripe_subscription(self):
+    def _cancel_stripe_subscription(self):
         subscriptionID = self.stripe_subscription_item_id
         if subscriptionID == None:
             raise ValueError("Stripe subscription item id is not set!")
         si = stripe.SubscriptionItem.retrieve(subscriptionID)
         si.delete()
+        
+    def _cancel_membership_status(self):
+        self.status_membership = MembershipStatus.CANCELED
+        
+    def cancel(self):
+        self._cancel_stripe_subscription()
+        self._cancel_membership_status()
     
     def save(self, *args, **kwargs):
         ''' 
