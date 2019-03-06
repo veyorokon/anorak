@@ -1,8 +1,8 @@
 {
-  "name": "material-dashboard-react",
-  "version": "1.5.0",
-  "description": "Material Dashboard React. Coded by Creative Tim",
-  "private": false,
+  "name": "anorak",
+  "version": "0.1.0",
+  "description": "Online subscription manager",
+  "private": true,
   "main": "dist/index.js",
   "dependencies": {
     "@material-ui/core": "3.1.0",
@@ -21,15 +21,15 @@
     "npm-run-all": "4.1.3",
     "numeral": "^2.0.6",
     "perfect-scrollbar": "1.4.0",
-    "react": "^16.5.2",
+    "react": "^16.8.4",
     "react-apollo": "^2.4.1",
     "react-chartist": "0.13.1",
     "react-copy-to-clipboard": "^5.0.1",
-    "react-dom": "16.5.2",
+    "react-dom": "^16.5.2",
     "react-facebook": "^7.0.2",
     "react-google-maps": "9.4.5",
     "react-router-dom": "4.3.1",
-    "react-scripts": "2.1.3",
+    "react-scripts": "^2.1.5",
     "react-scrollable-anchor": "^0.6.1",
     "react-stripe-elements": "^2.0.3",
     "react-swipeable-views": "0.12.17"
@@ -42,22 +42,16 @@
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
     "lint:check": "eslint . --ext=js,jsx;  exit 0",
     "lint:fix": "eslint . --ext=js,jsx --fix;  exit 0",
-    "build-package": "babel src --out-dir dist"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/creativetimofficial/material-dashboard-react.git"
+    "build-package": "babel src --out-dir dist",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "keywords": [],
-  "author": "Creative Tim <hello@creative-tim.com> (https://www.creative-tim.com/)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/creativetimofficial/material-dashboard-react/issues"
-  },
-  "homepage": "https://creativetimofficial.github.io/material-dashboard-react/#/dashboard",
+  "author": "",
+  "license": "",
+  "homepage": "https://squadup.xyz",
   "optionalDependencies": {
     "babel-eslint": "9.0.0",
-    "eslint": "5.6.0",
     "eslint-config-prettier": "3.0.1",
     "eslint-plugin-prettier": "2.6.2",
     "eslint-plugin-react": "7.11.1",

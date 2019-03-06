@@ -3,7 +3,6 @@ import ArrowForward from "@material-ui/icons/ArrowForward";
 import Login from "views/Login/Login.jsx";
 
 const authRoutes = [
-  
   {
     path: "/auth/login",
     sidebarName: "Login",
