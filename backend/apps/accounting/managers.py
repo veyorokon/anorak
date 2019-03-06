@@ -10,7 +10,7 @@ Custom managers for the accounting models
 ##########################################################################
 
 from django.db import models
-from backend.utility import get_first_day, get_last_day, today
+from backend.utility import *
 ##########################################################################
 ## Invoice Manager
 ##########################################################################
@@ -21,9 +21,9 @@ class InvoiceManager(models.Manager):
         """
         Return the Invoice of for this month or will create one.
         """
-        lastDay = get_last_day(today())
+        firstDay = get_first_day_of_next_month()
         query = self.filter(
-            date_for = lastDay,
+            date_for = firstDay,
             user = user
         )
         if query.exists():

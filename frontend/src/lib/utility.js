@@ -79,13 +79,14 @@ export function stringToPosetiveInt(value, defValue = 0) {
 }
 
 export function getMemberStatus(value){
-    if (value === 'A_0') return 'Terminated';
+    if (value === 'A_0') return 'Payment Failed';
     if (value === 'A_1') return 'Kicked';
     if (value === 'A_2') return 'Canceled';
-    if (value === 'A_3') return 'Pending Update';
+    if (value === 'A_3') return 'Pending';
     if (value === 'A_4') return 'Pending Invite';
     if (value === 'A_5') return 'Pending Creation';
-    if (value === 'A_6') return 'Active';
+    if (value === 'A_6') return 'Pending Update';
+    if (value === 'A_7') return 'Active';
 }
 
 export function getMemberColor(value){
@@ -96,6 +97,7 @@ export function getMemberColor(value){
     if (value === 'A_4') return 'warning';
     if (value === 'A_5') return 'warning';
     if (value === 'A_6') return 'success';
+    if (value === 'A_7') return 'success';
 }
 
 export function getAccountStatus(value){

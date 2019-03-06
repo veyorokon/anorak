@@ -6,9 +6,3 @@ class InvoiceType(DjangoObjectType):
     class Meta:
         model = Invoice
         exclude_fields = []
-
-
-class InvoiceItemType(DjangoObjectType):
-    class Meta:
-        model = InvoiceItem
-        exclude_fields = []

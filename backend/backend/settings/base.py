@@ -45,6 +45,7 @@ FIELD_ENCRYPTION_KEY = environ_setting("FIELD_ENCRYPTION_KEY")
 
 STRIPE_ACCOUNT_SID = environ_setting("STRIPE_ACCOUNT_SID")
 STRIPE_ANORAK_PRODUCT = environ_setting("STRIPE_ANORAK_PRODUCT")
+STRIPE_ANORAK_PLAN = environ_setting("STRIPE_ANORAK_PLAN")
 
 # Application definition
 INSTALLED_APPS = [
@@ -67,6 +68,12 @@ INSTALLED_APPS = [
     'graphene_django',
     'django_extensions',
     'encrypted_model_fields',
+    'django_crontab',
+]
+
+#Cron Jobs
+CRONJOBS = [
+    ('*/5 * * * *', 'backend.cron.daily_invoice_update')
 ]
 
 GRAPHENE = {

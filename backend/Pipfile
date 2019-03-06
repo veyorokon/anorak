@@ -23,6 +23,7 @@ django-jet = "*"
 django-feedparser = "*"
 plaid-python = "*"
 django-encrypted-model-fields = "*"
+django-crontab = "*"
 
 [dev-packages]
 

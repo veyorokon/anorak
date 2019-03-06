@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0e5651e71e33f04c5a3fcec8a24e75bca05c62b3bde451d55d1f6f9ca882f78d"
+            "sha256": "4668b1cd7a93ee32184390320d7db80d9f63c543858999498a3ea567d69ce53d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -111,11 +111,18 @@
         },
         "django-cors-headers": {
             "hashes": [
-                "sha256:8f94f96d2cdfa46360c62b892daae42477591997686ebf36c4f1cd9015528d22",
-                "sha256:ff46a244965bddd71070bb71c2f0e27ceae2d73c52db5d4ffa09ecc51d47548e"
+                "sha256:4f39b4af6b3a9aaf54e6711a60ecee1d2c4ed3056395ab6626d7ed17555c8fce",
+                "sha256:a8aeae8b56d9a7a1f57e9096e9e0dc6cfead2ecea4d5c4d51c1fd66024ac390a"
             ],
             "index": "pypi",
-            "version": "==2.4.1"
+            "version": "==2.5.0"
+        },
+        "django-crontab": {
+            "hashes": [
+                "sha256:1201810a212460aaaa48eb6a766738740daf42c1a4f6aafecfb1525036929236"
+            ],
+            "index": "pypi",
+            "version": "==0.7.1"
         },
         "django-encrypted-model-fields": {
             "hashes": [
@@ -288,8 +295,8 @@
         },
         "pycparser": {
             "hashes": [
-                "sha256:a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3",
-                "sha256:bd7708a0aea470c35a01f34541a4d318d99dee2d19318408e6eda51e7e5da38b"
+                "sha256:9eaa6b93f61bb0420efd909fbbbe00a77440a69eee896bdc5f47a9940f568424",
+                "sha256:a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3"
             ],
             "version": "==2.19"
         },
@@ -354,11 +361,11 @@
         },
         "twilio": {
             "hashes": [
-                "sha256:61bd7d266ee589f5363666f6395709adb8287e90315219b7f7a34c3ececeb473",
-                "sha256:6ce4d5ea09695b621f65cb9c8cc4b6d1b5593507a4ee76de6e3347328c266a1b"
+                "sha256:bdb505eee11454f9a2900984c57d4d7f4d39d4e660d0f40a58e1f4483ca9d7de",
+                "sha256:ff2efdbfe3b0eaf3f4665b6a2cdefd46ae1d23e5400f44749d3b5ffbfa803fc2"
             ],
             "index": "pypi",
-            "version": "==6.24.1"
+            "version": "==6.25.0"
         },
         "unidecode": {
             "hashes": [
