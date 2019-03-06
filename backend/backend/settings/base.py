@@ -34,7 +34,12 @@ def environ_setting(name, default=None):
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
-ALLOWED_HOSTS=['SquadUp.xyz', 'www.SquadUp.xyz']
+ALLOWED_HOSTS = [
+    'squadup.xyz', 
+    'www.squadup.xyz', 
+    'www.ianorak.com', 
+    'ianorak.com'
+]
 
 #Facebook
 FACEBOOK_CLIENT_ID = environ_setting('FACEBOOK_CLIENT_ID')
@@ -164,7 +169,9 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_WHITELIST = (
     'squadup.xyz',
-    'www.squadup.xyz'
+    'www.squadup.xyz',
+    'www.ianorak.com', 
+    'ianorak.com'
 )
 
 # Internationalization

@@ -49,13 +49,13 @@ const dashboardRoutes = [
         icon: Person,
         component: UserProfile
       }, 
-      {
-        path: "/dashboard/invoices",
-        sidebarName: "Invoices",
-        navbarName: "Invoices",
-        icon: Receipt,
-        component: InvoiceList
-      }, 
+      // {
+      //   path: "/dashboard/invoices",
+      //   sidebarName: "Invoices",
+      //   navbarName: "Invoices",
+      //   icon: Receipt,
+      //   component: InvoiceList
+      // }, 
     {
       path: "/dashboard/logout",
       sidebarName: "Logout",
