@@ -12,6 +12,7 @@ export function getToken() {
   }
 }
 
+
 export function timeDifference(givenTime) {
   givenTime = new Date(givenTime);
   const milliseconds = new Date().getTime() - givenTime.getTime();
