@@ -36,3 +36,11 @@ def get_last_day_of_month_epoch():
     
 def get_first_day_of_next_month():
     return get_last_day(today()) + timedelta(days=1)
+    
+def calculate_anorak_fee(amount=0.0):
+    if amount==0.0:
+        return 0
+    fee = round((amount * 0.03 + 0.50),2)
+    if fee > 5.00:
+        return 5.00
+    return fee

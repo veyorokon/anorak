@@ -12,7 +12,7 @@ class SubscriptionConfig(AppConfig):
             sender=SubscriptionAccount
         )
         post_save.connect(
-            signals.create_invoice_item,
+            signals.create_invoice,
             sender=SubscriptionMember
         )
         pre_delete.connect(

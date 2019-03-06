@@ -9,7 +9,7 @@ class Query(graphene.ObjectType):
     account_credentials = graphene.Field(SubscriptionAccountLoginType, token = graphene.String(required=True), membershipKey = graphene.Int(required=True), description="Returns the squad secret if the user has an active membership.")
     
     def resolve_subscription_services(self, info, **kwargs):
-        return SubscriptionService.objects.all()
+        return SubscriptionService.objects.all().filter(is_available=True)
         
     @login_required
     def resolve_account_credentials(self, info, token, membershipKey, **kwargs):

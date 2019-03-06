@@ -104,6 +104,10 @@ class StripeCustomer(models.Model):
         )
         return invoice
         
+    def get_stripe_upcoming_invoice(self):
+        invoice = stripe.Invoice.upcoming(customer=self.stripe_customer_id)
+        return invoice
+        
     def delete_customer(self):
         """
         Deletes the customer object in Stripe's database
