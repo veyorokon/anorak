@@ -5,8 +5,8 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { renderToStaticMarkup } from 'react-dom/server';
 import Invoice from "components/material-dashboard/Invoice/Invoice";
 import Card from "components/material-dashboard/Card/Card";
+import {USER_INVOICES} from "lib/queries";
 import { Query } from 'react-apollo';
-import {USER} from "lib/queries";
 import {getToken,calcAnorakFee} from "lib/utility"
 
 const company =
@@ -118,17 +118,26 @@ class InvoiceList extends React.Component {
         return token 
             ? (
               <Query
-                query={USER}
+                query={USER_INVOICES}
                 variables={{ token: token}}
                 fetchPolicy='no-cache'
               >
-              {({ loading, error, data }) => {
-                if (loading) return 'Loading...';
-                if (error) return `Error! ${error.message}`; 
-                  return(
-                      <div>temp</div>
-                  )
-              }}
+                {({ loading, error, data }) => {
+                  if (loading) return 'Loading...';
+                  if (error) return `Error! ${error.message}`; 
+                  if (data.user.invoices[0].items.length > 0){
+                  return (
+                        <InvoiceCard 
+                        invoice={this.invoice(data.user)} 
+                        customer={this.customer(data.user)} 
+                        company={company}
+                        />
+                    )
+                }
+                    return(
+                        <div />
+                    )
+                }}
             </Query>
             )
             :

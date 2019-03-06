@@ -68,6 +68,12 @@ INSTALLED_APPS = [
     'graphene_django',
     'django_extensions',
     'encrypted_model_fields',
+    'django_crontab',
+]
+
+#Cron Jobs
+CRONJOBS = [
+    ('*/5 * * * *', 'backend.cron.daily_invoice_update')
 ]
 
 GRAPHENE = {
