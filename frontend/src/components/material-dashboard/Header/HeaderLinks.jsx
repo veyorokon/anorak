@@ -17,6 +17,7 @@ import Search from "@material-ui/icons/Search";
 // core components
 import CustomInput from "components/material-dashboard/CustomInput/CustomInput.jsx";
 import Button from "components/material-dashboard/CustomButtons/Button.jsx";
+import { Link } from "react-router-dom";
 
 import headerLinksStyle from "assets/jss/material-dashboard-react/components/headerLinksStyle.jsx";
 
@@ -99,12 +100,14 @@ class HeaderLinks extends React.Component {
                 <Paper>
                   <ClickAwayListener onClickAway={this.handleClose}>
                     <MenuList role="menu">
-                      <MenuItem
-                        onClick={this.handleClose}
-                        className={classes.dropdownItem}
-                      >
-                        Visit your user profile to keep your billing information is up to date.
-                      </MenuItem>
+                        <Link to='/dashboard/user' className={classes.navLink}>
+                        <MenuItem
+                          onClick={this.handleClose}
+                          className={classes.dropdownItem}
+                        >
+                          Visit your Account to update your billing information.
+                        </MenuItem>
+                    </Link>
                       
                     </MenuList>
                   </ClickAwayListener>
