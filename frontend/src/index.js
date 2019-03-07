@@ -13,7 +13,7 @@ const hist = createBrowserHistory();
 
 const client = new ApolloClient({
   uri: 'http://localhost:8000/api/graphql/'
-  // uri: 'https://Anorak.xyz/api/graphql/'
+  // uri: 'https://squadup.xyz/api/graphql/'
 });
 
 ReactDOM.render(
