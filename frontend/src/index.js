@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { createBrowserHistory } from "history";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
 
 import "assets/css/material-dashboard-react.css?v=1.5.0";
 
@@ -18,13 +18,13 @@ const client = new ApolloClient({
 
 ReactDOM.render(
     <ApolloProvider client={client}>
-      <BrowserRouter history={hist} basename={process.env.PUBLIC_URL}>
+      <Router history={hist}>
         <Switch>
           {indexRoutes.map((prop, key) => {
             return <Route path={prop.path} component={prop.component} key={key} />;
           })}
         </Switch>
-      </BrowserRouter>
+      </Router>
     </ApolloProvider>,
   document.getElementById("root")
 );

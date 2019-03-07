@@ -33,7 +33,7 @@ function HeaderLinks({ ...props }) {
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>
-          <Link to={process.env.PUBLIC_URL + '/auth/login'} className={classes.navLink}>
+          <Link to='/auth/login' className={classes.navLink}>
             <PowerSettingsNew className={classes.icons} /> Login
           </Link>
       </ListItem>
