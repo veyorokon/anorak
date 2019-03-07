@@ -48,12 +48,13 @@ class Dashboard extends React.Component {
   };
   render() {
     const { classes } = this.props;
-    return window.localStorage.getItem('sessionToken') ? (
+    return getToken() ? (
       <Query
         query={USER}
         variables={{ token: getToken()}}
-        fetchPolicy='no-cache'
+        fetchPolicy='network-only'
       >
+      
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`; //redirect on error

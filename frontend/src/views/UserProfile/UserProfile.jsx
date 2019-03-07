@@ -395,12 +395,13 @@ function UserProfile(props) {
          <Query
            query={USER}
            variables={{ token: window.localStorage.getItem('sessionToken') }}
-           fetchPolicy='no-cache'
+           fetchPolicy='network-only'
          >
            {({ loading, error, data }) => {
              if (loading) return 'Loading...';
              if (error) return `Error! ${error.message}`;
              let memberships = [];
+             console.log(data)
              return (
                  <StripeProvider apiKey={stripeAPIKey}>
                  <UserProfileContent user={data.user} classes={classes}/>
