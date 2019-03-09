@@ -34,6 +34,8 @@ import { withRouter } from 'react-router-dom';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import {USER} from "lib/queries";
+import {mixpanel} from "lib/utility";
+
 
 class Dashboard extends React.Component {
   state = {
@@ -46,6 +48,10 @@ class Dashboard extends React.Component {
   handleChangeIndex = index => {
     this.setState({ value: index });
   };
+  
+  componentDidMount(){
+      mixpanel.track('Dashboard Page Load');
+  }
   render() {
     const { classes } = this.props;
     return getToken() ? (

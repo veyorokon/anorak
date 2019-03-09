@@ -48,7 +48,8 @@ InfoArea.propTypes = {
     "success",
     "info",
     "rose",
-    "gray"
+    "gray",
+    "secondary"
   ]),
   vertical: PropTypes.bool
 };

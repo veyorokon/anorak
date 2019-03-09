@@ -19,6 +19,9 @@ import Card from "components/material-dashboard/Card/Card.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
 import Form from 'components/material-dashboard/Form/Form';
+import {mixpanel} from "lib/utility";
+
+
 
 
 
@@ -30,6 +33,10 @@ class _ManageContent extends React.Component {
             cancelClicked: false,
             submitted: false
         }
+    }
+    
+    componentDidMount(){
+        mixpanel.track('Manage Page Load', { subscription: this.getValue("service").name });
     }
     
     getValue = (key) => {

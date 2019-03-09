@@ -6,6 +6,7 @@ import {
   infoColor,
   roseColor,
   grayColor,
+  secondaryColor,
   title
 } from "assets/jss/material-kit-react.jsx";
 
@@ -40,6 +41,9 @@ const infoStyle = {
   },
   gray: {
     color: grayColor
+  },
+  secondary: {
+    color: secondaryColor
   },
   icon: {
     width: "36px",

@@ -140,5 +140,5 @@ export function getRenewalDate(value){
 const stripeAPIKey = "pk_test_rLuroFoR4XKOxb3FbmJqTqrh";
 
 const mixpanel = require('mixpanel-browser');
-mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
+mixpanel.init('a1c48cab157e61bdb24c9b6756de12b8', { debug: true, verbose: 1 });
 export {mixpanel, stripeAPIKey}
