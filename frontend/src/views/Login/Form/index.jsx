@@ -10,8 +10,8 @@ import { withRouter } from 'react-router';
 import Form from "components/material-dashboard/Form/Form.jsx";
 import formConfig from './form';
 
-const mixpanel = require('mixpanel-browser');
-mixpanel.init('44b6b3d237fc93d6e6e371c900c53c55', { debug: true, verbose: 1 });
+import {mixpanel} from "lib/utility";
+
 
 const styles = theme => ({
   submit: {

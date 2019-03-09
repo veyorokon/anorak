@@ -269,17 +269,27 @@ server {
         proxy_pass http://unix:/run/gunicorn.sock;
     }
 
-
     location / {
 	#proxy_set_header   X-Forwarded-For $remote_addr;
         proxy_set_header   Host $host;
         #include proxy_params;
 	proxy_set_header Upgrade $http_upgrade;
-	alias /home/squadup0/server/frontend/build;
-	proxy_pass http://127.0.0.1:3000;
+	#alias /home/squadup0/server/frontend/build;
+	proxy_pass http://127.0.0.1:5000;
 	proxy_set_header Connection "upgrade";
+	index index.html;
+    autoindex on;
+    set $fallback_file /index.html;
+    if ($http_accept !~ text/html) {
+        set $fallback_file /null;
+    }
+    if ($uri ~ /$) {
+        set $fallback_file /null;
+    }
+    try_files $uri $fallback_file;
     }
 }
+
 ```
 
 After this point, you can configure HTTPS using certbot.

@@ -13,6 +13,9 @@ import Button from "components/material-dashboard/CustomButtons/Button.jsx";
 import Card from "components/material-dashboard/Card/Card.jsx";
 import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
+import {mixpanel} from "lib/utility";
+
+mixpanel.track('User Logout');
 
 const styles = {
   cardCategoryWhite: {
@@ -80,6 +83,7 @@ const styles = {
     textAlign: "center"
   }
 };
+
 
 function Logout(props) {
   const { classes } = props;

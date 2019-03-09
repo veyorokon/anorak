@@ -19,11 +19,16 @@ import ScrollableAnchor from 'react-scrollable-anchor'
 import landingPageStyle from "assets/jss/material-kit-react/views/landingPage.jsx";
 
 // Sections for this page
+import HowToSection from "./Sections/HowToSection.jsx";
 import ProductSection from "./Sections/ProductSection.jsx";
 import CallToAction from "./Sections/CallToAction.jsx";
 
+import {mixpanel} from "lib/utility";
 
 class LandingPage extends React.Component {
+componentDidMount(){
+    mixpanel.track('Landing Page Load');
+}
   render() {
     const { classes, ...rest } = this.props;
     return (
@@ -63,6 +68,7 @@ class LandingPage extends React.Component {
         <div className={classNames(classes.main, classes.mainRaised)}>
           <div className={classes.container}>
             <ProductSection />
+            <HowToSection />
             <ScrollableAnchor id={'signup'}>
                 <CallToAction />
           </ScrollableAnchor>

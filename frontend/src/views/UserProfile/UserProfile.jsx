@@ -20,6 +20,8 @@ import {USER} from "lib/queries";
 import { SET_STRIPE_CARD, UPDATE_USER } from "lib/mutations";
 import Form from 'components/material-dashboard/Form/Form';
 import withSnackbar from 'components/material-dashboard/Form/withSnackbar';
+import {mixpanel} from "lib/utility";
+
 
 const styles = {
   cardCategoryWhite: {
@@ -65,6 +67,11 @@ class _CardForm extends React.Component {
             submitted: false
         }
     }
+    
+    componentDidMount(){
+        mixpanel.track('Account Page Load');
+    }
+    
     onSubmit = async (setStripeCard, values) => {
      var firstName = this.props.addressVal('firstNameOnCard');
      var lastName = this.props.addressVal('lastNameOnCard');
@@ -85,6 +92,7 @@ class _CardForm extends React.Component {
     });      
       // Add mixpanel here
       this.setState({submitted:true})
+      mixpanel.track('Account Billing Update');
       this.props.triggerSnackbar('Your billing information was updated.');
  };
 

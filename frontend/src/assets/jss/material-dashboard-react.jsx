@@ -54,6 +54,7 @@ const defaultFont = {
 };
 
 const primaryColor = "#9c27b0";
+const secondaryColor = "#313131";
 const warningColor = "#ff9800";
 const dangerColor = "#f44336";
 const successColor = "#4caf50";
@@ -184,6 +185,7 @@ export {
   warningColor,
   dangerColor,
   successColor,
+  secondaryColor,
   infoColor,
   roseColor,
   grayColor,

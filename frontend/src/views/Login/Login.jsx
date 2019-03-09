@@ -7,6 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import FacebookButton from  "components/material-dashboard/FacebookButton/FacebookButton.jsx";
 import LoginForm from './Form';
 import Header from './Header';
+import {mixpanel} from "lib/utility";
+
+mixpanel.track('Login Page Load');
 
 const styles = theme => {
   const layoutWidth = 400;

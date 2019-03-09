@@ -39,6 +39,8 @@ import {USER, SUBSCRIPTION_SERVICES} from "lib/queries";
 import {CREATE_SUBSCRIPTION_ACCOUNT} from "lib/mutations";
 import withSnackbar from 'components/material-dashboard/Form/withSnackbar';
 
+import {mixpanel} from "lib/utility";
+
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -74,6 +76,10 @@ constructor(props){
         services: this.props.services,
         submitted: false
     }
+}
+
+componentDidMount(){
+    mixpanel.track('Connect Subscription Page Load');
 }
 
 setExistingStatus = (val) =>{
@@ -403,8 +409,10 @@ onSubmit = async (createSubscriptionAccount, values) => {
   try{
       await createSubscriptionAccount({ variables });
       this.props.triggerSnackbar('Subscribed! A new subscription was added to your dashboard.');
+      mixpanel.track('Connect Attempt Successful', {service: this.getServiceName()});
   }catch{
       this.props.triggerSnackbar('Sorry, an additional subscription account could not be created.');
+      mixpanel.track('Connect Attempt Unsuccessful', {service: this.getServiceName()});
   }
   
 
