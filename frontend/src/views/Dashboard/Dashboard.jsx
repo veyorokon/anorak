@@ -87,7 +87,7 @@ class Dashboard extends React.Component {
           </CardBody>
           <CardFooter chart>
             <div className={classes.stats}>
-              You have no new notifications.
+              Visit your profile to keep your billing up to date.
             </div>
           </CardFooter>
         </Card>

@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 djangorestframework = "==3.8.2"
 pytz = "==2018.5"
-"psycopg2" = "==2.7.3.2"
 stripe = "*"
 twilio = "*"
 django-enumfield = "*"
@@ -24,6 +23,10 @@ django-feedparser = "*"
 plaid-python = "*"
 django-encrypted-model-fields = "*"
 django-crontab = "*"
+django-celery-results = "*"
+redis = "*"
+django-redis = "*"
+psycopg2 = "*"
 
 [dev-packages]
 

@@ -97,7 +97,7 @@ export function getMemberColor(value){
     if (value === 'A_3') return 'warning';
     if (value === 'A_4') return 'warning';
     if (value === 'A_5') return 'warning';
-    if (value === 'A_6') return 'success';
+    if (value === 'A_6') return 'warning';
     if (value === 'A_7') return 'success';
 }
 

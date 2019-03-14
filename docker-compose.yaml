@@ -29,8 +29,70 @@ services:
         - "DB_HOST=database"
         - "DB_PORT=5432"
 
+
   database:
     restart: 'no'
     image: postgres
     ports:
       - "9432:5432"
+      
+      
+  redis:
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./redis:/usr/local/etc/redis
+    build: ./redis
+    privileged: true
+    command: bash -c "echo never > /sys/kernel/mm/transparent_hugepage/enabled && redis-server /usr/local/etc/redis/redis.conf --protected-mode no"
+    expose:
+      - '6379'
+      
+      
+  worker_celery:
+    restart: always
+    build: ./backend
+    command: bash -c "celery -A backend worker"
+    volumes:
+      - ./backend:/home/production/backend
+    depends_on:
+      - redis
+      - database
+    environment:
+        - "DJANGO_SETTINGS_MODULE=backend.settings.development"
+        - "FACEBOOK_CLIENT_ID=1974089579550206"
+        - "FACEBOOK_CLIENT_SECRET=8117c08eed5c3ec4fe3142ee9d704dc1"
+        - "SECRET_KEY=v(m)6f0+s3d$o4lk$lli&un$e1a@bu3oww^9=s=ms)+@df23*r"
+        - "FIELD_ENCRYPTION_KEY=g2z7GI3SaOnTNDCEZhy_46NWSzyUatriWt_ecPTjHNo="
+        - "STRIPE_ACCOUNT_SID=sk_test_9Xz79VxZxWJbanvxDAWLYmoN"
+        - "STRIPE_ANORAK_PRODUCT=prod_Ee5FnamhVM8dJe"
+        - "STRIPE_ANORAK_PLAN=plan_Ee5F1SihyP8Vm9"
+        - "DB_NAME=postgres"
+        - "DB_USER=postgres"
+        - "DB_HOST=database"
+        - "DB_PORT=5432"
+
+
+  worker_beat:
+    restart: always
+    build: ./backend
+    command: bash -c "rm -f -- celerybeat.pid && celery -A backend beat"
+    volumes:
+      - ./backend:/home/production/backend
+    depends_on:
+        - redis
+        - database
+    environment:
+        - "DJANGO_SETTINGS_MODULE=backend.settings.development"
+        - "FACEBOOK_CLIENT_ID=1974089579550206"
+        - "FACEBOOK_CLIENT_SECRET=8117c08eed5c3ec4fe3142ee9d704dc1"
+        - "SECRET_KEY=v(m)6f0+s3d$o4lk$lli&un$e1a@bu3oww^9=s=ms)+@df23*r"
+        - "FIELD_ENCRYPTION_KEY=g2z7GI3SaOnTNDCEZhy_46NWSzyUatriWt_ecPTjHNo="
+        - "STRIPE_ACCOUNT_SID=sk_test_9Xz79VxZxWJbanvxDAWLYmoN"
+        - "STRIPE_ANORAK_PRODUCT=prod_Ee5FnamhVM8dJe"
+        - "STRIPE_ANORAK_PLAN=plan_Ee5F1SihyP8Vm9"
+        - "DB_NAME=postgres"
+        - "DB_USER=postgres"
+        - "DB_HOST=database"
+        - "DB_PORT=5432"

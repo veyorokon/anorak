@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import sys
+from celery.schedules import crontab
+
 ##########################################################################
 ## Helper function for environmental settings
 ##########################################################################
@@ -73,13 +75,35 @@ INSTALLED_APPS = [
     'graphene_django',
     'django_extensions',
     'encrypted_model_fields',
-    'django_crontab',
+    'django_celery_results',
+    'django_redis'
 ]
 
-#Cron Jobs
-CRONJOBS = [
-    ('*/5 * * * *', 'backend.cron.daily_invoice_update')
-]
+####            Cache settings
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+    }
+}
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
+# Other Celery settings
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_BEAT_SCHEDULE = {
+    'task-number-one': {
+        'task': 'accounting.tasks.sync_stripe_invoices',
+        'schedule': 10.0,
+    },
+}
 
 GRAPHENE = {
     'SCHEMA': 'backend.schema.schema',
@@ -179,7 +203,7 @@ CORS_ORIGIN_WHITELIST = (
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'US/Pacific'
+TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_L10N = True

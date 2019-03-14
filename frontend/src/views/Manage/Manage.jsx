@@ -73,9 +73,7 @@ class _ManageContent extends React.Component {
                     tabIcon: AddBox,
                     marginedTab: true,
                     tabContent: (
-                        <div><h5>
-                          <small>The sharing feature is not yet available</small>
-                        </h5>
+                        <div>
                         <Card>
                             <div className={classes.container}>
                               <div id="navigation-pills">
@@ -135,7 +133,6 @@ class _ManageContent extends React.Component {
                   tabButton: "Sharing",
                   tabIcon: AddBox,
                   marginedTab: true,
-                  disabled:true,
                   tabContent: (
                       <Card>
                           <div className={classes.container}>

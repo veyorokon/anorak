@@ -34,6 +34,10 @@ class Invoice(models.Model):
     date_modified = models.DateTimeField(editable=False)
     #Stripe invoice object
     stripe_invoice = models.CharField(max_length=64, null=True, blank=True, unique=True, editable=False)
+    #Stripe invoice number
+    stripe_invoice_number = models.CharField(max_length=64, null=True, blank=True, unique=True, editable=False)
+    #Stripe invoice object
+    stripe_invoice_finalized_at = models.IntegerField(null=True, blank=True, unique=True, editable=False)
     #Stripe invoice object
     stripe_invoice_fee_id = models.CharField(max_length=64, null=True, blank=True, unique=True, editable=False)
     
@@ -47,14 +51,20 @@ class Invoice(models.Model):
         
     def set_date_for_from_today(self):
         self.date_for = get_first_day_of_next_month()
-    
-    def set_stripe_invoice(self):
-        customer = self.user.stripe_customer
-        self.stripe_invoice = customer.get_stripe_latest_invoice().id
         
-    def _update_stripe_invoice_fee(self):
+    def get_upcoming_invoice(self):
         customer = self.user.stripe_customer
-        invoice = customer.get_stripe_upcoming_invoice()
+        return customer.get_stripe_upcoming_invoice() 
+        
+    def is_matching_invoice(self, invoice):
+        '''
+        Checks if the invoice passed is the current invoice
+        '''
+        if invoice.number == self.stripe_invoice_number:
+            return True
+        return False
+        
+    def _update_stripe_invoice_fee(self, invoice):
         previousFee = stripe.InvoiceItem.retrieve(self.stripe_invoice_fee_id)
         prviousFeeAmount = previousFee.amount
         total = float((invoice.subtotal-prviousFeeAmount)/100)
@@ -64,11 +74,10 @@ class Invoice(models.Model):
           amount = int(fee*100)
         )
                 
-    def _set_stripe_invoice_fee(self):
-        customer = self.user.stripe_customer
-        invoice = customer.get_stripe_upcoming_invoice()
+    def _set_stripe_invoice_fee(self, invoice):
         total = float(invoice.subtotal/100)
         fee = calculate_anorak_fee(total) #imported from utility
+        customer = self.user.stripe_customer
         item = stripe.InvoiceItem.create(
             customer=customer.stripe_customer_id, 
             amount=int(fee*100), 
@@ -76,27 +85,51 @@ class Invoice(models.Model):
             description="Anorak Management Fee"
         )
         self.stripe_invoice_fee_id = item.id
+    
+    def finalize_invoice(self, invoice):
+        finalized = invoice.status_transitions.finalized_at
+        invoiceId = invoice.id
+        self.stripe_invoice_finalized_at = finalized
+        self.stripe_invoice = invoice.invoiceId
         
-    def update_stripe_invoice(self):
-        if self.stripe_invoice_fee_id:
-            self._update_stripe_invoice_fee()
+    def sync_with_upcoming_stripe_invoice(self):
+        upcomingInvoice = self.get_upcoming_invoice()
+        if self.is_matching_invoice(upcomingInvoice):
+            if self.stripe_invoice_fee_id:
+                self._update_stripe_invoice_fee(upcomingInvoice)
+            else:
+                self._set_stripe_invoice_fee(upcomingInvoice)
+            return False
         else:
-            self._set_stripe_invoice_fee()
+            customer = self.user.stripe_customer
+            currentInvoice = customer.get_stripe_latest_invoice()
+            self.finalize_invoice(currentInvoice)
+            return True
+            
+    def initialize_invoice(self, upcomingInvoice=None):
+        if not upcomingInvoice:
+            customer = self.user.stripe_customer
+            upcomingInvoice = customer.get_stripe_upcoming_invoice()
+        # print(upcomingInvoice)
+        self.stripe_invoice_number = upcomingInvoice.number
+        self.set_date_for_from_today()
         
     def get_stripe_invoice(self):
-        return stripe.Invoice.retrieve(
-            id=self.stripe_invoice
-        )
+        if self.stripe_invoice:
+            return stripe.Invoice.retrieve(
+                id=self.stripe_invoice
+            )
+        return None
         
+    
     def save(self, *args, **kwargs):
         ''' 
         On save, update timestamps 
         '''
         if not self.id:
             self.date_created = timezone.now()
-            self.set_date_for_from_today()
-            # self.set_stripe_invoice()
-        self.update_stripe_invoice()
+            self.initialize_invoice()
+        self.sync_with_upcoming_stripe_invoice()
         self.date_modified = timezone.now()
         return super(Invoice, self).save(*args, **kwargs)
         

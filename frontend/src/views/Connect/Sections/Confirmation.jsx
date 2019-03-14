@@ -67,12 +67,14 @@ function Confirmation(props) {
                     }}
                     inputProps={{
                       disabled: true,
-                      value:'veyorokon@gmail.com'
+                      value:'Your Email'
                     }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={6} md={3}>
                   <CustomInput
+                    password
+                    type="password"
                     labelText="Password"
                     id="password"
                     formControlProps={{

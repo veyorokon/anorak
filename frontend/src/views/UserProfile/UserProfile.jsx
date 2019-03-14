@@ -227,7 +227,7 @@ class _UserProfileContent extends React.Component {
                       text = "Success"
                   }
                   return(
-                      <GridItem xs={12} sm={12} md={12}>
+          <GridItem xs={12} sm={12} md={12}>
               <Card>
                 <CardHeader color="info">
                   <h4 className={classes.cardTitleWhite}>User Profile</h4>
@@ -293,7 +293,6 @@ class _UserProfileContent extends React.Component {
                   <h4 className={classes.cardTitleWhite}>Billing</h4>
                 </CardHeader>
                 <CardBody>
-                  <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
                     <CustomInput
                       labelText="Name On Card"
@@ -375,7 +374,6 @@ class _UserProfileContent extends React.Component {
                       />
                     </GridItem>
                     
-                  </GridContainer>
                 </CardBody>
                 <CardFooter>
                 <GridItem xs={12} sm={12} md={12}>
