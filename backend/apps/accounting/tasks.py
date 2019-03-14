@@ -4,13 +4,6 @@ from celery import task
 from . models import Invoice
 from core.models import User
 
-@task
-def test():
-    #print("HERE IS THE OUTPUT:")
-    #print(Invoice.objects.first().date_for)
-    #return "123"
-    pass
-    
 
 @task
 def sync_stripe_invoices():
