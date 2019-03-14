@@ -36,6 +36,16 @@ DATABASES = {
     }
 }
 
+####            Cache settings
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": environ_setting("REDIS_URL")+"/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
 
 GRAPHQL_JWT['JWT_VERIFY_EXPIRATION'] = False
 

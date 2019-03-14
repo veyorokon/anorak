@@ -79,16 +79,6 @@ INSTALLED_APPS = [
     'django_redis'
 ]
 
-####            Cache settings
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": environ_setting("REDIS_URL")+"/1",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
-        },
-    }
-}
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 # Other Celery settings
