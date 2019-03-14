@@ -83,7 +83,7 @@ INSTALLED_APPS = [
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://redis:6379/1",
+        "LOCATION": environ_setting("REDIS_URL")+"/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient"
         },
@@ -92,8 +92,8 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 # Other Celery settings
-CELERY_BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_BROKER_URL = environ_setting("REDIS_URL")
+CELERY_RESULT_BACKEND = environ_setting("REDIS_URL")
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
