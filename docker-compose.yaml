@@ -28,7 +28,9 @@ services:
         - "DB_USER=postgres"
         - "DB_HOST=database"
         - "DB_PORT=5432"
-        - "REDIS_URL=redis://redis:6379"
+        - "REDIS_PASSWORD=hme9PTDJHZFEkQyal0lx8AE0Hq366HxigpEEQ5"
+        - "REDIS_HOST=redis"
+        - "REDIS_PORT=6379"
 
 
   database:
@@ -73,7 +75,9 @@ services:
         - "DB_USER=postgres"
         - "DB_HOST=database"
         - "DB_PORT=5432"
-        - "REDIS_URL=redis://redis:6379"
+        - "REDIS_PASSWORD=hme9PTDJHZFEkQyal0lx8AE0Hq366HxigpEEQ5"
+        - "REDIS_HOST=redis"
+        - "REDIS_PORT=6379"
 
 
   worker_beat:
@@ -98,4 +102,6 @@ services:
         - "DB_USER=postgres"
         - "DB_HOST=database"
         - "DB_PORT=5432"
-        - "REDIS_URL=redis://redis:6379"
+        - "REDIS_PASSWORD=hme9PTDJHZFEkQyal0lx8AE0Hq366HxigpEEQ5"
+        - "REDIS_HOST=redis"
+        - "REDIS_PORT=6379"

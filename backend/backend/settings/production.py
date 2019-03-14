@@ -28,10 +28,11 @@ DATABASES = {
         'NAME': environ_setting('DB_NAME'),
         'USER':  environ_setting('DB_USER'),
         'HOST':  environ_setting('DB_HOST'),
-	'PASSWORD': environ_setting('DB_PASS'),
+	    'PASSWORD': environ_setting('DB_PASS'),
         'PORT':  environ_setting('DB_PORT')
     }
 }
+
 
 GRAPHQL_JWT['JWT_VERIFY_EXPIRATION'] = False
 
