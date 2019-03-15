@@ -17,7 +17,7 @@ const company =
             'Mountain View, CA 94041',
           ],
           email: 'support@ianorak.com',
-          logoUrl: 'https://www.shakeshack.com/wp-content/themes/shakeshack/images/shakeshack_logo.png',
+          logoUrl: '',
       };
 
 function _InvoiceCard(props) {

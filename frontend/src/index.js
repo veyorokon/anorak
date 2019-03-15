@@ -12,13 +12,12 @@ import { ApolloProvider } from 'react-apollo';
 const hist = createBrowserHistory();
 
 const client = new ApolloClient({
-  uri: 'http://localhost:8000/api/graphql/'
-  // uri: 'https://squadup.xyz/api/graphql/'
+  uri: 'https://squadup.xyz/api/graphql/'
 });
 
 ReactDOM.render(
     <ApolloProvider client={client}>
-      <BrowserRouter history={hist}>
+      <BrowserRouter>
         <Switch>
           {indexRoutes.map((prop, key) => {
             return <Route path={prop.path} component={prop.component} key={key} />;

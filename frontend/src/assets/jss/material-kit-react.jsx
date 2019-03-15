@@ -4,9 +4,8 @@
  * Material Kit React - v1.4.0 based on Material Kit - v2.0.2
  =========================================================
 
- * Product Page: https://www.creative-tim.com/product/material-kit-react
- * Copyright 2018 Creative Tim (https://www.creative-tim.com)
- * Licensed under MIT (https://github.com/creativetimofficial/material-kit-react/blob/master/LICENSE.md)
+ * Copyright 2018 Creative Tim 
+ * Licensed under MIT ()
 
  =========================================================
 
