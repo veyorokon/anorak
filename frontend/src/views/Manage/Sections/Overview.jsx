@@ -12,7 +12,7 @@ import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
 import CardAvatar from "components/material-dashboard/Card/CardAvatar.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
-import {formatDateTime, getRenewalDate, getAccountStatus, calcAnorakFee} from "lib/utility";
+import {formatDateTime, getRenewalDate, getAccountStatus, calcAnorakFee} from "lib/utility.jsx";
 import avatar from "assets/img/faces/marc.jpg";
 
 const styles = {

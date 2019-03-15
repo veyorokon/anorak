@@ -13,14 +13,14 @@ import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
 import { Elements, StripeProvider } from 'react-stripe-elements';
 import { CardElement, injectStripe } from 'react-stripe-elements';
-import {stripeAPIKey, getToken} from "lib/utility";
+import {stripeAPIKey, getToken} from "lib/utility.jsx";
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 import {USER} from "lib/queries";
 import { SET_STRIPE_CARD, UPDATE_USER } from "lib/mutations";
 import Form from 'components/material-dashboard/Form/Form';
 import withSnackbar from 'components/material-dashboard/Form/withSnackbar';
-import {mixpanel} from "lib/utility";
+import {mixpanel} from "lib/utility.jsx";
 
 
 const styles = {

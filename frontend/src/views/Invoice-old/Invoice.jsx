@@ -7,7 +7,7 @@ import Invoice from "components/material-dashboard/Invoice/Invoice";
 import Card from "components/material-dashboard/Card/Card";
 import {USER_INVOICES} from "lib/queries";
 import { Query } from 'react-apollo';
-import {getToken,calcAnorakFee} from "lib/utility"
+import {getToken,calcAnorakFee} from "lib/utility.jsx"
 
 const company =
         {

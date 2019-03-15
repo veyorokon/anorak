@@ -10,7 +10,7 @@ import { withRouter } from 'react-router';
 import Form from "components/material-dashboard/Form/Form.jsx";
 import formConfig from './form';
 
-import {mixpanel} from "lib/utility";
+import {mixpanel} from "lib/utility.jsx";
 
 
 const styles = theme => ({

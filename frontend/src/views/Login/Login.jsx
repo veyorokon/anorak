@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import FacebookButton from  "components/material-dashboard/FacebookButton/FacebookButton.jsx";
 import LoginForm from './Form';
 import Header from './Header';
-import {mixpanel} from "lib/utility";
+import {mixpanel} from "lib/utility.jsx";
 
 mixpanel.track('Login Page Load');
 

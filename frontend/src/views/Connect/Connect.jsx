@@ -31,7 +31,7 @@ import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/p
 import { Mutation } from 'react-apollo';
 import { Query } from 'react-apollo';
 
-import { getToken } from "lib/utility";
+import { getToken } from "lib/utility.jsx";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Confirmation from "./Sections/Confirmation.jsx";
 
@@ -39,7 +39,7 @@ import {USER, SUBSCRIPTION_SERVICES} from "lib/queries";
 import {CREATE_SUBSCRIPTION_ACCOUNT} from "lib/mutations";
 import withSnackbar from 'components/material-dashboard/Form/withSnackbar';
 
-import {mixpanel} from "lib/utility";
+import {mixpanel} from "lib/utility.jsx";
 
 const styles = {
   cardCategoryWhite: {
