@@ -137,8 +137,8 @@ export function getRenewalDate(value){
     return output;
 }
 
-const stripeAPIKey = "pk_live_8tYimrx0lEM0zJ2tVyQwwyZM";
+const stripeAPIKey = "pk_test_rLuroFoR4XKOxb3FbmJqTqrh";
 
 const mixpanel = require('mixpanel-browser');
-mixpanel.init('a6a2c6430be4e938506b27286e8a00a0', { debug: true, verbose: 1 });
+mixpanel.init('a1c48cab157e61bdb24c9b6756de12b8', { debug: true, verbose: 1 });
 export {mixpanel, stripeAPIKey}

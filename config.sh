@@ -4,8 +4,7 @@ export PRODUCTION_MIXPANEL='a6a2c6430be4e938506b27286e8a00a0'
 export LOCAL_STRIPE='pk_test_rLuroFoR4XKOxb3FbmJqTqrh'
 export PRODUCTION_STRIPE='pk_live_8tYimrx0lEM0zJ2tVyQwwyZM'
 export LOCAL_URL='localhost:8000'
-export PRODUCTION_URL='squadup.xyz'
-#!/bin/bash
+export PRODUCTION_URL='ianorak.com'
 
 confLocal ()
 {
