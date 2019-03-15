@@ -66,13 +66,14 @@ class Invoice(models.Model):
         
     def _update_stripe_invoice_fee(self, invoice):
         previousFee = stripe.InvoiceItem.retrieve(self.stripe_invoice_fee_id)
-        prviousFeeAmount = previousFee.amount
-        total = float((invoice.subtotal-prviousFeeAmount)/100)
+        previousFeeAmount = previousFee.amount
+        total = float((invoice.subtotal-previousFeeAmount)/100)
         fee = calculate_anorak_fee(total) #imported from utility
-        stripe.InvoiceItem.modify(
-          self.stripe_invoice_fee_id,
-          amount = int(fee*100)
-        )
+        if previousFeeAmount != fee:
+            stripe.InvoiceItem.modify(
+                self.stripe_invoice_fee_id,
+                amount = int(fee*100)
+            )
                 
     def _set_stripe_invoice_fee(self, invoice):
         total = float(invoice.subtotal/100)

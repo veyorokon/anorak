@@ -105,7 +105,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_BEAT_SCHEDULE = {
     'task-number-one': {
         'task': 'accounting.tasks.sync_stripe_invoices',
-        'schedule': 300.0,
+        'schedule': 10.0,
     },
 }
 

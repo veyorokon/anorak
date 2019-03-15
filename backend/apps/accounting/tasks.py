@@ -12,6 +12,6 @@ def sync_stripe_invoices():
             user = eachUser
         )
         invoice.save()
-        # print(invoice.date_for)
+        print(invoice.date_for)
         
         
