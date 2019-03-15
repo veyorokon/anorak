@@ -13,7 +13,7 @@ confLocal ()
     find ./  -name '*.jsx' -type f -exec sed -i '' -e 's/'$PRODUCTION_STRIPE'/'$LOCAL_STRIPE'/g' {} +
     
     find ./  -name 'index.js' -type f -exec sed -i '' -e 's/'$PRODUCTION_URL'/'$LOCAL_URL'/g' {} +
-    sed -i '' -e 's/https/http/g' frontend/src/index.js
+    sed -i '' -e 's/https:/http:/g' frontend/src/index.js
 }  
 
 confServer ()
@@ -23,7 +23,7 @@ confServer ()
     find ./  -name '*.jsx' -type f -exec sed -i '' -e 's/'$LOCAL_STRIPE'/'$PRODUCTION_STRIPE'/g' {} +
     
     find ./  -name 'index.js' -type f -exec sed -i '' -e 's/'$LOCAL_URL'/'$PRODUCTION_URL'/g' {} +
-    sed -i '' -e 's/http/https/g' frontend/src/index.js
+    sed -i '' -e 's/http:/https:/g' frontend/src/index.js
 }  
 
 if [ $1 = "server" ]; then
