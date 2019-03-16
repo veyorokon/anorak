@@ -11,6 +11,7 @@ ADD . backend/
 WORKDIR /backend
 
 RUN pipenv install --system --deploy
+RUN jupyter notebook --generate-config
 
 EXPOSE 8000
 

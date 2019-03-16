@@ -13,6 +13,7 @@ services:
       - .:/app
     ports:
       - 8000:8000
+      - 8890:8888
     depends_on:
       - database
     environment:
@@ -44,7 +45,7 @@ services:
       
       
   redis:
-    restart: always
+    restart: 'no'
     ports:
       - '6379:6379'
     volumes:
@@ -57,7 +58,7 @@ services:
       
       
   worker_celery:
-    restart: always
+    restart: 'no'
     build: ./backend
     command: bash -c "celery -A backend worker"
     volumes:
@@ -86,7 +87,7 @@ services:
         - "EMAIL_HOST=smtp.sendgrid.net"
 
   worker_beat:
-    restart: always
+    restart: 'no'
     build: ./backend
     command: bash -c "rm -f -- celerybeat.pid && celery -A backend beat"
     volumes:

@@ -27,6 +27,8 @@ django-celery-results = "*"
 redis = "*"
 django-redis = "*"
 psycopg2 = "*"
+django-mail-templated = "*"
+jupyter = "*"
 
 [dev-packages]
 

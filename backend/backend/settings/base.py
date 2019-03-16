@@ -76,7 +76,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'encrypted_model_fields',
     'django_celery_results',
-    'django_redis'
+    'django_redis',
+    'mail_templated'
 ]
 
 ####            Cache settings
@@ -154,7 +155,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates/'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
