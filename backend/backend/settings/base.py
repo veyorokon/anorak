@@ -109,6 +109,13 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
+# GSuite Gmail server
+EMAIL_USE_TLS = True
+EMAIL_HOST = environ_setting("EMAIL_HOST")
+EMAIL_PORT = 587
+EMAIL_HOST_USER = environ_setting("EMAIL_HOST_USER") 
+EMAIL_HOST_PASSWORD = environ_setting("EMAIL_HOST_PASSWORD")
+
 GRAPHENE = {
     'SCHEMA': 'backend.schema.schema',
     'MIDDLEWARE': [
