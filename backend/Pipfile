@@ -26,9 +26,9 @@ django-crontab = "*"
 django-celery-results = "*"
 redis = "*"
 django-redis = "*"
-psycopg2 = "*"
 django-mail-templated = "*"
 jupyter = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
