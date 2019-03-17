@@ -12,7 +12,7 @@ import { ApolloProvider } from 'react-apollo';
 const hist = createBrowserHistory();
 
 const client = new ApolloClient({
-  uri: 'https://ianorak.com/api/graphql/'
+  uri: 'http://localhost:8000/api/graphql/'
 });
 
 ReactDOM.render(

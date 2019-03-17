@@ -186,7 +186,6 @@ class Invoice(models.Model):
               },
             )
         return item
-        
     
     def save(self, *args, **kwargs):
         ''' 

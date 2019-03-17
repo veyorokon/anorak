@@ -11,11 +11,11 @@ def sync_stripe_invoices():
         try:
             lastInvoice = Invoice.objects.get(user=eachUser).order_by('-id')[0]
             finalized = lastInvoice.sync_with_stripe_or_finalize()
+            lastInvoice.save()
             if finalized:
                 invoice = Invoice.objects.get_or_create_this_month(
                     user = eachUser
                 )
-            invoice.save()
         except:
             invoice = Invoice.objects.get_or_create_this_month(
                 user = eachUser
