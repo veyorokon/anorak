@@ -169,7 +169,7 @@ class CallToAction extends React.Component {
                         (
                         <Button color="primary" onClick={()=>this.props.history.push('/dashboard/home')}>Go To Your Dashboard</Button>
                         ):(
-                            <Button color={color} disabled={isSubmitting || this.state.submitted} type="submit">{text}</Button>
+                            <Button color={color} disabled={true || isSubmitting || this.state.submitted} type="submit">{text}</Button>
                         )
                     }
                       </GridItem>

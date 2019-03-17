@@ -28,13 +28,13 @@ import {
 } from "variables/charts.jsx";
 
 import CardModal from "components/material-dashboard/CardModal/CardModal";
-import { getMemberStatus, getMemberColor, getToken } from "lib/utility";
+import { getMemberStatus, getMemberColor, getToken } from "lib/utility.jsx";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 import { withRouter } from 'react-router-dom';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import {USER} from "lib/queries";
-import {mixpanel} from "lib/utility";
+import {mixpanel} from "lib/utility.jsx";
 
 
 class Dashboard extends React.Component {
@@ -87,7 +87,7 @@ class Dashboard extends React.Component {
           </CardBody>
           <CardFooter chart>
             <div className={classes.stats}>
-              You have no new notifications.
+              Visit your profile to keep your billing up to date.
             </div>
           </CardFooter>
         </Card>

@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import {USER} from "lib/queries";
 import {REQUEST_ACCOUNT_CANCELLATION} from "lib/mutations";
 
-import { getToken } from "lib/utility";
+import { getToken } from "lib/utility.jsx";
 
 import Overview from "./Sections/Overview";
 import Button from "components/material-dashboard/CustomButtons/Button.jsx";
@@ -19,7 +19,7 @@ import Card from "components/material-dashboard/Card/Card.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
 import Form from 'components/material-dashboard/Form/Form';
-import {mixpanel} from "lib/utility";
+import {mixpanel} from "lib/utility.jsx";
 
 
 
@@ -73,9 +73,7 @@ class _ManageContent extends React.Component {
                     tabIcon: AddBox,
                     marginedTab: true,
                     tabContent: (
-                        <div><h5>
-                          <small>The sharing feature is not yet available</small>
-                        </h5>
+                        <div>
                         <Card>
                             <div className={classes.container}>
                               <div id="navigation-pills">
@@ -135,7 +133,6 @@ class _ManageContent extends React.Component {
                   tabButton: "Sharing",
                   tabIcon: AddBox,
                   marginedTab: true,
-                  disabled:true,
                   tabContent: (
                       <Card>
                           <div className={classes.container}>

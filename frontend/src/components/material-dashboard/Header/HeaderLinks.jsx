@@ -43,19 +43,22 @@ class HeaderLinks extends React.Component {
     return (
       <div>
         
+        <Link style={{color:"gray"}} to="/dashboard/home">
         <Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
           justIcon={window.innerWidth > 959}
           simple={!(window.innerWidth > 959)}
           aria-label="Dashboard"
           className={classes.buttonLink}
-          href="/dashboard/home"
         >
-          <Dashboard className={classes.icons} />
+        
+          <Dashboard style={{color:"inherit"}} className={classes.icons} />
           <Hidden mdUp implementation="css">
             <p className={classes.linkText}>Dashboard</p>
           </Hidden>
+          
         </Button>
+        </Link>
         <div className={classes.manager}>
           <Button
             buttonRef={node => {
@@ -116,19 +119,21 @@ class HeaderLinks extends React.Component {
             )}
           </Poppers>
         </div>
+        <Link style={{color:"gray"}} to="/dashboard/user">
         <Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
           justIcon={window.innerWidth > 959}
           simple={!(window.innerWidth > 959)}
           aria-label="Person"
           className={classes.buttonLink}
-          href="/dashboard/user"
+          
         >
           <Person className={classes.icons} />
           <Hidden mdUp implementation="css">
             <p className={classes.linkText}>Profile</p>
           </Hidden>
         </Button>
+        </Link>
       </div>
     );
   }

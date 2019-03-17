@@ -23,7 +23,7 @@ import HowToSection from "./Sections/HowToSection.jsx";
 import ProductSection from "./Sections/ProductSection.jsx";
 import CallToAction from "./Sections/CallToAction.jsx";
 
-import {mixpanel} from "lib/utility";
+import {mixpanel} from "lib/utility.jsx";
 
 class LandingPage extends React.Component {
 componentDidMount(){

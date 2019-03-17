@@ -6,7 +6,7 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { FacebookProvider, LoginButton } from 'react-facebook';
 
-import {mixpanel} from "lib/utility";
+import {mixpanel} from "lib/utility.jsx";
 
 const GET_FACEBOOK_USER = gql`
   mutation FacebookUser($email: String!, $facebookAccessToken: String!) {

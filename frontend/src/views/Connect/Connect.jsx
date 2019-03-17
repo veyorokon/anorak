@@ -31,7 +31,7 @@ import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/p
 import { Mutation } from 'react-apollo';
 import { Query } from 'react-apollo';
 
-import { getToken } from "lib/utility";
+import { getToken } from "lib/utility.jsx";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Confirmation from "./Sections/Confirmation.jsx";
 
@@ -39,7 +39,7 @@ import {USER, SUBSCRIPTION_SERVICES} from "lib/queries";
 import {CREATE_SUBSCRIPTION_ACCOUNT} from "lib/mutations";
 import withSnackbar from 'components/material-dashboard/Form/withSnackbar';
 
-import {mixpanel} from "lib/utility";
+import {mixpanel} from "lib/utility.jsx";
 
 const styles = {
   cardCategoryWhite: {
@@ -74,7 +74,8 @@ constructor(props){
         planSelected: 0,
         activeStep: 0,
         services: this.props.services,
-        submitted: false
+        submitted: false,
+        email: ''
     }
 }
 
@@ -123,6 +124,7 @@ setPlan = (val) => {
 
 handleCopy=()=>{
     this.setState({copied: true});
+    this.props.triggerSnackbar('Password copied to clipboard.');
 }
 
 generatePassword = () => {
@@ -260,6 +262,7 @@ loginSection = (classes, isGenDisabled, generatedPassword) => {
                         <GridContainer style={{display: "flex", "alignItems": "baseline", width:"100%"}}>
                           <GridItem xs={6} sm={6} md={4} lg={8}>
                             <CustomInput
+                              password
                               labelText="Password"
                               id="genpassword"
                               formControlProps={{
@@ -442,6 +445,7 @@ getPassword = () =>{
     if(isUsingGen) return this.state.generatedPassword;
     return this.state.ownPassword;
 }
+
 
 render(){
       const { classes } = this.props;

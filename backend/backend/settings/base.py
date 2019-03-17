@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import sys
+from celery.schedules import crontab
+
 ##########################################################################
 ## Helper function for environmental settings
 ##########################################################################
@@ -73,13 +75,47 @@ INSTALLED_APPS = [
     'graphene_django',
     'django_extensions',
     'encrypted_model_fields',
-    'django_crontab',
+    'django_celery_results',
+    'django_redis',
+    'mail_templated'
 ]
 
-#Cron Jobs
-CRONJOBS = [
-    ('*/5 * * * *', 'backend.cron.daily_invoice_update')
-]
+####            Cache settings
+
+CELERY_BROKER_URL = "redis://:"+ environ_setting("REDIS_PASSWORD")+ "@"+environ_setting("REDIS_HOST") + ":" + environ_setting("REDIS_PORT")
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": CELERY_BROKER_URL+"/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
+# Other Celery settings
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_BEAT_SCHEDULE = {
+    'task-number-one': {
+        'task': 'accounting.tasks.sync_stripe_invoices',
+        'schedule': crontab(minute='55', hour='23'),
+    },
+}
+
+# GSuite Gmail server
+EMAIL_USE_TLS = True
+EMAIL_HOST = environ_setting("EMAIL_HOST")
+EMAIL_PORT = 587
+EMAIL_HOST_USER = environ_setting("EMAIL_HOST_USER") 
+EMAIL_HOST_PASSWORD = environ_setting("EMAIL_HOST_PASSWORD")
 
 GRAPHENE = {
     'SCHEMA': 'backend.schema.schema',
@@ -119,7 +155,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates/'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -179,13 +215,16 @@ CORS_ORIGIN_WHITELIST = (
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'US/Pacific'
+TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
 
+STATICFILES_DIRS = (
+     os.path.join(BASE_DIR, 'fonts/'),
+)
 #STATIC_URL = os.environ.get('STATIC_URL', '/static/')
 STATIC_URL = '/static_files/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_files/')

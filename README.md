@@ -30,6 +30,11 @@ Anorak uses a number of open source and free tier projects to work properly:
 * [Apollo] - Caching GraphQL client for GraphQL servers.
 * [Material-UI] - React components that implement Google's Material Design.
 * [Stripe] - Python library for the Stripe API.
+* [Django Mail Templated] - Django templating for mail servers.
+* [Redis] - Caching server and message broker.
+* [Django Redis] - Redis integration for Django.
+* [Celery] - Distributed task queue.
+* [Celery Beat] - Periodic tasks generator.
 * [Postgres] - SQL relational database. 
 
 ### Anorak's Three Distinct Components:
@@ -76,9 +81,15 @@ You should be connected to the `backend` container's bash and your terminal wind
 root@9daded436eb5:/app/backend#
 ```
 
-If this is your first time, create a new Django superuser and follow the prompt.
+If this is your first time, create a new Django superuser and follow the prompt. 
 ```sh
 $ ./manage.py createsuperuser
+```
+
+**Optionally**, you can create a jupyter password if you would like to use a juptyer notebook in development. Then launch a Ipython notebook preloaded with Django models and open it in `http://localhost:8890`.
+```sh
+$ jupyter notebook password
+$ python manage.py shell_plus --notebook
 ```
 
 While still inside the backend container, make migrations and migrate them to the `database` container. Exit this container after this step.
@@ -144,6 +155,11 @@ In frontend/src/App/index.jsx, make sure you have the correct host: `uri: http:/
 # Deployment
 
 The install instructions for deploying the backend and frontend on a server.
+
+#### Setup
+ - [Install & Secure Redis](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-18-04)
+ - [Install Celery & Celery Beats](https://pythad.github.io/articles/2016-12/how-to-run-celery-as-a-daemon-in-production)
+ - [Configure MailServer](https://stackoverflow.com/questions/6367014/how-to-send-email-via-django)
 
 #### Important Paths
   - Nginx Config:  /etc/nginx/sites-available/squadup.xyz
@@ -375,5 +391,10 @@ License
    [Stripe]: <https://github.com/stripe/stripe-python>
    [GraphQL]: <https://graphql.org/>
    [GraphIQL]: <https://github.com/graphql/graphiql>
+   [Django Mail Templated]: <https://pypi.org/project/django-mail-templated>
+   [Redis]: <https://github.com/redis>
+   [Django Redis]: <https://github.com/niwinz/django-redis>
+   [Celery]: <https://github.com/celery/celery>
+   [Celery Beat]: <http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html>
    [Postgres]: <https://www.postgresql.org/>
    

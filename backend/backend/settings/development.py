@@ -25,6 +25,7 @@ ALLOWED_HOSTS+=[
     'localhost',
 ]
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -35,6 +36,11 @@ DATABASES = {
     }
 }
 
+NOTEBOOK_ARGUMENTS = [
+    '--ip', '0.0.0.0', 
+    '--allow-root',
+    '--no-browser', 
+]
 
 GRAPHQL_JWT['JWT_VERIFY_EXPIRATION'] = False
 

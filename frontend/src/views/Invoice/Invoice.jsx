@@ -7,7 +7,7 @@ import Invoice from "components/material-dashboard/Invoice/Invoice";
 import Card from "components/material-dashboard/Card/Card";
 import { Query } from 'react-apollo';
 import {USER} from "lib/queries";
-import {getToken,calcAnorakFee} from "lib/utility"
+import {getToken,calcAnorakFee} from "lib/utility.jsx"
 
 const company =
         {
@@ -17,7 +17,7 @@ const company =
             'Mountain View, CA 94041',
           ],
           email: 'support@ianorak.com',
-          logoUrl: 'https://www.shakeshack.com/wp-content/themes/shakeshack/images/shakeshack_logo.png',
+          logoUrl: '',
       };
 
 function _InvoiceCard(props) {

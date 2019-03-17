@@ -13,14 +13,14 @@ import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
 import { Elements, StripeProvider } from 'react-stripe-elements';
 import { CardElement, injectStripe } from 'react-stripe-elements';
-import {stripeAPIKey, getToken} from "lib/utility";
+import {stripeAPIKey, getToken} from "lib/utility.jsx";
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 import {USER} from "lib/queries";
 import { SET_STRIPE_CARD, UPDATE_USER } from "lib/mutations";
 import Form from 'components/material-dashboard/Form/Form';
 import withSnackbar from 'components/material-dashboard/Form/withSnackbar';
-import {mixpanel} from "lib/utility";
+import {mixpanel} from "lib/utility.jsx";
 
 
 const styles = {
@@ -227,7 +227,7 @@ class _UserProfileContent extends React.Component {
                       text = "Success"
                   }
                   return(
-                      <GridItem xs={12} sm={12} md={12}>
+          <GridItem xs={12} sm={12} md={12}>
               <Card>
                 <CardHeader color="info">
                   <h4 className={classes.cardTitleWhite}>User Profile</h4>
@@ -293,7 +293,6 @@ class _UserProfileContent extends React.Component {
                   <h4 className={classes.cardTitleWhite}>Billing</h4>
                 </CardHeader>
                 <CardBody>
-                  <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
                     <CustomInput
                       labelText="Name On Card"
@@ -375,7 +374,6 @@ class _UserProfileContent extends React.Component {
                       />
                     </GridItem>
                     
-                  </GridContainer>
                 </CardBody>
                 <CardFooter>
                 <GridItem xs={12} sm={12} md={12}>
