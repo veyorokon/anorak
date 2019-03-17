@@ -222,6 +222,9 @@ USE_L10N = True
 
 USE_TZ = True
 
+STATICFILES_DIRS = (
+     os.path.join(BASE_DIR, 'fonts/'),
+)
 #STATIC_URL = os.environ.get('STATIC_URL', '/static/')
 STATIC_URL = '/static_files/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_files/')

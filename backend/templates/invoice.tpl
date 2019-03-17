@@ -1,7 +1,8 @@
 {% extends "mail_templated/base.tpl" %}
+{% load staticfiles %}
 
 {% block subject %}
-Your iAnorak subscription order
+Your iAnorak {{data.service}} Subscription Order
 {% endblock %}
 
 
@@ -103,6 +104,16 @@ Your iAnorak subscription order
     .rtl table tr td:nth-child(2) {
         text-align: left;
     }
+        
+    @font-face {
+        font-family: 'Lombok';
+        src: url('{% static 'font/lombok.oft' %}');
+        src: local('{% static 'font/lombok.oft' %}');
+      }
+      
+      .title{
+          font-family: 'Lombok', Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+      }
     </style>
 </head>
 
@@ -114,13 +125,16 @@ Your iAnorak subscription order
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="https://www.sparksuite.com/images/logo.png" style="width:100%; max-width:300px;">
+                                Anorak
                             </td>
                             
                             <td>
-                                Invoice #: 123<br>
-                                Created: January 1, 2015<br>
-                                Due: February 1, 2015
+                                Invoice #: {{data.invoice_number}}<br>
+                                Subscription Starts: {{data.date_start}}<br>
+                                Subscription Ends: {{data.date_end}}<br>
+                                Renews: {{data.date_renew}}<br><br>
+                                -------------<br>
+                                Billed On: {{data.date_billing}}
                             </td>
                         </tr>
                     </table>
@@ -134,7 +148,7 @@ Your iAnorak subscription order
                             <td>
                                 {{ user.stripe_customer.line_1 }}<br>
                                     {% if user.stripe_customer.line_2 %}
-                                       {{ user.stripe_customer.line_2 }}<br>...
+                                       {{ user.stripe_customer.line_2 }}<br>
                                     {% endif %}
                                 {{ user.stripe_customer.city }}, {{ user.stripe_customer.state }}<br>
                             </td>    
@@ -178,24 +192,26 @@ Your iAnorak subscription order
                 </td>
             </tr>
             
+            {% for item in data.items %}
+                <tr class="item">
+                    <td>
+                        {{item.description}}
+                    </td>
+                    
+                    <td>
+                        ${{item.price}}
+                    </td>
+                </tr>
+            {% endfor %}
             
-            <tr class="item">
-                <td>
-                    Netflix (Remaining)
-                </td>
-                
-                <td>
-                    $10.00
-                </td>
-            </tr>
-            
+                        
             <tr class="item last">
                 <td>
-                    Netflix (1 month)
+                    {{data.lastItem.description}}
                 </td>
                 
                 <td>
-                    $10.00
+                    ${{data.lastItem.price}}
                 </td>
             </tr>
             
@@ -203,10 +219,13 @@ Your iAnorak subscription order
                 <td></td>
                 
                 <td>
-                   Total: $385.00
+                   Total: ${{data.total}}
                 </td>
             </tr>
         </table>
+        <p>
+            This amount does not include the Anorak management fee calculated as: 3% + 0.50 cents of your monthly total up to a maximum charge of $5.00. On your billing date ({{data.date_billing}}), you will receive a finalized invoice with all subscriptions used and the calculated Anorak fee.
+        </p>
     </div>
 </body>
 </html>

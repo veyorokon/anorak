@@ -8,10 +8,18 @@ from core.models import User
 @task
 def sync_stripe_invoices():
     for eachUser in User.objects.all():
-        invoice = Invoice.objects.get_or_create_this_month(
-            user = eachUser
-        )
-        invoice.save()
+        try:
+            lastInvoice = Invoice.objects.get(user=eachUser).order_by('-id')[0]
+            finalized = lastInvoice.sync_with_stripe_or_finalize()
+            if finalized:
+                invoice = Invoice.objects.get_or_create_this_month(
+                    user = eachUser
+                )
+            invoice.save()
+        except:
+            invoice = Invoice.objects.get_or_create_this_month(
+                user = eachUser
+            )    
     return True
         
         
