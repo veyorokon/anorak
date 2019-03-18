@@ -120,6 +120,13 @@ class Dashboard extends React.Component {
       
         {memberships.map(({id, statusMembership, subscriptionAccount}) => {
             var color = getMemberColor(statusMembership);
+            if(subscriptionAccount.pricePlan != null){
+                var amount = '$'+subscriptionAccount.pricePlan.amount;
+            }
+            else{
+                var amount = 'Pending'
+            }
+            
           return(<GridItem key={id} xs={12} sm={6} md={6} lg={6}>
             <Card subscription>
             <CardHeader>
@@ -131,7 +138,7 @@ class Dashboard extends React.Component {
                  ><Typography color={color}>{getMemberStatus(statusMembership)}</Typography></h5> 
                                
                 <h5 className={classes.cardCategoryWhite}>
-                    ${subscriptionAccount.pricePlan.amount}
+                    {amount}
                 </h5>
             </span>
             </CardHeader>

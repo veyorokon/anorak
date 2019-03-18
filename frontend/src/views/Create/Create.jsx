@@ -60,17 +60,17 @@ const styles = {
   }
 };
 
-class _ConnectContent extends React.Component {
+class _CreateContent extends React.Component {
 constructor(props){
     super(props)
     this.state={
-        isExisting: 1,
-        isGenerateDisabled:true,
+        isExisting:0,
         isGeneratedPassword:0,
         subscription:0,
+        generatedPassword:this.generatePassword(),
         ownPassword:'',
         copied: false,
-        isGenerateDisabled:true,
+        isGenerateDisabled:false,
         planSelected: 0,
         activeStep: 0,
         services: this.props.services,
@@ -80,7 +80,23 @@ constructor(props){
 }
 
 componentDidMount(){
-    mixpanel.track('Connect Subscription Page Load');
+    mixpanel.track('Create Subscription Page Load');
+}
+
+setExistingStatus = (val) =>{
+    if(val==1){
+        this.setState({
+            isExisting: val,
+            isGenerateDisabled:true,
+            isGeneratedPassword:0
+        });
+    }
+    else{
+        this.setState({
+            isExisting: val,
+            isGenerateDisabled:false,
+        });
+    }
 }
 
 setSubscription = (val) =>{
@@ -106,6 +122,45 @@ setPlan = (val) => {
     });
 }
 
+handleCopy=()=>{
+    this.setState({copied: true});
+    this.props.triggerSnackbar('Password copied to clipboard.');
+}
+
+generatePassword = () => {
+    var length = 10,
+        capitals = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        charset = "abcdefghijklmnopqrstuvwxyz",
+        numbers = "0123456789",
+        symbols = "!$&#",
+        retVal = "";
+    for (var i = 0, n = capitals.length; i < 2; ++i) {
+        retVal += capitals.charAt(Math.floor(Math.random() * n));
+    }
+    
+    for (var i = 0, n = charset.length; i < 3; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    
+    for (var i = 0, n = numbers.length; i < 2; ++i) {
+        retVal += numbers.charAt(Math.floor(Math.random() * n));
+    }
+    for (var i = 0, n = symbols.length; i < 1; ++i) {
+        retVal += symbols.charAt(Math.floor(Math.random() * n));
+    }
+    
+    var a = retVal.split(""),
+        n = a.length;
+
+    for(var i = n - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = a[i];
+        a[i] = a[j];
+        a[j] = tmp;
+    }
+
+    return a.join("");
+}
 
 loginSection = (classes, isGenDisabled, generatedPassword) => {
     return(
@@ -113,21 +168,82 @@ loginSection = (classes, isGenDisabled, generatedPassword) => {
           <div id="navigation-pills">
             <div className={classes.title}>
               <h3>
-                <small>Account Password:</small>
+                <small>Step 3: Set Your Account Password:</small>
               </h3>
             </div>
             
-            <GridItem xs={6} sm={6} md={4} lg={8}>
-              <CustomInput
-                labelText="Password"
-                id="setpassword"
-                type={"password"}
-                onChange={this.setOwnPassword}
-                formControlProps={{
-                  fullWidth: true,
-                }}
-              />
-            </GridItem>
+            <NavPillsModded
+              setValCallBack={this.setUsingGenerated}
+              color="success"
+              active={this.state.isGeneratedPassword}
+              tabs={[
+                {
+                  tabButton: "Set",
+                  tabIcon: AddBox,
+                  tabContent: (
+                    <span>
+                      {(this.state.isExisting ? <p>
+                        Enter the current password on the account.
+                      </p> : <p>
+                        Enter your own secure password.
+                      </p>)}
+                      
+                        
+                        <GridItem xs={6} sm={6} md={4} lg={8}>
+                          <CustomInput
+                            labelText="Password"
+                            id="setpassword"
+                            type={"password"}
+                            onChange={this.setOwnPassword}
+                            formControlProps={{
+                              fullWidth: true,
+                            }}
+                          />
+                        </GridItem>
+                      
+                    </span>
+                  )
+                },
+                {
+                  tabButton: "Generate",
+                  tabIcon: AddBox,
+                  disabled: isGenDisabled,
+                  tabContent: (
+                    <span>
+                      <p>
+                        Let Anorak set a randomly generated password.
+                      </p>
+                      
+                        <GridContainer style={{display: "flex", "alignItems": "baseline", width:"100%"}}>
+                          <GridItem xs={6} sm={6} md={4} lg={8}>
+                            <CustomInput
+                              password
+                              labelText="Password"
+                              id="genpassword"
+                              formControlProps={{
+                                  disabled: true,
+                                fullWidth: true,
+                              }}
+                              inputProps={{
+                                  placeholder:generatedPassword,
+                                  value: generatedPassword
+                              }}
+                            />
+                          </GridItem>
+                          <GridItem xs={4} sm={4} md={4}>
+                          <CopyToClipboard text={generatedPassword}
+                          onCopy={this.handleCopy}>
+                          <Button color="transparent">Copy</Button>
+                        </CopyToClipboard>
+                             
+                          </GridItem>
+                      </ GridContainer>
+                      
+                    </span>
+                  )
+                },
+              ]}
+            />
                     
             <p>
               Once set, passwords can be retrieved anytime from your dashboard.
@@ -160,12 +276,12 @@ subscriptionSection = (classes) => {
           <div id="navigation-pills">
             <div className={classes.title}>
               <h3>
-                <small>Subscription Service:</small>
+                <small>Step 1: Choose Subscription Service:</small>
               </h3>
             </div>
                 <NavPills
                     setValCallBack={this.setSubscription}
-                  color="primary"
+                  color="success"
                   tabs={tabs}
                 />
               
@@ -212,13 +328,13 @@ planSection = (classes) => {
           <div id="navigation-pills">
             <div className={classes.title}>
               <h3>
-                <small>Choose Your Plan:</small>
+                <small>Step 2: Choose Your Plan:</small>
               </h3>
             </div>
                 <NavPillsModded
                     active={this.state.planSelected}
                     setValCallBack={this.setPlan}
-                  color="primary"
+                  color="success"
                   tabs={tabs}
                 />
               
@@ -245,17 +361,17 @@ onSubmit = async (createSubscriptionAccount, values) => {
     planKey: planPK,
     password: this.getPassword(),
     username: '',
-    isConnectedAccount: true
+    isConnectedAccount: false
   };
   
   this.setState({submitted:true});
   try{
       await createSubscriptionAccount({ variables });
       this.props.triggerSnackbar('Subscribed! A new subscription was added to your dashboard.');
-      mixpanel.track('Connect Attempt Successful', {service: this.getServiceName()});
+      mixpanel.track('Create Attempt Successful', {service: this.getServiceName()});
   }catch{
       this.props.triggerSnackbar('Sorry, an additional subscription account could not be created.');
-      mixpanel.track('Connect Attempt Unsuccessful', {service: this.getServiceName()});
+      mixpanel.track('Create Attempt Unsuccessful', {service: this.getServiceName()});
   }
   
 
@@ -321,9 +437,9 @@ render(){
                       tabContent: (
                           
                         <span style={{display:isShowingFirst}}>
-                        <CardHeader color="primary">
-                          <h4 className={classes.cardTitleWhite}>Connect Your Subscription Account</h4>
-                          <p className={classes.cardCategoryWhite}>Connect an existing account to Anorak.</p>
+                        <CardHeader color="success">
+                          <h4 className={classes.cardTitleWhite}>Create A Subscription Account</h4>
+                          <p className={classes.cardCategoryWhite}>Let Anorak generate your subscription account</p>
                         </CardHeader>
                         
                         {this.subscriptionSection(classes)}
@@ -369,12 +485,12 @@ render(){
                           }, 600);
                         }}
                         disabled={this.state.submitted}
-                         color="primary">
+                         color="success">
                           Confirm
                         </Button>
                     </span>
                     :  
-                    <Button onClick={this.updateShowing} color="primary">
+                    <Button onClick={this.updateShowing} color="success">
                       Next
                     </Button> 
                 )}
@@ -387,10 +503,10 @@ render(){
       );
   }
 }
-const ConnectContent = withSnackbar(_ConnectContent);
+const CreateContent = withSnackbar(_CreateContent);
 
 
-function Connect(props) {
+function Create(props) {
  const { classes } = props;
 
   return (
@@ -400,7 +516,7 @@ function Connect(props) {
         if (error) return `Error! ${error.message}`;
         const services = data.subscriptionServices;
         return(
-            <ConnectContent classes={classes} services={services}/>
+            <CreateContent classes={classes} services={services}/>
         )
     }}
         
@@ -408,7 +524,7 @@ function Connect(props) {
   );
 }
 
-Connect.propTypes = {
+Create.propTypes = {
   classes: PropTypes.object.isRequired
 };
-export default withStyles(pillsStyle)(Connect);
+export default withStyles(pillsStyle)(Create);

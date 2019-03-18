@@ -6,14 +6,16 @@ mutation SubscriptionAccountMutation(
     $serviceKey:Int!, 
     $planKey:Int!, 
     $username:String!, 
-    $password:String!
+    $password:String!,
+    $isConnectedAccount: Boolean!
 ) {
     subscriptionAccount(
         token:$token, 
         serviceKey:$serviceKey, 
         planKey:$planKey, 
         password:$password, 
-        username:$username)
+        username:$username,
+        isConnectedAccount:$isConnectedAccount)
         {
       subscriptionAccount {
         id

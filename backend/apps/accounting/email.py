@@ -20,6 +20,23 @@ def is_prorated(stripeInvoiceItem):
 def days_in_a_month(date):
     return calendar.monthrange(date.year,date.month)[1]
 
+def set_invoice_dates(output, itemStartEpoch, date, stripeInvoice):
+    billingDateTime = convert_epoch(stripeInvoice.period_end)
+    
+    lastDayOfMonth = days_in_a_month(date)
+    endDateTime = datetime.strptime('{0} {1} {2}'.format(date.month, lastDayOfMonth, date.year), '%m %d %Y')
+    billingDateTime = convert_epoch(stripeInvoice.period_end)
+    endDate = endDateTime.strftime('%B %d, %Y')
+    renewalDate = get_first_day_of_next_month(endDateTime).strftime('%B %d, %Y')
+    startDate = convert_epoch(itemStartEpoch).strftime('%B %d, %Y')
+    billingDate = billingDateTime.strftime('%B %d, %Y')
+    
+    output["date_end"] = endDate
+    output["date_renew"] = renewalDate
+    output["date_start"] = startDate
+    output["date_billing"] = billingDate
+    return output
+
 def get_receipt_data(member, invoice):
     total = 0
     output = {}
@@ -32,21 +49,13 @@ def get_receipt_data(member, invoice):
         output["items"]=[{"description": item.description,  "price": amount}]
         total += amount
     amount = item.plan.amount/100
-    
     output["total"] = (total + amount)
-    
-    date = convert_epoch(stripeInvoice.period_end)
-    monthOf = convert_epoch(stripeInvoice.period_end)
-    lastDay = days_in_a_month(date)
-    endDateTime = datetime.strptime('{0} {1} {2}'.format(date.month, lastDay, date.year), '%m %d %Y')
-    output["date_end"] = endDateTime.strftime('%B %d, %Y')
-    output["date_renew"] = get_first_day_of_next_month(endDateTime).strftime('%B %d, %Y')
-    output["date_start"] = convert_epoch(itemStartEpoch).strftime('%B %d, %Y')
-    output["date_billing"] = monthOf.strftime('%B %d, %Y')
     output["invoice_number"] = stripeInvoice.number
-    
+    date = convert_epoch(stripeInvoice.period_end)
+    billingDateTime = convert_epoch(stripeInvoice.period_end)
+    output = set_invoice_dates(output, itemStartEpoch, date, stripeInvoice)
+    output["lastItem"]={"description": plan+" - Month of "+billingDateTime.strftime('%B'),  "price": amount}
     output["service"]= member.subscription_account.service.name
-    output["lastItem"]={"description": plan+" - Month of "+monthOf.strftime('%B'),  "price": amount}
     return output
 
 def convert_epoch(epoch):

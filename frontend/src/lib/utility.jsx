@@ -81,37 +81,47 @@ export function stringToPosetiveInt(value, defValue = 0) {
 
 export function getMemberStatus(value){
     if (value === 'A_0') return 'Payment Failed';
-    if (value === 'A_1') return 'Kicked';
-    if (value === 'A_2') return 'Canceled';
-    if (value === 'A_3') return 'Pending';
-    if (value === 'A_4') return 'Pending Invite';
-    if (value === 'A_5') return 'Pending Creation';
-    if (value === 'A_6') return 'Pending Update';
-    if (value === 'A_7') return 'Active';
+    if (value === 'A_10') return 'Kicked';
+    if (value === 'A_20') return 'Canceled';
+    if (value === 'A_30') return 'Pending';
+    if (value === 'A_40') return 'Pending Invite';
+    if (value === 'A_50') return 'Pending Creation';
+    if (value === 'A_51') return 'Pending Connection';
+    if (value === 'A_55') return 'Confirmation Required';
+    if (value === 'A_60') return 'Pending Update';
+    if (value === 'A_90') return 'Active';
 }
 
 export function getMemberColor(value){
     if (value === 'A_0') return 'danger';
-    if (value === 'A_1') return 'danger';
-    if (value === 'A_2') return 'danger';
-    if (value === 'A_3') return 'warning';
-    if (value === 'A_4') return 'warning';
-    if (value === 'A_5') return 'warning';
-    if (value === 'A_6') return 'warning';
-    if (value === 'A_7') return 'success';
+    if (value === 'A_10') return 'danger';
+    if (value === 'A_20') return 'danger';
+    if (value === 'A_30') return 'warning';
+    if (value === 'A_40') return 'warning';
+    if (value === 'A_50') return 'warning';
+    if (value === 'A_51') return 'warning';
+    if (value === 'A_55') return 'warning';
+    if (value === 'A_60') return 'warning';
+    if (value === 'A_90') return 'success';
 }
 
 export function getAccountStatus(value){
     if (value === 'A_0') return 'Terminated';
-    if (value === 'A_1') return 'Canceled';
-    if (value === 'A_2') return 'Pending';
-    if (value === 'A_3') return 'Active';
+    if (value === 'A_10') return 'Canceled';
+    if (value === 'A_20') return 'Pending';
+    if (value === 'A_30') return 'Pending';
+    if (value === 'A_35') return 'Pending';
+    if (value === 'A_90') return 'Active';
+    if (value === 'A_91') return 'Connected';
 }
 export function getAccountColor(value){
     if (value === 'A_0') return 'danger';
-    if (value === 'A_1') return 'muted';
-    if (value === 'A_2') return 'warning';
-    if (value === 'A_3') return 'success';
+    if (value === 'A_10') return 'muted';
+    if (value === 'A_20') return 'warning';
+    if (value === 'A_30') return 'warning';
+    if (value === 'A_35') return 'warning';
+    if (value === 'A_90') return 'success';
+    if (value === 'A_91') return 'success';
 }
 
 export function calcAnorakFee(value){

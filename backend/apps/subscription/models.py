@@ -136,9 +136,12 @@ class SubscriptionPricingPlan(models.Model):
 # Status for the subscription account
 class SubscriptionAccountStatus(enum.Enum):
     TERMINATED = 0
-    CANCELED = 1
-    PENDING = 2
-    ACTIVE = 3
+    CANCELED = 10
+    PENDING = 20
+    PENDING_CONNECT = 30
+    PENDING_CONNECT_CONFIRM = 35
+    ACTIVE = 90
+    CONNECTED = 91
     
     
 class SubscriptionAccount(models.Model):
@@ -147,7 +150,7 @@ class SubscriptionAccount(models.Model):
     #User who owns this subscription
     service = models.ForeignKey(SubscriptionService, on_delete=models.CASCADE, related_name="subscription_accounts")
     #User who owns this subscription
-    price_plan = models.ForeignKey(SubscriptionPricingPlan, on_delete=models.PROTECT, related_name="subscription_accounts", null=True,)
+    price_plan = models.ForeignKey(SubscriptionPricingPlan, on_delete=models.PROTECT, related_name="subscription_accounts", null=True, blank=True)
     #The encrypted username
     username = EncryptedCharField(max_length=128, null=True, blank=True)
     #The encrypted password. 
@@ -156,6 +159,8 @@ class SubscriptionAccount(models.Model):
     status_account = enum.EnumField(SubscriptionAccountStatus, default=SubscriptionAccountStatus.PENDING)
     #If any member has an outstanding balance on this account
     has_outstanding_balance = models.BooleanField(default=False)
+    #If this account was a connected account
+    is_connected_account = models.BooleanField(default=False)
     #Date that the subscription was created
     date_created = models.DateTimeField(editable=False)
     #Date that the subscription was modified
@@ -165,6 +170,12 @@ class SubscriptionAccount(models.Model):
     
     class Meta:
         db_table = "Subscription_Accounts"
+        
+    def activate(self):
+        self.status_account = SubscriptionAccountStatus.ACTIVE
+    
+    def connect(self):
+        self.status_account = SubscriptionAccountStatus.CONNECTED
             
     def save(self, *args, **kwargs):
         ''' 
@@ -179,16 +190,20 @@ class SubscriptionAccount(models.Model):
 # Status for the subscription account
 class MembershipStatus(enum.Enum):
     PAYMENT_FAILED = 0 # If their payment has failed
-    KICKED = 1 # If the responsible user cancels their membership
-    CANCELED = 2 # If they cancel their membership
-    PENDING = 3 # General Pending State
-    PENDING_INVITED = 4 # If the responsible user sent an invite
-    PENDING_CREATED = 5 # If the account needs to be processed
-    PENDING_UPDATING = 6 # If the account is being updated
-    ACTIVE = 7 # If the user has an active subscription membership
+    KICKED = 10 # If the responsible user cancels their membership
+    CANCELED = 20 # If they cancel their membership
+    PENDING = 30 # General Pending State
+    PENDING_INVITED = 40 # If the responsible user sent an invite
+
+    PENDING_CREATE = 50 # If the account needs to be processed
+    PENDING_CONNECT = 51 # If the account is created but connecting
+    PENDING_CONNECT_CONFIRMATION = 55 # The plan needs to be confirmed
+    PENDING_UPDATING = 60 # If the account is being updated
+    ACTIVE = 90 # If the user has an active subscription membership
+    CONNECTED = 91 # If the user has a successful connected account
     
     def validate(self, status):
-        if(status >= self.PENDING_CREATED):
+        if(status >= self.PENDING_CREATE):
             return True
         return False
     
@@ -206,7 +221,7 @@ class SubscriptionMember(models.Model):
     #Date that the subscription was created
     date_canceled = models.DateTimeField(editable=False, null=True, blank=True)
     #The stripe subscription item id
-    stripe_subscription_item_id = models.CharField(max_length=32, null=True)
+    stripe_subscription_item_id = models.CharField(max_length=32, null=True, blank=True)
     
     def get_existing_subscription_items(self):
         subscriptionItems = []
@@ -227,7 +242,7 @@ class SubscriptionMember(models.Model):
             if subscriptionItem['plan'].id == planID:
                 itemID = subscriptionItem.id
         self.stripe_subscription_item_id = itemID
-            
+                    
     def add_to_stripe_subscription(self):
         subscription = self.user.stripe_customer.stripe_subscription_id
         planID = self.subscription_account.price_plan.stripe_plan
@@ -240,10 +255,12 @@ class SubscriptionMember(models.Model):
             })
         updatedItems.append(newItem)
         
+        taxPercent = self.user.stripe_customer.get_user_sales_tax_rate() * 100
         updated = stripe.Subscription.modify(
             subscription, 
             items=updatedItems, 
-            billing_cycle_anchor='unchanged'
+            billing_cycle_anchor='unchanged',
+            tax_percent=taxPercent,
         )
         self.set_stripe_subscription_item_id(subscriptions=updated)
         
@@ -267,6 +284,7 @@ class SubscriptionMember(models.Model):
         '''
         if not self.id:
             self.date_created = timezone.now()
+        if not self.subscription_account.is_connected_account:
             self.add_to_stripe_subscription()
         self.date_modified = timezone.now()
         return super(SubscriptionMember, self).save(*args, **kwargs)

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f7a0a1fd92cf77f29e196f4fdbedfb9924d05798481020f2ba57fed9d55b7480"
+            "sha256": "bfee2354cd2f3b94c9886a14603e292d4895b874051edbfc78924c4e5113a7e5"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -370,6 +370,12 @@
             ],
             "version": "==2.10"
         },
+        "jsonobject": {
+            "hashes": [
+                "sha256:b59a7a0165d7aff8365d7e7be1aa6f87f3266bef019414af3f5d122d62ceb3d9"
+            ],
+            "version": "==0.7.1"
+        },
         "jsonschema": {
             "hashes": [
                 "sha256:0c0a81564f181de3212efa2d17de1910f8732fa1b71c42266d983cd74304e20d",
@@ -597,7 +603,8 @@
         },
         "pyrsistent": {
             "hashes": [
-                "sha256:3ca82748918eb65e2d89f222b702277099aca77e34843c5eb9d52451173970e2"
+                "sha256:3ca82748918eb65e2d89f222b702277099aca77e34843c5eb9d52451173970e2",
+                "sha256:491f3a2039f91647fceffa2376af1f91411c2e7ccded53cd2de1e3bd81e88dfd"
             ],
             "version": "==0.14.11"
         },
@@ -711,6 +718,13 @@
             ],
             "index": "pypi",
             "version": "==2.22.0"
+        },
+        "taxjar": {
+            "hashes": [
+                "sha256:9c98e48d4d9cc0112d16483e9b64c724b36e934f856640c70aa8417f1cba0d04"
+            ],
+            "index": "pypi",
+            "version": "==1.6.0"
         },
         "terminado": {
             "hashes": [

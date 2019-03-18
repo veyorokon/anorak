@@ -18,6 +18,8 @@ import DashboardPage from "views/Dashboard/Dashboard.jsx";
 import UserProfile from "views/UserProfile/UserProfile.jsx";
 import Logout from "views/Logout/Logout.jsx";
 import Connect from "views/Connect/Connect.jsx";
+import Create from "views/Create/Create.jsx";
+
 import Manage from "views/Manage/Manage.jsx";
 import InvoiceList from "views/Invoice/Invoice.jsx";
 
@@ -31,9 +33,16 @@ const dashboardRoutes = [
   }, 
   
     {
-      path: "/dashboard/connect",
-      sidebarName: "Add Subscription",
+      path: "/dashboard/create",
+      sidebarName: "Subscribe",
       navbarName: "Subscribe",
+      icon: AddBox,
+      component: Create
+    },
+    {
+      path: "/dashboard/connect",
+      sidebarName: "Connect",
+      navbarName: "Connect",
       icon: AddBox,
       component: Connect
     },

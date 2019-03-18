@@ -8,11 +8,18 @@ from accounting.email import *
 @receiver(post_save, sender=SubscriptionAccount)
 def create_account_subscription_member(sender, instance, created, **kwargs):
     if created:
-        member = SubscriptionMember.objects.create(
-            user = instance.responsible_user,
-            subscription_account = instance,
-            status_membership = MembershipStatus.PENDING_CREATED
-        )
+        if instance.is_connected_account:
+            member = SubscriptionMember.objects.create(
+                user = instance.responsible_user,
+                subscription_account = instance,
+                status_membership = MembershipStatus.PENDING_CONNECT
+            )
+        else:
+            member = SubscriptionMember.objects.create(
+                user = instance.responsible_user,
+                subscription_account = instance,
+                status_membership = MembershipStatus.PENDING_CREATE
+            )
 
 
 #Create invoice and email receipt
@@ -23,7 +30,8 @@ def create_invoice(sender, instance, created, **kwargs):
             user = instance.user
         )
         invoice.save() # Triggers the invoice update
-        email_receipt(instance, invoice)
+        if not instance.subscription_account.is_connected_account:
+            email_receipt(instance, invoice)
     else:
         invoice = Invoice.objects.get(user=instance.user)
         invoice.save() # Triggers the invoice update

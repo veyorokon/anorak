@@ -10,6 +10,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.db.models.signals import post_save, pre_delete, post_delete
 from django.contrib.auth.base_user import AbstractBaseUser
 
+import taxjar
 import stripe
 stripe.api_key = settings.STRIPE_ACCOUNT_SID
 
@@ -77,7 +78,17 @@ class StripeCustomer(models.Model):
     city = models.CharField(max_length=32, null=True, blank=True)
     state = models.CharField(max_length=32, null=True, blank=True)
     country = models.CharField(max_length=32, null=True, blank=True)
+    zip = models.IntegerField(null=True, blank=True)
     last_four = models.IntegerField(null=True, blank=True)
+    
+    def get_user_sales_tax_rate(self):
+        print(settings.TAX_JAR_KEY)
+        taxClient = taxjar.Client(api_key=settings.TAX_JAR_KEY)
+        stateSalesTax = 0
+        if self.zip:
+            rates = taxClient.rates_for_location(str(self.zip))
+            stateSalesTax = rates.state_rate
+        return stateSalesTax
         
     def create_stripe_customer(self):
         data = stripe.Customer.create(
@@ -132,6 +143,7 @@ class StripeCustomer(models.Model):
         self.city = source.address_city
         self.state = source.address_state
         self.country = source.country
+        self.zip = source.address_zip
         self.name = source.name
         self.last_four = source.last4
         self.save()

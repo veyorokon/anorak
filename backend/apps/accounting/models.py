@@ -151,8 +151,8 @@ class Invoice(models.Model):
         else:
             item = self.update_management_charge(invoice, managementCharge, duplicateTotal)
         self.stripe_invoice_fee_id = item.id
-        return False        
-
+        return False  
+           
 
     def update_management_charge(self, invoice, managementCharge, feeTotal=0.0):
         feeID = managementCharge.id
@@ -198,4 +198,57 @@ class Invoice(models.Model):
             self.sync_with_stripe_or_finalize()
             self.date_modified = timezone.now()
         return super(Invoice, self).save(*args, **kwargs)
+
         
+# class StateTax(models.Model):
+#     #State this is associated with
+#     state = models.CharField(max_length=512, unique=True, null=False)
+#     #Sales tax rate
+#     sales_tax = models.FloatField()
+#     #Date that the service was created
+#     date_created = models.DateTimeField(editable=False)
+#     #Date that the service was modified
+#     date_modified = models.DateTimeField(editable=False)
+# 
+#     class Meta:
+#         db_table = "StateTaxes"
+# 
+#     def save(self, *args, **kwargs):
+#         ''' 
+#         On save, update timestamps 
+#         '''
+#         if not self.id:
+#             self.date_created = timezone.now()
+#             self.state = self.state.lower()
+#         self.date_modified = timezone.now()
+#         return super(StateTax, self).save(*args, **kwargs)
+# 
+# 
+# class UserTax(models.Model):
+#     #The user this is tied to
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="tax")
+#     #The sales tax for this user
+#     state_tax = models.ForeignKey(StateTax, on_delete=models.SET_NULL, related_name="taxable_users", null=True)
+#     #Date that the service was created
+#     date_created = models.DateTimeField(editable=False)
+#     #Date that the service was modified
+#     date_modified = models.DateTimeField(editable=False)
+# 
+#     class Meta:
+#         db_table = "UserTaxes"
+# 
+#     def set_state_tax(self):
+#         state = self.user.stripe_customer.state
+#         stateTax = StateTax.objects.get(
+#             state = state
+#         )
+#         self.state_tax = stateTax
+# 
+#     def save(self, *args, **kwargs):
+#         ''' 
+#         On save, update timestamps 
+#         '''
+#         if not self.id:
+#             self.date_created = timezone.now()
+#         self.date_modified = timezone.now()
+#         return super(UserTax, self).save(*args, **kwargs)
