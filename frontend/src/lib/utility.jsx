@@ -90,6 +90,7 @@ export function getMemberStatus(value){
     if (value === 'A_55') return 'Confirmation Required';
     if (value === 'A_60') return 'Pending Update';
     if (value === 'A_90') return 'Active';
+    if (value === 'A_91') return 'Connected';
 }
 
 export function getMemberColor(value){
@@ -103,6 +104,11 @@ export function getMemberColor(value){
     if (value === 'A_55') return 'warning';
     if (value === 'A_60') return 'warning';
     if (value === 'A_90') return 'success';
+    if (value === 'A_91') return 'success';
+}
+export function isAccountConfirmationNeeded(value){
+    if (value === 'A_35') return true;
+    return false;
 }
 
 export function getAccountStatus(value){
@@ -110,7 +116,7 @@ export function getAccountStatus(value){
     if (value === 'A_10') return 'Canceled';
     if (value === 'A_20') return 'Pending';
     if (value === 'A_30') return 'Pending';
-    if (value === 'A_35') return 'Pending';
+    if (value === 'A_35') return 'Pending Confirmation';
     if (value === 'A_90') return 'Active';
     if (value === 'A_91') return 'Connected';
 }

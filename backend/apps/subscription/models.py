@@ -150,7 +150,7 @@ class SubscriptionAccount(models.Model):
     #User who owns this subscription
     service = models.ForeignKey(SubscriptionService, on_delete=models.CASCADE, related_name="subscription_accounts")
     #User who owns this subscription
-    price_plan = models.ForeignKey(SubscriptionPricingPlan, on_delete=models.PROTECT, related_name="subscription_accounts", null=True, blank=True)
+    price_plan = models.ForeignKey(SubscriptionPricingPlan, on_delete=models.PROTECT, related_name="subscription_accounts", null=True)
     #The encrypted username
     username = EncryptedCharField(max_length=128, null=True, blank=True)
     #The encrypted password. 
@@ -254,8 +254,10 @@ class SubscriptionMember(models.Model):
                 'id':item
             })
         updatedItems.append(newItem)
-        
-        taxPercent = self.user.stripe_customer.get_user_sales_tax_rate() * 100
+        try:
+            taxPercent = self.user.stripe_customer.get_user_sales_tax_rate() * 100
+        except:
+            taxPercent = 0
         updated = stripe.Subscription.modify(
             subscription, 
             items=updatedItems, 

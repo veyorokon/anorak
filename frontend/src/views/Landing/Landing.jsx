@@ -50,7 +50,7 @@ componentDidMount(){
               <GridItem xs={12} sm={12} md={6}>
                 <h1 className={classes.title}>Anorak</h1>
                 <h4>
-                  Subscriptions are a hassle and everyone needs an easier way to manage them. With Anorak, you have one place for all your subscriptions.
+                  Subscriptions are a hassle and you need an easier way to manage them. With Anorak, you have one place for all your subscriptions.
                 </h4>
                 <br />
                 <Button

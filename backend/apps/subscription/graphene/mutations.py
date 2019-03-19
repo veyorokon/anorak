@@ -33,7 +33,7 @@ class SubscriptionAccountMutation(graphene.Mutation):
                 service = service,
                 is_connected_account = isConnectedAccount,
                 status_account = SubscriptionAccountStatus.PENDING_CONNECT
-            )[0]
+            )
         else:
             price_plan = SubscriptionPricingPlan.objects.get(
                 pk = planKey,
@@ -45,7 +45,7 @@ class SubscriptionAccountMutation(graphene.Mutation):
                 price_plan = price_plan,
                 is_connected_account = isConnectedAccount,
                 status_account = SubscriptionAccountStatus.PENDING_CREATE
-            )[0]
+            )
             
         account.username = info.context.user.email
         account.password = password
@@ -64,7 +64,8 @@ class SubscriptionAccountConnectConfirmMutation(graphene.Mutation):
     
     @login_required
     def mutate(self, info, token, subscriptionAccountKey, **kwargs):
-        if not info.context.user.stripe_customer.has_card_on_file:
+        user =  info.context.user
+        if not user.stripe_customer.has_card_on_file:
             raise ValueError("Subscription could not be created. No active card was on file.")        
             
         account = SubscriptionAccount.objects.get_or_create(
@@ -73,7 +74,7 @@ class SubscriptionAccountConnectConfirmMutation(graphene.Mutation):
         account.connect()
         account.save()
         membership = SubscriptionMember.objects.get(
-            user = info.context.user,
+            user = user,
             subscription_account = account
         )
         membership.add_to_stripe_subscription()
@@ -89,4 +90,6 @@ class SubscriptionAccountConnectConfirmMutation(graphene.Mutation):
 
 class Mutations(graphene.ObjectType):
     subscription_account = SubscriptionAccountMutation.Field(description = "Creates a new subscription account. The server will automatically create membership and a management request.")
+    
+    confirm_connected_account = SubscriptionAccountConnectConfirmMutation.Field(description = "Confirms a previously connected account.")
     

@@ -12,8 +12,14 @@ import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
 import CardAvatar from "components/material-dashboard/Card/CardAvatar.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
-import {formatDateTime, getRenewalDate, getAccountStatus, calcAnorakFee} from "lib/utility.jsx";
-import avatar from "assets/img/faces/marc.jpg";
+import {formatDateTime, getRenewalDate, getAccountStatus, calcAnorakFee, isAccountConfirmationNeeded} from "lib/utility.jsx";
+
+import { Mutation } from 'react-apollo';
+import {CONFIRM_SUBSCRIPTION_CONNECT} from "lib/mutations";
+import {USER} from "lib/queries";
+import { getToken } from "lib/utility.jsx";
+import Form from 'components/material-dashboard/Form/Form';
+
 
 const styles = {
   cardCategoryWhite: {
@@ -36,8 +42,21 @@ const styles = {
 function getSum(n1, n2){
     return parseFloat(n1)+parseFloat(n2);
 }
-function Overview(props) {
-  const { classes, getValue } = props;
+
+class Overview extends React.Component {
+    
+    constructor(props){
+        super(props)
+        this.state={
+            cancelClicked: false,
+            submitted: false
+        }
+    }
+    
+render(){
+    
+  const { classes, getValue } = this.props;
+ 
   return (
     <div>
           <GridContainer>
@@ -157,6 +176,7 @@ function Overview(props) {
       </GridContainer>    
     </div>
   );
+}
 }
 
 export default withStyles(styles)(Overview);

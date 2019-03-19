@@ -80,6 +80,7 @@ class StripeCustomer(models.Model):
     country = models.CharField(max_length=32, null=True, blank=True)
     zip = models.IntegerField(null=True, blank=True)
     last_four = models.IntegerField(null=True, blank=True)
+    tax_rate = models.FloatField(null=True, blank=True)
     
     def get_user_sales_tax_rate(self):
         print(settings.TAX_JAR_KEY)
@@ -88,6 +89,7 @@ class StripeCustomer(models.Model):
         if self.zip:
             rates = taxClient.rates_for_location(str(self.zip))
             stateSalesTax = rates.state_rate
+        self.tax_rate = stateSalesTax
         return stateSalesTax
         
     def create_stripe_customer(self):
@@ -155,6 +157,7 @@ class StripeCustomer(models.Model):
         if not self.id:
             self.date_created = timezone.now()
             self.create_stripe_customer()
+        self.get_user_sales_tax_rate()
         self.date_modified = timezone.now()
         return super(StripeCustomer, self).save(*args, **kwargs)
         

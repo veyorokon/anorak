@@ -6,11 +6,13 @@ import { Query } from 'react-apollo';
 import withStyles from "@material-ui/core/styles/withStyles";
 import { withRouter } from 'react-router-dom';
 import {USER} from "lib/queries";
-import {REQUEST_ACCOUNT_CANCELLATION} from "lib/mutations";
+import {REQUEST_ACCOUNT_CANCELLATION, CONFIRM_SUBSCRIPTION_CONNECT} from "lib/mutations";
 
-import { getToken } from "lib/utility.jsx";
+import { getToken, isAccountConfirmationNeeded } from "lib/utility.jsx";
 
 import Overview from "./Sections/Overview";
+import Connect from "./Sections/Connect";
+
 import Button from "components/material-dashboard/CustomButtons/Button.jsx";
 
 import AddBox from "@material-ui/icons/AddBox";
@@ -31,7 +33,8 @@ class _ManageContent extends React.Component {
         this.state={
             active: 0,
             cancelClicked: false,
-            submitted: false
+            submitted: false,
+            confirmClicked: false
         }
     }
     
@@ -57,13 +60,81 @@ class _ManageContent extends React.Component {
         this.props.triggerSnackbar('Your cancellation request has been sent.');
     };
     
-    render(){
+    confirmSubmit = async (confirmSubscriptionConnect) => {
+        var accountKey = this.props.account.id;
+        const variables = {
+            token: getToken(),
+            subscriptionAccountKey: accountKey,
+        };
+        await confirmSubscriptionConnect({ variables });
+        this.setState({submitted: true});
+        this.props.triggerSnackbar('You\'ve succesfully connected your account.');
+    };
+    
+    renderConfirm = () =>{
         const {classes} = this.props;
-        const serviceName = this.getValue("service").name;
+        
         return(
-            <div><h3>
-              <small>{serviceName} Account</small>
-            </h3>
+            <div>
+              <Card>
+                  <div className={classes.container}>
+                      <div className={classes.title}>
+                        <h3>
+                          <small id='confirmName'>Confirm Your {this.getValue("service").name} Account</small>
+                        </h3>
+                      </div>
+                  <CardBody>
+                      <Connect getValue={this.getValue}/>
+                  </CardBody>
+                  <CardFooter style={{margin:"auto",marginBottom:"15px"}}>
+                  {(!this.state.cancelClicked ? (
+                      <Button color="success" onClick={()=>this.setState({cancelClicked:true})} >
+                        <span>Confirm</span>
+                      </Button>
+                  ):
+                  (
+                      <Mutation mutation={CONFIRM_SUBSCRIPTION_CONNECT}
+                      refetchQueries={[
+                        {
+                          query: USER,
+                          variables: {
+                            token: getToken()
+                          }
+                        }
+                      ]}>
+                      {confirmSubscriptionConnect => (
+                          <Form onSubmit={async (values, { setSubmitting }) => {
+                            await this.confirmSubmit(confirmSubscriptionConnect);
+                            setTimeout(() => {
+                              setSubmitting(false);
+                            }, 600);
+                          }}>
+                          
+                  {({ isSubmitting }) => {
+                  var text = 'Request Sent';
+                  if(!this.state.submitted) text = "Connect Your Subscription?"
+              return(<Button disabled={isSubmitting || this.state.submitted} color="primary" type="submit" >
+                        <span>{text}</span>
+                      </Button>
+                  )
+                      }}
+                    </Form>
+                      )}
+                  </Mutation>
+                  )
+              )}
+              </CardFooter>
+               </div>
+             </Card>
+        </div>
+        )
+    }
+    
+    renderManage = () =>{
+        const {classes} = this.props;
+        
+        return(
+            <div>
             <NavPills
               active={this.state.activeStep}
               color="success"
@@ -136,7 +207,7 @@ class _ManageContent extends React.Component {
                   tabContent: (
                       <Card>
                           <div className={classes.container}>
-                            <div id="navigation-pills">
+                            <div id="sharing">
                               <div className={classes.title}>
                                 <h3>
                                   <small>Your Neflix Account</small>
@@ -153,6 +224,16 @@ class _ManageContent extends React.Component {
               ]}
               /></div>
         )
+    }
+    
+    render(){
+        const {classes} = this.props;
+        var requiresConfirmation = isAccountConfirmationNeeded(this.getValue("statusAccount"));
+         
+        if(requiresConfirmation){
+            return this.renderConfirm();
+        }
+        return this.renderManage();
     }
 }
 
