@@ -6,14 +6,16 @@ mutation SubscriptionAccountMutation(
     $serviceKey:Int!, 
     $planKey:Int!, 
     $username:String!, 
-    $password:String!
+    $password:String!,
+    $isConnectedAccount: Boolean!
 ) {
     subscriptionAccount(
         token:$token, 
         serviceKey:$serviceKey, 
         planKey:$planKey, 
         password:$password, 
-        username:$username)
+        username:$username,
+        isConnectedAccount:$isConnectedAccount)
         {
       subscriptionAccount {
         id
@@ -21,6 +23,30 @@ mutation SubscriptionAccountMutation(
         dateModified
         statusAccount
         service{
+          id
+          name
+        }
+      }
+    }
+}
+`;
+
+const CONFIRM_SUBSCRIPTION_CONNECT = gql`
+mutation SubscriptionAccountConnectConfirmMutation(
+    $token:String!, 
+    $subscriptionAccountKey:Int!, 
+) {
+    confirmConnectedAccount(
+        token:$token, 
+        subscriptionAccountKey:$subscriptionAccountKey,)
+        {
+      subscriptionAccount {
+        id
+        dateCreated
+        dateModified
+        statusAccount
+        service{
+          id
           name
         }
       }
@@ -86,4 +112,4 @@ const REQUEST_ACCOUNT_CANCELLATION = gql`
     }
 `;
 
-export { CREATE_SUBSCRIPTION_ACCOUNT, LOGIN_USER, GET_FACEBOOK_USER, SET_STRIPE_CARD, UPDATE_USER, REQUEST_ACCOUNT_CANCELLATION, CREATE_USER }
+export { CREATE_SUBSCRIPTION_ACCOUNT, LOGIN_USER, GET_FACEBOOK_USER, SET_STRIPE_CARD, UPDATE_USER, REQUEST_ACCOUNT_CANCELLATION, CREATE_USER, CONFIRM_SUBSCRIPTION_CONNECT}

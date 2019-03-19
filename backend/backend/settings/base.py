@@ -80,6 +80,8 @@ INSTALLED_APPS = [
     'mail_templated'
 ]
 
+TAX_JAR_KEY = environ_setting("TAX_JAR_KEY")
+
 ####            Cache settings
 
 CELERY_BROKER_URL = "redis://:"+ environ_setting("REDIS_PASSWORD")+ "@"+environ_setting("REDIS_HOST") + ":" + environ_setting("REDIS_PORT")

@@ -29,6 +29,7 @@ django-redis = "*"
 django-mail-templated = "*"
 jupyter = "*"
 psycopg2-binary = "*"
+taxjar = "*"
 
 [dev-packages]
 

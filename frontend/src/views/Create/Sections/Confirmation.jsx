@@ -111,7 +111,7 @@ function Confirmation(props) {
                       }}
                       inputProps={{
                         disabled: true,
-                        value:"Pending"
+                        value:price
                       }}
                     />
                   </GridItem>

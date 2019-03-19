@@ -201,7 +201,7 @@ class _UserProfileContent extends React.Component {
       return (
         <React.Fragment>
           <GridContainer>
-          
+          <GridItem xs={12} sm={12} md={4}>
           <Mutation mutation={UPDATE_USER}
           refetchQueries={[
             {
@@ -227,7 +227,7 @@ class _UserProfileContent extends React.Component {
                       text = "Success"
                   }
                   return(
-          <GridItem xs={12} sm={12} md={12}>
+          
               <Card>
                 <CardHeader color="info">
                   <h4 className={classes.cardTitleWhite}>User Profile</h4>
@@ -279,11 +279,13 @@ class _UserProfileContent extends React.Component {
                   <Button color={color} disabled={isSubmitting || this.state.submitted || !this.state.updatedProfile} type="submit">{text}</Button>
                 </CardFooter>
               </Card>
-            </GridItem>)
+            
+        )
         }}
       </Form>
         )}
         </Mutation>
+        </GridItem>
       
             
                         
@@ -293,6 +295,7 @@ class _UserProfileContent extends React.Component {
                   <h4 className={classes.cardTitleWhite}>Billing</h4>
                 </CardHeader>
                 <CardBody>
+                <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
                     <CustomInput
                       labelText="Name On Card"
@@ -333,47 +336,52 @@ class _UserProfileContent extends React.Component {
                       }}
                     />
                   </GridItem>
-                    <GridItem xs={12} sm={4} md={4}>
-                      <CustomInput
-                        labelText="City"
-                        id="address_city"
-                        onChange={this.onChangeHandler}
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                            value: address_city
-                        }}
-                      />
-                    </GridItem>
+                  </GridContainer>
+                  <GridContainer>
+                        <GridItem xs={12} sm={6} md={6}>
+                          <CustomInput
+                            labelText="City"
+                            id="address_city"
+                            onChange={this.onChangeHandler}
+                            formControlProps={{
+                              fullWidth: true
+                            }}
+                            inputProps={{
+                                value: address_city
+                            }}
+                          />
+                        </GridItem>
+                        
+                    </GridContainer>
                     
-                    <GridItem xs={12} sm={4} md={4}>
-                      <CustomInput
-                        labelText="State"
-                        id="address_state"
-                        onChange={this.onChangeHandler}
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                            value: address_state
-                        }}
-                      />
-                    </GridItem>
-                    <GridItem xs={12} sm={4} md={4}>
-                      <CustomInput
-                        labelText="Country"
-                        id="address_country"
-                        onChange={this.onChangeHandler}
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                            value: address_country
-                        }}
-                      />
-                    </GridItem>
-                    
+                        <GridContainer>
+                        <GridItem xs={12} sm={6} md={6}>
+                          <CustomInput
+                            labelText="State"
+                            id="address_state"
+                            onChange={this.onChangeHandler}
+                            formControlProps={{
+                              fullWidth: true
+                            }}
+                            inputProps={{
+                                value: address_state
+                            }}
+                          />
+                        </GridItem>
+                        <GridItem xs={12} sm={6} md={6}>
+                          <CustomInput
+                            labelText="Country"
+                            id="address_country"
+                            onChange={this.onChangeHandler}
+                            formControlProps={{
+                              fullWidth: true
+                            }}
+                            inputProps={{
+                                value: address_country
+                            }}
+                          />
+                        </GridItem>
+                    </GridContainer>
                 </CardBody>
                 <CardFooter>
                 <GridItem xs={12} sm={12} md={12}>
