@@ -138,6 +138,7 @@ class SubscriptionAccountStatus(enum.Enum):
     TERMINATED = 0
     CANCELED = 10
     PENDING = 20
+    PENDING_CREATE = 29
     PENDING_CONNECT = 30
     PENDING_CONNECT_CONFIRM = 35
     ACTIVE = 90

@@ -38,6 +38,8 @@ class Invoice(models.Model):
     stripe_invoice_number = models.CharField(max_length=64, null=True, blank=True, unique=True, editable=False)
     #Stripe invoice object
     stripe_invoice_finalized_at = models.IntegerField(null=True, blank=True, unique=True, editable=False)
+    #If the payment method for this invoice failed
+    is_finalized = models.BooleanField(default=False)
     #Stripe invoice object
     stripe_invoice_fee_id = models.CharField(max_length=64, null=True, blank=True, unique=True, editable=False)
     
@@ -91,6 +93,7 @@ class Invoice(models.Model):
         invoiceId = invoice.id
         self.stripe_invoice_finalized_at = finalized
         self.stripe_invoice = invoice.invoiceId
+        self.is_finalized = True
             
     def initialize_invoice(self, upcomingInvoice=None):
         if not upcomingInvoice:
@@ -137,7 +140,7 @@ class Invoice(models.Model):
             managementFee = mgtFee
         return managementFee, duplicateTotal
         
-    def sync_with_stripe_or_finalize(self):
+    def sync_with_stripe_and_finalize(self):
         invoice = self.user.stripe_customer.get_stripe_upcoming_invoice()
         if not self.is_matching_invoice(invoice):
             invoice = self.user.stripe_customer.get_stripe_latest_invoice()
@@ -194,61 +197,7 @@ class Invoice(models.Model):
         if not self.id:
             self.date_created = timezone.now()
             self.initialize_invoice()
-        if self.stripe_invoice_finalized_at == None:
-            self.sync_with_stripe_or_finalize()
+        if not self.is_finalized:
+            self.sync_with_stripe_and_finalize()
             self.date_modified = timezone.now()
         return super(Invoice, self).save(*args, **kwargs)
-
-        
-# class StateTax(models.Model):
-#     #State this is associated with
-#     state = models.CharField(max_length=512, unique=True, null=False)
-#     #Sales tax rate
-#     sales_tax = models.FloatField()
-#     #Date that the service was created
-#     date_created = models.DateTimeField(editable=False)
-#     #Date that the service was modified
-#     date_modified = models.DateTimeField(editable=False)
-# 
-#     class Meta:
-#         db_table = "StateTaxes"
-# 
-#     def save(self, *args, **kwargs):
-#         ''' 
-#         On save, update timestamps 
-#         '''
-#         if not self.id:
-#             self.date_created = timezone.now()
-#             self.state = self.state.lower()
-#         self.date_modified = timezone.now()
-#         return super(StateTax, self).save(*args, **kwargs)
-# 
-# 
-# class UserTax(models.Model):
-#     #The user this is tied to
-#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="tax")
-#     #The sales tax for this user
-#     state_tax = models.ForeignKey(StateTax, on_delete=models.SET_NULL, related_name="taxable_users", null=True)
-#     #Date that the service was created
-#     date_created = models.DateTimeField(editable=False)
-#     #Date that the service was modified
-#     date_modified = models.DateTimeField(editable=False)
-# 
-#     class Meta:
-#         db_table = "UserTaxes"
-# 
-#     def set_state_tax(self):
-#         state = self.user.stripe_customer.state
-#         stateTax = StateTax.objects.get(
-#             state = state
-#         )
-#         self.state_tax = stateTax
-# 
-#     def save(self, *args, **kwargs):
-#         ''' 
-#         On save, update timestamps 
-#         '''
-#         if not self.id:
-#             self.date_created = timezone.now()
-#         self.date_modified = timezone.now()
-#         return super(UserTax, self).save(*args, **kwargs)

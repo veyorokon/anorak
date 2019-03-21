@@ -30,8 +30,6 @@ def create_invoice(sender, instance, created, **kwargs):
             user = instance.user
         )
         invoice.save() # Triggers the invoice update
-        if not instance.subscription_account.is_connected_account:
-            email_receipt(instance, invoice)
     else:
         invoice = Invoice.objects.get(user=instance.user)
         invoice.save() # Triggers the invoice update
@@ -40,15 +38,18 @@ def create_invoice(sender, instance, created, **kwargs):
 # Delete the Stripe customer from the model
 @receiver(pre_delete, sender=SubscriptionPricingPlan)
 def delete_stripe_plan(sender, instance=None, **kwargs):
-    instance.delete_stripe_plan()
-
+    try:
+        instance.delete_stripe_plan()
+    except:
+        pass
 
 # Delete the Stripe customer from the model
 @receiver(pre_delete, sender=SubscriptionMember)
 def delete_subscription_membership(sender, instance=None, **kwargs):
     try:
         instance.cancel()
-        invoice = Invoice.objects.get(user=instance.user)
-        invoice.save() # Triggers the invoice update
+        invoice = Invoice.objects.get(user=instance.user).order_by('-id')[0]
+        invoice.sync_with_stripe_or_finalize() # Triggers the invoice update
+        invoice.save()
     except:
         pass

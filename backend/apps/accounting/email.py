@@ -3,8 +3,12 @@ import time
 import calendar
 from backend.utility import *
 from core.models import User
+from django.template import Context
+
 from accounting.models import Invoice
 from mail_templated import EmailMessage
+from django.template.loader import render_to_string, get_template
+from django.contrib.staticfiles.templatetags.staticfiles import static
 
 
 def get_item_from_invoice(plan, invoice):

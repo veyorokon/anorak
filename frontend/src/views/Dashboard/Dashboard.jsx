@@ -143,7 +143,7 @@ class Dashboard extends React.Component {
             </span>
             </CardHeader>
               <CardBody subscription>
-               <img src={require("assets/svg/"+subscriptionAccount.service.name.toLowerCase()+".svg")} className={classes.cardImage} />
+               <img src={process.env.REACT_APP_STATIC_FILES+"svg/"+subscriptionAccount.service.name.toLowerCase()+".svg"} className={classes.cardImage} />
               </CardBody>
               <CardFooter>
               <span className={classes.cardInLine}>

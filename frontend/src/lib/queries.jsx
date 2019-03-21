@@ -36,6 +36,7 @@ query user($token: String!) {
             country
             name
             lastFour
+            taxRate
         }
         
         subscriptionMemberships{

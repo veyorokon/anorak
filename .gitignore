@@ -3,14 +3,9 @@ node_modules
 .env
 
 #Build files
-frontend/ios/build/
-frontend/.expo
-frontend/android/*
-frontend/ios/*
 
-src/backend/static/
 db.sqlite3
-AnorakDev
+#AnorakDev
 
 static_files
 

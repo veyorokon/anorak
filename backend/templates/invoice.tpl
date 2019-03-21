@@ -116,7 +116,6 @@ Your iAnorak {{data.service}} Subscription Order
       }
     </style>
 </head>
-
 <body>
     <div class="invoice-box">
         <table cellpadding="0" cellspacing="0">
@@ -229,5 +228,4 @@ Your iAnorak {{data.service}} Subscription Order
     </div>
 </body>
 </html>
-
 {% endblock %}
