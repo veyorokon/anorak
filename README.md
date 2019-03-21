@@ -366,13 +366,28 @@ Then add a .env file with the following values:
 [.env]
 ...
 NODE_PATH=./src
-PUBLIC_URL="https://squadup.xyz"
+PUBLIC_URL="https://ianorak.com"
 ```
    
 Lastly, we'll need to build the production version and run it using Pm2 which you'll need to install.
 ```sh
 rm -rf build &&  npm run build && pm2 stop all && pm2 serve /home/squadup0/server/frontend/build 5000
 ```
+
+update productionEnv
+update /etc/default/celeryd && celerybeats
+cd server
+git stash && git pull
+pipenv shell && pipenv install 
+pip freeze > requirements.txt
+deactivate
+cd ~/server
+./config server
+
+sudo service gunicorn restart
+sudo /etc/init.d/celeryd && celerybeats restart
+cd frontend
+frontendbuild
 
 License
 ----
