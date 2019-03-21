@@ -34,7 +34,7 @@ def environ_setting(name, default=None):
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.insert(0, os.path.join(BASE_DIR, 'src.apps'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 ALLOWED_HOSTS = [
     'squadup.xyz', 
@@ -67,32 +67,33 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    'core',
     'corsheaders',
-    'request',
+    
     'graphene_django',
     'django_extensions',
     'encrypted_model_fields',
-    'django_celery_results',
-    'django_redis',
-    'mail_templated'
+    'mail_templated',
+    "djstripe",
+    
+    'core',
+    'request',
 ]
 
 TAX_JAR_KEY = environ_setting("TAX_JAR_KEY")
 
 ####            Cache settings
+# 
+# CELERY_BROKER_URL = "redis://:"+ environ_setting("REDIS_PASSWORD")+ "@"+environ_setting("REDIS_HOST") + ":" + environ_setting("REDIS_PORT")
 
-CELERY_BROKER_URL = "redis://:"+ environ_setting("REDIS_PASSWORD")+ "@"+environ_setting("REDIS_HOST") + ":" + environ_setting("REDIS_PORT")
-
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": CELERY_BROKER_URL+"/1",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        },
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": CELERY_BROKER_URL+"/1",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         },
+#     }
+# }
 
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
@@ -118,7 +119,7 @@ EMAIL_HOST_USER = environ_setting("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = environ_setting("EMAIL_HOST_PASSWORD")
 
 GRAPHENE = {
-    'SCHEMA': 'src.backend.schema.schema',
+    'SCHEMA': 'backend.schema.schema',
     'MIDDLEWARE': [
         'graphql_jwt.middleware.JSONWebTokenMiddleware',
     ],
@@ -150,7 +151,7 @@ MIDDLEWARE = [
     'django.middleware.common.BrokenLinkEmailsMiddleware',
 ]
 
-ROOT_URLCONF = 'src.backend.urls'
+ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
     {
@@ -168,9 +169,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'src.backend.wsgi.application'
+WSGI_APPLICATION = 'backend.wsgi.application'
 AUTH_USER_MODEL = 'core.User'
 
+STRIPE_TEST_PUBLIC_KEY = environ_setting("STRIPE_TEST_PUBLIC_KEY")
+STRIPE_TEST_SECRET_KEY = environ_setting("STRIPE_ACCOUNT_SID")
+STRIPE_LIVE_MODE = False  # Change to True in production
+DJSTRIPE_WEBHOOK_SECRET = "whsec_o93pPkOHAIoudZVGlkO2Ky6yb9XkkmZ2"  # Get it from the section in the Stripe dashboard where you added the webhook endpoint
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

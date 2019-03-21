@@ -1,20 +1,20 @@
 from graphene_django.types import DjangoObjectType
 from core.models import * 
     
-class StripeCustomerType(DjangoObjectType):
-    class Meta:
-        model = StripeCustomer
-        exclude_fields = ['stripe_customer_id', 'stripe_credit_card_id']
+# class StripeCustomerType(DjangoObjectType):
+#     class Meta:
+#         model = StripeCustomer
+#         exclude_fields = ['stripe_customer_id', 'stripe_credit_card_id']
 
 class UserType(DjangoObjectType):
     class Meta:
         model = User
         exclude_fields = ['is_superuser', 'is_staff']
     
-    def resolve_stripe_customer(self, info):
-        if info.context.user == self:
-            return self.stripe_customer
-        return None
+    # def resolve_stripe_customer(self, info):
+    #     if info.context.user == self:
+    #         return self.stripe_customer
+    #     return None
     
     def resolve_email(self, info):
         if info.context.user == self or info.context.user.is_staff:

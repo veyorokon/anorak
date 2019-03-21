@@ -32,4 +32,6 @@ urlpatterns = [
             graphiql=settings.DEBUG
         ))
     ),
+    path("api/stripe/", include("djstripe.urls", namespace="djstripe")),
+
 ]

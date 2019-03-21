@@ -1,6 +1,6 @@
 from django.db import models
 from core.models import User
-from subscription.models import SubscriptionMember, SubscriptionAccount
+# from subscription.models import SubscriptionMember, SubscriptionAccount
 from django.utils import timezone
 from django_enumfield import enum
 
@@ -26,9 +26,9 @@ class ManagementRequestAction(enum.Enum):
 #Manual actions (in future API) needed to be performed on the actual subscription account.
 class ManagementRequest(models.Model):
     #The subscription account attached to this request
-    subscription_account = models.ForeignKey(SubscriptionAccount, on_delete=models.CASCADE, related_name="management_requests")
+    # subscription_account = models.ForeignKey(SubscriptionAccount, on_delete=models.CASCADE, related_name="management_requests")
     #The subscription membership attached to this request
-    subscription_member = models.ForeignKey(SubscriptionMember, on_delete=models.CASCADE, related_name="management_requests")
+    # subscription_member = models.ForeignKey(SubscriptionMember, on_delete=models.CASCADE, related_name="management_requests")
     #The originator of the request
     originator = enum.EnumField(ManagementRequestOriginator, default=ManagementRequestOriginator.CLIENT)
     #Date that the processing request was created

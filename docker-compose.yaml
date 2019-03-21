@@ -17,14 +17,15 @@ services:
     depends_on:
       - database
     environment:
-        - "DJANGO_SETTINGS_MODULE=backend.src.settings.development"
+        - "DJANGO_SETTINGS_MODULE=backend.settings.development"
         - "FACEBOOK_CLIENT_ID=1974089579550206"
         - "FACEBOOK_CLIENT_SECRET=8117c08eed5c3ec4fe3142ee9d704dc1"
         - "SECRET_KEY=v(m)6f0+s3d$o4lk$lli&un$e1a@bu3oww^9=s=ms)+@df23*r"
         - "FIELD_ENCRYPTION_KEY=g2z7GI3SaOnTNDCEZhy_46NWSzyUatriWt_ecPTjHNo="
         - "STRIPE_ACCOUNT_SID=sk_test_9Xz79VxZxWJbanvxDAWLYmoN"
-        - "STRIPE_ANORAK_PRODUCT=prod_EjjDCFPFi1tHtu"
-        - "STRIPE_ANORAK_PLAN=plan_EjjE44T2WQ96mP"
+        - "STRIPE_TEST_PUBLIC_KEY=pk_test_rLuroFoR4XKOxb3FbmJqTqrh"
+        - "STRIPE_ANORAK_PRODUCT=prod_EjnBIJAleVzUNz"
+        - "STRIPE_ANORAK_PLAN=plan_EjnCfmT2JdOt1a"
         - "DB_NAME=postgres"
         - "DB_USER=postgres"
         - "DB_HOST=database"
@@ -40,4 +41,10 @@ services:
     image: postgres
     ports:
       - "9432:5432"
+      
+  serveo:
+    build: serveo/
+    tty: true
+    stdin_open: true
+    command: "ssh -o ServerAliveInterval=60 -R ianoraktest:80:host.docker.internal:8000  -o \"StrictHostKeyChecking no\" serveo.net"
       

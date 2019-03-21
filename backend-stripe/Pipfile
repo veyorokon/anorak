@@ -30,6 +30,8 @@ django-mail-templated = "*"
 jupyter = "*"
 psycopg2-binary = "*"
 taxjar = "*"
+dj-stripe = "*"
+tox = "*"
 
 [dev-packages]
 
