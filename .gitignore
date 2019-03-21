@@ -16,7 +16,7 @@ static_files
 # remove backup files
 *~
 *.pyc
-
+__pycache__/
 
 # remove git files
 .idea
