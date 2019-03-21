@@ -20,7 +20,10 @@ def create_stripe_customer(sender, instance, created, **kwargs):
 # Delete the Stripe customer from the model
 @receiver(pre_delete, sender=StripeCustomer)
 def delete_stripe_customer(sender, instance=None, **kwargs):
-    instance.delete_customer()
+    try:
+        instance.delete_customer()
+    except:
+        pass
     
 #Create a base subscription to the Anorak product
 @receiver(post_save, sender=StripeCustomer)

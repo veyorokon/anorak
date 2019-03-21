@@ -83,7 +83,6 @@ class StripeCustomer(models.Model):
     tax_rate = models.FloatField(null=True, blank=True)
     
     def get_user_sales_tax_rate(self):
-        print(settings.TAX_JAR_KEY)
         taxClient = taxjar.Client(api_key=settings.TAX_JAR_KEY)
         stateSalesTax = 0
         if self.zip:

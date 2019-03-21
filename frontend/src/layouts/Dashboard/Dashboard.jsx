@@ -19,6 +19,7 @@ import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboar
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
 
+
 const switchRoutes = (
   <Switch>
     {dashboardRoutes.map((prop, key) => {
@@ -72,7 +73,7 @@ class App extends React.Component {
         <Sidebar
           routes={dashboardRoutes}
           logoText={"Anorak"}
-          logo={logo}
+          logo={process.env.REACT_APP_STATIC_FILES+"images/logo-a.png"}
           image={null}
           handleDrawerToggle={this.handleDrawerToggle}
           open={this.state.mobileOpen}

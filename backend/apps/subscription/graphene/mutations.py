@@ -20,7 +20,8 @@ class SubscriptionAccountMutation(graphene.Mutation):
     
     @login_required
     def mutate(self, info, serviceKey, planKey, token, username, password, isConnectedAccount, **kwargs):
-        if not info.context.user.stripe_customer.has_card_on_file:
+        user = info.context.user
+        if not user.stripe_customer.has_card_on_file:
             raise ValueError("Subscription could not be created. No active card was on file.")    
                 
         service = SubscriptionService.objects.get(
@@ -46,8 +47,13 @@ class SubscriptionAccountMutation(graphene.Mutation):
                 is_connected_account = isConnectedAccount,
                 status_account = SubscriptionAccountStatus.PENDING_CREATE
             )
+            membership = SubscriptionMember.objects.get(
+                subscription_account = account
+            )
+            invoice = Invoice.objects.filter(user=user).order_by('-id')[0]
+            email_receipt(membership, invoice)
             
-        account.username = info.context.user.email
+        account.username = user.email
         account.password = password
         account.save()
         return SubscriptionAccountMutation(
