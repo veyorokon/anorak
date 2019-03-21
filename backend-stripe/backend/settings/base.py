@@ -175,7 +175,8 @@ AUTH_USER_MODEL = 'core.User'
 STRIPE_TEST_PUBLIC_KEY = environ_setting("STRIPE_TEST_PUBLIC_KEY")
 STRIPE_TEST_SECRET_KEY = environ_setting("STRIPE_ACCOUNT_SID")
 STRIPE_LIVE_MODE = False  # Change to True in production
-DJSTRIPE_WEBHOOK_SECRET = "whsec_o93pPkOHAIoudZVGlkO2Ky6yb9XkkmZ2"  # Get it from the section in the Stripe dashboard where you added the webhook endpoint
+DJSTRIPE_WEBHOOK_SECRET = environ_setting("DJSTRIPE_WEBHOOK_SECRET")
+# Get it from the section in the Stripe dashboard where you added the webhook endpoint
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

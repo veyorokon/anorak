@@ -34,6 +34,7 @@ services:
         - "EMAIL_HOST_USER=anorak_test"
         - "EMAIL_HOST=smtp.sendgrid.net"
         - "TAX_JAR_KEY=08e289d7c2f7be1a25ac493d17afe4f9"
+        - "DJSTRIPE_WEBHOOK_SECRET=whsec_o93pPkOHAIoudZVGlkO2Ky6yb9XkkmZ2"
 
 
   database:
