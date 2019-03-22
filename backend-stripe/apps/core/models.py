@@ -11,8 +11,6 @@ from django.db.models.signals import post_save, pre_delete, post_delete
 from django.contrib.auth.base_user import AbstractBaseUser
 
 import taxjar
-import stripe
-stripe.api_key = settings.STRIPE_ACCOUNT_SID
 
 from rest_framework_jwt.settings import api_settings
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER

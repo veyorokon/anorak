@@ -7,18 +7,17 @@ class CoreConfig(AppConfig):
     def ready(self):
         from . import signals
         from core.models import User
-        from djstripe.models import Customer
+        from djstripe.models import Customer, Product
         
         post_save.connect(
             signals.create_stripe_customer,
+            sender=User
+        )
+        post_delete.connect(
+            signals.delete_stripe_customer, 
             sender=User
         )
         post_save.connect(
             signals.create_stripe_subscription,
             sender=Customer
         )
-        post_delete.connect(
-            signals.delete_stripe_customer, 
-            sender=User
-        )
-    

@@ -8,7 +8,7 @@ import stripe
 stripe.api_key = settings.STRIPE_ACCOUNT_SID
 anorakPlan = settings.STRIPE_ANORAK_PLAN
 
-from djstripe.models import Customer, Subscription, Plan
+from djstripe.models import Customer, Subscription, Plan, Product
 
 #Create a base subscription to the Anorak product
 @receiver(post_save, sender=User)
@@ -31,7 +31,7 @@ def create_stripe_subscription(sender, instance, created, **kwargs):
                 },
             ],
             billing_cycle_anchor=get_first_day_next_month_epoch()
-        )      
+        )   
         
 # Delete the Stripe customer from the model
 @receiver(post_delete, sender=User)
@@ -39,4 +39,5 @@ def delete_stripe_customer(sender, instance=None, **kwargs):
     try:
         instance.djstripe_customer.delete()
     except:
-        pass  
+        pass     
+    

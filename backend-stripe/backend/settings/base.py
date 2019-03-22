@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     
     'core',
     'request',
+    'subscription'
 ]
 
 TAX_JAR_KEY = environ_setting("TAX_JAR_KEY")
