@@ -1,5 +1,5 @@
 import graphene 
-from . types import *
+from . types import _UserType
 from core.models import * 
 from core.authentication import FacebookManager
 from graphql_jwt.decorators import login_required
@@ -59,7 +59,7 @@ class UpdateUser(graphene.Mutation):
         firstName = graphene.String()
         lastName = graphene.String()
     
-    user = graphene.Field(UserType)
+    user = graphene.Field(_UserType)
     
     @login_required
     def mutate(self, info, token, firstName, lastName):

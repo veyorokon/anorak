@@ -6,7 +6,7 @@ class SubscriptionConfig(AppConfig):
     
     def ready(self):
         from . import signals
-        from subscription.models import SubscriptionService, SubscriptionPlan
+        from subscription.models import SubscriptionService, SubscriptionPlan, SubscriptionMember
         
         post_save.connect(
             signals.create_stripe_product, 
@@ -25,15 +25,8 @@ class SubscriptionConfig(AppConfig):
             signals.delete_stripe_plan,
             sender=SubscriptionPlan
         )
-        # post_save.connect(
-        #     signals.create_invoice,
-        #     sender=SubscriptionMember
-        # )
-        # pre_delete.connect(
-        #     signals.delete_stripe_plan,
-        #     sender=SubscriptionPricingPlan
-        # )
-        # pre_delete.connect(
-        #     signals.delete_subscription_membership,
-        #     sender=SubscriptionMember
-        # )
+        
+        pre_delete.connect(
+            signals.delete_stripe_subscription_item,
+            sender=SubscriptionMember
+        )

@@ -28,8 +28,11 @@ class SubscriptionAccountAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         if obj:
             return self.readonly_fields + (
-                'is_connected_account', 
                 'responsible_user',
             )
         return self.readonly_fields
     
+@admin.register(SubscriptionMember)
+class SubscriptionMemberAdmin(admin.ModelAdmin):
+    """Define admin model for SubscriptionMember."""
+    readonly_fields=('stripe_subscription_item_id',)

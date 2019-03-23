@@ -3,14 +3,13 @@ from __future__ import unicode_literals
 from django.db import models
 from django.conf import settings
 from .managers import UserManager
+from backend.stripe import stripe
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import PermissionsMixin
 from django.db.models.signals import post_save, pre_delete, post_delete
 from django.contrib.auth.base_user import AbstractBaseUser
-
-import taxjar
 
 from rest_framework_jwt.settings import api_settings
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
@@ -57,3 +56,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def djstripe_customer(self):
         return self.djstripe_customers.first()
+    
+    @property
+    def djstripe_subscription(self):
+        return self.djstripe_customer.subscription
+        
+    def get_shipping_zip(self):
+        customer = stripe.Customer.retrieve(self.djstripe_customer.id)
+        return customer.shipping.address.postal_code

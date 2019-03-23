@@ -20,7 +20,6 @@ class ConnectAccountManager(models.Manager):
             
     def create(self, **kwargs):
         kwargs.update({
-            'is_connected_account': True, 
             'type': SubscriptionAccountType.CONNECT
         })
         return super(ConnectAccountManager, self).create(**kwargs)

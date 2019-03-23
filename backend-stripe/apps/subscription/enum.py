@@ -12,7 +12,7 @@ from django_enumfield import enum
 ## Enum Types
 ##########################################################################
 
-# Frequency of subscription billing
+# Type of service
 class ServiceType(enum.Enum):
     STREAMING = 0
     BOX = 1
@@ -32,13 +32,23 @@ class SubscriptionAccountStatus(enum.Enum):
     PENDING = 20
     PENDING_CREATE = 29
     PENDING_CONNECT = 30
-    PENDING_CONNECT_CONFIRM = 35
+    PENDING_CONFIRM = 35
     ACTIVE = 90
     CONNECTED = 91
     
     
-# Status for the subscription account
+# Type of subscription account
 class SubscriptionAccountType(enum.Enum):
     CREATE = 0
     CONNECT = 1
     
+
+# Status for the subscription membership
+class MembershipStatus(enum.Enum):
+    PAYMENT_FAILED = 0 
+    KICKED = 10 
+    CANCELED = 20 
+    INVITED = 30
+    PENDING = 40
+    UPDATING = 50
+    ACTIVE = 90 
