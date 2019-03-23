@@ -52,7 +52,8 @@ def get_receipt_data(member, invoice):
         amount = item.amount/100
         output["items"]=[{"description": item.description,  "price": amount}]
         total += amount
-    amount = item.plan.amount/100
+    else:
+        amount = item.plan.amount/100
     output["total"] = (total + amount)
     output["invoice_number"] = stripeInvoice.number
     date = convert_epoch(stripeInvoice.period_end)

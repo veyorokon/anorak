@@ -37,3 +37,12 @@ def get_last_day_of_month_epoch():
 def get_first_day_of_next_month(date=today()):
     return get_last_day(date) + timedelta(days=1)
     
+def convert_epoch(epoch):
+    date = datetime.fromtimestamp(epoch)
+    return date
+    
+def days_in_a_month(date):
+    return calendar.monthrange(date.year,date.month)[1]
+    
+def date_time_to_date(dateTime):
+        return dateTime.strftime('%B %d, %Y')
