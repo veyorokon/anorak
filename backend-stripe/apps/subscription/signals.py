@@ -9,6 +9,7 @@ Custom signals for the subscription models
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete, post_delete
 from subscription.models import *
+from backend.fees import AnorakFeeManager
 
 ##########################################################################
 ## SubscriptionService
@@ -50,4 +51,6 @@ def delete_stripe_plan(sender, instance, **kwargs):
 @receiver(pre_delete, sender=SubscriptionMember)
 def delete_stripe_subscription_item(sender, instance, **kwargs):
     instance.cancel()
+    feeManager = AnorakFeeManager()
+    feeManager.update_management_fee(user=instance.user)
     

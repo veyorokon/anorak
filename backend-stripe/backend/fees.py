@@ -60,15 +60,16 @@ class AnorakFeeManager(object):
         fee = self.calculate_management_fee(totalWithoutFees)
         startTime = existingItem.period.start
         endTime = existingItem.period.end
-        newItem = stripe.InvoiceItem.modify(
-                    feeID,
-                    amount = fee,
-                    period = {
-                    "start": startTime,
-                    "end": endTime,
-                  },
-                )
-        return newItem
+        if feeTotal != fee:
+            return stripe.InvoiceItem.modify(
+                        feeID,
+                        amount = fee,
+                        period = {
+                        "start": startTime,
+                        "end": endTime,
+                      },
+                    )
+        return existingItem
     
     def _delete_invoice_item(self, itemID):
         item = stripe.InvoiceItem.retrieve(itemID)
@@ -97,6 +98,5 @@ class AnorakFeeManager(object):
         feeItems = self.find_items(self.feeDescription, invoice)
         if feeItems:
             item, total = self._prevent_duplicate_fees(feeItems)
-            self._update_management_charge(invoice, item, total)
-        else:
-            self._create_management_charge(user, invoice)
+            return self._update_management_charge(invoice, item, total)
+        return self._create_management_charge(user, invoice)

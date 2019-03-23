@@ -221,7 +221,6 @@ class SubscriptionMember(models.Model):
     def _set_stripe_subscription_item_id(self, subscription=None):
         planID = self.subscription_account.subscription_plan.stripe_plan_id
         itemID = None
-        print(subscription)
         for subscriptionItem in subscription['items']['data']:
             if subscriptionItem.plan.id == planID:
                 itemID = subscriptionItem.id

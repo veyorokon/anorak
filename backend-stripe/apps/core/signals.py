@@ -1,12 +1,15 @@
+import json
 from django.conf import settings
 from django.dispatch import receiver
 from core.models import User
 from django.db.models.signals import post_save, pre_delete, post_delete
 from backend.utility import *
+from backend.fees import AnorakFeeManager
 from backend.stripe import stripe
 
-from djstripe.models import Customer, Subscription, Plan, Product, Invoice
+from djstripe.models import Customer, Subscription, Invoice, WebhookEventTrigger
 
+anorakPlan = settings.STRIPE_ANORAK_PLAN
 ##########################################################################
 ## User
 ##########################################################################
@@ -23,7 +26,6 @@ def create_stripe_customer(sender, instance, created, **kwargs):
     if created:
         customer = Customer.create(instance)
         
-        
 ##########################################################################
 ## Customer
 ##########################################################################
@@ -31,7 +33,6 @@ def create_stripe_customer(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Customer)
 def create_stripe_subscription(sender, instance, created, **kwargs):
     if created:
-        plan = Plan.objects.get(id=anorakPlan)
         anchor = get_first_day_of_next_month()
         stripe.Subscription.create(
             customer=instance.id,
@@ -43,3 +44,26 @@ def create_stripe_subscription(sender, instance, created, **kwargs):
             billing_cycle_anchor=get_first_day_next_month_epoch()
         )   
 
+##########################################################################
+## Invoice
+##########################################################################
+
+@receiver(post_save, sender=Invoice)
+def create_anorak_fee(sender, instance, created, **kwargs):
+    if created:
+        user = instance.customer.subscriber
+        feeManager = AnorakFeeManager()
+        feeManager.update_management_fee(user=user)
+        
+##########################################################################
+## Invoice
+##########################################################################
+
+@receiver(post_save, sender=WebhookEventTrigger)
+def trigger_anorak_fee(sender, instance, created, **kwargs):
+    data = json.loads(instance.body)
+    if (instance.valid and data['type'] == 'customer.subscription.updated'):
+        subscriberID = data['data']['object']['customer']
+        user = Customer.objects.get(id=subscriberID).subscriber
+        feeManager = AnorakFeeManager()
+        feeManager.update_management_fee(user=user)

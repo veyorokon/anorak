@@ -7,7 +7,7 @@ class CoreConfig(AppConfig):
     def ready(self):
         from . import signals
         from core.models import User
-        from djstripe.models import Customer, Product
+        from djstripe.models import Customer, Product, Invoice, WebhookEventTrigger
         
         post_save.connect(
             signals.create_stripe_customer,
@@ -20,4 +20,14 @@ class CoreConfig(AppConfig):
         post_save.connect(
             signals.create_stripe_subscription,
             sender=Customer
+        )
+        
+        post_save.connect(
+            signals.create_anorak_fee, 
+            sender=Invoice
+        )
+        
+        post_save.connect(
+            signals.trigger_anorak_fee, 
+            sender=WebhookEventTrigger
         )
