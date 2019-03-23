@@ -1,34 +1,15 @@
 from django.db import models
 from core.models import User
-# from subscription.models import SubscriptionMember, SubscriptionAccount
+from subscription.models import SubscriptionMember, SubscriptionAccount
 from django.utils import timezone
-from django_enumfield import enum
-
-
-# A request for account management
-class ManagementRequestOriginator(enum.Enum):
-    SERVER = 0 # If the backend generated this process request
-    CLIENT = 1 # If the user generated this process request
-    
-# The status of requests
-class ManagementRequestStatus(enum.Enum):
-    FAILED = 0 # If the request has been processed but with issues
-    PROCESSING = 1 # If the request has yet to be processed
-    COMPLETE = 2 # If the request was successfully processed
-
-# The status of requests
-class ManagementRequestAction(enum.Enum):
-    CANCEL_ACCOUNT = 0 
-    CHANGE_PASSWORD = 1 
-    CONNECT_ACCOUNT = 2 
-    CREATE_ACCOUNT = 3 
+from . enum import *
 
 #Manual actions (in future API) needed to be performed on the actual subscription account.
 class ManagementRequest(models.Model):
     #The subscription account attached to this request
-    # subscription_account = models.ForeignKey(SubscriptionAccount, on_delete=models.CASCADE, related_name="management_requests")
+    subscription_account = models.ForeignKey(SubscriptionAccount, on_delete=models.CASCADE, related_name="management_requests")
     #The subscription membership attached to this request
-    # subscription_member = models.ForeignKey(SubscriptionMember, on_delete=models.CASCADE, related_name="management_requests")
+    subscription_member = models.ForeignKey(SubscriptionMember, on_delete=models.CASCADE, related_name="management_requests")
     #The originator of the request
     originator = enum.EnumField(ManagementRequestOriginator, default=ManagementRequestOriginator.CLIENT)
     #Date that the processing request was created
