@@ -28,3 +28,4 @@ class CreateAccountManager(models.Manager):
     def get_queryset(self):
         return super(CreateAccountManager, self).get_queryset().filter(
             type=SubscriptionAccountType.CREATE)
+

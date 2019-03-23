@@ -1,0 +1,102 @@
+"""
+Custom fee manager to calculate and maintain anorak fees on stripe invoices
+"""
+
+##########################################################################
+## Imports
+##########################################################################
+
+from backend.utility import *
+from backend.stripe import stripe
+import calendar
+import time
+
+
+##########################################################################
+## Anorak Fee Manager
+##########################################################################
+
+class AnorakFeeManager(object):
+    def __init__(self):
+        self.feeDescription = "Anorak Management Fee"
+    
+    def _prevent_duplicate_fees(self, potentialDuplicateItems):
+        duplicateTotal = -1
+        item = None
+        if len(potentialDuplicateItems) == 1:
+            item = potentialDuplicateItems[0]
+            duplicateTotal = item.amount
+        elif len(potentialDuplicateItems) > 1:
+            mgtFee = potentialDuplicateItems[0]
+            duplicateTotal = mgtFee.amount
+            duplicates = potentialDuplicateItems[1:]
+            for duplicateFee in duplicates:
+                self._delete_invoice_item(duplicateFee.id)
+                duplicateTotal += duplicateFee.amount
+            item = mgtFee
+        return item, duplicateTotal
+
+    def _create_management_charge(self, user, invoice):
+        customer = user.djstripe_customer
+        subscription = user.djstripe_subscription
+        timeNow = int(calendar.timegm(time.gmtime()))
+        fee = self.calculate_management_fee(invoice.subtotal)
+        item = stripe.InvoiceItem.create(
+                customer=customer.id, 
+                amount=fee, 
+                currency="usd", 
+                subscription=subscription.id,
+                description=self.feeDescription,
+                period = {
+                "start": timeNow,
+                "end": get_first_day_next_month_epoch(),
+              },
+            )
+        return item
+    
+    def _update_management_charge(self, invoice, existingItem, feeTotal=0.0):
+        feeID = existingItem.id
+        totalWithoutFees = float(invoice.subtotal-feeTotal)
+        fee = self.calculate_management_fee(totalWithoutFees)
+        startTime = existingItem.period.start
+        endTime = existingItem.period.end
+        newItem = stripe.InvoiceItem.modify(
+                    feeID,
+                    amount = fee,
+                    period = {
+                    "start": startTime,
+                    "end": endTime,
+                  },
+                )
+        return newItem
+    
+    def _delete_invoice_item(self, itemID):
+        item = stripe.InvoiceItem.retrieve(itemID)
+        item.delete()
+    
+    def find_items(self, search, invoice):
+        search = [term.lower() for term in search]
+        found = []
+        for item in invoice.lines.data:
+            description = item.description.lower()
+            if all(term in description for term in search):
+                found.append(item)
+        return found
+    
+    def calculate_management_fee(self, subtotal):
+        subtotal /= 100 #Format from stripe
+        if subtotal==0.0:
+            return 0
+        fee = round((subtotal * 0.03 + 0.50) ,2)
+        if fee > 5.00:
+            fee = min(fee, 5.00)
+        return(int(fee*100))
+    
+    def update_management_fee(self, user):
+        invoice = user.upcoming_invoice()
+        feeItems = self.find_items(self.feeDescription, invoice)
+        if feeItems:
+            item, total = self._prevent_duplicate_fees(feeItems)
+            self._update_management_charge(invoice, item, total)
+        else:
+            self._create_management_charge(user, invoice)

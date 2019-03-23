@@ -3,21 +3,31 @@ from django.dispatch import receiver
 from core.models import User
 from django.db.models.signals import post_save, pre_delete, post_delete
 from backend.utility import *
+from backend.stripe import stripe
 
-import stripe
-stripe.api_key = settings.STRIPE_ACCOUNT_SID
-anorakPlan = settings.STRIPE_ANORAK_PLAN
+from djstripe.models import Customer, Subscription, Plan, Product, Invoice
 
-from djstripe.models import Customer, Subscription, Plan, Product
+##########################################################################
+## User
+##########################################################################
 
-#Create a base subscription to the Anorak product
+@receiver(post_delete, sender=User)
+def delete_stripe_customer(sender, instance=None, **kwargs):
+    try:
+        instance.djstripe_customer.delete()
+    except:
+        pass     
+    
 @receiver(post_save, sender=User)
 def create_stripe_customer(sender, instance, created, **kwargs):
     if created:
         customer = Customer.create(instance)
         
         
-# #Create a base subscription to the Anorak product
+##########################################################################
+## Customer
+##########################################################################
+
 @receiver(post_save, sender=Customer)
 def create_stripe_subscription(sender, instance, created, **kwargs):
     if created:
@@ -32,12 +42,4 @@ def create_stripe_subscription(sender, instance, created, **kwargs):
             ],
             billing_cycle_anchor=get_first_day_next_month_epoch()
         )   
-        
-# Delete the Stripe customer from the model
-@receiver(post_delete, sender=User)
-def delete_stripe_customer(sender, instance=None, **kwargs):
-    try:
-        instance.djstripe_customer.delete()
-    except:
-        pass     
-    
+

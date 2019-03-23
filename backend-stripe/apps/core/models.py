@@ -60,6 +60,21 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def djstripe_subscription(self):
         return self.djstripe_customer.subscription
+    
+    def upcoming_invoice(self):        
+        invoice = stripe.Invoice.upcoming(
+            customer=self.djstripe_customer.id
+        )
+        return invoice
+    
+    def latest_invoice(self):
+        subscription = stripe.Subscription.retrieve(
+            id=self.djstripe_subscription.id
+        )        
+        invoice = stripe.Invoice.retrieve(
+            id=subscription.latest_invoice
+        )
+        return invoice
         
     def get_shipping_zip(self):
         customer = stripe.Customer.retrieve(self.djstripe_customer.id)

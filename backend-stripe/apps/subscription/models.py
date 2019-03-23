@@ -13,7 +13,7 @@ from backend.utility import *
 from backend.stripe import stripe
 from backend.tax import tax_from_zip
 from djstripe.models import *
-from . managers import CreateAccountManager, ConnectAccountManager
+from . managers import *
 from . enum import *
 
 ##########################################################################
