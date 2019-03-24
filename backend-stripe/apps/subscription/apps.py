@@ -26,7 +26,12 @@ class SubscriptionConfig(AppConfig):
             sender=SubscriptionPlan
         )
         
+        post_save.connect(
+            signals.send_invoice_receipt, 
+            sender=SubscriptionMember
+        )
         pre_delete.connect(
             signals.delete_stripe_subscription_item,
             sender=SubscriptionMember
         )
+        

@@ -11,7 +11,6 @@ from backend.utility import *
 from subscription.models import SubscriptionMember
 from backend.fees import AnorakFeeManager
 from djstripe.models import Customer
-from subscription.models import SubscriptionMember
 
 anorakFeeManager = AnorakFeeManager()
 
@@ -21,15 +20,18 @@ anorakFeeManager = AnorakFeeManager()
 
 class EmailManager(object):
     
-    def __init__(self):
-        pass
+    def __init__(self, user):
+        self.invoice = user.upcoming_invoice()
+        self.invoiceData = self._invoice_data()
+        self.customer = self._get_customer_from_invoice()
+        self.user = self.customer.subscriber
     
-    def _invoice_data(self, invoice):
-        return invoice.lines.data
+    def _invoice_data(self):
+        return self.invoice.lines.data
     
-    def _invoice_items_from_product_name(self, productName, invoice):
-        invoiceData = self._invoice_data(invoice)
-        items = self.find_items([productName], invoiceData)
+    def _invoice_items_from_product_name(self, productName):
+        invoiceData = self.invoiceData
+        items = self.find_items([productName])
         return items
     
     def _get_item_name(self, item):
@@ -67,15 +69,15 @@ class EmailManager(object):
             return self._format_val(item.plan.amount)
         return self._format_val(item.amount)
     
-    def _get_invoice_billing_date_time(self, invoice):
-        return convert_epoch(invoice.period_end)
+    def _get_invoice_billing_date_time(self):
+        return convert_epoch(self.invoice.period_end)
     
-    def _get_invoice_billing_date(self, invoice):
-        billingDateTime = self._get_invoice_billing_date_time(invoice)
+    def _get_invoice_billing_date(self):
+        billingDateTime = self._get_invoice_billing_date_time()
         return date_time_to_date(billingDateTime)
     
-    def _get_invoice_end_date_time(self, invoice):
-        date = self._get_invoice_billing_date_time(invoice)
+    def _get_invoice_end_date_time(self):
+        date = self._get_invoice_billing_date_time()
         lastDayOfMonth = days_in_a_month(date)
         return datetime.strptime('{0} {1} {2}'.format(
             date.month, 
@@ -83,37 +85,36 @@ class EmailManager(object):
             date.year), '%m %d %Y'
         )
     
-    def _get_invoice_end_date(self, invoice):
-        endDateTime = self._get_invoice_end_date_time(invoice)
+    def _get_invoice_end_date(self):
+        endDateTime = self._get_invoice_end_date_time()
         return date_time_to_date(endDateTime)
     
-    def _get_invoice_renewal_date_time(self, invoice):
-        endDateTime = self._get_invoice_end_date_time(invoice)
+    def _get_invoice_renewal_date_time(self):
+        endDateTime = self._get_invoice_end_date_time()
         return get_first_day_of_next_month(endDateTime)
     
-    def _get_invoice_renewal_date(self, invoice):
-        renewalDateTime = self._get_invoice_renewal_date_time(invoice)
+    def _get_invoice_renewal_date(self):
+        renewalDateTime = self._get_invoice_renewal_date_time()
         return date_time_to_date(renewalDateTime)
     
-    def _get_invoice_start_date_time(self, invoice, item):
+    def _get_invoice_start_date_time(self, item):
         if item:
             return item.period.start
-        invoiceData = self._invoice_data(invoice)
-        least = invoiceData[0].period.start
-        for item in invoiceData:
+        least = self.invoiceData[0].period.start
+        for item in self.invoiceData:
             if item.period.start < least:
                 least = item.period.start
         return least
     
-    def _get_invoice_start_date(self, invoice, item):
-        startDateEpoch = self._get_invoice_start_date_time(invoice, item)
+    def _get_invoice_start_date(self, item):
+        startDateEpoch = self._get_invoice_start_date_time(item)
         startDateTime = convert_epoch(startDateEpoch)
         return date_time_to_date(startDateTime)
     
-    def _item_plan_description(self, item, invoice):
+    def _item_plan_description(self, item):
         if not item.plan:
             return item.description
-        monthOf = self._get_invoice_billing_date_time(invoice)
+        monthOf = self._get_invoice_billing_date_time()
         member = self._member_from_item(item)
         plan = member.subscription_account.subscription_plan.product_name
         return  plan+" - Month of "+monthOf.strftime('%B')
@@ -128,10 +129,10 @@ class EmailManager(object):
             return True
         return False
     
-    def _item_dictionary(self, item, invoice):
+    def _item_dictionary(self, item):
         return({
             'item_id': item.id,
-            'plan_description': self._item_plan_description(item, invoice),
+            'plan_description': self._item_plan_description(item),
             'prorated_description': self._item_prorated_description(item),
             'plan_amount': self._get_item_plan_amount(item),
             'prorated_amount': self._get_item_prorated_amount(item),
@@ -141,34 +142,23 @@ class EmailManager(object):
     def _member_from_item(self, item):
         plan = item.plan.id
         return SubscriptionMember.objects.get(
-            subscription_account__subscription_plan__stripe_plan_id=plan
+            subscription_account__subscription_plan__stripe_plan_id=plan,
+            user = self.user
         )
     
-    def _member_from_item(self, item):
-        plan = item.plan.id
-        return SubscriptionMember.objects.get(
-            subscription_account__subscription_plan__stripe_plan_id=plan
-        )
+    def _get_customer_from_invoice(self):
+        return Customer.objects.get(id=self.invoice.customer)
     
-    def _get_customer_from_invoice(self, invoice):
-        return Customer.objects.get(id=invoice.customer)
-    
-    def _get_user_from_invoice(self, invoice):
-        customer = Customer.objects.get(id=invoice.customer)
-        return customer.subscriber
-    
-    def _get_shipping_data(self, invoice):
-        customer = self._get_customer_from_invoice(invoice)
-        customerAPI = customer.api_retrieve()
+    def _get_shipping_data(self):
+        customerAPI = self.customer.api_retrieve()
         return customerAPI.shipping
     
-    def _get_card_last4(self, invoice):
-        customer = self._get_customer_from_invoice(invoice)
-        customerAPI = customer.api_retrieve()
+    def _get_card_last4(self):
+        customerAPI = self.customer.api_retrieve()
         return customerAPI.default_source.last4
     
-    def _get_user_address_dict(self, invoice):
-        shippingData = self._get_shipping_data(invoice)
+    def _get_user_address_dict(self):
+        shippingData = self._get_shipping_data()
         addressData = shippingData.address
         return({
             'line1': addressData.line1,
@@ -179,16 +169,16 @@ class EmailManager(object):
         })
         return shippingData
     
-    def _init_invoice_dict(self, invoice, item=None):
+    def _init_invoice_dict(self, item=None):
         dictionary = {}
         dictionary['items']={}
-        dictionary['invoice_number'] = invoice.number
-        dictionary['billing_date'] = self._get_invoice_billing_date(invoice)
-        dictionary['renewal_date'] = self._get_invoice_renewal_date(invoice)
-        dictionary['end_date'] = self._get_invoice_end_date(invoice)
-        dictionary['start_date'] = self._get_invoice_start_date(invoice, item)
-        dictionary['address'] = self._get_user_address_dict(invoice)
-        dictionary['last4'] = self._get_card_last4(invoice)
+        dictionary['invoice_number'] = self.invoice.number
+        dictionary['billing_date'] = self._get_invoice_billing_date()
+        dictionary['renewal_date'] = self._get_invoice_renewal_date()
+        dictionary['end_date'] = self._get_invoice_end_date()
+        dictionary['start_date'] = self._get_invoice_start_date(item)
+        dictionary['address'] = self._get_user_address_dict()
+        dictionary['last4'] = self._get_card_last4()
         return dictionary
        
     def _get_item_total(self, invoiceDictionaryItem):
@@ -204,21 +194,21 @@ class EmailManager(object):
             total += itemTotal
         return total
     
-    def _get_invoice_items(self, invoice, receiptItem):
+    def _get_invoice_items(self, receiptItem):
         items = []
         anorakFee = None
         if receiptItem:
-            item = self._item_dictionary(receiptItem, invoice)
+            item = self._item_dictionary(receiptItem)
             if anorakFeeManager.feeDescription == receiptItem.description :
                 anorakFee = item
             else:
                 items.append(item)
         else:
-            for item in self._invoice_data(invoice):
+            for item in self.invoiceData:
                 if anorakFeeManager.feeDescription != item.description:
-                    items.append(self._item_dictionary(item, invoice))
+                    items.append(self._item_dictionary(item))
                 else:
-                    anorakFee = self._item_dictionary(item, invoice)
+                    anorakFee = self._item_dictionary(item)
         if anorakFee:
             items.append(anorakFee)
             return items, True 
@@ -235,38 +225,36 @@ class EmailManager(object):
             return 0
         return self._format_val(taxPercent * subtotal)
     
-    def invoice_to_dict(self, invoice, receiptItem=None):
-        dictionary = self._init_invoice_dict(invoice, receiptItem)
-        taxPercent = invoice.tax_percent
-        items, hasAnorakFee = self._get_invoice_items(invoice, receiptItem)
+    def invoice_to_dict(self, receiptItem=None):
+        dictionary = self._init_invoice_dict(receiptItem)
+        taxPercent = self.invoice.tax_percent
+        items, hasAnorakFee = self._get_invoice_items(receiptItem)
         dictionary['items'] = items
         subtotal = self._get_invoice_subtotal_from_dict(dictionary)
         taxAmount = self._get_tax_amount(subtotal, taxPercent)
-        dictionary['subtotal'] = max(subtotal, 0)
-        dictionary['tax'] = taxAmount
-        dictionary['total'] = max(round((subtotal + taxAmount),2), 0)
-        dictionary['tax_percent'] = taxPercent
+        dictionary['subtotal'] = '{:.2f}'.format(max(subtotal, 0))
+        dictionary['tax'] = '{:.2f}'.format(taxAmount)
+        dictionary['total'] = '{:.2f}'.format(max(round((subtotal + taxAmount),2), 0))
+        dictionary['tax_percent'] = '{:.2f}'.format(taxPercent)
         dictionary['type'] = self._get_invoice_type(receiptItem)
         dictionary['has_anorak_fee'] = hasAnorakFee
         return dictionary
         
-    def find_items(self, search, invoiceData):
+    def find_items(self, search):
         search = [term.lower() for term in search]
         found = []
-        for item in invoiceData:
+        for item in self.invoiceData:
             description = item.description.lower()
             if all(term in description for term in search):
                 found.append(item)
         return found
     
-    def email_receipt(self, invoice, receiptItem=None):
-        dictionary = self.invoice_to_dict(invoice, receiptItem=receiptItem)       
-        user = self._get_user_from_invoice(invoice)
-        
+    def email_receipt(self, receiptItem=None):
+        dictionary = self.invoice_to_dict(receiptItem=receiptItem)               
         message = EmailMessage('invoice.tpl', 
-            {'user': user, 'data':dictionary}, 
+            {'user': self.user, 'data':dictionary}, 
             'Anorak@ianorak.com', 
-            to =[user.email]
+            to =[self.user.email]
         )
         message.send()
         return dictionary

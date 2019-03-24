@@ -10,6 +10,8 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete, post_delete
 from subscription.models import *
 from backend.fees import AnorakFeeManager
+from backend.email import EmailManager
+from backend.invoice import InvoiceManager
 
 ##########################################################################
 ## SubscriptionService
@@ -46,6 +48,16 @@ def delete_stripe_plan(sender, instance, **kwargs):
 ##########################################################################
 ## SubscriptionMember
 ##########################################################################
+
+#Send a receipt email
+@receiver(post_save, sender=SubscriptionMember)
+def send_invoice_receipt(sender, instance, created, **kwargs):
+    if created:
+        invoice = instance.user.upcoming_invoice()
+        invoiceManager = InvoiceManager()
+        emailManager = EmailManager(instance.user)
+        invoiceItem = invoiceManager.get_closest_item(instance, invoice)
+        emailManager.email_receipt(invoiceItem)
 
 #Delete the subscription with stripe
 @receiver(pre_delete, sender=SubscriptionMember)
