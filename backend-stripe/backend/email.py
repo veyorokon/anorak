@@ -18,6 +18,26 @@ anorakFeeManager = AnorakFeeManager()
 ## Email Manager
 ##########################################################################
 
+"""
+Custom email manager to for stripe invoices
+"""
+
+##########################################################################
+## Imports
+##########################################################################
+
+from mail_templated import EmailMessage
+from backend.utility import *
+from subscription.models import SubscriptionMember, SubscriptionPlan
+from backend.fees import AnorakFeeManager
+from djstripe.models import Customer
+
+anorakFeeManager = AnorakFeeManager()
+
+##########################################################################
+## Email Manager
+##########################################################################
+
 class EmailManager(object):
     
     def __init__(self, user, invoice=None):
@@ -43,9 +63,9 @@ class EmailManager(object):
         return item.description
     
     def _format_val(self, value):
-        if value:
+        if value != None:
             return round((value/100),2)
-        return None
+        return 0
     
     def _is_item_refund(self, item):
         prorated_amount = self._get_item_prorated_amount(item)
