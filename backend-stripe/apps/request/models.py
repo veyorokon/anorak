@@ -9,7 +9,7 @@ class ManagementRequest(models.Model):
     #The subscription account attached to this request
     subscription_account = models.ForeignKey(SubscriptionAccount, on_delete=models.CASCADE, related_name="management_requests")
     #The subscription membership attached to this request
-    subscription_member = models.ForeignKey(SubscriptionMember, on_delete=models.CASCADE, related_name="management_requests")
+    subscription_member = models.ForeignKey(SubscriptionMember, on_delete=models.CASCADE, related_name="management_requests", null=True, blank=True)
     #The originator of the request
     originator = enum.EnumField(ManagementRequestOriginator, default=ManagementRequestOriginator.CLIENT)
     #Date that the processing request was created

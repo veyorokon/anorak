@@ -13,4 +13,5 @@ def create_account_management_request(sender, instance, created, **kwargs):
             subscription_member = instance,
             originator = ManagementRequestOriginator.SERVER,
         )
-    
+
+#Connect account request generate

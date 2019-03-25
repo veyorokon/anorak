@@ -55,14 +55,13 @@ def delete_stripe_plan(sender, instance, **kwargs):
 #Send a receipt email for create accounts
 @receiver(post_save, sender=SubscriptionMember)
 def send_invoice_receipt(sender, instance, created, **kwargs):
-    accountType = instance.subscription_account.type
-    isCreateAccount = SubscriptionAccountType.label(accountType) == 'CREATE'
-    if created and isCreateAccount:
+    if created:
         invoice = instance.user.upcoming_invoice()
         invoiceManager = InvoiceManager()
         emailManager = EmailManager(instance.user)
         invoiceItem = invoiceManager.get_closest_item(instance, invoice)
         emailManager.email_receipt(invoiceItem)
+        
 
 #Delete the subscription item with stripe
 @receiver(pre_delete, sender=SubscriptionMember)

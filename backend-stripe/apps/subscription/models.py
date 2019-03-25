@@ -157,10 +157,13 @@ class SubscriptionAccount(models.Model):
         
     @property
     def responsible_member(self):
-        return SubscriptionMember.objects.get(
-            user = self.responsible_user,
-            subscription_account = self
-        )
+        try:
+            return SubscriptionMember.objects.get(
+                user = self.responsible_user,
+                subscription_account = self
+            )
+        except:
+            return None
         
     def save(self, *args, **kwargs):
         ''' 
@@ -265,7 +268,8 @@ class SubscriptionMember(models.Model):
         self._set_stripe_subscription_item_id(subscription=updated)
 
     def cancel(self):
-        self._cancel_stripe_subscription()
+        if self.stripe_subscription_item_id:
+            self._cancel_stripe_subscription()
         self._cancel_membership_status()
 
     def save(self, *args, **kwargs):
