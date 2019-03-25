@@ -9,9 +9,11 @@ Custom signals for the subscription models
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete, post_delete
 from subscription.models import *
+from djstripe.models import WebhookEventTrigger
 from backend.fees import AnorakFeeManager
 from backend.email import EmailManager
 from backend.invoice import InvoiceManager
+import json
 
 ##########################################################################
 ## SubscriptionService
@@ -66,3 +68,19 @@ def delete_stripe_subscription_item(sender, instance, **kwargs):
     feeManager = AnorakFeeManager()
     feeManager.update_management_fee(user=instance.user)
     
+    
+        
+##########################################################################
+## WebhookEventTrigger
+##########################################################################
+
+@receiver(post_save, sender=WebhookEventTrigger)
+def trigger_refund_email(sender, instance, created, **kwargs):
+    data = json.loads(instance.body)
+    if (instance.valid and data['type'] == 'invoiceitem.created'):
+        subscriberID = data['data']['object']['customer']
+        user = Customer.objects.get(id=subscriberID).subscriber
+        emailManager = EmailManager(user)
+        refundItem = emailManager.invoiceData[0]
+        if refundItem.amount <= 0:
+            emailManager.email_refund(refundItem)

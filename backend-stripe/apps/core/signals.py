@@ -56,7 +56,7 @@ def create_anorak_fee(sender, instance, created, **kwargs):
         feeManager.update_management_fee(user=user)
         
 ##########################################################################
-## Invoice
+## WebhookEventTrigger
 ##########################################################################
 
 @receiver(post_save, sender=WebhookEventTrigger)

@@ -1,6 +1,6 @@
 from datetime import date, timedelta, datetime
 import calendar
-
+import time
 
 def get_first_day(dt, d_years=0, d_months=0):
     y, m = dt.year + d_years, dt.month + d_months
@@ -45,4 +45,8 @@ def days_in_a_month(date):
     return calendar.monthrange(date.year,date.month)[1]
     
 def date_time_to_date(dateTime):
-        return dateTime.strftime('%B %d, %Y')
+    return dateTime.strftime('%B %d, %Y')
+        
+def get_current_epoch():
+    return int(calendar.timegm(time.gmtime()))
+    

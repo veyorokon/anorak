@@ -8,7 +8,6 @@ Custom invoice manager to for stripe invoices
 
 import sys
 from backend.utility import *
-from backend.email import EmailManager
 from subscription.models import SubscriptionMember
 
 ##########################################################################

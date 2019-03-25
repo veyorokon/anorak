@@ -8,7 +8,7 @@ Custom email manager to for stripe invoices
 
 from mail_templated import EmailMessage
 from backend.utility import *
-from subscription.models import SubscriptionMember
+from subscription.models import SubscriptionMember, SubscriptionPlan
 from backend.fees import AnorakFeeManager
 from djstripe.models import Customer
 
@@ -20,8 +20,10 @@ anorakFeeManager = AnorakFeeManager()
 
 class EmailManager(object):
     
-    def __init__(self, user):
-        self.invoice = user.upcoming_invoice()
+    def __init__(self, user, invoice=None):
+        self.invoice = invoice
+        if invoice == None:
+            self.invoice = user.upcoming_invoice()
         self.invoiceData = self._invoice_data()
         self.customer = self._get_customer_from_invoice()
         self.user = self.customer.subscriber
@@ -85,6 +87,10 @@ class EmailManager(object):
             date.year), '%m %d %Y'
         )
     
+    def _current_date(self):
+        currentDateTime = convert_epoch(get_current_epoch())
+        return date_time_to_date(currentDateTime)
+    
     def _get_invoice_end_date(self):
         endDateTime = self._get_invoice_end_date_time()
         return date_time_to_date(endDateTime)
@@ -115,8 +121,9 @@ class EmailManager(object):
         if not item.plan:
             return item.description
         monthOf = self._get_invoice_billing_date_time()
-        member = self._member_from_item(item)
-        plan = member.subscription_account.subscription_plan.product_name
+        #member = self._member_from_item(item)
+        subscriptionPlan = SubscriptionPlan.objects.get(stripe_plan_id=item.plan.id)
+        plan = subscriptionPlan.product_name
         return  plan+" - Month of "+monthOf.strftime('%B')
     
     def _item_prorated_description(self, item):
@@ -251,8 +258,19 @@ class EmailManager(object):
     
     def email_receipt(self, receiptItem=None):
         dictionary = self.invoice_to_dict(receiptItem=receiptItem)               
-        message = EmailMessage('invoice.tpl', 
+        message = EmailMessage('receipt.tpl', 
             {'user': self.user, 'data':dictionary}, 
+            'Anorak@ianorak.com', 
+            to =[self.user.email]
+        )
+        message.send()
+        return dictionary
+    
+    def email_refund(self, refundItem):
+        dictionary = self.invoice_to_dict(receiptItem=refundItem)   
+        cancelDate = self._current_date()
+        message = EmailMessage('refund.tpl', 
+            {'user': self.user, 'data':dictionary, 'date_cancelled':cancelDate}, 
             'Anorak@ianorak.com', 
             to =[self.user.email]
         )

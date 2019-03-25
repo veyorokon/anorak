@@ -6,6 +6,7 @@ class SubscriptionConfig(AppConfig):
     
     def ready(self):
         from . import signals
+        from djstripe.models import WebhookEventTrigger
         from subscription.models import SubscriptionService, SubscriptionPlan, SubscriptionMember
         
         post_save.connect(
@@ -34,4 +35,11 @@ class SubscriptionConfig(AppConfig):
             signals.delete_stripe_subscription_item,
             sender=SubscriptionMember
         )
+        
+        post_save.connect(
+            signals.trigger_refund_email, 
+            sender=WebhookEventTrigger
+        )
+        
+        
         
