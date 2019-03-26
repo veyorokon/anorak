@@ -43,8 +43,8 @@ class NotificationTrigger(models.Model):
 
 class EmailReceiptNotification(NotificationTrigger):
     """Email user the receipt for their new subscription."""
-    #The subscription membership attached to this request
-    subscription_member = models.ForeignKey(SubscriptionMember, on_delete = models.SET_NULL, related_name = "notification", null=True)
+    #The stripe subscription item id
+    stripe_subscription_item_id = models.CharField(max_length=32, null=True)
         
     def _email_recipient(self, invoiceItem, invoice):
         emailManager = EmailManager(self.recipient, invoice)
@@ -71,6 +71,5 @@ class EmailReceiptNotification(NotificationTrigger):
         db_table = "Email_Notifications"
         unique_together = (
             'recipient', 
-            'subscription_member',
         )
         

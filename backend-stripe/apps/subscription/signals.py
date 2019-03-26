@@ -51,17 +51,12 @@ def delete_stripe_plan(sender, instance, **kwargs):
 
 @receiver(post_save, sender=SubscriptionMember)
 def create_stripe_subscription_item(sender, instance, created, **kwargs):
-    """Create the plan from stripe"""
+    """Create the email notification for emailing receipt"""
     if created:
         emailNotification = EmailReceiptNotification.objects.create(
             recipient = instance.user,
-            subscription_member = instance
+            stripe_subscription_item_id = instance.stripe_subscription_item_id
         )
-        try:
-            instance.add_to_stripe_subscription()
-            instance.save()
-        except:
-            emailNotification.delete()
         
 @receiver(pre_delete, sender=SubscriptionMember)
 def delete_stripe_subscription_item(sender, instance, **kwargs):

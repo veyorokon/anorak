@@ -9,6 +9,7 @@ Custom signals for the notification models
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete, post_delete
 from notification.models import EmailReceiptNotification
+from subscription.models import SubscriptionMember
 from backend.fees import AnorakFeeManager
 from backend.email import EmailManager
 from backend.invoice import InvoiceManager
@@ -42,7 +43,8 @@ def trigger_email_event(sender, instance, created, **kwargs):
             instance
         )
         emailNotification = EmailReceiptNotification.objects.get(
-            subscription_member__stripe_subscription_item_id=newSubscriptionItemId
+            recipient = user,
+            stripe_subscription_item_id=newSubscriptionItemId
         )
         
         if emailNotification.processed == False:
