@@ -13,6 +13,16 @@
       {% endif %}
       
       <fieldset class="module aligned">
+        <div class="form-row">
+          Username: {{subscriptionAccount.username}}
+        </div>
+        <div class="form-row">
+          Password: {{subscriptionAccount.password}}
+        </div>
+      </fieldset>
+      <br />
+      
+      <fieldset class="module aligned">
         {% for field in form %}
           <div class="form-row">
             {{ field.errors }}

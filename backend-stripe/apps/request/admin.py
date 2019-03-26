@@ -27,10 +27,10 @@ class ManagementRequestAdmin(admin.ModelAdmin):
         'date_created',
     )
     list_display = (
-        'id',
-        'subscription_account',
-        'originator',
         'status',
+        'id',
+        'originator',
+        'subscription_account',
         'requested_action', 
         'account_actions'
     )
@@ -58,7 +58,7 @@ class ManagementRequestAdmin(admin.ModelAdmin):
         context['opts'] = self.model._meta
         context['form'] = form
         context['managementRequest'] = managementRequest
-        context['subscriptionAaccount'] = subscriptionAccount
+        context['subscriptionAccount'] = subscriptionAccount
         context['title'] = action_title
         
         return TemplateResponse(

@@ -31,7 +31,7 @@ class SubscriptionAccountStatus(enum.Enum):
     CANCELED = 10
     PENDING = 20
     PENDING_CREATE = 29
-    PENDING_CONNECT = 30
+    PENDING_CONNECT = 30 #Admin needs to first verify
     PENDING_CONFIRM_CONNECT = 35
     ACTIVE = 90
     CONNECTED = 91

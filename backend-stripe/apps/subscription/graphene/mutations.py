@@ -22,7 +22,7 @@ class SubscriptionCreateMutation(graphene.Mutation):
         username = graphene.String(required=True)
         password = graphene.String(required=True)
 
-    subscriptionMember =  graphene.Field(_SubscriptionMemberType)
+    subscriptionAccount =  graphene.Field(_SubscriptionAccountType)
 
     @login_required
     def mutate(self, info, serviceKey, planKey, token, username, password, **kwargs):
@@ -46,14 +46,9 @@ class SubscriptionCreateMutation(graphene.Mutation):
             username = username,
             password = password
         )
-        
-        # UPDATE THIS AND SEPARATE MEMBER CREATION INTO ADMIN FORM
-        member = SubscriptionMember.objects.create(
-            user = user,
-            subscription_account = account,
-        )
+                
         return SubscriptionCreateMutation(
-            subscriptionMember = member
+            subscriptionAccount = account
         )
 
 
@@ -120,6 +115,7 @@ class ConfirmConnectAccountMutation(graphene.Mutation):
         member = SubscriptionMember.objects.create(
             user = account.responsible_user,
             subscription_account = account,
+            status_membership = MembershipStatus.ACTIVE
         )
         
         account.save()
@@ -129,11 +125,11 @@ class ConfirmConnectAccountMutation(graphene.Mutation):
 
 
 class Mutations(graphene.ObjectType):
-    subscription_member = SubscriptionCreateMutation.Field(
+    subscription_create_account = SubscriptionCreateMutation.Field(
         description = "Creates a new subscription account. The server will automatically create membership and a management request."
     )
     
-    subscription_account = SubscriptionConnectMutation.Field(
+    subscription_connect_account = SubscriptionConnectMutation.Field(
         description = "Connect an existing subscription account. The service will automatically create a management request to verify connect login."
     )
     

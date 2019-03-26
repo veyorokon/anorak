@@ -25,6 +25,32 @@ class SubscriptionPlanAdmin(admin.ModelAdmin):
 @admin.register(SubscriptionAccount)
 class SubscriptionAccountAdmin(admin.ModelAdmin):
     """Define admin model for SubscriptionAccount."""
+    list_display = (
+        'id',
+        'type',
+        'responsible_user',
+        'subscription_service',
+        'subscription_plan',
+        'status_account',
+        'date_created', 
+        'date_modified',
+        'date_canceled'
+    )
+    
+    readonly_fields = (
+        'id',
+        'type',
+        'responsible_user',
+        'subscription_service',
+        'subscription_plan',
+        'status_account',
+        'date_created', 
+        'date_modified',
+        'date_canceled',
+        'username',
+        'password',
+    )
+
     def get_readonly_fields(self, request, obj=None):
         if obj:
             return self.readonly_fields + (
@@ -35,4 +61,20 @@ class SubscriptionAccountAdmin(admin.ModelAdmin):
 @admin.register(SubscriptionMember)
 class SubscriptionMemberAdmin(admin.ModelAdmin):
     """Define admin model for SubscriptionMember."""
-    readonly_fields=('stripe_subscription_item_id',)
+    list_display = (
+        'id',
+        'user',
+        'subscription_account',
+        'status_membership',
+        'date_created', 
+        'date_modified',
+        'date_canceled',
+        'stripe_subscription_item_id',
+    )
+    readonly_fields = (
+        'status_membership',
+        'date_created', 
+        'date_modified',
+        'date_canceled',
+        'stripe_subscription_item_id',
+    )

@@ -118,7 +118,7 @@ class SubscriptionPlan(models.Model):
         self.stripe_plan_id = plan.id
     
     def __str__(self):
-        return self.product_name +": $"+str(self.amount)+" billed monthly"
+        return "$"+str(self.amount)+" billed monthly"
 
 
 ##########################################################################
@@ -167,6 +167,11 @@ class SubscriptionAccount(models.Model):
             
     def _create(self):
         self.status_account = SubscriptionAccountStatus.ACTIVE
+        SubscriptionMember.objects.create(
+            user=self.responsible_user, 
+            subscription_account=self,
+            status_membership = MembershipStatus.ACTIVE
+        )
             
     def _connect(self):
         self.status_account = SubscriptionAccountStatus.PENDING_CONFIRM_CONNECT
