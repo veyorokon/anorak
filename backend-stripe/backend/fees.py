@@ -76,9 +76,13 @@ class AnorakFeeManager(object):
         item.delete()
     
     def find_items(self, search, invoice):
+        lineItems = invoice.lines.data
+        return self.search_invoice_line_items(search, lineItems)
+    
+    def search_invoice_line_items(self, search, lineItems):
         search = [term.lower() for term in search]
         found = []
-        for item in invoice.lines.data:
+        for item in lineItems:
             description = item.description.lower()
             if all(term in description for term in search):
                 found.append(item)
@@ -97,6 +101,26 @@ class AnorakFeeManager(object):
         if invoice == None:
             invoice = user.upcoming_invoice()
         feeItems = self.find_items(self.feeDescription, invoice)
+        if feeItems:
+            item, total = self._prevent_duplicate_fees(feeItems)
+            return self._update_management_charge(invoice, item, total)
+        return self._create_management_charge(user, invoice)
+    
+    def _batch_invoice_items(self, user, limit):
+        return stripe.InvoiceItem.list(
+            customer = user.djstripe_customer.id,
+            pending=True,
+            limit=limit
+        )
+    
+    def deep_update_management_fee(self, user, invoice=None, limit=50):
+        if invoice == None:
+            invoice = user.upcoming_invoice()
+        batchInvoiceItems = self._batch_invoice_items(user, limit)
+        feeItems = self.search_invoice_line_items(
+            [self.feeDescription], 
+            batchInvoiceItems
+        )
         if feeItems:
             item, total = self._prevent_duplicate_fees(feeItems)
             return self._update_management_charge(invoice, item, total)

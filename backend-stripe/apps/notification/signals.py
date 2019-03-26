@@ -45,7 +45,7 @@ def trigger_email_event(sender, instance, created, **kwargs):
             subscription_member__stripe_subscription_item_id=newSubscriptionItemId
         )
         
-        if not emailNotification.processed:
+        if emailNotification.processed == False:
             invoiceItem = invoiceManager.get_invoice_subscription_item(
                 newSubscriptionItemId, 
                 invoice
@@ -55,4 +55,4 @@ def trigger_email_event(sender, instance, created, **kwargs):
             
     if updateFee:        
         feeManager = AnorakFeeManager()
-        feeManager.update_management_fee(user=user, invoice=invoice)
+        feeManager.deep_update_management_fee(user=user, invoice=invoice)

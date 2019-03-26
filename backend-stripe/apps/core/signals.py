@@ -7,7 +7,7 @@ from backend.utility import *
 from backend.fees import AnorakFeeManager
 from backend.stripe import stripe
 
-from djstripe.models import Customer, Subscription, Invoice, WebhookEventTrigger
+from djstripe.models import Customer, Invoice
 
 anorakPlan = settings.STRIPE_ANORAK_PLAN
 ##########################################################################
@@ -53,17 +53,5 @@ def create_anorak_fee(sender, instance, created, **kwargs):
     if created:
         user = instance.customer.subscriber
         feeManager = AnorakFeeManager()
-        feeManager.update_management_fee(user=user)
+        feeManager.deep_update_management_fee(user=user)
         
-##########################################################################
-## WebhookEventTrigger
-##########################################################################
-
-@receiver(post_save, sender=WebhookEventTrigger)
-def trigger_anorak_fee(sender, instance, created, **kwargs):
-    data = json.loads(instance.body)
-    if (instance.valid and data['type'] == 'customer.subscription.updated'):
-        subscriberID = data['data']['object']['customer']
-        user = Customer.objects.get(id=subscriberID).subscriber
-        feeManager = AnorakFeeManager()
-        feeManager.update_management_fee(user=user)

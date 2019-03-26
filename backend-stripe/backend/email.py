@@ -1,19 +1,3 @@
-"""
-Custom email manager to for stripe invoices
-"""
-
-##########################################################################
-## Imports
-##########################################################################
-
-from mail_templated import EmailMessage
-from backend.utility import *
-from subscription.models import SubscriptionMember, SubscriptionPlan
-from backend.fees import AnorakFeeManager
-from djstripe.models import Customer
-
-anorakFeeManager = AnorakFeeManager()
-
 ##########################################################################
 ## Email Manager
 ##########################################################################
