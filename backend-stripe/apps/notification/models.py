@@ -10,6 +10,7 @@ from django.db import models
 from core.models import User
 from django.utils import timezone
 from djstripe.models import Event
+from backend.email import EmailManager
 from subscription.models import SubscriptionMember
 
 ##########################################################################
@@ -27,9 +28,9 @@ class NotificationTrigger(models.Model):
     #Date that the notification was modified
     date_modified = models.DateTimeField(editable=False)
     #Date that the notification was canceled
-    date_canceled = models.DateTimeField(editable=False, null=True, blank=True)
+    date_notified = models.DateTimeField(editable=False, null=True, blank=True)
     #The webhook event that triggered this notification
-    trigger_event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="notifications", null=True)
+    trigger_event = models.ForeignKey(Event, on_delete=models.SET_NULL, related_name="notifications", null=True)
     
     
     class Meta:
@@ -43,9 +44,20 @@ class NotificationTrigger(models.Model):
 class EmailReceiptNotification(NotificationTrigger):
     """Email user the receipt for their new subscription."""
     #The subscription membership attached to this request
-    subscription_member = models.OneToOneField(SubscriptionMember, on_delete = models.CASCADE, related_name = "notification")
-    
-    
+    subscription_member = models.ForeignKey(SubscriptionMember, on_delete = models.SET_NULL, related_name = "notification", null=True)
+        
+    def _email_recipient(self, invoiceItem, invoice):
+        emailManager = EmailManager(self.recipient, invoice)
+        emailManager.email_receipt(invoiceItem)
+        
+    def process(self, event, invoiceItem, invoice):
+        self.trigger_event = event
+        self.date_notified = timezone.now()
+        self.processed = True
+        self._email_recipient(invoiceItem, invoice)
+        self.save()
+        
+        
     def save(self, *args, **kwargs):
         ''' 
         On save, update timestamps 
@@ -53,7 +65,7 @@ class EmailReceiptNotification(NotificationTrigger):
         if not self.id:
             self.date_created = timezone.now()
         self.date_modified = timezone.now()
-        return super(EmailNotification, self).save(*args, **kwargs)
+        return super(EmailReceiptNotification, self).save(*args, **kwargs)
         
     class Meta:
         db_table = "Email_Notifications"

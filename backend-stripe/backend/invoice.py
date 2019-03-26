@@ -34,13 +34,7 @@ class InvoiceManager(object):
     def _item_plan_matches(self, item, memberPlan):
         if item.plan and item.plan.id == memberPlan:
             return True
-        return False
-    
-    def get_closest_item(self, member, invoice=None):
-        if invoice == None:
-            invoice = member.user.upcoming_invoice()
-        memberPlan = self._get_plan_id_from_member(member)
-        return self._get_closest_item(member, invoice, memberPlan)
+        return False    
         
     def _get_closest_item(self, member, invoice, memberPlan):
         items = self._get_invoice_items(invoice)
@@ -71,3 +65,32 @@ class InvoiceManager(object):
     def _initial_difference(self, items, member):
         initialItem = items[0]
         return self._get_item_difference(initialItem, member)
+    
+    def _event_data(self, event):
+        return event.data['object']['items']['data']
+    
+    def _event_previous_data(self, event):
+        return event.data['previous_attributes']['items']['data']
+    
+    def _event_new_data(self, event):
+        newData = self._event_data(event)
+        previousData = self._event_previous_data(event)
+        return [x for x in newData + previousData if x not in newData or x not in previousData][0]
+    
+    def get_invoice_subscription_item(self, newSubscriptionItemId, invoice):
+        invoiceItem = None
+        for item in self._get_invoice_items(invoice):
+            if('subscription_item' in item):
+                subscriptionItemId = item['subscription_item']
+                if(subscriptionItemId == newSubscriptionItemId):
+                    invoiceItem = item
+        return invoiceItem
+    
+    def get_new_subscription_item_id(self, event):
+        return self._event_new_data(event)['id']
+    
+    def get_closest_item(self, member, invoice=None):
+        if invoice == None:
+            invoice = member.user.upcoming_invoice()
+        memberPlan = self._get_plan_id_from_member(member)
+        return self._get_closest_item(member, invoice, memberPlan)

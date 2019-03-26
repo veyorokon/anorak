@@ -297,7 +297,6 @@ class SubscriptionMember(models.Model):
         '''
         if not self.id:
             self.date_created = timezone.now()
-            self.add_to_stripe_subscription()
         self.date_modified = timezone.now()
         return super(SubscriptionMember, self).save(*args, **kwargs)
 
