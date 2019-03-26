@@ -19,11 +19,12 @@ class AccountManagementForm(forms.Form):
     comment = forms.CharField(
         required=False,
         widget=forms.Textarea,
+        initial="Successful"
     )
 
-    def save(self, account):
+    def save(self, account, processingUser):
         try:
-            account = self.form_action(account)
+            account = self.form_action(account, processingUser)
         except errors.Error as e:
             error_message = str(e)
             self.add_error(None, error_message)
@@ -32,7 +33,8 @@ class AccountManagementForm(forms.Form):
                 
 class ActivateForm(AccountManagementForm):
 
-    def form_action(self, managementRequest):
+    def form_action(self, managementRequest, processingUser):
         return managementRequest.activate(
-            comment=self.cleaned_data['comment']
+            comment=self.cleaned_data['comment'],
+            processingUser=processingUser
         )

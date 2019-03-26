@@ -27,11 +27,11 @@ class SubscriptionAccountAdmin(admin.ModelAdmin):
     """Define admin model for SubscriptionAccount."""
     list_display = (
         'id',
+        'status_account',
         'type',
         'responsible_user',
         'subscription_service',
         'subscription_plan',
-        'status_account',
         'date_created', 
         'date_modified',
         'date_canceled'
@@ -63,15 +63,17 @@ class SubscriptionMemberAdmin(admin.ModelAdmin):
     """Define admin model for SubscriptionMember."""
     list_display = (
         'id',
+        'status_membership',
         'user',
         'subscription_account',
-        'status_membership',
         'date_created', 
         'date_modified',
         'date_canceled',
         'stripe_subscription_item_id',
     )
     readonly_fields = (
+        'user',
+        'subscription_account',
         'status_membership',
         'date_created', 
         'date_modified',

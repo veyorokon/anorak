@@ -27,16 +27,23 @@ class ManagementRequestAdmin(admin.ModelAdmin):
         'date_created',
     )
     list_display = (
+        'id',
+        'status',
+        'processed_by',
+        'subscription_account',
+        'originator',
+        'requested_action', 
+        'account_actions'
+    )
+    readonly_fields = (
+        'subscription_member',
         'status',
         'id',
         'originator',
         'subscription_account',
         'requested_action', 
-        'account_actions'
-    )
-    readonly_fields = (
-        'id',
-        'account_actions', 
+        'account_actions',
+        'processed_by',
     )
     
     def process_action(self,request, management_request_id, action_form, action_title):
@@ -49,7 +56,8 @@ class ManagementRequestAdmin(admin.ModelAdmin):
             form = action_form(request.POST)
             if form.is_valid():
                 try:
-                    form.save(managementRequest)
+                    processingUser = request.user
+                    form.save(managementRequest, processingUser)
                 except errors.Error as e:
                     pass
                 return redirect('/api/admin/request/managementrequest/')

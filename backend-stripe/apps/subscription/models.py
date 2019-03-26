@@ -61,6 +61,7 @@ class SubscriptionService(models.Model):
     def __str__(self):
         return self.name    
     
+    
 ##########################################################################
 ## Subscription Plan
 ##########################################################################
@@ -227,7 +228,7 @@ class SubscriptionMember(models.Model):
     #Date that the subscription was created
     date_canceled = models.DateTimeField(editable=False, null=True, blank=True)
     #The stripe subscription item id
-    stripe_subscription_item_id = models.CharField(max_length=32)
+    stripe_subscription_item_id = models.CharField(max_length=32, unique=True)
     
     
     def _cancel_stripe_subscription(self):
