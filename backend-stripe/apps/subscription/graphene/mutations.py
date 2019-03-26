@@ -47,6 +47,7 @@ class SubscriptionCreateMutation(graphene.Mutation):
             password = password
         )
         
+        # UPDATE THIS AND SEPARATE MEMBER CREATION INTO ADMIN FORM
         member = SubscriptionMember.objects.create(
             user = user,
             subscription_account = account,
@@ -114,12 +115,14 @@ class ConfirmConnectAccountMutation(graphene.Mutation):
         account = ConnectAccount.objects.get(
             pk = subscriptionAccountKey
         )
+        account.status_account = SubscriptionAccountStatus.CONNECTED
         
         member = SubscriptionMember.objects.create(
             user = account.responsible_user,
             subscription_account = account,
         )
         
+        account.save()
         return ConfirmConnectAccountMutation(
             subscriptionMember = member
         )

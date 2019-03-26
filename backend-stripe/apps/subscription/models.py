@@ -127,7 +127,7 @@ class SubscriptionPlan(models.Model):
 
 class SubscriptionAccount(models.Model):
     #The type of the account
-    type = enum.EnumField(SubscriptionAccountType, default=SubscriptionAccountType.CREATE)
+    type = enum.EnumField(SubscriptionAccountType, default=SubscriptionAccountType.CREATE, editable=False)
     #User who is responsible and pays if other members miss.
     responsible_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subscription_accounts")
     #The service this account is for
@@ -164,7 +164,21 @@ class SubscriptionAccount(models.Model):
             )
         except:
             return None
+            
+    def _create(self):
+        self.status_account = SubscriptionAccountStatus.ACTIVE
+            
+    def _connect(self):
+        self.status_account = SubscriptionAccountStatus.PENDING_CONFIRM_CONNECT
+            
+    def activate(self):
+        if self.type == SubscriptionAccountType.CREATE:
+            self._create()
+        else:
+            self._connect()
+        self.save()
         
+            
     def save(self, *args, **kwargs):
         ''' 
         On save, update timestamps 
@@ -208,7 +222,7 @@ class SubscriptionMember(models.Model):
     #Date that the subscription was created
     date_canceled = models.DateTimeField(editable=False, null=True, blank=True)
     #The stripe subscription item id
-    stripe_subscription_item_id = models.CharField(max_length=32, null=True, blank=True)
+    stripe_subscription_item_id = models.CharField(max_length=32)
     
     
     def _cancel_stripe_subscription(self):
@@ -268,8 +282,7 @@ class SubscriptionMember(models.Model):
         self._set_stripe_subscription_item_id(subscription=updated)
 
     def cancel(self):
-        if self.stripe_subscription_item_id:
-            self._cancel_stripe_subscription()
+        self._cancel_stripe_subscription()
         self._cancel_membership_status()
 
     def save(self, *args, **kwargs):
@@ -278,7 +291,6 @@ class SubscriptionMember(models.Model):
         '''
         if not self.id:
             self.date_created = timezone.now()
-        if self.subscription_account.type != SubscriptionAccountType.CONNECT:
             self.add_to_stripe_subscription()
         self.date_modified = timezone.now()
         return super(SubscriptionMember, self).save(*args, **kwargs)

@@ -93,8 +93,9 @@ class AnorakFeeManager(object):
             fee = min(fee, 5.00)
         return(int(fee*100))
     
-    def update_management_fee(self, user):
-        invoice = user.upcoming_invoice()
+    def update_management_fee(self, user, invoice=None):
+        if invoice == None:
+            invoice = user.upcoming_invoice()
         feeItems = self.find_items(self.feeDescription, invoice)
         if feeItems:
             item, total = self._prevent_duplicate_fees(feeItems)

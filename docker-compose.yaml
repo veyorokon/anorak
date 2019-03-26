@@ -44,6 +44,7 @@ services:
       - "9432:5432"
       
   serveo:
+    restart: always
     build: serveo/
     tty: true
     stdin_open: true

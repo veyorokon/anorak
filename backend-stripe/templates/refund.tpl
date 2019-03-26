@@ -277,7 +277,7 @@ Your Subscription Cancellation Refund
               </td>
             </tr>
             <tr class="total last">
-                <td>Total: </td>                
+                <td>Refund Total: </td>                
                 <td>
                    ${{data.total}}
                 </td>

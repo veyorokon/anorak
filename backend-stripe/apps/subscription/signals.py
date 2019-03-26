@@ -52,23 +52,13 @@ def delete_stripe_plan(sender, instance, **kwargs):
 ## SubscriptionMember
 ##########################################################################
 
-#Send a receipt email for create accounts
-@receiver(post_save, sender=SubscriptionMember)
-def send_invoice_receipt(sender, instance, created, **kwargs):
-    if created:
-        invoice = instance.user.upcoming_invoice()
-        invoiceManager = InvoiceManager()
-        emailManager = EmailManager(instance.user)
-        invoiceItem = invoiceManager.get_closest_item(instance, invoice)
-        emailManager.email_receipt(invoiceItem)
-        
-
 #Delete the subscription item with stripe
 @receiver(pre_delete, sender=SubscriptionMember)
 def delete_stripe_subscription_item(sender, instance, **kwargs):
-    instance.cancel()
-    feeManager = AnorakFeeManager()
-    feeManager.update_management_fee(user=instance.user)
+    try:
+        instance.cancel()
+    except:
+        pass
     
         
 ##########################################################################
@@ -78,10 +68,21 @@ def delete_stripe_subscription_item(sender, instance, **kwargs):
 @receiver(post_save, sender=WebhookEventTrigger)
 def trigger_refund_email(sender, instance, created, **kwargs):
     data = json.loads(instance.body)
-    if (instance.valid and data['type'] == 'invoiceitem.created'):
+    invoice = None
+    
+    if data['data']['object'] and data['data']['object']['customer']:
         subscriberID = data['data']['object']['customer']
         user = Customer.objects.get(id=subscriberID).subscriber
-        emailManager = EmailManager(user)
-        refundItem = emailManager.invoiceData[0]
-        if refundItem.amount <= 0:
-            emailManager.email_refund(refundItem)
+        invoice = user.upcoming_invoice()
+        
+    if (instance.valid and data['type'] == 'invoiceitem.created'):
+        emailManager = EmailManager(user, invoice=invoice)
+        invoiceItem = emailManager.invoiceData[0]
+        if invoiceItem.amount <= 0:
+            emailManager.email_refund(invoiceItem)
+        else:
+            emailManager.email_receipt(invoiceItem)
+            
+    elif (instance.valid and data['type'] == 'customer.subscription.updated'):
+        feeManager = AnorakFeeManager()
+        feeManager.update_management_fee(user=user, invoice=invoice)

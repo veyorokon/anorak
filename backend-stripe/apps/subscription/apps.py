@@ -11,34 +11,30 @@ class SubscriptionConfig(AppConfig):
         
         post_save.connect(
             signals.create_stripe_product, 
-            sender=SubscriptionService
+            sender=SubscriptionService,
         )
         pre_delete.connect(
             signals.delete_stripe_product,
-            sender=SubscriptionService
+            sender=SubscriptionService,
         )
         
         post_save.connect(
             signals.create_stripe_plan, 
-            sender=SubscriptionPlan
+            sender=SubscriptionPlan,
         )
         pre_delete.connect(
             signals.delete_stripe_plan,
-            sender=SubscriptionPlan
+            sender=SubscriptionPlan,
         )
         
-        post_save.connect(
-            signals.send_invoice_receipt, 
-            sender=SubscriptionMember
-        )
         pre_delete.connect(
             signals.delete_stripe_subscription_item,
-            sender=SubscriptionMember
+            sender=SubscriptionMember,
         )
         
         post_save.connect(
             signals.trigger_refund_email, 
-            sender=WebhookEventTrigger
+            sender=WebhookEventTrigger,
         )
         
         

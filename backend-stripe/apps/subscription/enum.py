@@ -32,9 +32,24 @@ class SubscriptionAccountStatus(enum.Enum):
     PENDING = 20
     PENDING_CREATE = 29
     PENDING_CONNECT = 30
-    PENDING_CONFIRM = 35
+    PENDING_CONFIRM_CONNECT = 35
     ACTIVE = 90
     CONNECTED = 91
+    
+    _transitions = {
+        CONNECTED: (
+            PENDING,
+            PENDING_CONFIRM_CONNECT,
+        ),
+        ACTIVE: (
+            PENDING,
+            PENDING_CREATE,
+        ),
+        PENDING_CONFIRM_CONNECT: (
+            PENDING,
+            PENDING_CONNECT,
+        )
+    }
     
     
 # Type of subscription account

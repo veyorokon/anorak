@@ -16,14 +16,22 @@ class ManagementRequest(models.Model):
     date_created = models.DateTimeField(editable=False)
     #Date that the request was processed
     date_processed = models.DateTimeField(editable=False, null=True, blank=True)
-    #Who this request was created by
-    processed_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="management_requests_processed", editable=False, null=True, blank=True)
     #The status of the user subscription 
     status = enum.EnumField(ManagementRequestStatus, default=ManagementRequestStatus.PROCESSING)
     #The action requested on the account
     requested_action = enum.EnumField(ManagementRequestAction, default=ManagementRequestAction.CREATE_ACCOUNT)
     #Any specific notes by the person who processed the action.
     processed_notes = models.CharField(max_length=128, blank=True, null=True)
+    
+    def process(self, processedNotes):
+        self.status = ManagementRequestStatus.COMPLETE
+        self.date_processed = timezone.now()
+        self.processed_notes = processedNotes
+    
+    def activate(self, comment, **kwargs):
+        self.subscription_account.activate()
+        self.process(comment)
+        self.save()
     
     def save(self, *args, **kwargs):
         ''' 

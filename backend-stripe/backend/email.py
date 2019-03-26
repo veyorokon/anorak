@@ -248,8 +248,6 @@ class EmailManager(object):
         return invoiceType
     
     def _get_tax_amount(self, subtotal, taxPercent):
-        if(subtotal <= 0):
-            return 0
         return self._format_val(taxPercent * subtotal)
     
     def invoice_to_dict(self, receiptItem=None):
@@ -259,9 +257,9 @@ class EmailManager(object):
         dictionary['items'] = items
         subtotal = self._get_invoice_subtotal_from_dict(dictionary)
         taxAmount = self._get_tax_amount(subtotal, taxPercent)
-        dictionary['subtotal'] = '{:.2f}'.format(max(subtotal, 0))
+        dictionary['subtotal'] = '{:.2f}'.format(subtotal)
         dictionary['tax'] = '{:.2f}'.format(taxAmount)
-        dictionary['total'] = '{:.2f}'.format(max(round((subtotal + taxAmount),2), 0))
+        dictionary['total'] = '{:.2f}'.format(round((subtotal + taxAmount),2))
         dictionary['tax_percent'] = '{:.2f}'.format(taxPercent)
         dictionary['type'] = self._get_invoice_type(receiptItem)
         dictionary['has_anorak_fee'] = hasAnorakFee

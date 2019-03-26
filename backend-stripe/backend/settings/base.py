@@ -76,8 +76,8 @@ INSTALLED_APPS = [
     "djstripe",
     
     'core',
+    'subscription',
     'request',
-    'subscription'
 ]
 
 TAX_JAR_KEY = environ_setting("TAX_JAR_KEY")
