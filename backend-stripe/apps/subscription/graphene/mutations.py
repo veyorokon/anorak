@@ -13,6 +13,11 @@ from subscription.models import SubscriptionService, SubscriptionAccount, Subscr
 from subscription.enum import *
 from graphql_jwt.decorators import login_required
 
+
+##########################################################################
+## Mutation for new CreateAccount
+##########################################################################
+
 class SubscriptionCreateMutation(graphene.Mutation):
 
     class Arguments:
@@ -51,6 +56,10 @@ class SubscriptionCreateMutation(graphene.Mutation):
             subscriptionAccount = account
         )
 
+
+##########################################################################
+## Mutation for new ConnectAccount
+##########################################################################
 
 class SubscriptionConnectMutation(graphene.Mutation):
 
@@ -91,6 +100,10 @@ class SubscriptionConnectMutation(graphene.Mutation):
         )
 
 
+##########################################################################
+## Mutation to confirm ConnectAccount
+##########################################################################
+
 class ConfirmConnectAccountMutation(graphene.Mutation):
 
     class Arguments:
@@ -106,7 +119,7 @@ class ConfirmConnectAccountMutation(graphene.Mutation):
             raise ValueError(
                 "Subscription could not be connected. No active card was on file."
             )
-        # UPDATE STATUSES
+        
         account = ConnectAccount.objects.get(
             pk = subscriptionAccountKey
         )
@@ -122,7 +135,7 @@ class ConfirmConnectAccountMutation(graphene.Mutation):
         return ConfirmConnectAccountMutation(
             subscriptionMember = member
         )
-
+            
 
 class Mutations(graphene.ObjectType):
     subscription_create_account = SubscriptionCreateMutation.Field(
@@ -136,4 +149,5 @@ class Mutations(graphene.ObjectType):
     confirm_connect_account = ConfirmConnectAccountMutation.Field( 
         description = "Confirms a previously connected account. Membership is created and the user is billed."
     )
+    
     

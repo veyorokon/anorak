@@ -37,7 +37,7 @@ class ManagementRequest(models.Model):
     processed_notes = models.CharField(max_length=128, blank=True, null=True)
     
     def process(self, processedNotes, processingUser):
-        self.status = ManagementRequestStatus.COMPLETE
+        self.status = ManagementRequestStatus.COMPLETED
         self.date_processed = timezone.now()
         self.processed_notes = processedNotes
         self.processed_by = processingUser

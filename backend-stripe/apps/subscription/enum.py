@@ -15,14 +15,14 @@ from django_enumfield import enum
 # Type of service
 class ServiceType(enum.Enum):
     STREAMING = 0
-    BOX = 1
-    MEMBERSHIP = 2
+    BOX = 10
+    MEMBERSHIP = 20
         
 # Frequency of subscription billing
 class PlanBillingFrequency(enum.Enum):
     DAY = 0
-    WEEK = 1
-    MONTH = 2
+    WEEK = 10
+    MONTH = 20
     
 
 # Status for the subscription account
@@ -55,7 +55,7 @@ class SubscriptionAccountStatus(enum.Enum):
 # Type of subscription account
 class SubscriptionAccountType(enum.Enum):
     CREATE = 0
-    CONNECT = 1
+    CONNECT = 10
     
 
 # Status for the subscription membership

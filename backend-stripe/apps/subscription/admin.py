@@ -14,6 +14,12 @@ from . models import *
     
 @admin.register(SubscriptionService)
 class SubscriptionServiceAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'name',
+        'type',
+        'is_available',
+    )
     """Define admin model for SubscriptionService."""
     readonly_fields=('stripe_product_id',)
 
