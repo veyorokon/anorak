@@ -17,7 +17,7 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.urls import path
-from .forms import ActivateForm
+from .forms import *
 from django.http import HttpResponseRedirect
 
     
@@ -29,14 +29,15 @@ class ManagementRequestAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'status',
+        'requested_action', 
+        'requested_by',
         'processed_by',
         'subscription_account',
         'originator',
-        'requested_action', 
         'account_actions'
     )
     readonly_fields = (
-        'subscription_member',
+        'requested_by',
         'status',
         'id',
         'originator',
@@ -46,7 +47,7 @@ class ManagementRequestAdmin(admin.ModelAdmin):
         'processed_by',
     )
     
-    def process_action(self,request, management_request_id, action_form, action_title):
+    def process_action(self,request, management_request_id, action_form, action_title, template):
         managementRequest = self.get_object(request, management_request_id)
         subscriptionAccount = managementRequest.subscription_account
         
@@ -71,7 +72,7 @@ class ManagementRequestAdmin(admin.ModelAdmin):
         
         return TemplateResponse(
             request,
-            'account_activate.tpl',
+            template,
             context,
         )
     
@@ -81,8 +82,17 @@ class ManagementRequestAdmin(admin.ModelAdmin):
             management_request_id=management_request_id,
             action_form=ActivateForm,
             action_title='Activate',
+            template='account_activate.tpl'
         )
-        
+    
+    def process_cancel(self, request, management_request_id, *args, **kwargs):
+        return self.process_action(
+            request=request,
+            management_request_id=management_request_id,
+            action_form=CancelForm,
+            action_title='Cancel',
+            template='account_cancel.tpl'
+        )
     
     def get_urls(self):
         urls = super().get_urls()
@@ -91,6 +101,11 @@ class ManagementRequestAdmin(admin.ModelAdmin):
                 '<int:management_request_id>/activate/',
                 self.admin_site.admin_view(self.process_activate),
                 name='account-activate',
+            ),
+            path(
+                '<int:management_request_id>/cancel/',
+                self.admin_site.admin_view(self.process_cancel),
+                name='account-cancel',
             ),
         ]
         return custom_urls + urls
@@ -107,6 +122,12 @@ class ManagementRequestAdmin(admin.ModelAdmin):
                 return format_html(
                     '<a class="button" href="{}">Connect</a>&nbsp;',
                     reverse('admin:account-activate', args=[obj.pk]),
+                )
+                
+            elif obj.requested_action == ManagementRequestAction.CANCEL_ACCOUNT:
+                return format_html(
+                    '<a class="button" href="{}">Cancel</a>&nbsp;',
+                    reverse('admin:account-cancel', args=[obj.pk]),
                 )
         return None
     account_actions.short_description = 'Account Actions'

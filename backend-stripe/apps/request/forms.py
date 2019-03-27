@@ -38,3 +38,16 @@ class ActivateForm(AccountManagementForm):
             comment=self.cleaned_data['comment'],
             processingUser=processingUser
         )
+
+class CancelForm(AccountManagementForm):
+    comment = forms.CharField(
+        required=False,
+        widget=forms.Textarea,
+        initial="Canceled"
+    )
+
+    def form_action(self, managementRequest, processingUser):
+        return managementRequest.cancel(
+            comment=self.cleaned_data['comment'],
+            processingUser=processingUser
+        )

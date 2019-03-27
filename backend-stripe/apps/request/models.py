@@ -20,7 +20,7 @@ class ManagementRequest(models.Model):
     #The subscription account attached to this request
     subscription_account = models.ForeignKey(SubscriptionAccount, on_delete=models.CASCADE, related_name="management_requests")
     #The subscription membership attached to this request
-    subscription_member = models.ForeignKey(SubscriptionMember, on_delete=models.CASCADE, related_name="management_requests", null=True, blank=True)
+    requested_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="management_requests")
     #The user this was processed by
     processed_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="processed_management_requests", null=True)
     #The originator of the request
@@ -43,6 +43,11 @@ class ManagementRequest(models.Model):
         self.processed_by = processingUser
         
     
+    def cancel(self, comment, processingUser, **kwargs):
+        self.subscription_account.cancel()
+        self.process(comment, processingUser)
+        self.save()
+    
     def activate(self, comment, processingUser, **kwargs):
         self.subscription_account.activate()
         self.process(comment, processingUser)
@@ -55,3 +60,6 @@ class ManagementRequest(models.Model):
         if not self.id:
             self.date_created = timezone.now()
         return super(ManagementRequest, self).save(*args, **kwargs)
+    
+    class Meta:
+        db_table = "Management_Requests"

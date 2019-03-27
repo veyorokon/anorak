@@ -29,6 +29,7 @@ class PlanBillingFrequency(enum.Enum):
 class SubscriptionAccountStatus(enum.Enum):
     TERMINATED = 0
     CANCELED = 10
+    PENDING_CANCELLATION = 15
     PENDING = 20
     PENDING_CREATE = 29
     PENDING_CONNECT = 30 #Admin needs to first verify
@@ -48,6 +49,17 @@ class SubscriptionAccountStatus(enum.Enum):
         PENDING_CONFIRM_CONNECT: (
             PENDING,
             PENDING_CONNECT,
+        ),
+        PENDING_CANCELLATION:(
+            CONNECTED,
+            ACTIVE,
+            PENDING,
+            PENDING_CREATE,
+            PENDING_CONNECT,
+            PENDING_CONFIRM_CONNECT,
+        ),
+        CANCELED : (
+            PENDING_CANCELLATION,
         )
     }
     

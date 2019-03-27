@@ -9,10 +9,11 @@ from django.db import models
 from core.models import User
 from django.utils import timezone
 from encrypted_model_fields.fields import EncryptedCharField
+from django.db.models import Q
+from djstripe.models import *
 from backend.utility import *
 from backend.stripe import stripe
 from backend.tax import tax_from_zip
-from djstripe.models import *
 from . managers import *
 from . enum import *
 
@@ -166,6 +167,12 @@ class SubscriptionAccount(models.Model):
         except:
             return None
             
+    @property
+    def basic_members(self):
+        return self.subscribers.all().filter(~Q(
+            user = self.responsible_user
+        ))
+            
     def _create(self):
         self.status_account = SubscriptionAccountStatus.ACTIVE
         SubscriptionMember.objects.create(
@@ -176,6 +183,13 @@ class SubscriptionAccount(models.Model):
             
     def _connect(self):
         self.status_account = SubscriptionAccountStatus.PENDING_CONFIRM_CONNECT
+    
+    def _cancel_basic_members(self):
+        for member in self.basic_members:
+            member.delete()
+    
+    def _cancel_responsible_member(self):
+        self.responsible_member.delete()
             
     def activate(self):
         if self.type == SubscriptionAccountType.CREATE:
@@ -184,6 +198,11 @@ class SubscriptionAccount(models.Model):
             self._connect()
         self.save()
         
+    def cancel(self):
+        self._cancel_basic_members()
+        self._cancel_responsible_member()
+        self.status_account = SubscriptionAccountStatus.CANCELED
+        self.save()
             
     def save(self, *args, **kwargs):
         ''' 

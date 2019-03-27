@@ -15,7 +15,7 @@ def create_account_management_request(sender, instance, created, **kwargs):
             requestedAction = ManagementRequestAction.CONNECT_ACCOUNT
         ManagementRequest.objects.create(
             subscription_account = instance,
-            subscription_member = instance.responsible_member,
+            requested_by = instance.responsible_user,
             originator = ManagementRequestOriginator.SERVER,
             requested_action = requestedAction
         )

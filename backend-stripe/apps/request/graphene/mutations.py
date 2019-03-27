@@ -14,7 +14,7 @@ from . types import _ManagementRequestType
 from request.models import ManagementRequest
 from request.enum import *
 from graphql_jwt.decorators import login_required
-
+from subscription.enum import SubscriptionAccountStatus
 
 ##########################################################################
 ## Mutation to cancel membership
@@ -44,15 +44,18 @@ class CancelSubscriptionMemberMutation(graphene.Mutation):
             )
         account = member.subscription_account
         if member.user == member.subscription_account.responsible_user:
+            account.status_account = SubscriptionAccountStatus.PENDING_CANCELLATION
+            account.save()
             managementRequest = ManagementRequest.objects.create(
                 subscription_account = account,
-                subscription_member = member,
+                requested_by = user,
                 requested_action = ManagementRequestAction.CANCEL_ACCOUNT
             )
         else:
             member.delete()
             managementRequest = ManagementRequest.objects.create(
                 subscription_account = account,
+                requested_by = user,
                 requested_action = ManagementRequestAction.CANCEL_MEMBER,
                 status = ManagementRequestStatus.COMPLETED_BY_SERVER,
                 processed_notes = "Automatic complete on server.",
