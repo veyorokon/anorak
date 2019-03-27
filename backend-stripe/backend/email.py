@@ -28,9 +28,13 @@ class EmailManager(object):
         self.invoice = invoice
         if invoice == None:
             self.invoice = user.upcoming_invoice()
-        self.invoiceData = self._invoice_data()
+        self.invoiceData = self._clean_invoice_data(invoice)
         self.customer = self._get_customer_from_invoice()
         self.user = self.customer.subscriber
+        
+    def _clean_invoice_data(self, invoice):
+        invoiceData = invoice.lines.data
+        return [item for item in invoiceData if item.amount!=0]
     
     def _invoice_data(self):
         return self.invoice.lines.data
@@ -126,9 +130,12 @@ class EmailManager(object):
             return item.description
         monthOf = self._get_invoice_billing_date_time()
         #member = self._member_from_item(item)
-        subscriptionPlan = SubscriptionPlan.objects.get(stripe_plan_id=item.plan.id)
-        plan = subscriptionPlan.product_name
-        return  plan+" - Month of "+monthOf.strftime('%B')
+        try:
+            subscriptionPlan = SubscriptionPlan.objects.get(stripe_plan_id=item.plan.id)
+            plan = subscriptionPlan.product_name
+            return  plan+" - Month of "+monthOf.strftime('%B')
+        except:
+            return "Subscription"
     
     def _item_prorated_description(self, item):
         if not item.plan:
@@ -141,12 +148,17 @@ class EmailManager(object):
         return False
     
     def _item_dictionary(self, item):
+        proratedDescription = None
+        proratedAmount = None
+        if item.proration:
+            proratedDescription = self._item_prorated_description(item)
+            proratedAmount = self._get_item_prorated_amount(item)
         return({
             'item_id': item.id,
             'plan_description': self._item_plan_description(item),
-            'prorated_description': self._item_prorated_description(item),
+            'prorated_description': proratedDescription,
             'plan_amount': self._get_item_plan_amount(item),
-            'prorated_amount': self._get_item_prorated_amount(item),
+            'prorated_amount': proratedAmount,
             'was_refunded': self._is_item_refund(item)
         })
     
@@ -212,13 +224,13 @@ class EmailManager(object):
             item = self._item_dictionary(receiptItem)
             if anorakFeeManager.feeDescription == receiptItem.description :
                 anorakFee = item
-            else:
+            elif item:
                 items.append(item)
         else:
             for item in self.invoiceData:
-                if anorakFeeManager.feeDescription != item.description:
+                if anorakFeeManager.feeDescription != item.description and item:
                     items.append(self._item_dictionary(item))
-                else:
+                elif item:
                     anorakFee = self._item_dictionary(item)
         if anorakFee:
             items.append(anorakFee)
@@ -259,7 +271,7 @@ class EmailManager(object):
         return found
     
     def email_receipt(self, receiptItem=None):
-        dictionary = self.invoice_to_dict(receiptItem=receiptItem)               
+        dictionary = self.invoice_to_dict(receiptItem=receiptItem)  
         message = EmailMessage('receipt.tpl', 
             {'user': self.user, 'data':dictionary}, 
             'Anorak@ianorak.com', 

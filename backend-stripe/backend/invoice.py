@@ -89,6 +89,21 @@ class InvoiceManager(object):
     def get_new_subscription_item_id(self, event):
         return self._event_new_data(event)['id']
     
+        
+    def get_invoice_item(self, event, invoice):
+        newSubscriptionItemId = self.get_new_subscription_item_id(event)
+        newSubscriptionLineItem = self.get_invoice_subscription_item(newSubscriptionItemId, invoice)
+        planId, productId = newSubscriptionLineItem.plan.id, newSubscriptionLineItem.plan.product
+        invoiceData = invoice.lines.data
+        for item in invoiceData:
+            if item.plan:
+                cond1 = item.plan.id == planId
+                cond2 = item.plan.product == productId 
+                cond3 = item.subscription_item == newSubscriptionItemId
+                if cond1 and cond2 and cond3:
+                    return item
+        return None
+    
     def get_closest_item(self, member, invoice=None):
         if invoice == None:
             invoice = member.user.upcoming_invoice()

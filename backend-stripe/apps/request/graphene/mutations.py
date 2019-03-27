@@ -43,7 +43,7 @@ class CancelSubscriptionMemberMutation(graphene.Mutation):
                 "No membership to this subscription account was found."
             )
         account = member.subscription_account
-        if member == member.subscription_account.responsible_user:
+        if member.user == member.subscription_account.responsible_user:
             managementRequest = ManagementRequest.objects.create(
                 subscription_account = account,
                 subscription_member = member,

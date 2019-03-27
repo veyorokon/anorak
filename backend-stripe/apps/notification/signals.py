@@ -48,10 +48,7 @@ def trigger_email_event(sender, instance, created, **kwargs):
         )
         
         if emailNotification.processed == False:
-            invoiceItem = invoiceManager.get_invoice_subscription_item(
-                newSubscriptionItemId, 
-                invoice
-            )
+            invoiceItem = invoiceManager.get_invoice_item(instance, invoice)
             emailNotification.process(instance, invoiceItem, invoice)
             updateFee = True
             

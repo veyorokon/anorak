@@ -45,6 +45,12 @@ class EmailReceiptNotification(NotificationTrigger):
     """Email user the receipt for their new subscription."""
     #The stripe subscription item id
     stripe_subscription_item_id = models.CharField(max_length=32, null=True)
+    #The stripe subscription item id
+    stripe_invoice_item_id = models.CharField(max_length=32, null=True)
+    
+    @property
+    def djstripe_event_id(self):
+        return self.trigger_event.id
         
     def _email_recipient(self, invoiceItem, invoice):
         emailManager = EmailManager(self.recipient, invoice)
@@ -54,6 +60,7 @@ class EmailReceiptNotification(NotificationTrigger):
         self.trigger_event = event
         self.date_notified = timezone.now()
         self.processed = True
+        self.stripe_invoice_item_id = invoiceItem.id
         self._email_recipient(invoiceItem, invoice)
         self.save()
         
@@ -69,7 +76,3 @@ class EmailReceiptNotification(NotificationTrigger):
         
     class Meta:
         db_table = "Email_Notifications"
-        unique_together = (
-            'recipient', 
-        )
-        

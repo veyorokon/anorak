@@ -14,18 +14,29 @@ from . models import *
     
 @admin.register(SubscriptionService)
 class SubscriptionServiceAdmin(admin.ModelAdmin):
+    """Define admin model for SubscriptionService."""
     list_display = (
         'id',
         'name',
+        'url_home',
         'type',
         'is_available',
+        'stripe_product_id',
     )
-    """Define admin model for SubscriptionService."""
     readonly_fields=('stripe_product_id',)
 
 @admin.register(SubscriptionPlan)
 class SubscriptionPlanAdmin(admin.ModelAdmin):
     """Define admin model for SubscriptionPlan."""
+    list_display = (
+        'id',
+        'product_name',
+        'amount',
+        'billing_frequency',
+        'maximum_size',
+        'is_active',
+        'stripe_plan_id',
+    )
     readonly_fields=('stripe_plan_id',)
 
 @admin.register(SubscriptionAccount)
