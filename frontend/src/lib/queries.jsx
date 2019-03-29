@@ -26,19 +26,8 @@ query user($token: String!) {
         email
         firstName
         lastName
-        stripeCustomer{
-            id
-            hasCardOnFile
-            line1
-            line2
-            city
-            state
-            country
-            name
-            lastFour
-            taxRate
-        }
-        
+
+
         subscriptionMemberships{
           id
           dateCreated
@@ -48,10 +37,10 @@ query user($token: String!) {
             id
             dateCreated
             statusAccount
-            pricePlan{
+            subscriptionPlan{
                 amount
             }
-            service{
+            subscriptionService{
               id
               name
             }

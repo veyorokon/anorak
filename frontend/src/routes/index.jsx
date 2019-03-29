@@ -6,9 +6,9 @@ import Discover from "layouts/Discover/Discover.jsx";
 
 
 const indexRoutes = [
-    { path: "/dashboard/manage", component: Manage },    
+    { path: "/dashboard/manage", component: Manage },
     { path: "/dashboard", component: Dashboard },
-    { path: "/discover", component: Discover },
+    // { path: "/discover", component: Discover },
     { path: "/logout", component: Dashboard },
     { path: "/auth", component: Auth },
     { path: "/login", component: Auth },

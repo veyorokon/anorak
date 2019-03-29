@@ -5,9 +5,9 @@ services:
 
   backend:
     restart: 'no'
-    build: backend-stripe/
-    working_dir: /app/backend-stripe/
-    command: bash -c "python check_db.py --service-name Postgres --ip database --port 5432 && 
+    build: backend/
+    working_dir: /app/backend/
+    command: bash -c "python check_db.py --service-name Postgres --ip database --port 5432 &&
         python manage.py runserver_plus 0.0.0.0:8000"
     volumes:
       - .:/app
@@ -42,11 +42,10 @@ services:
     image: postgres
     ports:
       - "9432:5432"
-      
+
   serveo:
     restart: always
     build: serveo/
     tty: true
     stdin_open: true
     command: "ssh -o ServerAliveInterval=60 -R ianoraktest:80:host.docker.internal:8000  -o \"StrictHostKeyChecking no\" serveo.net"
-      

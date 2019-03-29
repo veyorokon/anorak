@@ -12,6 +12,9 @@ import Header from "components/material-dashboard/Header/Header.jsx";
 import Footer from "components/material-dashboard/Footer/Footer.jsx";
 import Sidebar from "components/material-dashboard/Sidebar/Sidebar.jsx";
 
+import GridItem from "components/material-dashboard/Grid/GridItem.jsx";
+import GridContainer from "components/material-dashboard/Grid/GridContainer.jsx";
+
 import discoverRoutes from "routes/discover.jsx";
 
 import discoverStyle from "assets/jss/material-dashboard-react/layouts/discoverStyle.jsx";
@@ -67,28 +70,42 @@ class App extends React.Component {
     const { classes, ...rest } = this.props;
     return (
       <div className={classes.wrapper}>
-        <Sidebar
-          routes={discoverRoutes}
-          logoText={"Anorak"}
-          logo={process.env.REACT_APP_STATIC_FILES+"images/logo-a.png"}
-          image={null}
-          handleDrawerToggle={this.handleDrawerToggle}
-          open={this.state.mobileOpen}
-          {...rest}
-        />
-        <div className={classes.mainPanel} ref="mainPanel">
-          <Header
-            routes={discoverRoutes}
-            handleDrawerToggle={this.handleDrawerToggle}
-            {...rest}
-          />
-          
-            <div className={classes.content}>
-              <div className={classes.container}>{switchRoutes}</div>
-            </div>
-          
-          {this.getRoute() ? <Footer /> : null}
-        </div>
+
+            <GridContainer>
+
+                <GridItem xs={12} sm={8} md={8} lg={8}>
+                  <div className={classes.mainPanel} ref="mainPanel">
+                    <Sidebar
+                      routes={discoverRoutes}
+                      logoText={"Anorak"}
+                      logo={process.env.REACT_APP_STATIC_FILES+"images/logo-a.png"}
+                      image={null}
+                      handleDrawerToggle={this.handleDrawerToggle}
+                      open={this.state.mobileOpen}
+                      {...rest}
+                    />
+                    <Header
+                      routes={discoverRoutes}
+                      handleDrawerToggle={this.handleDrawerToggle}
+                      {...rest}
+                    />
+                    <div className={classes.content}>
+                      <div className={classes.container}>{switchRoutes}</div>
+                    </div>
+                    {this.getRoute() ? <Footer /> : null}
+                    </div>
+                    </GridItem>
+
+
+                  <GridItem xs={12} sm={4} md={4} lg={4}>
+                      <div className={classes.content}>
+                          <div className={classes.container}>{switchRoutes}</div>
+                      </div>
+                  </GridItem>
+
+                </GridContainer>
+
+
       </div>
     );
   }
