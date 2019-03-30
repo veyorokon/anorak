@@ -2,7 +2,7 @@ const cardImagesStyles = {
   cardImgTop: {
     width: "100%",
     borderTopLeftRadius: "calc(.25rem - 1px)",
-    borderTopRightRadius: "calc(.25rem - 1px)",
+    borderTopRightRadius: "calc(.25rem - 1px)"
   },
   cardImgBottom: {
     width: "100%",

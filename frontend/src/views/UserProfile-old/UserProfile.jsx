@@ -72,15 +72,15 @@ class _CardForm extends React.Component {
   }
 
   onSubmit = async (setStripeCard, values) => {
-    const name_on_card = this.props.valueQuery("name_on_card");
-    const address_line1 = this.props.valueQuery("address_line1");
-    const address_line2 = this.props.valueQuery("address_line2");
-    const address_city = this.props.valueQuery("address_city");
-    const address_state = this.props.valueQuery("address_state");
-    const address_country = this.props.valueQuery("address_country");
-    const last4 = this.props.valueQuery("last4");
+    const customer = this.props.customer;
+    const address_line1 = customer.shipping.address.line1;
+    const address_line2 = customer.shipping.address.line2;
+    const address_city = customer.shipping.address.city;
+    const address_state = customer.shipping.address.state;
+    const address_country = customer.shipping.address.country;
 
     const { token } = await this.props.stripe.createToken({
+      name: "test name", //this.props.addressVal('name_on_card'),
       address_line1: address_line1,
       address_line2: address_line2,
       address_city: address_city,
@@ -90,8 +90,7 @@ class _CardForm extends React.Component {
     const { data } = await setStripeCard({
       variables: {
         token: getToken(),
-        cardToken: token.id,
-        nameOnCard: name_on_card
+        cardToken: token.id
       }
     });
     // Add mixpanel here
@@ -113,12 +112,13 @@ class _CardForm extends React.Component {
             }}
           >
             {({ isSubmitting }) => {
+              const customer = this.props.customer;
               var color = "info";
               var text = "Update Billing";
-              var last4 = this.props.valueQuery("last4");
+              var last_four = customer.default_source.last4;
               var label_text = "You don't have an active card";
-              if (last4) {
-                label_text = "Your current card ends in: " + last4;
+              if (last_four) {
+                label_text = "Your current card ends in: " + last_four;
               }
               if (this.state.submitted) {
                 color = "success";
@@ -166,23 +166,19 @@ class _UserProfileContent extends React.Component {
   constructor(props) {
     super(props);
     var user = this.props.user;
-    var customer = this.props.customer;
-
-    var nameOnCard = "";
-    if (customer.default_source.metadata.name_on_card) {
-      nameOnCard = customer.default_source.metadata.name_on_card;
-    }
+    // var stripe = this.props.user.stripeCustomer;
+    console.log(this.props.customer);
     this.state = {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      name_on_card: nameOnCard,
-      address_line1: customer.default_source.address_line1,
-      address_line2: customer.default_source.address_line2,
-      address_city: customer.default_source.address_city,
-      address_state: customer.default_source.address_state,
-      address_country: customer.default_source.address_country,
-      last4: customer.default_source.last4,
+      // name_on_card: stripe.name,
+      // address_line1: stripe.line1,
+      // address_line2: stripe.line2,
+      // address_city: stripe.city,
+      // address_state: stripe.state,
+      // address_country: stripe.country,
+      // last_four: stripe.lastFour,
       submitted: false,
       updatedProfile: false
     };
@@ -210,8 +206,9 @@ class _UserProfileContent extends React.Component {
     };
 
     await updateUser({ variables });
-    this.setState({ submitted: true });
+    //this.setState({ submitted: true });
     this.props.triggerSnackbar("Your profile has been updated.");
+    // mixpanel.track('Squad Create', { squad: values.id });
   };
 
   render() {
@@ -219,12 +216,13 @@ class _UserProfileContent extends React.Component {
     const firstName = this.getAddressVal("firstName");
     const lastName = this.getAddressVal("lastName");
     const email = this.getAddressVal("email");
+    const customer = this.props.customer;
     const name_on_card = this.getAddressVal("name_on_card");
-    const address_line1 = this.getAddressVal("address_line1");
-    const address_line2 = this.getAddressVal("address_line2");
-    const address_city = this.getAddressVal("address_city");
-    const address_state = this.getAddressVal("address_state");
-    const address_country = this.getAddressVal("address_country");
+    const address_line1 = customer.shipping.address.line1;
+    const address_line2 = customer.shipping.address.line2;
+    const address_city = customer.shipping.address.city;
+    const address_state = customer.shipping.address.state;
+    const address_country = customer.shipping.address.country;
     return (
       <React.Fragment>
         <GridContainer>
@@ -423,7 +421,7 @@ class _UserProfileContent extends React.Component {
               <CardFooter>
                 <GridItem xs={12} sm={12} md={12}>
                   <Elements>
-                    <CardForm valueQuery={key => this.getAddressVal(key)} />
+                    <CardForm customer={customer} />
                   </Elements>
                 </GridItem>
               </CardFooter>
@@ -470,10 +468,9 @@ function UserProfile(props) {
       variables={{ token: getToken() }}
       fetchPolicy="network-only"
     >
-      {({ loading, error, data }) => {
+      {({ loading, error, customer }) => {
         if (loading) return "Loading...";
         if (error) return `Error! ${error.message}`;
-        const customer = JSON.parse(data.customer);
         return <UserProfileWithUser customer={customer} />;
       }}
     </Query>

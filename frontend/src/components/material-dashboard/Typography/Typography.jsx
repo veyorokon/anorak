@@ -7,53 +7,49 @@ import typographyStyle from "assets/jss/material-dashboard-react/components/typo
 
 function Info({ ...props }) {
   const { color, classes, children } = props;
-  if(color=="info"){
-      return (
-        <div className={classes.defaultFontStyle + " " + classes.infoText}>
-                  {children}
-        </div>
-      );
+  if (color == "info") {
+    return (
+      <div className={classes.defaultFontStyle + " " + classes.infoText}>
+        {children}
+      </div>
+    );
   }
-  if(color=="primary"){
-      return (
-        <div className={classes.defaultFontStyle + " " + classes.primaryText}>
-                  {children}
-        </div>
-      );
+  if (color == "primary") {
+    return (
+      <div className={classes.defaultFontStyle + " " + classes.primaryText}>
+        {children}
+      </div>
+    );
   }
-  if(color=="danger"){
-      return (
-        <div className={classes.defaultFontStyle + " " + classes.dangerText}>
-                  {children}
-        </div>
-      );
+  if (color == "danger") {
+    return (
+      <div className={classes.defaultFontStyle + " " + classes.dangerText}>
+        {children}
+      </div>
+    );
   }
-  if(color=="success"){
-      return (
-        <div className={classes.defaultFontStyle + " " + classes.successText}>
-                  {children}
-        </div>
-      );
+  if (color == "success") {
+    return (
+      <div className={classes.defaultFontStyle + " " + classes.successText}>
+        {children}
+      </div>
+    );
   }
-  if(color=="warning"){
-      return (
-        <div className={classes.defaultFontStyle + " " + classes.warningText}>
-                  {children}
-        </div>
-      );
+  if (color == "warning") {
+    return (
+      <div className={classes.defaultFontStyle + " " + classes.warningText}>
+        {children}
+      </div>
+    );
   }
-  if(color=="muted"){
-      return (
-        <div className={classes.defaultFontStyle + " " + classes.mutedText}>
-                  {children}
-        </div>
-      );
+  if (color == "muted") {
+    return (
+      <div className={classes.defaultFontStyle + " " + classes.mutedText}>
+        {children}
+      </div>
+    );
   }
-  return (
-    <div className={classes.defaultFontStyle}>
-      {children}
-    </div>
-  );
+  return <div className={classes.defaultFontStyle}>{children}</div>;
 }
 
 Info.propTypes = {

@@ -22,9 +22,14 @@ class ProductSection extends React.Component {
       <div className={classes.section}>
         <GridContainer justify="center">
           <GridItem xs={12} sm={12} md={8}>
-            <h2 className={classes.title}>Meet Your New Subscription Manager</h2>
+            <h2 className={classes.title}>
+              Meet Your New Subscription Manager
+            </h2>
             <h5 className={classes.description}>
-              Track your billing expenses to see how much you're spending. Securely store your subscription passwords so you never lose track of them again. Invite family to share access to services or limit access to accounts on your terms.
+              Track your billing expenses to see how much you're spending.
+              Securely store your subscription passwords so you never lose track
+              of them again. Invite family to share access to services or limit
+              access to accounts on your terms.
             </h5>
           </GridItem>
         </GridContainer>

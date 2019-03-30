@@ -1,7 +1,7 @@
-import React from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import MaterialUiSnackbar from '@material-ui/core/Snackbar';
-import CloseIcon from '@material-ui/icons/Close';
+import React from "react";
+import IconButton from "@material-ui/core/IconButton";
+import MaterialUiSnackbar from "@material-ui/core/Snackbar";
+import CloseIcon from "@material-ui/icons/Close";
 
 export default function withSnackbar(WrappedComponent) {
   return class extends React.Component {
@@ -10,7 +10,7 @@ export default function withSnackbar(WrappedComponent) {
     };
 
     onClose = (event, reason) => {
-      if (reason === 'clickaway') {
+      if (reason === "clickaway") {
         return;
       }
       this.setState({ open: false });
@@ -26,14 +26,14 @@ export default function withSnackbar(WrappedComponent) {
           <WrappedComponent triggerSnackbar={this.onTrigger} {...this.props} />
           <MaterialUiSnackbar
             anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left'
+              vertical: "bottom",
+              horizontal: "left"
             }}
             open={this.state.open}
             autoHideDuration={6000}
             onClose={this.onClose}
             ContentProps={{
-              'aria-describedby': 'message-id'
+              "aria-describedby": "message-id"
             }}
             message={<span id="message-id">{this.state.message}</span>}
             action={

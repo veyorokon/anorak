@@ -35,9 +35,7 @@ class TeamSection extends React.Component {
           <GridContainer>
             <GridItem xs={12} sm={12} md={4}>
               <Card plain>
-                <GridItem xs={12} sm={12} md={6} className={classes.itemGrid}>
-                  
-                </GridItem>
+                <GridItem xs={12} sm={12} md={6} className={classes.itemGrid} />
                 <h4 className={classes.cardTitle}>
                   Gigi Hadid
                   <br />
@@ -78,9 +76,7 @@ class TeamSection extends React.Component {
             </GridItem>
             <GridItem xs={12} sm={12} md={4}>
               <Card plain>
-                <GridItem xs={12} sm={12} md={6} className={classes.itemGrid}>
-                  
-                </GridItem>
+                <GridItem xs={12} sm={12} md={6} className={classes.itemGrid} />
                 <h4 className={classes.cardTitle}>
                   Christian Louboutin
                   <br />
@@ -114,9 +110,7 @@ class TeamSection extends React.Component {
             </GridItem>
             <GridItem xs={12} sm={12} md={4}>
               <Card plain>
-                <GridItem xs={12} sm={12} md={6} className={classes.itemGrid}>
-                  
-                </GridItem>
+                <GridItem xs={12} sm={12} md={6} className={classes.itemGrid} />
                 <h4 className={classes.cardTitle}>
                   Kendall Jenner
                   <br />

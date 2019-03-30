@@ -13,9 +13,9 @@ import Button from "components/material-dashboard/CustomButtons/Button.jsx";
 import Card from "components/material-dashboard/Card/Card.jsx";
 import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
-import {mixpanel} from "lib/utility.jsx";
+import { mixpanel } from "lib/utility.jsx";
 
-mixpanel.track('User Logout');
+mixpanel.track("User Logout");
 
 const styles = {
   cardCategoryWhite: {
@@ -84,15 +84,12 @@ const styles = {
   }
 };
 
-
 function Logout(props) {
   const { classes } = props;
   return (
     <GridContainer justify="center">
       <GridItem xs={12} sm={12} md={8}>
-        <Card>
-          
-        </Card>
+        <Card />
       </GridItem>
     </GridContainer>
   );

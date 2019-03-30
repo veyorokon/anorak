@@ -1,11 +1,11 @@
-import React from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import TextField from '@material-ui/core/TextField';
-import { Field as FormikField } from 'formik';
+import React from "react";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import TextField from "@material-ui/core/TextField";
+import { Field as FormikField } from "formik";
 
 const MaterialUiInputComponent = ({ field, form, ...props }) => {
-  if (props.type === 'checkbox') {
+  if (props.type === "checkbox") {
     return (
       <FormControlLabel
         control={

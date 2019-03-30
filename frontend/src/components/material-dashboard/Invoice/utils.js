@@ -1,10 +1,10 @@
-import moment from 'moment';
-import numeral from 'numeral';
+import moment from "moment";
+import numeral from "numeral";
 
 export function formatDate(date) {
-  return moment(date).format('MMM Do, YYYY');
+  return moment(date).format("MMM Do, YYYY");
 }
 
 export function formatCurrency(amount) {
-  return numeral(amount).format('$0,0.00');
+  return numeral(amount).format("$0,0.00");
 }

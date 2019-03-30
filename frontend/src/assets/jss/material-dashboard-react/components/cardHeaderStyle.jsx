@@ -118,11 +118,11 @@ const cardHeaderStyle = {
     "&:not($cardHeaderIcon)": {
       ...roseCardHeader
     }
-},
+  },
 
-cardHeaderAdd:{
+  cardHeaderAdd: {
     paddingBottom: "unset"
-}
+  }
 };
 
 export default cardHeaderStyle;

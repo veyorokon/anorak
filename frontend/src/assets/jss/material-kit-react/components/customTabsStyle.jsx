@@ -43,7 +43,6 @@ const customTabsStyle = {
     transition: "0.2s background-color 0.1s"
   },
   tabWrapper: {
-      
     display: "inline-block",
     minHeight: "unset !important",
     minWidth: "unset !important",
@@ -55,7 +54,7 @@ const customTabsStyle = {
       verticalAlign: "middle",
       margin: "-1px 5px 0 0"
     }
-},
+  }
 };
 
 export default customTabsStyle;

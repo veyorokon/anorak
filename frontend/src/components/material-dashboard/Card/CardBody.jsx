@@ -11,7 +11,16 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import cardBodyStyle from "assets/jss/material-dashboard-react/components/cardBodyStyle.jsx";
 
 function CardBody({ ...props }) {
-  const { classes, className, children, plain, profile, subscription, add, ...rest } = props;
+  const {
+    classes,
+    className,
+    children,
+    plain,
+    profile,
+    subscription,
+    add,
+    ...rest
+  } = props;
   const cardBodyClasses = classNames({
     [classes.cardBody]: true,
     [classes.cardBodyPlain]: plain,

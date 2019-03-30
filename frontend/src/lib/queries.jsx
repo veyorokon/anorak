@@ -1,57 +1,62 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
 const SUBSCRIPTION_SERVICES = gql`
-query SubscriptionServices{
-  subscriptionServices{
-    id
-    name
-    isUsernameEmail
-    urlHome
-    urlTermsOfService
-    isAvailable
-    pricingPlans{
+  query SubscriptionServices {
+    subscriptionServices {
       id
-      amount
-      isActive
-      maximumSize
+      name
+      isUsernameEmail
+      urlHome
+      urlTermsOfService
+      isAvailable
+      pricingPlans {
+        id
+        amount
+        isActive
+        maximumSize
+      }
     }
   }
-}
 `;
 
 const USER = gql`
-query user($token: String!) {
+  query user($token: String!) {
     user(token: $token) {
+      id
+      email
+      firstName
+      lastName
+
+      subscriptionMemberships {
         id
-        email
-        firstName
-        lastName
-
-
-        subscriptionMemberships{
+        dateCreated
+        dateModified
+        statusMembership
+        subscriptionAccount {
           id
           dateCreated
-          dateModified
-          statusMembership
-          subscriptionAccount{
+          statusAccount
+          subscriptionPlan {
+            amount
+          }
+          subscriptionService {
             id
-            dateCreated
-            statusAccount
-            subscriptionPlan{
-                amount
-            }
-            subscriptionService{
-              id
-              name
-            }
-            responsibleUser{
-                firstName
-                lastName
-            }
+            name
+          }
+          responsibleUser {
+            firstName
+            lastName
           }
         }
+      }
     }
-}
+  }
+`;
+
+const CUSTOMER = gql`
+  query customer($token: String!) {
+    customer(token: $token)
+  }
 `;
 
 // const USER_INVOICES = gql`
@@ -91,14 +96,13 @@ query user($token: String!) {
 // }
 // `;
 
-
 const ACCOUNT_CREDENTIALS = gql`
-query AccountCredentials($token:String!, $membershipKey:Int!){
-  accountCredentials(token:$token, membershipKey:$membershipKey){
-    username,
-    password,
+  query AccountCredentials($token: String!, $membershipKey: Int!) {
+    accountCredentials(token: $token, membershipKey: $membershipKey) {
+      username
+      password
+    }
   }
-}
 `;
 
-export { SUBSCRIPTION_SERVICES, USER, ACCOUNT_CREDENTIALS }
+export { SUBSCRIPTION_SERVICES, USER, ACCOUNT_CREDENTIALS, CUSTOMER };

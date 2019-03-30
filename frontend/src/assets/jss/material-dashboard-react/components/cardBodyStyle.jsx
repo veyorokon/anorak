@@ -11,20 +11,20 @@ const cardBodyStyle = {
   },
   cardBodyProfile: {
     marginTop: "15px"
-},
-cardBodySubscription: {
+  },
+  cardBodySubscription: {
     padding: "0.9375rem 20px",
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
-    display: "flex",
-},
-cardBodyAdd:{
+    display: "flex"
+  },
+  cardBodyAdd: {
     display: "flex",
     justifyContent: "center",
-    alignItems:"center",
+    alignItems: "center",
     paddingTop: "unset"
-}
+  }
 };
 
 export default cardBodyStyle;

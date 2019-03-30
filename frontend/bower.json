@@ -1,10 +1,10 @@
 {
-  "name": "material-dashboard-react",
-  "homepage": "https://github.com/creativetimofficial/material-dashboard-react",
+  "name": "anorak",
+  "homepage": "https://ianorak.com",
   "authors": [
-    "creative-tim"
+    "Vahid Eyorokon"
   ],
-  "description": "A Badass Material-UI Kit based on Material Design",
+  "description": "Subscription Manager",
   "main": "public/index.html",
   "keywords": [
     "material",
@@ -15,7 +15,7 @@
     "google",
     "twitter"
   ],
-  "license": "Creative TIM License",
+  "license": "",
   "ignore": [
     "**/.*",
     "node_modules",

@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 export default function EntityInfo({ entity }) {
   const { name, email, address } = entity;
@@ -7,7 +7,7 @@ export default function EntityInfo({ entity }) {
   return (
     <div>
       {name && <div>{name}</div>}
-      {address && address.map((line) => <div key={line}>{line}</div>)}
+      {address && address.map(line => <div key={line}>{line}</div>)}
       {email && <a href={`mailto:${email}`}>{email}</a>}
     </div>
   );
@@ -18,7 +18,7 @@ EntityInfo.propTypes = {
     name: PropTypes.string,
     email: PropTypes.string,
     address: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.string.isRequired),
-    ]),
-  }).isRequired,
+      PropTypes.arrayOf(PropTypes.string.isRequired)
+    ])
+  }).isRequired
 };

@@ -1,17 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import gql from 'graphql-tag';
-import { Mutation } from 'react-apollo';
-import { withRouter } from 'react-router';
+import React from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import gql from "graphql-tag";
+import { Mutation } from "react-apollo";
+import { withRouter } from "react-router";
 
 import Form from "components/material-dashboard/Form/Form.jsx";
-import formConfig from './form';
+import formConfig from "./form";
 
-import {mixpanel} from "lib/utility.jsx";
-
+import { mixpanel } from "lib/utility.jsx";
 
 const styles = theme => ({
   submit: {
@@ -41,10 +40,10 @@ class LoginForm extends React.Component {
           password: values.password
         }
       });
-      window.localStorage.setItem('sessionToken', data.loginUser.token);
+      window.localStorage.setItem("sessionToken", data.loginUser.token);
       mixpanel.identify(values.email);
-      mixpanel.track('User Login');
-      this.props.history.push('/dashboard/home');
+      mixpanel.track("User Login");
+      this.props.history.push("/dashboard/home");
     } catch (e) {
       console.log(e);
       this.setState({ error: true });
@@ -52,7 +51,7 @@ class LoginForm extends React.Component {
   };
 
   componentDidMount() {
-    mixpanel.track('Login Page Load');
+    mixpanel.track("Login Page Load");
   }
 
   render() {
@@ -69,12 +68,12 @@ class LoginForm extends React.Component {
           >
             {({ isSubmitting, renderField }) => (
               <div>
-                {renderField('email', {
-                  margin: 'normal',
+                {renderField("email", {
+                  margin: "normal",
                   fullWidth: true
                 })}
-                {renderField('password', {
-                  margin: 'normal',
+                {renderField("password", {
+                  margin: "normal",
                   fullWidth: true
                 })}
 

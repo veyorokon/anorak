@@ -6,9 +6,7 @@ import {
 } from "assets/jss/material-dashboard-react.jsx";
 
 const appStyle = theme => ({
-  
   mainPanel: {
-    
     overflow: "auto",
     position: "relative",
     float: "right",

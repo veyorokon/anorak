@@ -12,10 +12,10 @@ import Check from "@material-ui/icons/Check";
 // core components
 import customInputStyle from "assets/jss/material-dashboard-react/components/customInputStyle.jsx";
 
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import IconButton from "@material-ui/core/IconButton";
 
 function CustomInput({ ...props }) {
   const {
@@ -44,50 +44,54 @@ function CustomInput({ ...props }) {
   const marginTop = classNames({
     [classes.marginTop]: labelText === undefined
   });
-  
+
   const [values, setValues] = React.useState({
-    password: '',
-    showPassword: false,
+    password: "",
+    showPassword: false
   });
 
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
   };
-  
-  if(password){
-      return(
-          <FormControl {...formControlProps}
-          className={formControlProps.className + " " + classes.formControl}
-        >
-          {labelText !== undefined ? (
-            <InputLabel
-              className={classes.labelRoot + labelClasses}
-              htmlFor={id}
-              {...labelProps}
-            >
-              {labelText}
-            </InputLabel>
-          ) : null}
+
+  if (password) {
+    return (
+      <FormControl
+        {...formControlProps}
+        className={formControlProps.className + " " + classes.formControl}
+      >
+        {labelText !== undefined ? (
+          <InputLabel
+            className={classes.labelRoot + labelClasses}
+            htmlFor={id}
+            {...labelProps}
+          >
+            {labelText}
+          </InputLabel>
+        ) : null}
         <Input
-            classes={{
-              root: marginTop,
-              disabled: classes.disabled,
-              underline: underlineClasses
-            }}
-            type={values.showPassword ? 'text' : 'password'}
-            id={id}
-            onChange={onChange}
-            {...inputProps}
+          classes={{
+            root: marginTop,
+            disabled: classes.disabled,
+            underline: underlineClasses
+          }}
+          type={values.showPassword ? "text" : "password"}
+          id={id}
+          onChange={onChange}
+          {...inputProps}
           endAdornment={
             <InputAdornment position="end">
-              <IconButton aria-label="Toggle password visibility" onClick={handleClickShowPassword}>
+              <IconButton
+                aria-label="Toggle password visibility"
+                onClick={handleClickShowPassword}
+              >
                 {values.showPassword ? <Visibility /> : <VisibilityOff />}
               </IconButton>
             </InputAdornment>
           }
         />
       </FormControl>
-      )
+    );
   }
   return (
     <FormControl

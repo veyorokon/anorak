@@ -45,7 +45,7 @@ const discoverStyle = theme => ({
     paddingTop: "10px",
     marginBottom: "0"
   },
-  
+
   cardTitle: {
     color: "#3C4858",
     marginTop: "0px",
@@ -73,30 +73,30 @@ const discoverStyle = theme => ({
       fontWeight: "400",
       lineHeight: "1"
     }
-},
-    cardInLine:{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "baseline"
-    },
-    cardImage:{
-        maxWidth: "75%",
-        margin: "inherit",
-        padding: "initial",
-        display: "flex"
-    },
-    subscriptionHeader:{
-        color: successColor,
-        margin: "unset"
-    },
-    extendedIcon: {
-    marginRight: theme.spacing.unit,
   },
-  subscriptionCardIcon:{
-      boxShadow: "unset"
+  cardInLine: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "baseline"
   },
-  textLink:{
-      display: "contents",
+  cardImage: {
+    maxWidth: "75%",
+    margin: "inherit",
+    padding: "initial",
+    display: "flex"
+  },
+  subscriptionHeader: {
+    color: successColor,
+    margin: "unset"
+  },
+  extendedIcon: {
+    marginRight: theme.spacing.unit
+  },
+  subscriptionCardIcon: {
+    boxShadow: "unset"
+  },
+  textLink: {
+    display: "contents"
   }
 });
 

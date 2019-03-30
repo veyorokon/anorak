@@ -4,15 +4,14 @@ import Landing from "layouts/Landing/Landing.jsx";
 import Auth from "layouts/Auth/Auth.jsx";
 import Discover from "layouts/Discover/Discover.jsx";
 
-
 const indexRoutes = [
-    { path: "/dashboard/manage", component: Manage },
-    { path: "/dashboard", component: Dashboard },
-    // { path: "/discover", component: Discover },
-    { path: "/logout", component: Dashboard },
-    { path: "/auth", component: Auth },
-    { path: "/login", component: Auth },
-    { path: "/", component: Landing },
+  { path: "/dashboard/manage", component: Manage },
+  { path: "/dashboard", component: Dashboard },
+  // { path: "/discover", component: Discover },
+  { path: "/logout", component: Dashboard },
+  { path: "/auth", component: Auth },
+  { path: "/login", component: Auth },
+  { path: "/", component: Landing }
 ];
 
 export default indexRoutes;
