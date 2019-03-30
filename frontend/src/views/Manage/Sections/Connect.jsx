@@ -69,7 +69,7 @@ class Connect extends React.Component {
                   }}
                   inputProps={{
                     disabled: true,
-                    value: getValue("service").name
+                    value: getValue("subscriptionService").name
                   }}
                 />
               </GridItem>
@@ -84,7 +84,7 @@ class Connect extends React.Component {
                   }}
                   inputProps={{
                     disabled: true,
-                    value: "$" + getValue("pricePlan").amount
+                    value: "$" + getValue("subscriptionPlan").amount
                   }}
                 />
               </GridItem>

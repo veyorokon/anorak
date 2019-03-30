@@ -26,27 +26,20 @@ const USER = gql`
       email
       firstName
       lastName
-
-      subscriptionMemberships {
+      dashboardAccounts {
         id
         dateCreated
-        dateModified
-        statusMembership
-        subscriptionAccount {
+        statusAccount
+        subscriptionPlan {
+          amount
+        }
+        subscriptionService {
           id
-          dateCreated
-          statusAccount
-          subscriptionPlan {
-            amount
-          }
-          subscriptionService {
-            id
-            name
-          }
-          responsibleUser {
-            firstName
-            lastName
-          }
+          name
+        }
+        responsibleUser {
+          firstName
+          lastName
         }
       }
     }

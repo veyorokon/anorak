@@ -67,6 +67,16 @@ class User(AbstractBaseUser, PermissionsMixin):
         customer_api = customer.api_retrieve()
         return customer_api
 
+    @property
+    def dashboard_accounts(self):
+        accounts = self.subscription_accounts.all()
+        memberships = self.subscription_memberships.all()
+        membershipAccounts = []
+        for membership in memberships:
+            membershipAccounts.append(membership.subscription_account)
+        userAccounts = membershipAccounts + list(accounts)
+        return list(set(userAccounts))
+
     def upcoming_invoice(self):
         invoice = stripe.Invoice.upcoming(
             customer=self.djstripe_customer.id

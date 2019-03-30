@@ -134,7 +134,7 @@ class Dashboard extends React.Component {
                     } else {
                       var amount = "Pending";
                     }
-
+                    var name = subscriptionAccount.subscriptionService.name.toLowerCase();
                     return (
                       <GridItem key={id} xs={12} sm={6} md={6} lg={6}>
                         <Card subscription>
@@ -159,8 +159,10 @@ class Dashboard extends React.Component {
                             <img
                               src={
                                 process.env.REACT_APP_STATIC_FILES +
-                                "svg/" +
-                                subscriptionAccount.service.name.toLowerCase() +
+                                "logos/" +
+                                name +
+                                "/svg/" +
+                                name +
                                 ".svg"
                               }
                               className={classes.cardImage}

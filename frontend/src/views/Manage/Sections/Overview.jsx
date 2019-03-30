@@ -72,7 +72,7 @@ class Overview extends React.Component {
               }}
               inputProps={{
                 disabled: true,
-                value: getValue("service").name
+                value: getValue("subscriptionService").name
               }}
             />
           </GridItem>
@@ -130,7 +130,7 @@ class Overview extends React.Component {
               }}
               inputProps={{
                 disabled: true,
-                value: "$" + getValue("pricePlan").amount
+                value: "$" + getValue("subscriptionPlan").amount
               }}
             />
           </GridItem>
@@ -144,7 +144,8 @@ class Overview extends React.Component {
               }}
               inputProps={{
                 disabled: true,
-                value: "* $" + calcAnorakFee(getValue("pricePlan").amount)
+                value:
+                  "* $" + calcAnorakFee(getValue("subscriptionPlan").amount)
               }}
             />
           </GridItem>
@@ -160,8 +161,8 @@ class Overview extends React.Component {
                 value:
                   "$" +
                   getSum(
-                    calcAnorakFee(getValue("pricePlan").amount),
-                    getValue("pricePlan").amount
+                    calcAnorakFee(getValue("subscriptionPlan").amount),
+                    getValue("subscriptionPlan").amount
                   )
               }}
             />

@@ -38,7 +38,7 @@ def create_stripe_plan(sender, instance, created, **kwargs):
     if created:
         instance._init_stripe_plan()
         instance.save()
-        
+
 @receiver(pre_delete, sender=SubscriptionPlan)
 def delete_stripe_plan(sender, instance, **kwargs):
     """Delete the product from stripe"""
@@ -57,7 +57,7 @@ def create_stripe_subscription_item(sender, instance, created, **kwargs):
             recipient = instance.user,
             stripe_subscription_item_id = instance.stripe_subscription_item_id
         )
-        
+
 @receiver(pre_delete, sender=SubscriptionMember)
 def delete_stripe_subscription_item(sender, instance, **kwargs):
     """Delete the subscription item with stripe"""

@@ -22,13 +22,13 @@ from . enum import *
 ##########################################################################
 
 class SubscriptionService(models.Model):
-    #The encrypted secret. 
+    #The encrypted secret.
     name = models.CharField(max_length=128, null=False, unique=True)
     #The frequency of billing
     type = enum.EnumField(ServiceType, default=ServiceType.STREAMING)
     #the number of days for a free trial
     free_trial_days = models.IntegerField(default=0)
-    #The url for home page 
+    #The url for home page
     url_home = models.CharField(max_length=128, null=True)
     #The url for the terms of service.
     url_terms_of_service = models.CharField(max_length=128, null=True)
@@ -38,31 +38,31 @@ class SubscriptionService(models.Model):
     is_available = models.BooleanField(default=False)
     #The djstripe model webhook
     stripe_product_id = models.CharField(max_length=32)
-    
-    
+
+
     class Meta:
         db_table = "Subscription_Services"
-        
+
     @property
     def djstripe_product(self):
         return Product.objects.get(id=self.stripe_product_id)
-        
+
     def _init_stripe_product(self):
         product = stripe.Product.create(
             name=self.name,
             type='service',
         )
         self.stripe_product_id = product.id
-    
+
     def _delete_stripe_product(self):
         product = stripe.Product.retrieve(
             self.stripe_product_id
         ).delete()
-        
+
     def __str__(self):
-        return self.name    
-    
-    
+        return self.name
+
+
 ##########################################################################
 ## Subscription Plan
 ##########################################################################
@@ -88,23 +88,23 @@ class SubscriptionPlan(models.Model):
         db_table = "Subscription_Plans"
         unique_together = ('service', 'amount','maximum_size')
         ordering = ['maximum_size']
-    
+
     @property
     def djstripe_plan(self):
         return Plan.objects.get(id=self.stripe_plan_id)
-    
+
     @property
     def product_name(self):
         name = self.service.name
         if self.maximum_size > 1:
             return name + ' - Family Plan ('+str(self.maximum_size)+' users)'
         return name + ' - Individual Plan'
-        
+
     def _delete_stripe_plan(self):
         stripe.Plan.retrieve(
             self.stripe_plan_id
         ).delete()
-        
+
     def _init_stripe_plan(self):
         name = self.product_name
         nickname = self.__str__()
@@ -118,7 +118,7 @@ class SubscriptionPlan(models.Model):
             nickname=nickname
         )
         self.stripe_plan_id = plan.id
-    
+
     def __str__(self):
         return "$"+str(self.amount)+" billed monthly"
 
@@ -138,7 +138,7 @@ class SubscriptionAccount(models.Model):
     subscription_plan = models.ForeignKey(SubscriptionPlan, on_delete=models.CASCADE, related_name="subscription_accounts", null=True)
     #The encrypted username
     username = EncryptedCharField(max_length=128, null=True, blank=True)
-    #The encrypted password. 
+    #The encrypted password.
     password = EncryptedCharField(max_length=128, null=True, blank=True)
     #The status of the account
     status_account = enum.EnumField(SubscriptionAccountStatus, default=SubscriptionAccountStatus.PENDING)
@@ -152,11 +152,11 @@ class SubscriptionAccount(models.Model):
     class Meta:
         db_table = "Subscription_Accounts"
         unique_together = (
-            'responsible_user', 
+            'responsible_user',
             'subscription_service',
             'subscription_plan'
         )
-        
+
     @property
     def responsible_member(self):
         try:
@@ -166,53 +166,53 @@ class SubscriptionAccount(models.Model):
             )
         except:
             return None
-            
+
     @property
     def basic_members(self):
         return self.subscribers.all().filter(~Q(
             user = self.responsible_user
         ))
-            
+
     def _create(self):
         self.status_account = SubscriptionAccountStatus.ACTIVE
         SubscriptionMember.objects.create(
-            user=self.responsible_user, 
+            user=self.responsible_user,
             subscription_account=self,
             status_membership = MembershipStatus.ACTIVE
         )
-            
+
     def _connect(self):
         self.status_account = SubscriptionAccountStatus.PENDING_CONFIRM_CONNECT
-    
+
     def _cancel_basic_members(self):
         for member in self.basic_members:
             member.delete()
-    
+
     def _cancel_responsible_member(self):
-        self.responsible_member.delete()
-            
+        self.responsible_member.cancel()
+
     def activate(self):
         if self.type == SubscriptionAccountType.CREATE:
             self._create()
         else:
             self._connect()
         self.save()
-        
+
     def cancel(self):
         self._cancel_basic_members()
         self._cancel_responsible_member()
         self.status_account = SubscriptionAccountStatus.CANCELED
         self.save()
-            
+
     def save(self, *args, **kwargs):
-        ''' 
-        On save, update timestamps 
+        '''
+        On save, update timestamps
         '''
         if not self.id:
             self.date_created = timezone.now()
         self.date_modified = timezone.now()
         return super(SubscriptionAccount, self).save(*args, **kwargs)
-        
+
     def __str__(self):
         user = self.responsible_user.email
         plan = str(self.subscription_plan)
@@ -238,7 +238,7 @@ class SubscriptionMember(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subscription_memberships")
     #The subscription account of which this is a member.
     subscription_account = models.ForeignKey(SubscriptionAccount, on_delete=models.CASCADE, related_name="subscribers")
-    #The status of the user subscription 
+    #The status of the user subscription
     status_membership = enum.EnumField(MembershipStatus, default=MembershipStatus.PENDING)
     #Date that the subscription was created
     date_created = models.DateTimeField(editable=False)
@@ -248,8 +248,8 @@ class SubscriptionMember(models.Model):
     date_canceled = models.DateTimeField(editable=False, null=True, blank=True)
     #The stripe subscription item id
     stripe_subscription_item_id = models.CharField(max_length=32, unique=True)
-    
-    
+
+
     def _cancel_stripe_subscription(self):
         subscriptionID = self.stripe_subscription_item_id
         if subscriptionID == None:
@@ -259,7 +259,7 @@ class SubscriptionMember(models.Model):
 
     def _cancel_membership_status(self):
         self.status_membership = MembershipStatus.CANCELED
-    
+
     def _set_stripe_subscription_item_id(self, subscription=None):
         planID = self.subscription_account.subscription_plan.stripe_plan_id
         itemID = None
@@ -270,7 +270,7 @@ class SubscriptionMember(models.Model):
 
     def get_existing_subscription_items(self):
         return self.user.djstripe_subscription.items.all()
-    
+
     def _validate_subscription_item(self, item):
         try:
             stripe.SubscriptionItem.retrieve(
@@ -282,7 +282,7 @@ class SubscriptionMember(models.Model):
 
     def get_subscription(self):
         return self.user.djstripe_subscription
-    
+
     def add_to_stripe_subscription(self):
         subscription = self.user.djstripe_subscription
         planID = self.subscription_account.subscription_plan.stripe_plan_id
@@ -299,20 +299,21 @@ class SubscriptionMember(models.Model):
         zip = self.user.get_shipping_zip()
         taxPercent = tax_from_zip(zip) * 100
         updated = stripe.Subscription.modify(
-            subscription.id, 
-            items=updatedItems, 
+            subscription.id,
+            items=updatedItems,
             billing_cycle_anchor='unchanged',
             tax_percent=taxPercent,
         )
         self._set_stripe_subscription_item_id(subscription=updated)
 
     def cancel(self):
-        self._cancel_stripe_subscription()
         self._cancel_membership_status()
+        self._cancel_stripe_subscription()
+        self.save()
 
     def save(self, *args, **kwargs):
-        ''' 
-        On save, update timestamps 
+        '''
+        On save, update timestamps
         '''
         if not self.id:
             self.date_created = timezone.now()

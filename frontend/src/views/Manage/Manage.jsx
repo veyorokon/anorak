@@ -39,7 +39,7 @@ class _ManageContent extends React.Component {
 
   componentDidMount() {
     mixpanel.track("Manage Page Load", {
-      subscription: this.getValue("service").name
+      subscription: this.getValue("subscriptionService").name
     });
   }
 
@@ -49,12 +49,12 @@ class _ManageContent extends React.Component {
   };
 
   onSubmit = async requestCancellation => {
-    var accountKey = this.props.account.id;
-    var memberKey = this.props.membership.id;
+    var subscriptionAccountKey = this.props.account.id;
+    var subscriptionMemberKey = this.props.membership.id;
     const variables = {
       token: getToken(),
-      accountKey: accountKey,
-      memberKey: memberKey
+      subscriptionAccountKey: subscriptionAccountKey,
+      subscriptionMemberKey: subscriptionMemberKey
     };
     await requestCancellation({ variables });
     this.setState({ submitted: true });
@@ -82,7 +82,8 @@ class _ManageContent extends React.Component {
             <div className={classes.title}>
               <h3>
                 <small id="confirmName">
-                  Confirm Your {this.getValue("service").name} Account
+                  Confirm Your {this.getValue("subscriptionService").name}{" "}
+                  Account
                 </small>
               </h3>
             </div>

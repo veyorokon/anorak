@@ -1,7 +1,7 @@
 from graphene_django.types import DjangoObjectType
-from core.models import * 
 from subscription.models import SubscriptionService, SubscriptionPlan, SubscriptionAccount, SubscriptionMember
 from graphene_django.registry import Registry
+from subscription.enum import SubscriptionAccountStatus
 
 class _SubscriptionType(DjangoObjectType):
     class Meta:

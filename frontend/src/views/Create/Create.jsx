@@ -344,6 +344,7 @@ class _CreateContent extends React.Component {
   };
 
   onSubmit = async (createSubscriptionAccount, values) => {
+    var username = this.props.user.email;
     var subscription = this.state.subscription;
     var plan = this.state.planSelected;
     var planPK = this.state.services[subscription].pricingPlans[plan].id;
@@ -354,7 +355,7 @@ class _CreateContent extends React.Component {
       serviceKey: subscriptionPK,
       planKey: planPK,
       password: this.getPassword(),
-      username: "",
+      username: username,
       isConnectedAccount: false
     };
 
@@ -472,6 +473,7 @@ class _CreateContent extends React.Component {
                                 size={this.getServiceSize()}
                                 price={this.getPrice()}
                                 password={this.getPassword()}
+                                email={this.props.user.email}
                               />
                             </CardBody>
                           </span>
@@ -511,7 +513,7 @@ class _CreateContent extends React.Component {
 }
 const CreateContent = withSnackbar(_CreateContent);
 
-function Create(props) {
+function CreateWithServices(props) {
   const { classes } = props;
 
   return (
@@ -520,7 +522,32 @@ function Create(props) {
         if (loading) return "Loading...";
         if (error) return `Error! ${error.message}`;
         const services = data.subscriptionServices;
-        return <CreateContent classes={classes} services={services} />;
+        return (
+          <CreateContent
+            classes={classes}
+            user={props.user}
+            services={services}
+          />
+        );
+      }}
+    </Query>
+  );
+}
+
+function Create(props) {
+  const { classes } = props;
+
+  return (
+    <Query
+      query={USER}
+      variables={{ token: getToken() }}
+      fetchPolicy="network-only"
+    >
+      {({ loading, error, data }) => {
+        if (loading) return "Loading...";
+        if (error) return `Error! ${error.message}`;
+        const user = data.user;
+        return <CreateWithServices classes={classes} user={user} />;
       }}
     </Query>
   );

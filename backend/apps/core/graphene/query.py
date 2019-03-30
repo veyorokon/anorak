@@ -8,7 +8,7 @@ class Query(graphene.ObjectType):
     user = graphene.Field(_UserType, token=graphene.String(required=True))
     customer = graphene.types.json.JSONString(
         token=graphene.String(required=True),
-        description='JSON result test'
+        description='JSON customer data from stripe.'
     )
 
     @login_required

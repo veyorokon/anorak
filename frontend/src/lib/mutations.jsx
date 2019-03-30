@@ -1,30 +1,34 @@
 import gql from "graphql-tag";
 
 const CREATE_SUBSCRIPTION_ACCOUNT = gql`
-  mutation SubscriptionAccountMutation(
+  mutation SubscriptionCreateMutation(
     $token: String!
     $serviceKey: Int!
     $planKey: Int!
     $username: String!
     $password: String!
-    $isConnectedAccount: Boolean!
   ) {
-    subscriptionAccount(
+    subscriptionCreateAccount(
       token: $token
       serviceKey: $serviceKey
       planKey: $planKey
       password: $password
       username: $username
-      isConnectedAccount: $isConnectedAccount
     ) {
       subscriptionAccount {
         id
-        dateCreated
-        dateModified
-        statusAccount
-        service {
+        responsibleUser {
+          id
+          firstName
+        }
+        subscriptionService {
           id
           name
+        }
+        type
+        subscriptionPlan {
+          id
+          amount
         }
       }
     }
@@ -123,20 +127,24 @@ const SET_STRIPE_CARD = gql`
 `;
 
 const REQUEST_ACCOUNT_CANCELLATION = gql`
-  mutation RequestCancellationMutation(
+  mutation CancelSubscriptionMember(
     $token: String!
-    $memberKey: Int!
-    $accountKey: Int!
+    $subscriptionAccountKey: Int!
+    $subscriptionMemberKey: Int!
   ) {
-    requestCancellation(
+    cancelMemberRequest(
       token: $token
-      memberKey: $memberKey
-      accountKey: $accountKey
+      subscriptionAccountKey: $subscriptionAccountKey
+      subscriptionMemberKey: $subscriptionMemberKey
     ) {
       managementRequest {
         id
         status
         requestedAction
+        requestedBy {
+          id
+          email
+        }
       }
     }
   }
