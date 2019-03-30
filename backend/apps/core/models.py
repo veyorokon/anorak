@@ -23,16 +23,16 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(_('email address'), blank=False, unique=True,
         null=True)
-    phone_number = models.CharField( max_length=17, blank=True, unique=True, 
+    phone_number = models.CharField( max_length=17, blank=True, unique=True,
         null=True)
     facebook_id = models.CharField(_('facebook id'), max_length=30, blank=True, null=True, editable=False)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, null=True, blank=True)
-    date_joined = models.DateTimeField(_('date joined'), 
+    date_joined = models.DateTimeField(_('date joined'),
         editable=True, null=True, auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('staff'), default=False)
-    
+
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
@@ -41,41 +41,60 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
- 
+
     def __str__(self):
         return 'Email={0}'.format(
             self.email
         )
-        
+
     @property
     def json_web_token(self):
         payload = jwt_payload_handler(self)
         token = jwt_encode_handler(payload)
         return token
-        
+
     @property
     def djstripe_customer(self):
         return self.djstripe_customers.first()
-    
+
     @property
     def djstripe_subscription(self):
         return self.djstripe_customer.subscription
-    
-    def upcoming_invoice(self):        
+
+    @property
+    def customer_api(self):
+        customer = self.djstripe_customer
+        customer_api = customer.api_retrieve()
+        return customer_api
+
+    def upcoming_invoice(self):
         invoice = stripe.Invoice.upcoming(
             customer=self.djstripe_customer.id
         )
         return invoice
-    
+
     def latest_invoice(self):
         subscription = stripe.Subscription.retrieve(
             id=self.djstripe_subscription.id
-        )        
+        )
         invoice = stripe.Invoice.retrieve(
             id=subscription.latest_invoice
         )
         return invoice
-        
+
     def get_shipping_zip(self):
         customer = stripe.Customer.retrieve(self.djstripe_customer.id)
         return customer.shipping.address.postal_code
+
+    def link_card(self, token, nameOnCard):
+        customer = self.djstripe_customer.api_retrieve()
+        source = customer.sources.create(
+            source=token,
+            metadata={
+                "name_on_card": nameOnCard
+            }
+        )
+        stripe.Customer.modify(
+            self.djstripe_customer.id,
+            default_source = source.id
+        )
