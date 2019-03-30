@@ -28,7 +28,7 @@ import {
 } from "variables/charts.jsx";
 
 import CardModal from "components/material-dashboard/CardModal/CardModal";
-import { getMemberStatus, getAccountColor, getToken } from "lib/utility.jsx";
+import { getMemberStatus, getMemberColor, getToken } from "lib/utility.jsx";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 import { withRouter } from "react-router-dom";
 import gql from "graphql-tag";
@@ -62,9 +62,9 @@ class Dashboard extends React.Component {
         {({ loading, error, data }) => {
           if (loading) return "Loading...";
           if (error) return `Error! ${error.message}`; //redirect on error
-          let subscriptionCards = [];
-          data.user.dashboardAccounts.forEach(elem => {
-            subscriptionCards.push(elem);
+          let memberships = [];
+          data.user.subscriptionMemberships.forEach(elem => {
+            memberships.push(elem);
           });
           return (
             <div>
@@ -126,79 +126,71 @@ class Dashboard extends React.Component {
                   </Card>
                 </GridItem>
 
-                {subscriptionCards.map(subscriptionCard => {
-                  var color = getAccountColor(subscriptionCard.statusAccount);
-                  var amount = "Pending";
-                  console.log(subscriptionCard);
-                  if (subscriptionCard.subscriptionPlan != null) {
-                    amount = "$" + subscriptionCard.subscriptionPlan.amount;
-                  }
-                  var name = subscriptionCard.subscriptionService.name.toLowerCase();
-                  return (
-                    <GridItem
-                      key={subscriptionCard.id}
-                      xs={12}
-                      sm={6}
-                      md={6}
-                      lg={6}
-                    >
-                      <Card subscription>
-                        <CardHeader>
-                          <CardIcon
-                            className={classes.subscriptionCardIcon}
-                            color={color}
-                          />
-                          <span className={classes.cardInLine}>
-                            <h5>
-                              <Typography color={color}>
-                                {getMemberStatus(
-                                  subscriptionCard.statusAccount
-                                )}
-                              </Typography>
-                            </h5>
-
-                            <h5 className={classes.cardCategoryWhite}>
-                              {amount}
-                            </h5>
-                          </span>
-                        </CardHeader>
-                        <CardBody subscription>
-                          <img
-                            src={
-                              process.env.REACT_APP_STATIC_FILES +
-                              "logos/" +
-                              name +
-                              "/svg/" +
-                              name +
-                              ".svg"
-                            }
-                            className={classes.cardImage}
-                          />
-                        </CardBody>
-                        <CardFooter>
-                          <span className={classes.cardInLine}>
-                            <CardModal
-                              membershipID={subscriptionCard.id}
-                              title={"Account Login"}
+                {memberships.map(
+                  ({ id, statusMembership, subscriptionAccount }) => {
+                    var color = getMemberColor(statusMembership);
+                    if (subscriptionAccount.pricePlan != null) {
+                      var amount = "$" + subscriptionAccount.pricePlan.amount;
+                    } else {
+                      var amount = "Pending";
+                    }
+                    var name = subscriptionAccount.subscriptionService.name.toLowerCase();
+                    return (
+                      <GridItem key={id} xs={12} sm={6} md={6} lg={6}>
+                        <Card subscription>
+                          <CardHeader>
+                            <CardIcon
+                              className={classes.subscriptionCardIcon}
+                              color={color}
                             />
-                            <Button
-                              onClick={() => {
-                                this.props.history.push(
-                                  "manage/" + subscriptionCard.id
-                                );
-                              }}
-                              color="transparent"
-                            >
-                              <span className={classes.cardCategoryWhite}>
-                                Manage
-                              </span>
-                            </Button>
-                          </span>
-                        </CardFooter>
-                      </Card>
-                    </GridItem>
-                  );
-                })}
+                            <span className={classes.cardInLine}>
+                              <h5>
+                                <Typography color={color}>
+                                  {getMemberStatus(statusMembership)}
+                                </Typography>
+                              </h5>
+
+                              <h5 className={classes.cardCategoryWhite}>
+                                {amount}
+                              </h5>
+                            </span>
+                          </CardHeader>
+                          <CardBody subscription>
+                            <img
+                              src={
+                                process.env.REACT_APP_STATIC_FILES +
+                                "logos/" +
+                                name +
+                                "/svg/" +
+                                name +
+                                ".svg"
+                              }
+                              className={classes.cardImage}
+                            />
+                          </CardBody>
+                          <CardFooter>
+                            <span className={classes.cardInLine}>
+                              <CardModal
+                                membershipID={id}
+                                title={"Account Login"}
+                              />
+                              <Button
+                                onClick={() => {
+                                  this.props.history.push("manage/" + id);
+                                }}
+                                color="transparent"
+                              >
+                                <span className={classes.cardCategoryWhite}>
+                                  Manage
+                                </span>
+                              </Button>
+                            </span>
+                          </CardFooter>
+                        </Card>
+                      </GridItem>
+                    );
+                  }
+                )}
               </GridContainer>
             </div>
           );
