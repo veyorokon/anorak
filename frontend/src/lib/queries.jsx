@@ -31,6 +31,7 @@ const USER = gql`
         dateCreated
         statusAccount
         subscriptionPlan {
+          id
           amount
         }
         subscriptionService {
@@ -38,6 +39,7 @@ const USER = gql`
           name
         }
         responsibleUser {
+          id
           firstName
           lastName
         }

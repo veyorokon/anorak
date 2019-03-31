@@ -130,12 +130,10 @@ const REQUEST_ACCOUNT_CANCELLATION = gql`
   mutation CancelSubscriptionMember(
     $token: String!
     $subscriptionAccountKey: Int!
-    $subscriptionMemberKey: Int!
   ) {
     cancelMemberRequest(
       token: $token
       subscriptionAccountKey: $subscriptionAccountKey
-      subscriptionMemberKey: $subscriptionMemberKey
     ) {
       managementRequest {
         id

@@ -50,11 +50,9 @@ class _ManageContent extends React.Component {
 
   onSubmit = async requestCancellation => {
     var subscriptionAccountKey = this.props.account.id;
-    var subscriptionMemberKey = this.props.membership.id;
     const variables = {
       token: getToken(),
-      subscriptionAccountKey: subscriptionAccountKey,
-      subscriptionMemberKey: subscriptionMemberKey
+      subscriptionAccountKey: subscriptionAccountKey
     };
     await requestCancellation({ variables });
     this.setState({ submitted: true });
@@ -289,14 +287,14 @@ class _ManageContent extends React.Component {
 
 const ManageContent = withSnackbar(_ManageContent);
 
-function getMembershipID(path) {
+function getAccountID(path) {
   return path.substr(path.lastIndexOf("/") + 1);
 }
 
-function getMembership(path, data) {
-  const membershipID = getMembershipID(path);
-  for (var i = 0; i < data.length; i++) {
-    if (data[i].id == membershipID) return data[i];
+function getAccount(path, dashboardAccounts) {
+  const accountID = getAccountID(path);
+  for (var i = 0; i < dashboardAccounts.length; i++) {
+    if (dashboardAccounts[i].id == accountID) return dashboardAccounts[i];
   }
   return null;
 }
@@ -310,16 +308,11 @@ function Manage(props) {
         if (loading) return "Loading...";
         if (error) return `Error! ${error.message}`;
         const path = props.location.pathname;
-        const subscriptionMemberships = data.user.subscriptionMemberships;
-        const membership = getMembership(path, subscriptionMemberships);
-        const account = membership.subscriptionAccount;
+        const dashboardAccounts = data.user.dashboardAccounts;
+        const account = getAccount(path, dashboardAccounts);
         return (
           <div>
-            <ManageContent
-              membership={membership}
-              account={account}
-              classes={classes}
-            />
+            <ManageContent account={account} classes={classes} />
           </div>
         );
       }}

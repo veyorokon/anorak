@@ -6,7 +6,7 @@ Graphene (GraphQL) mutations for the request models
 ## Imports
 ##########################################################################
 
-import graphene 
+import graphene
 from core.models import User
 from django.utils import timezone
 from subscription.models import SubscriptionMember
@@ -21,18 +21,17 @@ from subscription.enum import SubscriptionAccountStatus
 ##########################################################################
 
 class CancelSubscriptionMemberMutation(graphene.Mutation):
-    
+
     class Arguments:
         token = graphene.String(required=True)
         subscriptionAccountKey = graphene.Int(required=True)
-        subscriptionMemberKey = graphene.Int(required=True)
 
     managementRequest =  graphene.Field(_ManagementRequestType)
-    
+
     @login_required
-    def mutate(self, info, token, subscriptionAccountKey, subscriptionMemberKey, **kwargs):
+    def mutate(self, info, token, subscriptionAccountKey, **kwargs):
         user = info.context.user
-        
+
         try:
             member = SubscriptionMember.objects.get(
                 user = user,
@@ -61,7 +60,7 @@ class CancelSubscriptionMemberMutation(graphene.Mutation):
                 processed_notes = "Automatic complete on server.",
                 date_processed = timezone.now()
             )
-            
+
         return CancelSubscriptionMemberMutation(
             managementRequest = managementRequest
         )

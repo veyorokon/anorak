@@ -28,7 +28,7 @@ class EmailManager(object):
         self.invoice = invoice
         if invoice == None:
             self.invoice = user.upcoming_invoice()
-        self.invoiceData = self._clean_invoice_data(invoice)
+        self.invoiceData = self._clean_invoice_data(self.invoice)
         self.customer = self._get_customer_from_invoice()
         self.user = self.customer.subscriber
 
