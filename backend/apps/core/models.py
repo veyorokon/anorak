@@ -92,9 +92,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         )
         return invoice
 
-    def get_shipping_zip(self):
-        customer = stripe.Customer.retrieve(self.djstripe_customer.id)
-        return customer.shipping.address.postal_code
+    def get_tax_zip(self):
+        customer = self.customer_api
+        sourceZip = customer.default_source.address_zip
+        return sourceZip
 
     def link_card(self, token, nameOnCard):
         customer = self.djstripe_customer.api_retrieve()

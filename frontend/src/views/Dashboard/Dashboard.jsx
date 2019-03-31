@@ -129,7 +129,6 @@ class Dashboard extends React.Component {
                 {subscriptionCards.map(subscriptionCard => {
                   var color = getAccountColor(subscriptionCard.statusAccount);
                   var amount = "Pending";
-                  console.log(subscriptionCard);
                   if (subscriptionCard.subscriptionPlan != null) {
                     amount = "$" + subscriptionCard.subscriptionPlan.amount;
                   }
@@ -178,7 +177,7 @@ class Dashboard extends React.Component {
                         <CardFooter>
                           <span className={classes.cardInLine}>
                             <CardModal
-                              membershipID={subscriptionCard.id}
+                              subscriptionAccountKey={subscriptionCard.id}
                               title={"Account Login"}
                             />
                             <Button

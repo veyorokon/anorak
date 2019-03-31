@@ -90,8 +90,11 @@ const CUSTOMER = gql`
 // `;
 
 const ACCOUNT_CREDENTIALS = gql`
-  query AccountCredentials($token: String!, $membershipKey: Int!) {
-    accountCredentials(token: $token, membershipKey: $membershipKey) {
+  query AccountCredentials($token: String!, $subscriptionAccountKey: Int!) {
+    accountCredentials(
+      token: $token
+      subscriptionAccountKey: $subscriptionAccountKey
+    ) {
       username
       password
     }

@@ -286,7 +286,10 @@ class _CreateContent extends React.Component {
 
   planSection = classes => {
     var selectedService = this.state.subscription;
-    var pricingPlans = this.state.services[selectedService].pricingPlans;
+    var pricingPlans = [];
+    if (this.state.services[selectedService] != null) {
+      pricingPlans = this.state.services[selectedService].pricingPlans;
+    }
     var tabs = pricingPlans.map(plan => {
       if (plan.maximumSize === 1) {
         return {

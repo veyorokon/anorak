@@ -169,23 +169,41 @@ class _UserProfileContent extends React.Component {
     var customer = this.props.customer;
 
     var nameOnCard = "";
-    if (customer.default_source.metadata.name_on_card) {
+    if (
+      customer.default_source &&
+      customer.default_source.metadata.name_on_card
+    ) {
       nameOnCard = customer.default_source.metadata.name_on_card;
+      this.state = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        name_on_card: nameOnCard,
+        address_line1: customer.default_source.address_line1,
+        address_line2: customer.default_source.address_line2,
+        address_city: customer.default_source.address_city,
+        address_state: customer.default_source.address_state,
+        address_country: customer.default_source.address_country,
+        last4: customer.default_source.last4,
+        submitted: false,
+        updatedProfile: false
+      };
+    } else {
+      this.state = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        name_on_card: nameOnCard,
+        address_line1: "",
+        address_line2: "",
+        address_city: "",
+        address_state: "",
+        address_country: "",
+        last4: "",
+        submitted: false,
+        updatedProfile: false
+      };
     }
-    this.state = {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      name_on_card: nameOnCard,
-      address_line1: customer.default_source.address_line1,
-      address_line2: customer.default_source.address_line2,
-      address_city: customer.default_source.address_city,
-      address_state: customer.default_source.address_state,
-      address_country: customer.default_source.address_country,
-      last4: customer.default_source.last4,
-      submitted: false,
-      updatedProfile: false
-    };
   }
 
   onChangeHandler = event => {

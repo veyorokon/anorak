@@ -40,7 +40,7 @@ class SubscriptionAccountStatus(EnumMap):
     PENDING_CANCELLATION = 15
     PENDING = 20
     PENDING_CREATE = 29
-    PENDING_CONNECT = 30 
+    PENDING_CONNECT = 30
     PENDING_CONFIRM_CONNECT = 35
     ACTIVE = 90
     CONNECTED = 91
@@ -88,7 +88,7 @@ class MembershipStatus(enum.Enum):
     UPDATING = 50
     ACTIVE = 90
 
-    def validate(self, status):
-        if status >= self.UPDATING:
+    def validate(status):
+        if status >= MembershipStatus.UPDATING:
             return True
         return False

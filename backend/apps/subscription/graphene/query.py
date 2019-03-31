@@ -15,7 +15,7 @@ class Query(graphene.ObjectType):
     account_credentials = graphene.Field(
         _SubscriptionLoginType,
         token = graphene.String(required=True),
-        membershipKey = graphene.Int(required=True),
+        subscriptionAccountKey = graphene.Int(required=True),
         description="Returns the squad secret if the user has an active membership."
     )
 
@@ -27,16 +27,15 @@ class Query(graphene.ObjectType):
         return jsonData.enum_map()
 
     @login_required
-    def resolve_account_credentials(self, info, token, membershipKey, **kwargs):
+    def resolve_account_credentials(self, info, token, subscriptionAccountKey, **kwargs):
         user = info.context.user
         try:
-            membership = SubscriptionMember.objects.get(pk=membershipKey, user=info.context.user)
+            account = SubscriptionAccount.objects.get(
+                pk=subscriptionAccountKey
+            )
         except:
             return None
-        status = membership.status_membership
-        statusVerification = MembershipStatus()
-        cond1 = statusVerification.validate(status)
-        cond2 = membership.subscription_account.responsible_user == user
-        if(cond1 or cond2):
-            return membership.subscription_account
+        validated = account.validate_user(user)
+        if(validated):
+            return account
         return None

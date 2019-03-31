@@ -16,7 +16,7 @@ import { ACCOUNT_CREDENTIALS } from "lib/queries";
 class CardModal extends React.Component {
   state = {
     open: false,
-    membershipID: this.props.membershipID,
+    subscriptionAccountKey: this.props.subscriptionAccountKey,
     username: "",
     password: ""
   };
@@ -31,7 +31,7 @@ class CardModal extends React.Component {
       query: ACCOUNT_CREDENTIALS,
       variables: {
         token: window.localStorage.getItem("sessionToken"),
-        membershipKey: this.state.membershipID
+        subscriptionAccountKey: this.state.subscriptionAccountKey
       }
     });
     if (data.accountCredentials) {

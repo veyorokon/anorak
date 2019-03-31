@@ -79,7 +79,7 @@ class SubscriptionPlan(models.Model):
     #The frequency of billing
     billing_frequency = enum.EnumField(PlanBillingFrequency, default= PlanBillingFrequency.MONTH)
     #Maximum size for the service
-    maximum_size = models.IntegerField(default=None, null=True, blank=True)
+    maximum_size = models.IntegerField(default=None, null=True)
     #The stripe plan for this service
     stripe_plan_id = models.CharField(max_length=32)
 
@@ -204,6 +204,20 @@ class SubscriptionAccount(models.Model):
         self.status_account = SubscriptionAccountStatus.CANCELED
         self.save()
 
+    def validate_user(self, user):
+        if user == self.responsible_user:
+            return True
+        try:
+            membershipStatus = SubscriptionMember.objects.get(
+                subscription_account = self,
+                user = user
+            ).status_membership
+            validated = MembershipStatus.validate(membershipStatus)
+            return validated
+        except:
+            pass
+        return False
+
     def save(self, *args, **kwargs):
         '''
         On save, update timestamps
@@ -296,7 +310,7 @@ class SubscriptionMember(models.Model):
                 })
         #Can delete invalid here
         updatedItems.append(newItem)
-        zip = self.user.get_shipping_zip()
+        zip = self.user.get_tax_zip()
         taxPercent = tax_from_zip(zip) * 100
         updated = stripe.Subscription.modify(
             subscription.id,
