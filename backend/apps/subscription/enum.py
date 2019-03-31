@@ -6,6 +6,7 @@ Custom enum types for the subscription models
 ## Imports
 ##########################################################################
 from django_enumfield import enum
+from enum import Enum
 
 ##########################################################################
 ## Enum Types
@@ -70,6 +71,12 @@ class SubscriptionAccountStatus(EnumMap):
             PENDING_CANCELLATION,
         )
     }
+
+    @classmethod
+    def __enumerable__(cls):
+        return Enum(type(cls).__name__, cls.items())
+
+
 
 
 # Type of subscription account

@@ -248,6 +248,7 @@ class _ManageContent extends React.Component {
               tabButton: "Sharing",
               tabIcon: AddBox,
               marginedTab: true,
+              disabled: true,
               tabContent: (
                 <Card>
                   <div className={classes.container}>
