@@ -1,55 +1,67 @@
+"""
+Custom signals for the subscription models
+"""
+
+##########################################################################
+## Imports
+##########################################################################
+
 from django.dispatch import receiver
-from django.db.models.signals import post_save, pre_delete
-from subscription.models import SubscriptionMember, SubscriptionAccount, MembershipStatus, SubscriptionPricingPlan
-from accounting.models import Invoice
-from accounting.email import *
+from django.db.models.signals import post_save, pre_delete, post_delete
+from subscription.models import *
+from notification.models import EmailReceiptNotification
 
-#Create member for new account
-@receiver(post_save, sender=SubscriptionAccount)
-def create_account_subscription_member(sender, instance, created, **kwargs):
+##########################################################################
+## SubscriptionService
+##########################################################################
+
+@receiver(post_save, sender=SubscriptionService)
+def create_stripe_product(sender, instance, created, **kwargs):
+    """Create product for new service"""
     if created:
-        if instance.is_connected_account:
-            member = SubscriptionMember.objects.create(
-                user = instance.responsible_user,
-                subscription_account = instance,
-                status_membership = MembershipStatus.PENDING_CONNECT
-            )
-        else:
-            member = SubscriptionMember.objects.create(
-                user = instance.responsible_user,
-                subscription_account = instance,
-                status_membership = MembershipStatus.PENDING_CREATE
-            )
+        instance._init_stripe_product()
+        instance.save()
+
+@receiver(pre_delete, sender=SubscriptionService)
+def delete_stripe_product(sender, instance, **kwargs):
+    """Delete the product from stripe"""
+    instance._delete_stripe_product()
 
 
-#Create invoice and email receipt
+##########################################################################
+## SubscriptionPlan
+##########################################################################
+
+@receiver(post_save, sender=SubscriptionPlan)
+def create_stripe_plan(sender, instance, created, **kwargs):
+    """Create the plan from stripe"""
+    if created:
+        instance._init_stripe_plan()
+        instance.save()
+
+@receiver(pre_delete, sender=SubscriptionPlan)
+def delete_stripe_plan(sender, instance, **kwargs):
+    """Delete the product from stripe"""
+    instance._delete_stripe_plan()
+
+
+##########################################################################
+## SubscriptionMember
+##########################################################################
+
 @receiver(post_save, sender=SubscriptionMember)
-def create_invoice(sender, instance, created, **kwargs):
+def create_stripe_subscription_item(sender, instance, created, **kwargs):
+    """Create the email notification for emailing receipt"""
     if created:
-        invoice = Invoice.objects.get_or_create_this_month(
-            user = instance.user
+        emailNotification = EmailReceiptNotification.objects.create(
+            recipient = instance.user,
+            stripe_subscription_item_id = instance.stripe_subscription_item_id
         )
-        invoice.save() # Triggers the invoice update
-    else:
-        invoice = Invoice.objects.get(user=instance.user)
-        invoice.save() # Triggers the invoice update
-    
-    
-# Delete the Stripe customer from the model
-@receiver(pre_delete, sender=SubscriptionPricingPlan)
-def delete_stripe_plan(sender, instance=None, **kwargs):
-    try:
-        instance.delete_stripe_plan()
-    except:
-        pass
 
-# Delete the Stripe customer from the model
 @receiver(pre_delete, sender=SubscriptionMember)
-def delete_subscription_membership(sender, instance=None, **kwargs):
+def delete_stripe_subscription_item(sender, instance, **kwargs):
+    """Delete the subscription item with stripe"""
     try:
         instance.cancel()
-        invoice = Invoice.objects.get(user=instance.user).order_by('-id')[0]
-        invoice.sync_with_stripe_or_finalize() # Triggers the invoice update
-        invoice.save()
     except:
         pass

@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block subject %}
-Your iAnorak {{data.service}} Subscription Order
+Your iAnorak Subscription Order
 {% endblock %}
 
 
@@ -129,11 +129,11 @@ Your iAnorak {{data.service}} Subscription Order
                             
                             <td>
                                 Invoice #: {{data.invoice_number}}<br>
-                                Subscription Starts: {{data.date_start}}<br>
-                                Subscription Ends: {{data.date_end}}<br>
-                                Renews: {{data.date_renew}}<br><br>
+                                Subscription Starts: {{data.start_date}}<br>
+                                Subscription Ends: {{data.end_date}}<br>
+                                Renews: {{data.renewal_date}}<br><br>
                                 -------------<br>
-                                Billed On: {{data.date_billing}}
+                                Billed On: {{data.billing_date}}
                             </td>
                         </tr>
                     </table>
@@ -145,14 +145,15 @@ Your iAnorak {{data.service}} Subscription Order
                     <table>
                         <tr>
                             <td>
-                                {{ user.stripe_customer.line_1 }}<br>
-                                    {% if user.stripe_customer.line_2 %}
-                                       {{ user.stripe_customer.line_2 }}<br>
+                                {{ data.address.line1 }}<br>
+                                    {% if data.address.line2 %}
+                                       {{ data.address.line2 }}<br>
                                     {% endif %}
-                                {{ user.stripe_customer.city }}, {{ user.stripe_customer.state }}<br>
+                                {{ data.address.city }}, {{ data.address.state }}<br>
                             </td>    
                             <td>
-                                {{ user.first_name }} {{ user.last_name }}<br>
+                              {% if user.first_name %} {{ user.first_name }} {% endif %}
+                                 {% if user.first_name %} {{ user.last_name }} {% endif %}<br>
                                 {{ user.email }}
                             </td>
                                                     
@@ -177,7 +178,7 @@ Your iAnorak {{data.service}} Subscription Order
                 </td>
                 
                 <td>
-                    {{ user.stripe_customer.last_four }}<br>
+                    {{ data.last4 }}<br>
                 </td>
             </tr>
             
@@ -191,40 +192,105 @@ Your iAnorak {{data.service}} Subscription Order
                 </td>
             </tr>
             
-            {% for item in data.items %}
-                <tr class="item">
+          {% with data.items|last as last %}
+          
+          
+              {% for item in data.items %}
+                {% ifnotequal item.item_id|stringformat:"s" last.item_id|stringformat:"s" %}
+                
+                    {% if item.prorated_description %}
+                      <tr class="item">
+                        <td>
+                            {{item.prorated_description}}
+                        </td>
+                        
+                        <td>
+                            ${{item.prorated_amount}}
+                            {% if item.was_refunded %}
+                              (Refund)&nbsp;
+                            {% endif %}
+                        </td>
+                      </tr>
+                    {% endif %}
+                    
+                    {% if item.plan_description %}
+                      <tr class="item">
+                        <td>
+                          {{item.plan_description}}
+                        </td>
+                        
+                        <td>
+                            ${{item.plan_amount}}
+                            {% if item.was_refunded %}
+                              (Refund)&nbsp;
+                            {% endif %}
+                        </td>
+                      </tr>
+                    {% endif %}
+                        
+                  {% endifnotequal %}
+              {% endfor %}
+                
+            
+              
+                {% if last.prorated_description %}
+                  <tr class="item">
                     <td>
-                        {{item.description}}
+                        {{last.prorated_description}}
                     </td>
                     
                     <td>
-                        ${{item.price}}
+                        ${{last.prorated_amount}}
+                        {% if last.was_refunded %}
+                          (Refund)&nbsp;
+                        {% endif %}
                     </td>
-                </tr>
-            {% endfor %}
+                  </tr>
+                {% endif %}
+              
+              <tr class="item last">
+                <td>
+                    {{last.plan_description}}
+                </td>
+                
+                <td>
+                    ${{last.plan_amount}}
+                    {% if last.was_refunded %}
+                      (Refund)&nbsp;
+                    {% endif %}
+                </td>
+              </tr>
+          {% endwith %}            
             
-                        
+            
             <tr class="item last">
-                <td>
-                    {{data.lastItem.description}}
-                </td>
-                
-                <td>
-                    ${{data.lastItem.price}}
-                </td>
+              <td>
+                Subtotal:
+              </td>
+              <td>
+                 ${{data.subtotal}}
+              </td>
             </tr>
-            
-            <tr class="total">
-                <td></td>
-                
+            <tr class="item last">
+              <td>
+                Tax:
+              </td>
+              <td>
+                 ${{data.tax}}
+              </td>
+            </tr>
+            <tr class="total last">
+                <td>Total: </td>                
                 <td>
-                   Total: ${{data.total}}
+                   ${{data.total}}
                 </td>
             </tr>
         </table>
-        <p>
-            This amount does not include the Anorak management fee calculated as: 3% + 0.50 cents of your monthly total up to a maximum charge of $5.00. On your billing date ({{data.date_billing}}), you will receive a finalized invoice with all subscriptions used and the calculated Anorak fee.
-        </p>
+        {% if data.has_anorak_fee is not True %}
+          <p>
+              This amount does not include the Anorak management fee calculated as: 3% + 0.50 cents of your monthly total up to a maximum charge of $5.00. On your billing date ({{data.billing_date}}), you will receive a finalized invoice with all subscriptions used and the calculated Anorak fee.
+          </p>
+        {% endif %}
     </div>
 </body>
 </html>

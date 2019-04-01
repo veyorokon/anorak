@@ -7,8 +7,13 @@ class RequestConfig(AppConfig):
     
     def ready(self):
         from . import signals
-        from subscription.models import SubscriptionAccount
+        from subscription.models import ConnectAccount, CreateAccount
         post_save.connect(
             signals.create_account_management_request, 
-            sender=SubscriptionAccount
+            sender=ConnectAccount,
+        )
+        
+        post_save.connect(
+            signals.create_account_management_request, 
+            sender=CreateAccount,
         )

@@ -1,30 +1,31 @@
+import graphene
 from graphene_django.types import DjangoObjectType
-from core.models import * 
-from subscription.models import *
+from subscription.models import SubscriptionService, SubscriptionPlan, SubscriptionAccount, SubscriptionMember
 from graphene_django.registry import Registry
+from subscription.enum import SubscriptionAccountStatus
 
-class SubscriptionType(DjangoObjectType):
+class _SubscriptionType(DjangoObjectType):
     class Meta:
         model = SubscriptionService
         exclude_fields = ["subscription_accounts"]
 
-class SubscriptionPricingPlanType(DjangoObjectType):
+class _SubscriptionPlanType(DjangoObjectType):
     class Meta:
-        model = SubscriptionPricingPlan
+        model = SubscriptionPlan
         exclude_fields = ["subscription_accounts", "service"]
 
-class SubscriptionAccountType(DjangoObjectType):
+class _SubscriptionAccountType(DjangoObjectType):
     class Meta:
         model = SubscriptionAccount
         exclude_fields = ["username", "password"]
 
-class SubscriptionAccountLoginType(DjangoObjectType):
+class _SubscriptionLoginType(DjangoObjectType):
     class Meta:
         model = SubscriptionAccount
         only_fields = ["username", "password"]
         registry = Registry()
 
-class SubscriptionMemberType(DjangoObjectType):
+class _SubscriptionMemberType(DjangoObjectType):
     class Meta:
         model = SubscriptionMember
         exclude_fields = []

@@ -7,7 +7,7 @@ services:
     restart: 'no'
     build: backend/
     working_dir: /app/backend/
-    command: bash -c "python check_db.py --service-name Postgres --ip database --port 5432 && 
+    command: bash -c "python check_db.py --service-name Postgres --ip database --port 5432 &&
         python manage.py runserver_plus 0.0.0.0:8000"
     volumes:
       - .:/app
@@ -23,19 +23,18 @@ services:
         - "SECRET_KEY=v(m)6f0+s3d$o4lk$lli&un$e1a@bu3oww^9=s=ms)+@df23*r"
         - "FIELD_ENCRYPTION_KEY=g2z7GI3SaOnTNDCEZhy_46NWSzyUatriWt_ecPTjHNo="
         - "STRIPE_ACCOUNT_SID=sk_test_9Xz79VxZxWJbanvxDAWLYmoN"
-        - "STRIPE_ANORAK_PRODUCT=prod_EjjDCFPFi1tHtu"
-        - "STRIPE_ANORAK_PLAN=plan_EjjE44T2WQ96mP"
+        - "STRIPE_TEST_PUBLIC_KEY=pk_test_rLuroFoR4XKOxb3FbmJqTqrh"
+        - "STRIPE_ANORAK_PRODUCT=prod_Ely2quoFYo500t"
+        - "STRIPE_ANORAK_PLAN=plan_Ely2t4s19Ky4GA"
         - "DB_NAME=postgres"
         - "DB_USER=postgres"
         - "DB_HOST=database"
         - "DB_PORT=5432"
-        - "REDIS_PASSWORD=hme9PTDJHZFEkQyal0lx8AE0Hq366HxigpEEQ5"
-        - "REDIS_HOST=redis"
-        - "REDIS_PORT=6379"
         - "EMAIL_HOST_PASSWORD=LBYnYhhyeqFULc5"
         - "EMAIL_HOST_USER=anorak_test"
         - "EMAIL_HOST=smtp.sendgrid.net"
         - "TAX_JAR_KEY=08e289d7c2f7be1a25ac493d17afe4f9"
+        - "DJSTRIPE_WEBHOOK_SECRET=whsec_o93pPkOHAIoudZVGlkO2Ky6yb9XkkmZ2"
 
 
   database:
@@ -43,77 +42,10 @@ services:
     image: postgres
     ports:
       - "9432:5432"
-      
-      
-  redis:
-    restart: 'no'
-    ports:
-      - '6379:6379'
-    volumes:
-      - ./redis:/usr/local/etc/redis
-    build: ./redis
-    privileged: true
-    command: bash -c "echo never > /sys/kernel/mm/transparent_hugepage/enabled && redis-server /usr/local/etc/redis/redis.conf --protected-mode no"
-    expose:
-      - '6379'
-      
-      
-  worker_celery:
-    restart: 'no'
-    build: ./backend
-    command: bash -c "celery -A backend worker"
-    volumes:
-      - ./backend:/home/production/backend
-    depends_on:
-      - redis
-      - database
-    environment:
-        - "DJANGO_SETTINGS_MODULE=backend.settings.development"
-        - "FACEBOOK_CLIENT_ID=1974089579550206"
-        - "FACEBOOK_CLIENT_SECRET=8117c08eed5c3ec4fe3142ee9d704dc1"
-        - "SECRET_KEY=v(m)6f0+s3d$o4lk$lli&un$e1a@bu3oww^9=s=ms)+@df23*r"
-        - "FIELD_ENCRYPTION_KEY=g2z7GI3SaOnTNDCEZhy_46NWSzyUatriWt_ecPTjHNo="
-        - "STRIPE_ACCOUNT_SID=sk_test_9Xz79VxZxWJbanvxDAWLYmoN"
-        - "STRIPE_ANORAK_PRODUCT=prod_EjjDCFPFi1tHtu"
-        - "STRIPE_ANORAK_PLAN=plan_EjjE44T2WQ96mP"
-        - "DB_NAME=postgres"
-        - "DB_USER=postgres"
-        - "DB_HOST=database"
-        - "DB_PORT=5432"
-        - "REDIS_PASSWORD=hme9PTDJHZFEkQyal0lx8AE0Hq366HxigpEEQ5"
-        - "REDIS_HOST=redis"
-        - "REDIS_PORT=6379"
-        - "EMAIL_HOST_PASSWORD=LBYnYhhyeqFULc5"
-        - "EMAIL_HOST_USER=anorak_test"
-        - "EMAIL_HOST=smtp.sendgrid.net"
-        - "TAX_JAR_KEY=08e289d7c2f7be1a25ac493d17afe4f9"
 
-  worker_beat:
-    restart: 'no'
-    build: ./backend
-    command: bash -c "rm -f -- celerybeat.pid && celery -A backend beat"
-    volumes:
-      - ./backend:/home/production/backend
-    depends_on:
-        - redis
-        - database
-    environment:
-        - "DJANGO_SETTINGS_MODULE=backend.settings.development"
-        - "FACEBOOK_CLIENT_ID=1974089579550206"
-        - "FACEBOOK_CLIENT_SECRET=8117c08eed5c3ec4fe3142ee9d704dc1"
-        - "SECRET_KEY=v(m)6f0+s3d$o4lk$lli&un$e1a@bu3oww^9=s=ms)+@df23*r"
-        - "FIELD_ENCRYPTION_KEY=g2z7GI3SaOnTNDCEZhy_46NWSzyUatriWt_ecPTjHNo="
-        - "STRIPE_ACCOUNT_SID=sk_test_9Xz79VxZxWJbanvxDAWLYmoN"
-        - "STRIPE_ANORAK_PRODUCT=prod_EjjDCFPFi1tHtu"
-        - "STRIPE_ANORAK_PLAN=plan_EjjE44T2WQ96mP"
-        - "DB_NAME=postgres"
-        - "DB_USER=postgres"
-        - "DB_HOST=database"
-        - "DB_PORT=5432"
-        - "REDIS_PASSWORD=hme9PTDJHZFEkQyal0lx8AE0Hq366HxigpEEQ5"
-        - "REDIS_HOST=redis"
-        - "REDIS_PORT=6379"
-        - "EMAIL_HOST_PASSWORD=LBYnYhhyeqFULc5"
-        - "EMAIL_HOST_USER=anorak_test"
-        - "EMAIL_HOST=smtp.sendgrid.net"
-        - "TAX_JAR_KEY=08e289d7c2f7be1a25ac493d17afe4f9"
+  serveo:
+    restart: always
+    build: serveo/
+    tty: true
+    stdin_open: true
+    command: "ssh -o ServerAliveInterval=60 -R ianoraktest:80:host.docker.internal:8000  -o \"StrictHostKeyChecking no\" serveo.net"

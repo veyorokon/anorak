@@ -33,18 +33,18 @@ const cardStyle = {
     background: "#313131",
     width: "100%",
     height: "300px"
-},
-cardMain: {
-  marginTop: "30px",
-  textAlign: "center",
-  height: "300px",
-},
-cardAdd:{
+  },
+  cardMain: {
+    marginTop: "30px",
+    textAlign: "center",
+    height: "300px"
+  },
+  cardAdd: {
     background: "rgba(49,50,64,0.08)",
     border: "1px solid #cccccc",
     boxShadow: "inset 0 1px 4px 0 rgba(0,0,0,0.50)",
-    height: "300px",
-}
+    height: "300px"
+  }
 };
 
 export default cardStyle;

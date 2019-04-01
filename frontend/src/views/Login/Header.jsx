@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
-import LockIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
+import React from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import Avatar from "@material-ui/core/Avatar";
+import LockIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
 
 const styles = theme => ({
   avatar: {
@@ -11,8 +11,8 @@ const styles = theme => ({
     backgroundColor: theme.palette.secondary.main
   },
   title: {
-    marginTop: '12px',
-    marginBottom: '20px'
+    marginTop: "12px",
+    marginBottom: "20px"
   }
 });
 

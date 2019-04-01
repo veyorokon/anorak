@@ -1,101 +1,153 @@
+"""
+Graphene (GraphQL) mutations for the subscription models
+"""
+
+##########################################################################
+## Imports
+##########################################################################
+
 import graphene 
-from . types import *
+from . types import _SubscriptionAccountType, _SubscriptionMemberType
 from core.models import * 
-from subscription.models import SubscriptionAccount, SubscriptionService, SubscriptionPricingPlan, SubscriptionMember, SubscriptionAccountStatus, MembershipStatus
-from accounting.email import *
-from accounting.models import Invoice
+from subscription.models import SubscriptionService, SubscriptionAccount, SubscriptionPlan, CreateAccount, SubscriptionMember, ConnectAccount
+from subscription.enum import *
 from graphql_jwt.decorators import login_required
 
-class SubscriptionAccountMutation(graphene.Mutation):
-    
+
+##########################################################################
+## Mutation for new CreateAccount
+##########################################################################
+
+class SubscriptionCreateMutation(graphene.Mutation):
+
     class Arguments:
         serviceKey = graphene.Int(required=True)
         planKey = graphene.Int(required=True)
         token = graphene.String(required=True)
         username = graphene.String(required=True)
         password = graphene.String(required=True)
-        isConnectedAccount = graphene.Boolean()
-    
-    subscriptionAccount =  graphene.Field(SubscriptionAccountType)
-    
+
+    subscriptionAccount =  graphene.Field(_SubscriptionAccountType)
+
     @login_required
-    def mutate(self, info, serviceKey, planKey, token, username, password, isConnectedAccount, **kwargs):
+    def mutate(self, info, serviceKey, planKey, token, username, password, **kwargs):
         user = info.context.user
-        if not user.stripe_customer.has_card_on_file:
-            raise ValueError("Subscription could not be created. No active card was on file.")    
-                
+        if not user.djstripe_customer.has_valid_source():
+            raise ValueError(
+                "Subscription could not be created. No active card was on file."
+            )
         service = SubscriptionService.objects.get(
             pk=serviceKey
+        )    
+        plan = SubscriptionPlan.objects.get(
+            pk = planKey,
+            service = service,
         )
-
-        if isConnectedAccount:   
-            account = SubscriptionAccount.objects.create(
-                responsible_user = info.context.user,
-                service = service,
-                is_connected_account = isConnectedAccount,
-                status_account = SubscriptionAccountStatus.PENDING_CONNECT
-            )
-        else:
-            price_plan = SubscriptionPricingPlan.objects.get(
-                pk = planKey,
-                service = service,
-            )
-            account = SubscriptionAccount.objects.create(
-                responsible_user = info.context.user,
-                service = service,
-                price_plan = price_plan,
-                is_connected_account = isConnectedAccount,
-                status_account = SubscriptionAccountStatus.PENDING_CREATE
-            )
-            membership = SubscriptionMember.objects.get(
-                subscription_account = account
-            )
-            invoice = Invoice.objects.filter(user=user).order_by('-id')[0]
-            email_receipt(membership, invoice)
-            
-        account.username = user.email
-        account.password = password
-        account.save()
-        return SubscriptionAccountMutation(
+        account = CreateAccount.objects.create(
+            responsible_user = user,
+            subscription_service = service,
+            subscription_plan = plan,
+            status_account = SubscriptionAccountStatus.PENDING_CREATE,
+            username = username,
+            password = password
+        )
+                
+        return SubscriptionCreateMutation(
             subscriptionAccount = account
         )
-        
-class SubscriptionAccountConnectConfirmMutation(graphene.Mutation):
-    
+
+
+##########################################################################
+## Mutation for new ConnectAccount
+##########################################################################
+
+class SubscriptionConnectMutation(graphene.Mutation):
+
+    class Arguments:
+        serviceKey = graphene.Int(required=True)
+        planKey = graphene.Int(required=True)
+        token = graphene.String(required=True)
+        username = graphene.String(required=True)
+        password = graphene.String(required=True)
+
+    subscriptionAccount =  graphene.Field(_SubscriptionAccountType)
+
+    @login_required
+    def mutate(self, info, serviceKey, planKey, token, username, password, **kwargs):
+        user = info.context.user
+        if not user.djstripe_customer.has_valid_source():
+            raise ValueError(
+                "Subscription could not be connected. No active card was on file."
+            )
+        service = SubscriptionService.objects.get(
+            pk=serviceKey
+        )    
+        plan = SubscriptionPlan.objects.get(
+            pk = planKey,
+            service = service,
+        )
+        account = ConnectAccount.objects.create(
+            type = SubscriptionAccountType.CONNECT,
+            responsible_user = user,
+            subscription_service = service,
+            subscription_plan = plan,
+            status_account = SubscriptionAccountStatus.PENDING_CONNECT,
+            username = username,
+            password = password
+        )
+        return SubscriptionConnectMutation(
+            subscriptionAccount = account
+        )
+
+
+##########################################################################
+## Mutation to confirm ConnectAccount
+##########################################################################
+
+class ConfirmConnectAccountMutation(graphene.Mutation):
+
     class Arguments:
         token = graphene.String(required=True)
         subscriptionAccountKey = graphene.Int(required=True)
-    
-    subscriptionAccount =  graphene.Field(SubscriptionAccountType)
-    
+
+    subscriptionMember =  graphene.Field(_SubscriptionMemberType)
+
     @login_required
     def mutate(self, info, token, subscriptionAccountKey, **kwargs):
-        user =  info.context.user
-        if not user.stripe_customer.has_card_on_file:
-            raise ValueError("Subscription could not be created. No active card was on file.")        
-            
-        account = SubscriptionAccount.objects.get_or_create(
-            pk = subscriptionAccountKey
-        )[0]
-        account.connect()
-        account.save()
-        membership = SubscriptionMember.objects.get(
-            user = user,
-            subscription_account = account
-        )
-        membership.add_to_stripe_subscription()
-        membership.status_membership = MembershipStatus.CONNECTED
-        membership.save()
+        user = info.context.user
+        if not user.djstripe_customer.has_valid_source():
+            raise ValueError(
+                "Subscription could not be connected. No active card was on file."
+            )
         
-        invoice = Invoice.objects.filter(user=user).order_by('-id')[0]
-        invoice.save()
-        email_receipt(membership, invoice)
-        return SubscriptionAccountConnectConfirmMutation(
-            subscriptionAccount = account
+        account = ConnectAccount.objects.get(
+            pk = subscriptionAccountKey
         )
+        account.status_account = SubscriptionAccountStatus.CONNECTED
+        
+        member = SubscriptionMember.objects.create(
+            user = account.responsible_user,
+            subscription_account = account,
+            status_membership = MembershipStatus.ACTIVE
+        )
+        
+        account.save()
+        return ConfirmConnectAccountMutation(
+            subscriptionMember = member
+        )
+            
 
 class Mutations(graphene.ObjectType):
-    subscription_account = SubscriptionAccountMutation.Field(description = "Creates a new subscription account. The server will automatically create membership and a management request.")
+    subscription_create_account = SubscriptionCreateMutation.Field(
+        description = "Creates a new subscription account. The server will automatically create membership and a management request."
+    )
     
-    confirm_connected_account = SubscriptionAccountConnectConfirmMutation.Field(description = "Confirms a previously connected account.")
+    subscription_connect_account = SubscriptionConnectMutation.Field(
+        description = "Connect an existing subscription account. The service will automatically create a management request to verify connect login."
+    )
+    
+    confirm_connect_account = ConfirmConnectAccountMutation.Field( 
+        description = "Confirms a previously connected account. Membership is created and the user is billed."
+    )
+    
     

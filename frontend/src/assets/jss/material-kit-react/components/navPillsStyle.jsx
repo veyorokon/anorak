@@ -24,7 +24,7 @@ const navPillsStyle = theme => ({
     flexWrap: "unset",
     overflow: "-moz-scrollbars-vertical",
     overflowX: "scroll",
-    background: "rgba(49,50,64,0.01)",
+    background: "rgba(49,50,64,0.01)"
   },
   displayNone: {
     display: "none !important"
@@ -50,7 +50,7 @@ const navPillsStyle = theme => ({
     maxWidth: "100%",
     margin: "0 5px"
   },
-  margined:{margin:"8px"},
+  margined: { margin: "8px" },
   pillsWithIcons: {
     borderRadius: "4px"
   },
@@ -134,7 +134,7 @@ const navPillsStyle = theme => ({
   alignCenter: {
     alignItems: "center",
     justifyContent: "center"
-}
+  }
 });
 
 export default navPillsStyle;

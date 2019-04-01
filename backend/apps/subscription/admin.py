@@ -1,17 +1,92 @@
-# -*- coding: utf-8 -*-
+"""
+Custom admin for the subscription models
+"""
+
+##########################################################################
+## Imports
+##########################################################################
+
 from __future__ import unicode_literals
 
 from django.contrib import admin
 from django.apps import apps
+from . models import *
 
-app = apps.get_app_config('subscription') # 
-for model_name, model in app.models.items():
-    model_admin = type(model_name + "Admin", (admin.ModelAdmin,), {})
+@admin.register(SubscriptionService)
+class SubscriptionServiceAdmin(admin.ModelAdmin):
+    """Define admin model for SubscriptionService."""
+    list_display = (
+        'id',
+        'name',
+        'url_home',
+        'type',
+        'is_available',
+        'stripe_product_id',
+    )
+    readonly_fields=('stripe_product_id',)
 
-    model_admin.list_display = model.admin_list_display if hasattr(model, 'admin_list_display') else tuple([field.name for field in model._meta.fields])
-    model_admin.list_filter = model.admin_list_filter if hasattr(model, 'admin_list_filter') else model_admin.list_display
-    model_admin.list_display_links = model.admin_list_display_links if hasattr(model, 'admin_list_display_links') else ()
-    model_admin.list_editable = model.admin_list_editable if hasattr(model, 'admin_list_editable') else ()
-    model_admin.search_fields = model.admin_search_fields if hasattr(model, 'admin_search_fields') else ()
+@admin.register(SubscriptionPlan)
+class SubscriptionPlanAdmin(admin.ModelAdmin):
+    """Define admin model for SubscriptionPlan."""
+    list_display = (
+        'id',
+        'product_name',
+        'amount',
+        'billing_frequency',
+        'maximum_size',
+        'is_active',
+        'stripe_plan_id',
+    )
+    readonly_fields=('stripe_plan_id',)
 
-    admin.site.register(model, model_admin)
+@admin.register(SubscriptionAccount)
+class SubscriptionAccountAdmin(admin.ModelAdmin):
+    """Define admin model for SubscriptionAccount."""
+    list_display = (
+        'id',
+        'status_account',
+        'type',
+        'responsible_user',
+        'subscription_service',
+        'subscription_plan',
+        'date_created',
+        'date_modified',
+        'date_canceled'
+    )
+
+    readonly_fields = (
+        'id',
+        'type',
+        'responsible_user',
+        'subscription_service',
+        'subscription_plan',
+        'status_account',
+        'date_created',
+        'date_modified',
+        'date_canceled',
+        'username',
+        'password',
+    )
+
+@admin.register(SubscriptionMember)
+class SubscriptionMemberAdmin(admin.ModelAdmin):
+    """Define admin model for SubscriptionMember."""
+    list_display = (
+        'id',
+        'status_membership',
+        'user',
+        'subscription_account',
+        'date_created',
+        'date_modified',
+        'date_canceled',
+        'stripe_subscription_item_id',
+    )
+    readonly_fields = (
+        'user',
+        'subscription_account',
+        'status_membership',
+        'date_created',
+        'date_modified',
+        'date_canceled',
+        'stripe_subscription_item_id',
+    )

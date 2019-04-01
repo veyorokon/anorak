@@ -20,10 +20,7 @@ from . base import *
 DEBUG = True
 
 
-ALLOWED_HOSTS+=[
-    '127.0.0.1',
-    'localhost',
-]
+ALLOWED_HOSTS = ['*']
 
 
 DATABASES = {
@@ -37,12 +34,15 @@ DATABASES = {
 }
 
 NOTEBOOK_ARGUMENTS = [
-    '--ip', '0.0.0.0', 
+    '--ip', '0.0.0.0',
     '--allow-root',
-    '--no-browser', 
+    '--no-browser',
 ]
 
 GRAPHQL_JWT['JWT_VERIFY_EXPIRATION'] = False
+STRIPE_TEST_PUBLIC_KEY = environ_setting("STRIPE_TEST_PUBLIC_KEY")
+STRIPE_TEST_SECRET_KEY = environ_setting("STRIPE_ACCOUNT_SID")
+STRIPE_LIVE_MODE = False  # Change to True in production
 
 
 CORS_ORIGIN_ALLOW_ALL = True

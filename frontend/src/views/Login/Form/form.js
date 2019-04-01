@@ -1,20 +1,20 @@
 export default {
   email: {
-    initialValue: '',
-    label: 'Email Address',
+    initialValue: "",
+    label: "Email Address",
     input: {
-      autoComplete: 'email',
+      autoComplete: "email",
       required: true,
-      type: 'email'
+      type: "email"
     }
   },
   password: {
-    initialValue: '',
-    label: 'Password',
+    initialValue: "",
+    label: "Password",
     input: {
-      autoComplete: 'current-password',
+      autoComplete: "current-password",
       required: true,
-      type: 'password'
+      type: "password"
     }
   }
 };

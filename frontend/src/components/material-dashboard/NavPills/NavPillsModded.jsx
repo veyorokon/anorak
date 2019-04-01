@@ -25,16 +25,16 @@ class NavPills extends React.Component {
   }
   handleChange = (event, active) => {
     this.setState({ active });
-    if(this.props.setValCallBack){
-        this.props.setValCallBack(active);
+    if (this.props.setValCallBack) {
+      this.props.setValCallBack(active);
     }
   };
   handleChangeIndex = index => {
     this.setState({ active: index });
   };
-  updateActive = (val) => {
-      this.setState({active:val});
-  }
+  updateActive = val => {
+    this.setState({ active: val });
+  };
   render() {
     const {
       classes,
@@ -83,7 +83,7 @@ class NavPills extends React.Component {
                 root: pillsClasses,
                 labelContainer: classes.labelContainer,
                 label: classes.label,
-                selected: classes[color],
+                selected: classes[color]
               }}
               disabled={prop.disabled}
             />
@@ -108,16 +108,14 @@ class NavPills extends React.Component {
         </SwipeableViews>
       </div>
     );
-    if(transparent){
-        return horizontal !== undefined ? (
-          <GridContainer>
-            <GridItem {...horizontal.contentGrid}>{tabContent}</GridItem>
-          </GridContainer>
-        ) : (
-          <div>
-            {tabContent}
-          </div>
-        );
+    if (transparent) {
+      return horizontal !== undefined ? (
+        <GridContainer>
+          <GridItem {...horizontal.contentGrid}>{tabContent}</GridItem>
+        </GridContainer>
+      ) : (
+        <div>{tabContent}</div>
+      );
     }
     return horizontal !== undefined ? (
       <GridContainer>
@@ -156,7 +154,7 @@ NavPills.propTypes = {
     "danger",
     "success",
     "info",
-    "rose",
+    "rose"
   ]),
   direction: PropTypes.string,
   horizontal: PropTypes.shape({

@@ -72,7 +72,7 @@ class App extends React.Component {
         <Sidebar
           routes={dashboardRoutes}
           logoText={"Anorak"}
-          logo={logo}
+          logo={process.env.REACT_APP_STATIC_FILES+"images/logo-a.png"}
           image={null}
           handleDrawerToggle={this.handleDrawerToggle}
           open={this.state.mobileOpen}
@@ -90,7 +90,7 @@ class App extends React.Component {
                 <Manage />
               </div>
             </div>
-            
+
           {this.getRoute() ? <Footer /> : null}
         </div>
       </div>

@@ -4,7 +4,7 @@ from subscription.models import *
 from request.models import *
 from graphene_django.registry import Registry
 
-class ManagementRequestType(DjangoObjectType):
+class _ManagementRequestType(DjangoObjectType):
     class Meta:
         model = ManagementRequest
         exclude_fields = []

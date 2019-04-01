@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import sys
-from celery.schedules import crontab
+# from celery.schedules import crontab
 
 ##########################################################################
 ## Helper function for environmental settings
@@ -37,9 +37,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 ALLOWED_HOSTS = [
-    'squadup.xyz', 
-    'www.squadup.xyz', 
-    'www.ianorak.com', 
+    'squadup.xyz',
+    'www.squadup.xyz',
+    'www.ianorak.com',
     'ianorak.com'
 ]
 
@@ -67,56 +67,57 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    'core',
     'corsheaders',
-    'subscription',
-    'accounting',
-    'request',
+
     'graphene_django',
     'django_extensions',
     'encrypted_model_fields',
-    'django_celery_results',
-    'django_redis',
-    'mail_templated'
+    'mail_templated',
+    "djstripe",
+
+    'core',
+    'subscription',
+    'notification',
+    'request',
 ]
 
 TAX_JAR_KEY = environ_setting("TAX_JAR_KEY")
 
 ####            Cache settings
+#
+# CELERY_BROKER_URL = "redis://:"+ environ_setting("REDIS_PASSWORD")+ "@"+environ_setting("REDIS_HOST") + ":" + environ_setting("REDIS_PORT")
 
-CELERY_BROKER_URL = "redis://:"+ environ_setting("REDIS_PASSWORD")+ "@"+environ_setting("REDIS_HOST") + ":" + environ_setting("REDIS_PORT")
-
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": CELERY_BROKER_URL+"/1",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        },
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": CELERY_BROKER_URL+"/1",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         },
+#     }
+# }
 
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
-# Other Celery settings
-CELERY_RESULT_BACKEND = CELERY_BROKER_URL
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TASK_SERIALIZER = 'json'
-
-CELERY_BEAT_SCHEDULE = {
-    'task-number-one': {
-        'task': 'accounting.tasks.sync_stripe_invoices',
-        'schedule': crontab(minute='55', hour='23'),
-    },
-}
+# # Other Celery settings
+# CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TASK_SERIALIZER = 'json'
+#
+# CELERY_BEAT_SCHEDULE = {
+#     'task-number-one': {
+#         'task': 'accounting.tasks.sync_stripe_invoices',
+#         'schedule': crontab(minute='55', hour='23'),
+#     },
+# }
 
 # GSuite Gmail server
 EMAIL_USE_TLS = True
 EMAIL_HOST = environ_setting("EMAIL_HOST")
 EMAIL_PORT = 587
-EMAIL_HOST_USER = environ_setting("EMAIL_HOST_USER") 
+EMAIL_HOST_USER = environ_setting("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = environ_setting("EMAIL_HOST_PASSWORD")
 
 GRAPHENE = {
@@ -173,6 +174,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 AUTH_USER_MODEL = 'core.User'
 
+DJSTRIPE_WEBHOOK_SECRET = environ_setting("DJSTRIPE_WEBHOOK_SECRET")
+# Get it from the section in the Stripe dashboard where you added the webhook endpoint
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -208,7 +211,7 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_WHITELIST = (
     'squadup.xyz',
     'www.squadup.xyz',
-    'www.ianorak.com', 
+    'www.ianorak.com',
     'ianorak.com'
 )
 
@@ -230,4 +233,3 @@ STATICFILES_DIRS = (
 #STATIC_URL = os.environ.get('STATIC_URL', '/static/')
 STATIC_URL = '/static_files/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_files/')
-

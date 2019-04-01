@@ -23,6 +23,7 @@ from graphene_django.views import GraphQLView
 from . schema import schema
 
 urlpatterns = [
+    path("api/stripe/", include("djstripe.urls", namespace="djstripe")),
     path('api/jet/', include('jet.urls', 'jet')),
     path('api/jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     path('api/admin/', admin.site.urls),

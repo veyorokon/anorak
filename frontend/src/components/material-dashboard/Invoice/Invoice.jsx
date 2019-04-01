@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { formatCurrency, formatDate } from './utils';
-import EntityInfo from './EntityInfo';
+import React from "react";
+import PropTypes from "prop-types";
+import { formatCurrency, formatDate } from "./utils";
+import EntityInfo from "./EntityInfo";
 
 const styles = `
 .invoice-box{
@@ -99,9 +99,7 @@ const styles = `
 }
 `;
 
-export default function Invoice({
-  invoice, company, customer, lang, notes,
-}) {
+export default function Invoice({ invoice, company, customer, lang, notes }) {
   const { items } = invoice;
   const totalAmount = items.reduce((sum, item) => sum + item.amount, 0);
 
@@ -129,7 +127,7 @@ export default function Invoice({
                         <td className="title">
                           <img
                             src={company.logoUrl}
-                            style={{ width: '100%', maxWidth: '200px' }}
+                            style={{ width: "100%", maxWidth: "200px" }}
                             alt={company.name}
                           />
                         </td>
@@ -147,7 +145,7 @@ export default function Invoice({
                           <div className="subheading">Bill To</div>
                           <EntityInfo entity={customer} />
                         </td>
-                        
+
                         <td>
                           <table className="invoice-information">
                             <tbody>
@@ -187,19 +185,21 @@ export default function Invoice({
               </tr>
               {invoice.description && [
                 <tr className="heading" key="heading">
-                  <td className="subheading" colSpan="2">Description</td>
+                  <td className="subheading" colSpan="2">
+                    Description
+                  </td>
                   <td />
                 </tr>,
                 <tr className="details" key="details">
                   <td colSpan="2">{invoice.description}</td>
-                </tr>,
+                </tr>
               ]}
               <tr className="heading">
                 <td className="subheading">Item</td>
                 <td className="subheading">Usage</td>
                 <td />
               </tr>
-              {items.map((item) => (
+              {items.map(item => (
                 <tr className="item" key={item.description}>
                   <td>{item.description}</td>
                   <td>{item.usage}</td>
@@ -238,7 +238,7 @@ export default function Invoice({
 Invoice.propTypes = {
   company: PropTypes.shape({
     name: PropTypes.string,
-    logoUrl: PropTypes.string,
+    logoUrl: PropTypes.string
   }).isRequired,
   customer: PropTypes.shape({}).isRequired,
   invoice: PropTypes.shape({
@@ -246,21 +246,20 @@ Invoice.propTypes = {
     dueDate: PropTypes.string.isRequired,
     paidDate: PropTypes.string,
     paymentMethod: PropTypes.string,
-    id: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]).isRequired,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     description: PropTypes.string.isRequired,
-    items: PropTypes.arrayOf(PropTypes.shape({
-      description: PropTypes.string.isRequired,
-      amount: PropTypes.number.isRequired,
-    }).isRequired).isRequired,
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        description: PropTypes.string.isRequired,
+        amount: PropTypes.number.isRequired
+      }).isRequired
+    ).isRequired
   }).isRequired,
   lang: PropTypes.string,
-  notes: PropTypes.node,
+  notes: PropTypes.node
 };
 
 Invoice.defaultProps = {
-  lang: 'en_US',
-  notes: null,
+  lang: "en_US",
+  notes: null
 };

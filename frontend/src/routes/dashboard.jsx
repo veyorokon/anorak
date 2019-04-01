@@ -4,7 +4,6 @@ import Person from "@material-ui/icons/Person";
 import AddBox from "@material-ui/icons/AddBox";
 import Receipt from "@material-ui/icons/Receipt";
 
-
 // import ContentPaste from "@material-ui/icons/ContentPaste";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
 import BubbleChart from "@material-ui/icons/BubbleChart";
@@ -24,56 +23,56 @@ import Manage from "views/Manage/Manage.jsx";
 import InvoiceList from "views/Invoice/Invoice.jsx";
 
 const dashboardRoutes = [
-    {
-      path: "/dashboard/home",
-      sidebarName: "Dashboard",
-      navbarName: "Subscription Dashboard",
-      icon: Dashboard,
-      component: DashboardPage
-  }, 
+  {
+    path: "/dashboard/home",
+    sidebarName: "Dashboard",
+    navbarName: "Subscription Dashboard",
+    icon: Dashboard,
+    component: DashboardPage
+  },
   // {
   //       path: "/dashboard/discover",
   //       sidebarName: "Discover",
   //       navbarName: "Discover Subscriptions",
   //       icon: Dashboard,
   //       component: Discover
-  //   }, 
-  
-    {
-      path: "/dashboard/create",
-      sidebarName: "Subscribe",
-      navbarName: "Subscribe",
-      icon: AddBox,
-      component: Create
-    },
-    {
-      path: "/dashboard/connect",
-      sidebarName: "Connect",
-      navbarName: "Connect",
-      icon: AddBox,
-      component: Connect
-    },
-      {
-        path: "/dashboard/user",
-        sidebarName: "Account",
-        navbarName: "Account",
-        icon: Person,
-        component: UserProfile
-      }, 
-      // {
-      //   path: "/dashboard/invoices",
-      //   sidebarName: "Invoices",
-      //   navbarName: "Invoices",
-      //   icon: Receipt,
-      //   component: InvoiceList
-      // }, 
-    {
-      path: "/dashboard/logout",
-      sidebarName: "Logout",
-      navbarName: "Logout",
-      icon: ExitToApp,
-      component: Logout
-    }
+  //   },
+
+  {
+    path: "/dashboard/create",
+    sidebarName: "Subscribe",
+    navbarName: "Subscribe",
+    icon: AddBox,
+    component: Create
+  },
+  {
+    path: "/dashboard/connect",
+    sidebarName: "Connect",
+    navbarName: "Connect",
+    icon: AddBox,
+    component: Connect
+  },
+  {
+    path: "/dashboard/user",
+    sidebarName: "Account",
+    navbarName: "Account",
+    icon: Person,
+    component: UserProfile
+  },
+  // {
+  //   path: "/dashboard/invoices",
+  //   sidebarName: "Invoices",
+  //   navbarName: "Invoices",
+  //   icon: Receipt,
+  //   component: InvoiceList
+  // },
+  {
+    path: "/dashboard/logout",
+    sidebarName: "Logout",
+    navbarName: "Logout",
+    icon: ExitToApp,
+    component: Logout
+  }
 ];
 
 export default dashboardRoutes;

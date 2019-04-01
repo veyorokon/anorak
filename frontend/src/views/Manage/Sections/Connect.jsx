@@ -12,11 +12,15 @@ import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
 import CardAvatar from "components/material-dashboard/Card/CardAvatar.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
-import {formatDateTime, getRenewalDate, getAccountStatus, calcAnorakFee} from "lib/utility.jsx";
+import {
+  formatDateTime,
+  getRenewalDate,
+  getAccountStatus,
+  calcAnorakFee
+} from "lib/utility.jsx";
 
 import { getToken } from "lib/utility.jsx";
-import Form from 'components/material-dashboard/Form/Form';
-
+import Form from "components/material-dashboard/Form/Form";
 
 const styles = {
   cardCategoryWhite: {
@@ -36,79 +40,73 @@ const styles = {
     textDecoration: "none"
   }
 };
-function getSum(n1, n2){
-    return parseFloat(n1)+parseFloat(n2);
+function getSum(n1, n2) {
+  return parseFloat(n1) + parseFloat(n2);
 }
 
 class Connect extends React.Component {
-    
-    constructor(props){
-        super(props)
-        this.state={
-            confirmClicked: false,
-            submitted: false
-        }
-    }
-    
-render(){
-    
-  const { classes, getValue } = this.props;
-      return(
-          <GridContainer>
-            <GridItem xs={12} sm={12} md={12}>
-              <Card plain>                  
-                  <GridContainer>
-                    <GridItem xs={12} sm={12} md={5}>
-                      <CustomInput
-                        labelText="Service"
-                        id="service"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          disabled: true,
-                          value:getValue("service").name
-                        }}
-                      />
-                    </GridItem>
-                                        
-                  </GridContainer>
-                  <GridContainer>
-                    <GridItem xs={4} sm={4} md={4}>
-                        <CustomInput
-                          labelText="Price"
-                          id="price"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            disabled: true,
-                            value:"$"+getValue("pricePlan").amount
-                          }}
-                        />
-                      </GridItem>
-                      <GridItem xs={4} sm={4} md={4}>
-                        <CustomInput
-                          labelText="Duration"
-                          id="duration"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            disabled: true,
-                            value:'Monthly'
-                          }}
-                        />
-                      </GridItem>
-                  </GridContainer>
-                  
-                  
-              </Card>
-            </GridItem>
-          </GridContainer>
-      )
+  constructor(props) {
+    super(props);
+    this.state = {
+      confirmClicked: false,
+      submitted: false
+    };
+  }
+
+  render() {
+    const { classes, getValue } = this.props;
+    return (
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={12}>
+          <Card plain>
+            <GridContainer>
+              <GridItem xs={12} sm={12} md={5}>
+                <CustomInput
+                  labelText="Service"
+                  id="service"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    disabled: true,
+                    value: getValue("subscriptionService").name
+                  }}
+                />
+              </GridItem>
+            </GridContainer>
+            <GridContainer>
+              <GridItem xs={4} sm={4} md={4}>
+                <CustomInput
+                  labelText="Price"
+                  id="price"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    disabled: true,
+                    value: "$" + getValue("subscriptionPlan").amount
+                  }}
+                />
+              </GridItem>
+              <GridItem xs={4} sm={4} md={4}>
+                <CustomInput
+                  labelText="Duration"
+                  id="duration"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    disabled: true,
+                    value: "Monthly"
+                  }}
+                />
+              </GridItem>
+            </GridContainer>
+          </Card>
+        </GridItem>
+      </GridContainer>
+    );
   }
 }
-
 
 export default withStyles(styles)(Connect);

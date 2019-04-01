@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Form as FormikForm, Formik } from 'formik';
-import mapValues from 'lodash/mapValues';
+import React from "react";
+import PropTypes from "prop-types";
+import { Form as FormikForm, Formik } from "formik";
+import mapValues from "lodash/mapValues";
 
-import FormField from './FormField';
+import FormField from "./FormField";
 
 /**
  * Wraps formik's Form to handle a form config object. A form config object is
@@ -53,7 +53,7 @@ export default class From extends React.Component {
   render() {
     return (
       <Formik
-        initialValues={mapValues(this.props.config, 'initialValue')}
+        initialValues={mapValues(this.props.config, "initialValue")}
         onSubmit={this.props.onSubmit}
       >
         {formikFields => (

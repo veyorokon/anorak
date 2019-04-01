@@ -12,14 +12,19 @@ import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
 import CardAvatar from "components/material-dashboard/Card/CardAvatar.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
-import {formatDateTime, getRenewalDate, getAccountStatus, calcAnorakFee, isAccountConfirmationNeeded} from "lib/utility.jsx";
+import {
+  formatDateTime,
+  getRenewalDate,
+  getAccountStatus,
+  calcAnorakFee,
+  isAccountConfirmationNeeded
+} from "lib/utility.jsx";
 
-import { Mutation } from 'react-apollo';
-import {CONFIRM_SUBSCRIPTION_CONNECT} from "lib/mutations";
-import {USER} from "lib/queries";
+import { Mutation } from "react-apollo";
+import { CONFIRM_SUBSCRIPTION_CONNECT } from "lib/mutations";
+import { USER } from "lib/queries";
 import { getToken } from "lib/utility.jsx";
-import Form from 'components/material-dashboard/Form/Form';
-
+import Form from "components/material-dashboard/Form/Form";
 
 const styles = {
   cardCategoryWhite: {
@@ -39,41 +44,39 @@ const styles = {
     textDecoration: "none"
   }
 };
-function getSum(n1, n2){
-    return parseFloat(n1)+parseFloat(n2);
+function getSum(n1, n2) {
+  return parseFloat(n1) + parseFloat(n2);
 }
 
 class Overview extends React.Component {
-    
-    constructor(props){
-        super(props)
-        this.state={
-            cancelClicked: false,
-            submitted: false
-        }
-    }
-    
-render(){
-    
-  const { classes, getValue } = this.props;
- 
-  return (
-    <div>
-          <GridContainer>
-            <GridItem xs={6} sm={6} md={6}>
-              <CustomInput
-                labelText="Service"
-                id="service"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                inputProps={{
-                  disabled: true,
-                  value:getValue("service").name
-                }}
-              />
-            </GridItem>
-            <GridItem xs={6} sm={6} md={6}>
+  constructor(props) {
+    super(props);
+    this.state = {
+      cancelClicked: false,
+      submitted: false
+    };
+  }
+
+  render() {
+    const { classes, getValue } = this.props;
+
+    return (
+      <div>
+        <GridContainer>
+          <GridItem xs={6} sm={6} md={6}>
+            <CustomInput
+              labelText="Service"
+              id="service"
+              formControlProps={{
+                fullWidth: true
+              }}
+              inputProps={{
+                disabled: true,
+                value: getValue("subscriptionService").name
+              }}
+            />
+          </GridItem>
+          <GridItem xs={6} sm={6} md={6}>
             <CustomInput
               labelText="Status"
               id="status"
@@ -82,25 +85,25 @@ render(){
               }}
               inputProps={{
                 disabled: true,
-                value:getAccountStatus(getValue("statusAccount"))
+                value: getAccountStatus(getValue("statusAccount"))
               }}
             />
           </GridItem>
-           </ GridContainer>
-           
-           <GridContainer>
-            <GridItem xs={6} sm={6} md={6}>
-                <CustomInput
-                  labelText="Created"
-                  id="created"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    disabled: true,
-                    value:formatDateTime(getValue("dateCreated"))
-                  }}
-                />
+        </GridContainer>
+
+        <GridContainer>
+          <GridItem xs={6} sm={6} md={6}>
+            <CustomInput
+              labelText="Created"
+              id="created"
+              formControlProps={{
+                fullWidth: true
+              }}
+              inputProps={{
+                disabled: true,
+                value: formatDateTime(getValue("dateCreated"))
+              }}
+            />
           </GridItem>
           <GridItem xs={6} sm={6} md={6}>
             <CustomInput
@@ -111,29 +114,27 @@ render(){
               }}
               inputProps={{
                 disabled: true,
-                value:getValue("responsibleUser").firstName
+                value: getValue("responsibleUser").firstName
               }}
             />
           </GridItem>
-          
-           </GridContainer>
-           
-            <GridContainer>
-            
-            <GridItem xs={6} sm={6} md={6}>
-              <CustomInput
-                labelText="Price"
-                id="price"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                inputProps={{
-                  disabled: true,
-                  value:"$"+getValue("pricePlan").amount
-                }}
-              />
-            </GridItem>
-            
+        </GridContainer>
+
+        <GridContainer>
+          <GridItem xs={6} sm={6} md={6}>
+            <CustomInput
+              labelText="Price"
+              id="price"
+              formControlProps={{
+                fullWidth: true
+              }}
+              inputProps={{
+                disabled: true,
+                value: "$" + getValue("subscriptionPlan").amount
+              }}
+            />
+          </GridItem>
+
           <GridItem xs={6} sm={6} md={6}>
             <CustomInput
               labelText="Anorak Fee"
@@ -143,7 +144,8 @@ render(){
               }}
               inputProps={{
                 disabled: true,
-                value:"* $"+calcAnorakFee(getValue("pricePlan").amount)
+                value:
+                  "* $" + calcAnorakFee(getValue("subscriptionPlan").amount)
               }}
             />
           </GridItem>
@@ -156,27 +158,32 @@ render(){
               }}
               inputProps={{
                 disabled: true,
-                value:"$"+getSum(calcAnorakFee(getValue("pricePlan").amount), getValue("pricePlan").amount)
+                value:
+                  "$" +
+                  getSum(
+                    calcAnorakFee(getValue("subscriptionPlan").amount),
+                    getValue("subscriptionPlan").amount
+                  )
               }}
             />
           </GridItem>
           <GridItem xs={6} sm={6} md={6}>
-              <CustomInput
-                labelText="Renews"
-                id="renews"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                inputProps={{
-                  disabled: true,
-                  value:getRenewalDate(getValue("statusAccount"))
-                }}
-              />
-        </GridItem>
-      </GridContainer>    
-    </div>
-  );
-}
+            <CustomInput
+              labelText="Renews"
+              id="renews"
+              formControlProps={{
+                fullWidth: true
+              }}
+              inputProps={{
+                disabled: true,
+                value: getRenewalDate(getValue("statusAccount"))
+              }}
+            />
+          </GridItem>
+        </GridContainer>
+      </div>
+    );
+  }
 }
 
 export default withStyles(styles)(Overview);

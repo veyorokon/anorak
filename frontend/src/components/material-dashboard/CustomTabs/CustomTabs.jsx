@@ -37,7 +37,7 @@ class CustomTabs extends React.Component {
     const cardTitle = classNames({
       [classes.cardTitle]: true,
       [classes.tabMargin]: tabMargin,
-      [classes.cardTitleRTL]: rtlActive,
+      [classes.cardTitleRTL]: rtlActive
     });
     return (
       <Card plain={plainTabs}>
@@ -113,7 +113,7 @@ CustomTabs.propTypes = {
   ),
   rtlActive: PropTypes.bool,
   plainTabs: PropTypes.bool,
-  tabMargin: PropTypes.bool,
+  tabMargin: PropTypes.bool
 };
 
 export default withStyles(customTabsStyle)(CustomTabs);

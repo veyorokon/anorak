@@ -42,22 +42,19 @@ class HeaderLinks extends React.Component {
     const { open } = this.state;
     return (
       <div>
-        
-        <Link style={{color:"gray"}} to="/dashboard/home">
-        <Button
-          color={window.innerWidth > 959 ? "transparent" : "white"}
-          justIcon={window.innerWidth > 959}
-          simple={!(window.innerWidth > 959)}
-          aria-label="Dashboard"
-          className={classes.buttonLink}
-        >
-        
-          <Dashboard style={{color:"inherit"}} className={classes.icons} />
-          <Hidden mdUp implementation="css">
-            <p className={classes.linkText}>Dashboard</p>
-          </Hidden>
-          
-        </Button>
+        <Link style={{ color: "gray" }} to="/dashboard/home">
+          <Button
+            color={window.innerWidth > 959 ? "transparent" : "white"}
+            justIcon={window.innerWidth > 959}
+            simple={!(window.innerWidth > 959)}
+            aria-label="Dashboard"
+            className={classes.buttonLink}
+          >
+            <Dashboard style={{ color: "inherit" }} className={classes.icons} />
+            <Hidden mdUp implementation="css">
+              <p className={classes.linkText}>Dashboard</p>
+            </Hidden>
+          </Button>
         </Link>
         <div className={classes.manager}>
           <Button
@@ -103,15 +100,14 @@ class HeaderLinks extends React.Component {
                 <Paper>
                   <ClickAwayListener onClickAway={this.handleClose}>
                     <MenuList role="menu">
-                        <Link to='/dashboard/user' className={classes.navLink}>
+                      <Link to="/dashboard/user" className={classes.navLink}>
                         <MenuItem
                           onClick={this.handleClose}
                           className={classes.dropdownItem}
                         >
                           Visit your Account to update your billing information.
                         </MenuItem>
-                    </Link>
-                      
+                      </Link>
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>
@@ -119,20 +115,19 @@ class HeaderLinks extends React.Component {
             )}
           </Poppers>
         </div>
-        <Link style={{color:"gray"}} to="/dashboard/user">
-        <Button
-          color={window.innerWidth > 959 ? "transparent" : "white"}
-          justIcon={window.innerWidth > 959}
-          simple={!(window.innerWidth > 959)}
-          aria-label="Person"
-          className={classes.buttonLink}
-          
-        >
-          <Person className={classes.icons} />
-          <Hidden mdUp implementation="css">
-            <p className={classes.linkText}>Profile</p>
-          </Hidden>
-        </Button>
+        <Link style={{ color: "gray" }} to="/dashboard/user">
+          <Button
+            color={window.innerWidth > 959 ? "transparent" : "white"}
+            justIcon={window.innerWidth > 959}
+            simple={!(window.innerWidth > 959)}
+            aria-label="Person"
+            className={classes.buttonLink}
+          >
+            <Person className={classes.icons} />
+            <Hidden mdUp implementation="css">
+              <p className={classes.linkText}>Profile</p>
+            </Hidden>
+          </Button>
         </Link>
       </div>
     );

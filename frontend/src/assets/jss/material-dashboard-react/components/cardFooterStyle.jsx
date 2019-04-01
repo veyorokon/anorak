@@ -39,13 +39,13 @@ const cardFooterStyle = theme => ({
   },
   cardFooterChart: {
     borderTop: "1px solid #eee"
-},
-cardFooterSubscription: {
-  borderTop: "1px solid #222222",
-  [theme.breakpoints.up("md")]: {
-    marginLeft: "unset",
   },
-}
+  cardFooterSubscription: {
+    borderTop: "1px solid #222222",
+    [theme.breakpoints.up("md")]: {
+      marginLeft: "unset"
+    }
+  }
 });
 
 export default cardFooterStyle;

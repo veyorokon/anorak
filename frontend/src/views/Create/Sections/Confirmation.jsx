@@ -35,106 +35,99 @@ const styles = {
 };
 
 function Confirmation(props) {
-  const { classes, service, size, price, password } = props;
+  const { classes, service, size, price, password, email } = props;
   return (
     <div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card plain>
-            
-              
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={5}>
-                  <CustomInput
-                    labelText="Service"
-                    id="service"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      disabled: true,
-                      value:service
-                    }}
-                  />
-                </GridItem>
-                
-                <GridItem xs={12} sm={6} md={3}>
-                  <CustomInput
-                    labelText="Username"
-                    id="username"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      disabled: true,
-                      value:'Your Email'
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={6} md={3}>
-                  <CustomInput
-                    password
-                    type="password"
-                    labelText="Password"
-                    id="password"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      disabled: true,
-                      value:password
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                  
-                  <GridItem xs={4} sm={4} md={4}>
-                    <CustomInput
-                      labelText="Size"
-                      id="size"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        disabled: true,
-                        value:size
-                      }}
-                    />
-                  </GridItem>
-                  <GridItem xs={4} sm={4} md={4}>
-                    <CustomInput
-                      labelText="Price"
-                      id="price"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        disabled: true,
-                        value:price
-                      }}
-                    />
-                  </GridItem>
-                  <GridItem xs={4} sm={4} md={4}>
-                    <CustomInput
-                      labelText="Duration"
-                      id="duration"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        disabled: true,
-                        value:'Monthly'
-                      }}
-                    />
-                  </GridItem>
-              </GridContainer>
-              
-            
-            
+            <GridContainer>
+              <GridItem xs={12} sm={12} md={5}>
+                <CustomInput
+                  labelText="Service"
+                  id="service"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    disabled: true,
+                    value: service
+                  }}
+                />
+              </GridItem>
+
+              <GridItem xs={12} sm={6} md={3}>
+                <CustomInput
+                  labelText="Username"
+                  id="username"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    disabled: true,
+                    value: email
+                  }}
+                />
+              </GridItem>
+              <GridItem xs={12} sm={6} md={3}>
+                <CustomInput
+                  password
+                  type="password"
+                  labelText="Password"
+                  id="password"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    disabled: true,
+                    value: password
+                  }}
+                />
+              </GridItem>
+            </GridContainer>
+            <GridContainer>
+              <GridItem xs={4} sm={4} md={4}>
+                <CustomInput
+                  labelText="Size"
+                  id="size"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    disabled: true,
+                    value: size
+                  }}
+                />
+              </GridItem>
+              <GridItem xs={4} sm={4} md={4}>
+                <CustomInput
+                  labelText="Price"
+                  id="price"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    disabled: true,
+                    value: price
+                  }}
+                />
+              </GridItem>
+              <GridItem xs={4} sm={4} md={4}>
+                <CustomInput
+                  labelText="Duration"
+                  id="duration"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    disabled: true,
+                    value: "Monthly"
+                  }}
+                />
+              </GridItem>
+            </GridContainer>
           </Card>
         </GridItem>
-        
       </GridContainer>
     </div>
   );
