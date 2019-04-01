@@ -37,9 +37,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 ALLOWED_HOSTS = [
-    'squadup.xyz', 
-    'www.squadup.xyz', 
-    'www.ianorak.com', 
+    'squadup.xyz',
+    'www.squadup.xyz',
+    'www.ianorak.com',
     'ianorak.com'
 ]
 
@@ -68,13 +68,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    
+
     'graphene_django',
     'django_extensions',
     'encrypted_model_fields',
     'mail_templated',
     "djstripe",
-    
+
     'core',
     'subscription',
     'notification',
@@ -84,7 +84,7 @@ INSTALLED_APPS = [
 TAX_JAR_KEY = environ_setting("TAX_JAR_KEY")
 
 ####            Cache settings
-# 
+#
 # CELERY_BROKER_URL = "redis://:"+ environ_setting("REDIS_PASSWORD")+ "@"+environ_setting("REDIS_HOST") + ":" + environ_setting("REDIS_PORT")
 
 # CACHES = {
@@ -105,7 +105,7 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 # CELERY_ACCEPT_CONTENT = ['application/json']
 # CELERY_RESULT_SERIALIZER = 'json'
 # CELERY_TASK_SERIALIZER = 'json'
-# 
+#
 # CELERY_BEAT_SCHEDULE = {
 #     'task-number-one': {
 #         'task': 'accounting.tasks.sync_stripe_invoices',
@@ -117,7 +117,7 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 EMAIL_USE_TLS = True
 EMAIL_HOST = environ_setting("EMAIL_HOST")
 EMAIL_PORT = 587
-EMAIL_HOST_USER = environ_setting("EMAIL_HOST_USER") 
+EMAIL_HOST_USER = environ_setting("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = environ_setting("EMAIL_HOST_PASSWORD")
 
 GRAPHENE = {
@@ -174,9 +174,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 AUTH_USER_MODEL = 'core.User'
 
-STRIPE_TEST_PUBLIC_KEY = environ_setting("STRIPE_TEST_PUBLIC_KEY")
-STRIPE_TEST_SECRET_KEY = environ_setting("STRIPE_ACCOUNT_SID")
-STRIPE_LIVE_MODE = False  # Change to True in production
 DJSTRIPE_WEBHOOK_SECRET = environ_setting("DJSTRIPE_WEBHOOK_SECRET")
 # Get it from the section in the Stripe dashboard where you added the webhook endpoint
 
@@ -214,7 +211,7 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_WHITELIST = (
     'squadup.xyz',
     'www.squadup.xyz',
-    'www.ianorak.com', 
+    'www.ianorak.com',
     'ianorak.com'
 )
 
@@ -236,4 +233,3 @@ STATICFILES_DIRS = (
 #STATIC_URL = os.environ.get('STATIC_URL', '/static/')
 STATIC_URL = '/static_files/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_files/')
-
