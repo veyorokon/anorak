@@ -72,12 +72,6 @@ class SubscriptionAccountStatus(EnumMap):
         )
     }
 
-    @classmethod
-    def __enumerable__(cls):
-        return Enum(type(cls).__name__, cls.items())
-
-
-
 
 # Type of subscription account
 class SubscriptionAccountType(enum.Enum):

@@ -49,7 +49,12 @@ class EmailReceiptNotification(NotificationTrigger):
 
     @property
     def djstripe_event_id(self):
-        return self.trigger_event.id
+        id = None
+        try:
+            id = self.trigger_event.id
+        except:
+            pass
+        return id
 
     def _email_recipient(self, invoiceItem, invoice):
         emailManager = EmailManager(self.recipient, invoice)

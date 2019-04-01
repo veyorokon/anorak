@@ -35,23 +35,61 @@ const CREATE_SUBSCRIPTION_ACCOUNT = gql`
   }
 `;
 
-const CONFIRM_SUBSCRIPTION_CONNECT = gql`
-  mutation SubscriptionAccountConnectConfirmMutation(
+const CONNECT_SUBSCRIPTION_ACCOUNT = gql`
+  mutation SubscriptionConnectMutation(
     $token: String!
-    $subscriptionAccountKey: Int!
+    $serviceKey: Int!
+    $planKey: Int!
+    $username: String!
+    $password: String!
   ) {
-    confirmConnectedAccount(
+    subscriptionConnectAccount(
       token: $token
-      subscriptionAccountKey: $subscriptionAccountKey
+      serviceKey: $serviceKey
+      planKey: $planKey
+      password: $password
+      username: $username
     ) {
       subscriptionAccount {
         id
-        dateCreated
-        dateModified
-        statusAccount
-        service {
+        responsibleUser {
+          id
+          firstName
+        }
+        subscriptionService {
           id
           name
+        }
+        type
+        subscriptionPlan {
+          id
+          amount
+        }
+      }
+    }
+  }
+`;
+
+const CONFIRM_SUBSCRIPTION_CONNECT = gql`
+  mutation ConfirmConnectAccountMutation(
+    $token: String!
+    $subscriptionAccountKey: Int!
+  ) {
+    confirmConnectAccount(
+      token: $token
+      subscriptionAccountKey: $subscriptionAccountKey
+    ) {
+      subscriptionMember {
+        id
+        dateCreated
+        dateModified
+        subscriptionAccount {
+          id
+          statusAccount
+          subscriptionService {
+            id
+            name
+          }
         }
       }
     }
@@ -150,6 +188,7 @@ const REQUEST_ACCOUNT_CANCELLATION = gql`
 
 export {
   CREATE_SUBSCRIPTION_ACCOUNT,
+  CONNECT_SUBSCRIPTION_ACCOUNT,
   LOGIN_USER,
   GET_FACEBOOK_USER,
   SET_STRIPE_CARD,

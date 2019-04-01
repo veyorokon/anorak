@@ -53,6 +53,11 @@ class ManagementRequest(models.Model):
         self.process(comment, processingUser)
         self.save()
 
+    def connect(self, comment, processingUser, plan, **kwargs):
+        self.subscription_account.connect(plan)
+        self.process(comment, processingUser)
+        self.save()
+
     def save(self, *args, **kwargs):
         '''
         On save, update timestamps

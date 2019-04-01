@@ -1,7 +1,21 @@
 {% extends "admin/change_form.html" %}
 {% load i18n admin_static admin_modify %}
-{% block content %}
 
+
+{% load i18n static jet_tags %}
+{% block extrahead %}
+    {{ block.super }}
+
+{% endblock %}
+{% block blockbots %}
+    {{ block.super }}
+    <!-- FIXING SELECT 2 JQUERY ISSUE-->
+    <script src="{% static 'admin/js/vendor/jquery/jquery.js' as url %}{{ url|jet_append_version }}"
+            type="text/javascript"></script>
+    <script src="{% static 'admin/js/jquery.init.js' as url %}{{ url|jet_append_version }}"></script>
+{% endblock %}
+
+{% block content %}
   <div id="content-main">
     <form action="" method="POST">
       {% csrf_token %}
@@ -11,7 +25,7 @@
         </p>
         {{ form.non_field_errors }}
       {% endif %}
-      
+
       <fieldset class="module aligned">
         <div class="form-row">
           Username: {{subscriptionAccount.username}}
@@ -21,7 +35,7 @@
         </div>
       </fieldset>
       <br />
-      
+
       <fieldset class="module aligned">
         {% for field in form %}
           <div class="form-row">
@@ -36,11 +50,11 @@
           </div>
         {% endfor %}
       </fieldset>
-      
+
       <div class="submit-row">
         <input type="submit" class="default" value="Activate">
       </div>
-      
+
     </form>
   </div>
 

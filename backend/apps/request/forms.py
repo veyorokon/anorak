@@ -9,7 +9,7 @@ Custom forms for the request models
 from . import errors
 from django import forms
 from django.utils import timezone
-from subscription.models import SubscriptionAccount
+from subscription.models import SubscriptionAccount, SubscriptionPlan
 
 ##########################################################################
 ## Request Form for Account Management
@@ -19,7 +19,7 @@ class AccountManagementForm(forms.Form):
     comment = forms.CharField(
         required=False,
         widget=forms.Textarea,
-        initial="Successful"
+        initial="Created"
     )
 
     def save(self, account, processingUser):
@@ -29,14 +29,32 @@ class AccountManagementForm(forms.Form):
             error_message = str(e)
             self.add_error(None, error_message)
             raise
-    
-                
-class ActivateForm(AccountManagementForm):
+
+
+class CreateForm(AccountManagementForm):
 
     def form_action(self, managementRequest, processingUser):
         return managementRequest.activate(
             comment=self.cleaned_data['comment'],
             processingUser=processingUser
+        )
+
+class ConnectForm(AccountManagementForm):
+    comment = forms.CharField(
+        required=False,
+        widget=forms.Textarea,
+        initial="Connected"
+    )
+    plan = forms.ModelChoiceField(
+        queryset = SubscriptionPlan.objects.all(),
+        required=True
+    )
+
+    def form_action(self, managementRequest, processingUser):
+        return managementRequest.connect(
+            comment=self.cleaned_data['comment'],
+            processingUser=processingUser,
+            plan = self.cleaned_data['plan']
         )
 
 class CancelForm(AccountManagementForm):

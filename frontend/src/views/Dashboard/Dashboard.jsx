@@ -28,7 +28,7 @@ import {
 } from "variables/charts.jsx";
 
 import CardModal from "components/material-dashboard/CardModal/CardModal";
-import { getMemberStatus, getAccountColor, getToken } from "lib/utility.jsx";
+import { getAccountStatus, getAccountColor, getToken } from "lib/utility.jsx";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 import { withRouter } from "react-router-dom";
 import gql from "graphql-tag";
@@ -150,7 +150,7 @@ class Dashboard extends React.Component {
                           <span className={classes.cardInLine}>
                             <h5>
                               <Typography color={color}>
-                                {getMemberStatus(
+                                {getAccountStatus(
                                   subscriptionCard.statusAccount
                                 )}
                               </Typography>

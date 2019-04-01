@@ -36,7 +36,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import Confirmation from "./Sections/Confirmation.jsx";
 
 import { USER, SUBSCRIPTION_SERVICES } from "lib/queries";
-import { CREATE_SUBSCRIPTION_ACCOUNT } from "lib/mutations";
+import { CONNECT_SUBSCRIPTION_ACCOUNT } from "lib/mutations";
 import withSnackbar from "components/material-dashboard/Form/withSnackbar";
 
 import { mixpanel } from "lib/utility.jsx";
@@ -75,7 +75,7 @@ class _ConnectContent extends React.Component {
       activeStep: 0,
       services: this.props.services,
       submitted: false,
-      email: ""
+      email: this.props.user.email
     };
   }
 
@@ -225,7 +225,7 @@ class _ConnectContent extends React.Component {
     this.setState({ activeStep: current });
   };
 
-  onSubmit = async (createSubscriptionAccount, values) => {
+  onSubmit = async (connectSubscriptionAccount, values) => {
     var subscription = this.state.subscription;
     var plan = this.state.planSelected;
     var planPK = this.state.services[subscription].pricingPlans[plan].id;
@@ -236,13 +236,12 @@ class _ConnectContent extends React.Component {
       serviceKey: subscriptionPK,
       planKey: planPK,
       password: this.getPassword(),
-      username: "",
-      isConnectedAccount: true
+      username: this.props.user.email
     };
 
     this.setState({ submitted: true });
     try {
-      await createSubscriptionAccount({ variables });
+      await connectSubscriptionAccount({ variables });
       this.props.triggerSnackbar(
         "Subscribed! A new subscription was added to your dashboard."
       );
@@ -296,7 +295,7 @@ class _ConnectContent extends React.Component {
     }
     return (
       <Mutation
-        mutation={CREATE_SUBSCRIPTION_ACCOUNT}
+        mutation={CONNECT_SUBSCRIPTION_ACCOUNT}
         refetchQueries={[
           {
             query: USER,
@@ -306,7 +305,7 @@ class _ConnectContent extends React.Component {
           }
         ]}
       >
-        {createSubscriptionAccount => (
+        {connectSubscriptionAccount => (
           <div>
             <GridContainer>
               <GridItem xs={12} sm={12} md={12} lg={12}>
@@ -354,6 +353,7 @@ class _ConnectContent extends React.Component {
                                 size={this.getServiceSize()}
                                 price={this.getPrice()}
                                 password={this.getPassword()}
+                                email={this.props.user.email}
                               />
                             </CardBody>
                           </span>
@@ -369,7 +369,7 @@ class _ConnectContent extends React.Component {
                     <Button onClick={this.updateShowing}>Back</Button>
                     <Button
                       onClick={async values => {
-                        await this.onSubmit(createSubscriptionAccount, values);
+                        await this.onSubmit(connectSubscriptionAccount, values);
                         setTimeout(() => {}, 600);
                       }}
                       disabled={this.state.submitted}
@@ -393,7 +393,7 @@ class _ConnectContent extends React.Component {
 }
 const ConnectContent = withSnackbar(_ConnectContent);
 
-function Connect(props) {
+function ConnectWithServices(props) {
   const { classes } = props;
 
   return (
@@ -402,7 +402,32 @@ function Connect(props) {
         if (loading) return "Loading...";
         if (error) return `Error! ${error.message}`;
         const services = data.subscriptionServices;
-        return <ConnectContent classes={classes} services={services} />;
+        return (
+          <ConnectContent
+            user={props.user}
+            classes={classes}
+            services={services}
+          />
+        );
+      }}
+    </Query>
+  );
+}
+
+function Connect(props) {
+  const { classes } = props;
+
+  return (
+    <Query
+      query={USER}
+      variables={{ token: getToken() }}
+      fetchPolicy="network-only"
+    >
+      {({ loading, error, data }) => {
+        if (loading) return "Loading...";
+        if (error) return `Error! ${error.message}`;
+        const user = data.user;
+        return <ConnectWithServices classes={classes} user={user} />;
       }}
     </Query>
   );

@@ -29,8 +29,3 @@ class _SubscriptionMemberType(DjangoObjectType):
     class Meta:
         model = SubscriptionMember
         exclude_fields = []
-
-
-SubscriptionAccountStatusEnum = graphene.Enum.from_enum(
-    SubscriptionAccountStatus.__enumerable__()
-)

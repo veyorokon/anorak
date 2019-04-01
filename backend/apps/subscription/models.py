@@ -120,7 +120,7 @@ class SubscriptionPlan(models.Model):
         self.stripe_plan_id = plan.id
 
     def __str__(self):
-        return "$"+str(self.amount)+" billed monthly"
+        return self.product_name + " $"+str(self.amount)+" billed monthly"
 
 
 ##########################################################################
@@ -190,6 +190,13 @@ class SubscriptionAccount(models.Model):
 
     def _cancel_responsible_member(self):
         self.responsible_member.cancel()
+
+    def _set_plan(self, plan):
+        self.subscription_plan = plan
+
+    def connect(self, plan):
+        self._set_plan(plan)
+        self.activate()
 
     def activate(self):
         if self.type == SubscriptionAccountType.CREATE:

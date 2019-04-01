@@ -11,7 +11,7 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from django.apps import apps
 from . models import *
-    
+
 @admin.register(SubscriptionService)
 class SubscriptionServiceAdmin(admin.ModelAdmin):
     """Define admin model for SubscriptionService."""
@@ -49,11 +49,11 @@ class SubscriptionAccountAdmin(admin.ModelAdmin):
         'responsible_user',
         'subscription_service',
         'subscription_plan',
-        'date_created', 
+        'date_created',
         'date_modified',
         'date_canceled'
     )
-    
+
     readonly_fields = (
         'id',
         'type',
@@ -61,20 +61,13 @@ class SubscriptionAccountAdmin(admin.ModelAdmin):
         'subscription_service',
         'subscription_plan',
         'status_account',
-        'date_created', 
+        'date_created',
         'date_modified',
         'date_canceled',
         'username',
         'password',
     )
 
-    def get_readonly_fields(self, request, obj=None):
-        if obj:
-            return self.readonly_fields + (
-                'responsible_user',
-            )
-        return self.readonly_fields
-    
 @admin.register(SubscriptionMember)
 class SubscriptionMemberAdmin(admin.ModelAdmin):
     """Define admin model for SubscriptionMember."""
@@ -83,7 +76,7 @@ class SubscriptionMemberAdmin(admin.ModelAdmin):
         'status_membership',
         'user',
         'subscription_account',
-        'date_created', 
+        'date_created',
         'date_modified',
         'date_canceled',
         'stripe_subscription_item_id',
@@ -92,7 +85,7 @@ class SubscriptionMemberAdmin(admin.ModelAdmin):
         'user',
         'subscription_account',
         'status_membership',
-        'date_created', 
+        'date_created',
         'date_modified',
         'date_canceled',
         'stripe_subscription_item_id',

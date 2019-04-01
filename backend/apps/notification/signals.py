@@ -26,8 +26,11 @@ def trigger_email_event(sender, instance, created, **kwargs):
     invoice = None
     updateFee = False
     if instance.customer:
-        user = instance.customer.subscriber
-        invoice = user.upcoming_invoice()
+        try:
+            user = instance.customer.subscriber
+            invoice = user.upcoming_invoice()
+        except:
+            raise ValueError("Cannot email NoneType customer.")
 
     if instance.type == 'invoiceitem.created':
         emailManager = EmailManager(user, invoice=invoice)

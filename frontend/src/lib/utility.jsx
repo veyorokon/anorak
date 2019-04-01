@@ -113,16 +113,20 @@ export function isAccountConfirmationNeeded(value) {
 export function getAccountStatus(value) {
   if (value === "A_0") return "Terminated";
   if (value === "A_10") return "Canceled";
+  if (value === "A_15") return "Pending Cancellation";
   if (value === "A_20") return "Pending";
-  if (value === "A_30") return "Pending";
-  if (value === "A_35") return "Pending Confirmation";
+  if (value === "A_29") return "Creating";
+  if (value === "A_30") return "Connecting";
+  if (value === "A_35") return "Confirmation Needed";
   if (value === "A_90") return "Active";
   if (value === "A_91") return "Connected";
 }
 export function getAccountColor(value) {
   if (value === "A_0") return "danger";
   if (value === "A_10") return "muted";
+  if (value === "A_15") return "muted";
   if (value === "A_20") return "warning";
+  if (value === "A_29") return "warning";
   if (value === "A_30") return "warning";
   if (value === "A_35") return "warning";
   if (value === "A_90") return "success";
