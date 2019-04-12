@@ -20,7 +20,7 @@ from . base import *
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS.extend(['stripe.com', 'www.stripe.com', 'ianoraktest.serveo.net', 'localhost'])
 
 
 DATABASES = {

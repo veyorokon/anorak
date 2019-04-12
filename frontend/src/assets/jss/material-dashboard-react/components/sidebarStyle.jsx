@@ -100,6 +100,7 @@ const sidebarStyle = theme => ({
     left: "0",
     backgroundSize: "cover",
     backgroundPosition: "center center",
+    background: "#000",
     "&:after": {
       position: "absolute",
       zIndex: "3",
