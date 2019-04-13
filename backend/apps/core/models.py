@@ -4,6 +4,7 @@ from django.db import models
 from django.conf import settings
 from .managers import UserManager
 from backend.stripe import stripe
+from backend.utility import get_current_epoch
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.utils.translation import ugettext_lazy as _
@@ -28,10 +29,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     facebook_id = models.CharField(_('facebook id'), max_length=30, blank=True, null=True, editable=False)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, null=True, blank=True)
-    date_joined = models.DateTimeField(_('date joined'),
-        editable=True, null=True, auto_now_add=True)
+    date_joined = models.IntegerField(_('date joined'),
+        editable=True, null=True, default=get_current_epoch())
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('staff'), default=False)
+    is_member = models.BooleanField(_('is paying member'), default=False)
 
     objects = UserManager()
 

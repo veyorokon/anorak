@@ -6,9 +6,9 @@ Graphene (GraphQL) mutations for the subscription models
 ## Imports
 ##########################################################################
 
-import graphene 
+import graphene
 from . types import _SubscriptionAccountType, _SubscriptionMemberType
-from core.models import * 
+from core.models import *
 from subscription.models import SubscriptionService, SubscriptionAccount, SubscriptionPlan, CreateAccount, SubscriptionMember, ConnectAccount
 from subscription.enum import *
 from graphql_jwt.decorators import login_required
@@ -32,13 +32,13 @@ class SubscriptionCreateMutation(graphene.Mutation):
     @login_required
     def mutate(self, info, serviceKey, planKey, token, username, password, **kwargs):
         user = info.context.user
-        if not user.djstripe_customer.has_valid_source():
+        if user.is_member:
             raise ValueError(
                 "Subscription could not be created. No active card was on file."
             )
         service = SubscriptionService.objects.get(
             pk=serviceKey
-        )    
+        )
         plan = SubscriptionPlan.objects.get(
             pk = planKey,
             service = service,
@@ -51,7 +51,7 @@ class SubscriptionCreateMutation(graphene.Mutation):
             username = username,
             password = password
         )
-                
+
         return SubscriptionCreateMutation(
             subscriptionAccount = account
         )
@@ -75,13 +75,13 @@ class SubscriptionConnectMutation(graphene.Mutation):
     @login_required
     def mutate(self, info, serviceKey, planKey, token, username, password, **kwargs):
         user = info.context.user
-        if not user.djstripe_customer.has_valid_source():
+        if user.is_member:
             raise ValueError(
                 "Subscription could not be connected. No active card was on file."
             )
         service = SubscriptionService.objects.get(
             pk=serviceKey
-        )    
+        )
         plan = SubscriptionPlan.objects.get(
             pk = planKey,
             service = service,
@@ -115,39 +115,37 @@ class ConfirmConnectAccountMutation(graphene.Mutation):
     @login_required
     def mutate(self, info, token, subscriptionAccountKey, **kwargs):
         user = info.context.user
-        if not user.djstripe_customer.has_valid_source():
+        if user.is_member:
             raise ValueError(
                 "Subscription could not be connected. No active card was on file."
             )
-        
+
         account = ConnectAccount.objects.get(
             pk = subscriptionAccountKey
         )
         account.status_account = SubscriptionAccountStatus.CONNECTED
-        
+
         member = SubscriptionMember.objects.create(
             user = account.responsible_user,
             subscription_account = account,
             status_membership = MembershipStatus.ACTIVE
         )
-        
+
         account.save()
         return ConfirmConnectAccountMutation(
             subscriptionMember = member
         )
-            
+
 
 class Mutations(graphene.ObjectType):
     subscription_create_account = SubscriptionCreateMutation.Field(
         description = "Creates a new subscription account. The server will automatically create membership and a management request."
     )
-    
+
     subscription_connect_account = SubscriptionConnectMutation.Field(
         description = "Connect an existing subscription account. The service will automatically create a management request to verify connect login."
     )
-    
-    confirm_connect_account = ConfirmConnectAccountMutation.Field( 
+
+    confirm_connect_account = ConfirmConnectAccountMutation.Field(
         description = "Confirms a previously connected account. Membership is created and the user is billed."
     )
-    
-    

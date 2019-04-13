@@ -96,7 +96,12 @@ const dashboardStyle = theme => ({
     boxShadow: "unset"
   },
   textLink: {
-    display: "contents"
+    cursor: "pointer",
+    display: "contents",
+    color: "black",
+    "&:hover": {
+      color: "black"
+    }
   }
 });
 

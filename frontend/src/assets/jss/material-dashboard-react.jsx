@@ -6,7 +6,7 @@
 
  * Product Page: http://www.creative-tim.com/product/material-dashboard-react
  * Copyright 2018 Creative Tim (http://www.creative-tim.com)
- * 
+ *
 
  =========================================================
 
@@ -54,7 +54,7 @@ const defaultFont = {
   lineHeight: "1.5em"
 };
 
-const primaryColor = "#9c27b0";
+const primaryColor = "#313131";
 const secondaryColor = "#313131";
 const warningColor = "#ff9800";
 const dangerColor = "#f44336";
@@ -65,7 +65,7 @@ const grayColor = "#999999";
 
 const primaryBoxShadow = {
   boxShadow:
-    "0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2)"
+    "0 12px 20px -10px rgba(0, 0, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 0, 0, 0.2)"
 };
 const infoBoxShadow = {
   boxShadow:
@@ -105,7 +105,7 @@ const infoCardHeader = {
   ...infoBoxShadow
 };
 const primaryCardHeader = {
-  background: "linear-gradient(60deg, #ab47bc, #8e24aa)",
+  background: "linear-gradient(60deg, #313131, #191C21)",
   ...primaryBoxShadow
 };
 const roseCardHeader = {

@@ -1,11 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 // react plugin for creating charts
-import ChartistGraph from "react-chartist";
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import AccessTime from "@material-ui/icons/AccessTime";
 import GridItem from "components/material-dashboard/Grid/GridItem.jsx";
 import GridContainer from "components/material-dashboard/Grid/GridContainer.jsx";
 import Card from "components/material-dashboard/Card/Card.jsx";
@@ -13,25 +10,15 @@ import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
 import Button from "components/material-dashboard/CustomButtons/Button.jsx";
-import CardActions from "@material-ui/core/CardActions";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import footerStyle from "assets/jss/material-dashboard-react/components/footerStyle.jsx";
 import AddIcon from "@material-ui/icons/Add";
 import Icon from "@material-ui/core/Icon";
 import CardIcon from "components/material-dashboard/Card/CardIcon.jsx";
-import Success from "components/material-dashboard/Typography/Success.jsx";
 import Typography from "components/material-dashboard/Typography/Typography.jsx";
-import {
-  dailySalesChart,
-  emailsSubscriptionChart,
-  completedTasksChart
-} from "variables/charts.jsx";
 
 import CardModal from "components/material-dashboard/CardModal/CardModal";
 import { getAccountStatus, getAccountColor, getToken } from "lib/utility.jsx";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 import { withRouter } from "react-router-dom";
-import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import { USER } from "lib/queries";
 import { mixpanel } from "lib/utility.jsx";
@@ -105,7 +92,7 @@ class Dashboard extends React.Component {
                     <CardBody add>
                       <p className={classes.cardCategory}>
                         <Button
-                          action
+                          color="primary"
                           round
                           aria-label="Add"
                           onClick={() => {

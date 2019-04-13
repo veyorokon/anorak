@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import InputLabel from "@material-ui/core/InputLabel";
 // core components
 import GridItem from "components/material-dashboard/Grid/GridItem.jsx";
 import GridContainer from "components/material-dashboard/Grid/GridContainer.jsx";
@@ -13,16 +12,10 @@ import Card from "components/material-dashboard/Card/Card.jsx";
 import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
-import { Elements, StripeProvider } from "react-stripe-elements";
-
-import avatar from "assets/img/faces/marc.jpg";
-import { withRouter } from "react-router-dom";
 
 import AddBox from "@material-ui/icons/AddBox";
 import Group from "@material-ui/icons/Group";
 import Person from "@material-ui/icons/Person";
-
-import MergeType from "@material-ui/icons/MergeType";
 
 import NavPills from "components/material-dashboard/NavPills/NavPills.jsx";
 import NavPillsModded from "components/material-dashboard/NavPills/NavPillsModded.jsx";
@@ -32,7 +25,6 @@ import { Mutation } from "react-apollo";
 import { Query } from "react-apollo";
 
 import { getToken } from "lib/utility.jsx";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import Confirmation from "./Sections/Confirmation.jsx";
 
 import { USER, SUBSCRIPTION_SERVICES } from "lib/queries";
@@ -40,25 +32,6 @@ import { CONNECT_SUBSCRIPTION_ACCOUNT } from "lib/mutations";
 import withSnackbar from "components/material-dashboard/Form/withSnackbar";
 
 import { mixpanel } from "lib/utility.jsx";
-
-const styles = {
-  cardCategoryWhite: {
-    color: "rgba(255,255,255,.62)",
-    margin: "0",
-    fontSize: "14px",
-    marginTop: "0",
-    marginBottom: "0"
-  },
-  cardTitleWhite: {
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "300",
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "3px",
-    textDecoration: "none"
-  }
-};
 
 class _ConnectContent extends React.Component {
   constructor(props) {
@@ -106,7 +79,7 @@ class _ConnectContent extends React.Component {
     });
   };
 
-  loginSection = (classes, isGenDisabled, generatedPassword) => {
+  loginSection = classes => {
     return (
       <div className={classes.container}>
         <div id="navigation-pills">
@@ -263,7 +236,10 @@ class _ConnectContent extends React.Component {
 
   getServiceName = () => {
     var selected = this.state.subscription;
-    return this.state.services[selected].name;
+    if (this.state.services[selected]) {
+      return this.state.services[selected].name;
+    }
+    return "";
   };
 
   getServiceSize = () => {
