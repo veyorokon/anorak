@@ -13,15 +13,12 @@ import Card from "components/material-dashboard/Card/Card.jsx";
 import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
-import { Elements, StripeProvider } from "react-stripe-elements";
 
 import { withRouter } from "react-router-dom";
 
 import AddBox from "@material-ui/icons/AddBox";
 import Group from "@material-ui/icons/Group";
 import Person from "@material-ui/icons/Person";
-
-import MergeType from "@material-ui/icons/MergeType";
 
 import NavPills from "components/material-dashboard/NavPills/NavPills.jsx";
 import NavPillsModded from "components/material-dashboard/NavPills/NavPillsModded.jsx";
@@ -31,8 +28,10 @@ import { Mutation } from "react-apollo";
 import { Query } from "react-apollo";
 
 import { getToken } from "lib/utility.jsx";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import Confirmation from "./Sections/Confirmation.jsx";
+import Login from "./Sections/Login.jsx";
+import Plan from "./Sections/Plan.jsx";
+import Subscription from "./Sections/Subscription.jsx";
 
 import { USER, SUBSCRIPTION_SERVICES } from "lib/queries";
 import { ADD_SUBSCRIPTION_ACCOUNT } from "lib/mutations";
@@ -40,36 +39,13 @@ import withSnackbar from "components/material-dashboard/Form/withSnackbar";
 
 import { mixpanel } from "lib/utility.jsx";
 
-const styles = {
-  cardCategoryWhite: {
-    color: "rgba(255,255,255,.62)",
-    margin: "0",
-    fontSize: "14px",
-    marginTop: "0",
-    marginBottom: "0"
-  },
-  cardTitleWhite: {
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "300",
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "3px",
-    textDecoration: "none"
-  }
-};
-
 class _CreateContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isExisting: 0,
-      isGeneratedPassword: 0,
       subscription: 0,
-      generatedPassword: this.generatePassword(),
       ownPassword: "",
       copied: false,
-      isGenerateDisabled: false,
       planSelected: 0,
       activeStep: 0,
       services: this.props.services,
@@ -82,31 +58,10 @@ class _CreateContent extends React.Component {
     mixpanel.track("Create Subscription Page Load");
   }
 
-  setExistingStatus = val => {
-    if (val == 1) {
-      this.setState({
-        isExisting: val,
-        isGenerateDisabled: true,
-        isGeneratedPassword: 0
-      });
-    } else {
-      this.setState({
-        isExisting: val,
-        isGenerateDisabled: false
-      });
-    }
-  };
-
   setSubscription = val => {
     this.setState({
       subscription: val,
       planSelected: 0
-    });
-  };
-
-  setUsingGenerated = val => {
-    this.setState({
-      isGeneratedPassword: val
     });
   };
 
@@ -118,159 +73,6 @@ class _CreateContent extends React.Component {
     this.setState({
       planSelected: val
     });
-  };
-
-  handleCopy = () => {
-    this.setState({ copied: true });
-    this.props.triggerSnackbar("Password copied to clipboard.");
-  };
-
-  generatePassword = () => {
-    var length = 10,
-      capitals = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-      charset = "abcdefghijklmnopqrstuvwxyz",
-      numbers = "0123456789",
-      symbols = "!$&#",
-      retVal = "";
-    for (var i = 0, n = capitals.length; i < 2; ++i) {
-      retVal += capitals.charAt(Math.floor(Math.random() * n));
-    }
-
-    for (var i = 0, n = charset.length; i < 3; ++i) {
-      retVal += charset.charAt(Math.floor(Math.random() * n));
-    }
-
-    for (var i = 0, n = numbers.length; i < 2; ++i) {
-      retVal += numbers.charAt(Math.floor(Math.random() * n));
-    }
-    for (var i = 0, n = symbols.length; i < 1; ++i) {
-      retVal += symbols.charAt(Math.floor(Math.random() * n));
-    }
-
-    var a = retVal.split(""),
-      n = a.length;
-
-    for (var i = n - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var tmp = a[i];
-      a[i] = a[j];
-      a[j] = tmp;
-    }
-
-    return a.join("");
-  };
-
-  loginSection = classes => {
-    return (
-      <div className={classes.container}>
-        <div id="navigation-pills">
-          <div className={classes.title}>
-            <h3>
-              <small>Optional: Add Your Account Password:</small>
-            </h3>
-          </div>
-          <CustomInput
-            labelText="Password"
-            id="setpassword"
-            type={"password"}
-            onChange={this.setOwnPassword}
-            formControlProps={{
-              fullWidth: true
-            }}
-          />
-          <p>
-            Once set, passwords can be retrieved anytime from your dashboard and
-            shared with friends and family.
-          </p>
-        </div>
-      </div>
-    );
-  };
-
-  subscriptionSection = classes => {
-    var tabs = this.state.services.map(service => ({
-      tabButton: service.name,
-      tabIcon: AddBox,
-      marginedTab: true,
-      tabContent: (
-        <span>
-          <p>{service.name} streaming service for content on demand.</p>
-        </span>
-      )
-    }));
-
-    return (
-      <div className={classes.container}>
-        <div id="navigation-pills">
-          <div className={classes.title}>
-            <h3>
-              <small>Step 1: Choose Subscription Service:</small>
-            </h3>
-          </div>
-          <NavPills
-            setValCallBack={this.setSubscription}
-            color="success"
-            tabs={tabs}
-          />
-        </div>
-      </div>
-    );
-  };
-
-  planSection = classes => {
-    var selectedService = this.state.subscription;
-    var pricingPlans = [];
-    if (this.state.services[selectedService] != null) {
-      pricingPlans = this.state.services[selectedService].pricingPlans;
-    }
-    var tabs = pricingPlans.map(plan => {
-      if (plan.maximumSize === 1) {
-        return {
-          tabButton: "Individual",
-          tabIcon: Person,
-          marginedTab: true,
-          tabContent: (
-            <span>
-              <p>
-                Individual monthly plan for ${plan.amount}. Allows streaming for
-                only 1 session.
-              </p>
-            </span>
-          )
-        };
-      }
-      return {
-        tabButton: "Group",
-        tabIcon: Group,
-        marginedTab: true,
-        tabContent: (
-          <span>
-            <p>
-              Group monthly plan for ${plan.amount}. Allows streaming for{" "}
-              {plan.maximumSize} simultaneous sessions.
-            </p>
-          </span>
-        )
-      };
-    });
-
-    return (
-      <div className={classes.container}>
-        <div id="navigation-pills">
-          <div className={classes.title}>
-            <h3>
-              <small>Step 2: Choose Your Plan:</small>
-            </h3>
-          </div>
-          <NavPillsModded
-            active={this.state.planSelected}
-            setValCallBack={this.setPlan}
-            color="success"
-            tabs={tabs}
-          />
-        </div>
-      </div>
-    );
   };
 
   updateShowing = () => {
@@ -336,15 +138,11 @@ class _CreateContent extends React.Component {
   };
 
   getPassword = () => {
-    var isUsingGen = this.state.isGeneratedPassword;
-    if (isUsingGen) return this.state.generatedPassword;
     return this.state.ownPassword;
   };
 
   render() {
     const { classes } = this.props;
-    var isGenDisabled = this.state.isGenerateDisabled;
-    var generatedPassword = this.state.generatedPassword;
     var isShowingFirst = "none";
     var activeStep = this.state.activeStep;
     if (activeStep == 0) {
@@ -384,14 +182,24 @@ class _CreateContent extends React.Component {
                               </p>
                             </CardHeader>
 
-                            {this.subscriptionSection(classes)}
+                            <Subscription
+                              classes={classes}
+                              services={this.state.services}
+                              handleSetSubscription={this.setSubscription}
+                            />
 
-                            {this.planSection(classes)}
-                            {this.loginSection(
-                              classes,
-                              isGenDisabled,
-                              generatedPassword
-                            )}
+                            <Plan
+                              classes={classes}
+                              selectedService={this.state.subscription}
+                              services={this.state.services}
+                              planSelected={this.state.planSelected}
+                              handleSetPlan={this.setPlan}
+                            />
+
+                            <Login
+                              classes={classes}
+                              handleOnChange={this.setOwnPassword}
+                            />
                           </span>
                         )
                       },
@@ -450,7 +258,6 @@ const CreateContent = withSnackbar(withRouter(_CreateContent));
 
 function CreateWithServices(props) {
   const { classes } = props;
-
   return (
     <Query query={SUBSCRIPTION_SERVICES}>
       {({ loading, error, data }) => {
