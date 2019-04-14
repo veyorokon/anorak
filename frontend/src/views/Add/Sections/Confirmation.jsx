@@ -1,19 +1,11 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import InputLabel from "@material-ui/core/InputLabel";
 // core components
 import GridItem from "components/material-dashboard/Grid/GridItem.jsx";
 import GridContainer from "components/material-dashboard/Grid/GridContainer.jsx";
 import CustomInput from "components/material-dashboard/CustomInput/CustomInput.jsx";
-import Button from "components/material-dashboard/CustomButtons/Button.jsx";
 import Card from "components/material-dashboard/Card/Card.jsx";
-import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
-import CardAvatar from "components/material-dashboard/Card/CardAvatar.jsx";
-import CardBody from "components/material-dashboard/Card/CardBody.jsx";
-import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
-
-import avatar from "assets/img/faces/marc.jpg";
 
 const styles = {
   cardCategoryWhite: {
@@ -35,7 +27,7 @@ const styles = {
 };
 
 function Confirmation(props) {
-  const { classes, service, size, price, password, email } = props;
+  const { service, price, password, email } = props;
   return (
     <div>
       <GridContainer>
@@ -69,36 +61,26 @@ function Confirmation(props) {
                   }}
                 />
               </GridItem>
-              <GridItem xs={12} sm={6} md={3}>
-                <CustomInput
-                  password
-                  type="password"
-                  labelText="Password"
-                  id="password"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    disabled: true,
-                    value: password
-                  }}
-                />
-              </GridItem>
+
+              {password && (
+                <GridItem xs={12} sm={6} md={3}>
+                  <CustomInput
+                    password
+                    type="password"
+                    labelText="Password"
+                    id="password"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      disabled: true,
+                      value: password
+                    }}
+                  />
+                </GridItem>
+              )}
             </GridContainer>
             <GridContainer>
-              <GridItem xs={4} sm={4} md={4}>
-                <CustomInput
-                  labelText="Size"
-                  id="size"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    disabled: true,
-                    value: size
-                  }}
-                />
-              </GridItem>
               <GridItem xs={4} sm={4} md={4}>
                 <CustomInput
                   labelText="Price"

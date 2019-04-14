@@ -118,6 +118,7 @@ export function getAccountStatus(value) {
   if (value === "A_29") return "Creating";
   if (value === "A_30") return "Connecting";
   if (value === "A_35") return "Confirmation Needed";
+  if (value === "A_80") return "Active";
   if (value === "A_90") return "Active";
   if (value === "A_91") return "Connected";
 }
@@ -129,6 +130,7 @@ export function getAccountColor(value) {
   if (value === "A_29") return "warning";
   if (value === "A_30") return "warning";
   if (value === "A_35") return "warning";
+  if (value === "A_80") return "success";
   if (value === "A_90") return "success";
   if (value === "A_91") return "success";
 }
@@ -141,6 +143,16 @@ export function calcAnorakFee(value) {
 
 export function formatDateTime(value) {
   return value.split("T")[0];
+}
+
+export function formatEpochTime(value) {
+  var dateObj = new Date(0);
+  dateObj.setUTCSeconds(value);
+  var month = dateObj.getUTCMonth() + 1; //months from 1-12
+  var day = dateObj.getUTCDate();
+  var year = dateObj.getUTCFullYear();
+
+  return month + "/" + day + "/" + year;
 }
 
 export function getRenewalDate(value) {

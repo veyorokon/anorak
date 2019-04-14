@@ -6,18 +6,14 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import GridItem from "components/material-dashboard/Grid/GridItem.jsx";
 import GridContainer from "components/material-dashboard/Grid/GridContainer.jsx";
-import CustomInput from "components/material-dashboard/CustomInput/CustomInput.jsx";
 import Button from "components/material-dashboard/CustomButtons/Button.jsx";
 import Card from "components/material-dashboard/Card/Card.jsx";
 import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
 
-import AddBox from "@material-ui/icons/AddBox";
-import Group from "@material-ui/icons/Group";
-import Person from "@material-ui/icons/Person";
+import { withRouter } from "react-router-dom";
 
-import NavPills from "components/material-dashboard/NavPills/NavPills.jsx";
 import NavPillsModded from "components/material-dashboard/NavPills/NavPillsModded.jsx";
 
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
@@ -26,46 +22,39 @@ import { Query } from "react-apollo";
 
 import { getToken } from "lib/utility.jsx";
 import Confirmation from "./Sections/Confirmation.jsx";
+import Login from "./Sections/Login.jsx";
+import Plan from "./Sections/Plan.jsx";
+import Subscription from "./Sections/Subscription.jsx";
 
 import { USER, SUBSCRIPTION_SERVICES } from "lib/queries";
-import { CONNECT_SUBSCRIPTION_ACCOUNT } from "lib/mutations";
+import { ADD_SUBSCRIPTION_ACCOUNT } from "lib/mutations";
 import withSnackbar from "components/material-dashboard/Form/withSnackbar";
 
 import { mixpanel } from "lib/utility.jsx";
 
-class _ConnectContent extends React.Component {
+class _CreateContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isExisting: 1,
-      isGenerateDisabled: true,
-      isGeneratedPassword: 0,
       subscription: 0,
       ownPassword: "",
       copied: false,
-      isGenerateDisabled: true,
       planSelected: 0,
       activeStep: 0,
       services: this.props.services,
       submitted: false,
-      email: this.props.user.email
+      email: ""
     };
   }
 
   componentDidMount() {
-    mixpanel.track("Connect Subscription Page Load");
+    mixpanel.track("Create Subscription Page Load");
   }
 
   setSubscription = val => {
     this.setState({
       subscription: val,
       planSelected: 0
-    });
-  };
-
-  setUsingGenerated = val => {
-    this.setState({
-      isGeneratedPassword: val
     });
   };
 
@@ -79,126 +68,14 @@ class _ConnectContent extends React.Component {
     });
   };
 
-  loginSection = classes => {
-    return (
-      <div className={classes.container}>
-        <div id="navigation-pills">
-          <div className={classes.title}>
-            <h3>
-              <small>Account Password:</small>
-            </h3>
-          </div>
-
-          <GridItem xs={6} sm={6} md={4} lg={8}>
-            <CustomInput
-              labelText="Password"
-              id="setpassword"
-              type={"password"}
-              onChange={this.setOwnPassword}
-              formControlProps={{
-                fullWidth: true
-              }}
-            />
-          </GridItem>
-
-          <p>
-            Once set, passwords can be retrieved anytime from your dashboard.
-          </p>
-        </div>
-      </div>
-    );
-  };
-
-  subscriptionSection = classes => {
-    var tabs = this.state.services.map(service => ({
-      tabButton: service.name,
-      tabIcon: AddBox,
-      marginedTab: true,
-      tabContent: (
-        <span>
-          <p>{service.name} streaming service for content on demand.</p>
-        </span>
-      )
-    }));
-
-    return (
-      <div className={classes.container}>
-        <div id="navigation-pills">
-          <div className={classes.title}>
-            <h3>
-              <small>Subscription Service:</small>
-            </h3>
-          </div>
-          <NavPills
-            setValCallBack={this.setSubscription}
-            color="primary"
-            tabs={tabs}
-          />
-        </div>
-      </div>
-    );
-  };
-
-  planSection = classes => {
-    var selectedService = this.state.subscription;
-    var pricingPlans = this.state.services[selectedService].pricingPlans;
-    var tabs = pricingPlans.map(plan => {
-      if (plan.maximumSize === 1) {
-        return {
-          tabButton: "Individual",
-          tabIcon: Person,
-          marginedTab: true,
-          tabContent: (
-            <span>
-              <p>
-                Individual monthly plan for ${plan.amount}. Allows streaming for
-                only 1 session.
-              </p>
-            </span>
-          )
-        };
-      }
-      return {
-        tabButton: "Group",
-        tabIcon: Group,
-        marginedTab: true,
-        tabContent: (
-          <span>
-            <p>
-              Group monthly plan for ${plan.amount}. Allows streaming for{" "}
-              {plan.maximumSize} simultaneous sessions.
-            </p>
-          </span>
-        )
-      };
-    });
-
-    return (
-      <div className={classes.container}>
-        <div id="navigation-pills">
-          <div className={classes.title}>
-            <h3>
-              <small>Choose Your Plan:</small>
-            </h3>
-          </div>
-          <NavPillsModded
-            active={this.state.planSelected}
-            setValCallBack={this.setPlan}
-            color="primary"
-            tabs={tabs}
-          />
-        </div>
-      </div>
-    );
-  };
-
   updateShowing = () => {
     var current = this.state.activeStep + 1;
     current %= 2;
     this.setState({ activeStep: current });
   };
 
-  onSubmit = async (connectSubscriptionAccount, values) => {
+  onSubmit = async (createSubscriptionAccount, values) => {
+    var username = this.props.user.email;
     var subscription = this.state.subscription;
     var plan = this.state.planSelected;
     var planPK = this.state.services[subscription].pricingPlans[plan].id;
@@ -209,23 +86,25 @@ class _ConnectContent extends React.Component {
       serviceKey: subscriptionPK,
       planKey: planPK,
       password: this.getPassword(),
-      username: this.props.user.email
+      username: username,
+      isConnectedAccount: false
     };
 
     this.setState({ submitted: true });
     try {
-      await connectSubscriptionAccount({ variables });
+      await createSubscriptionAccount({ variables });
       this.props.triggerSnackbar(
-        "Subscribed! A new subscription was added to your dashboard."
+        "Success! A new subscription was added to your dashboard."
       );
-      mixpanel.track("Connect Attempt Successful", {
+      mixpanel.track("Create Attempt Successful", {
         service: this.getServiceName()
       });
+      this.props.history.push("/dashboard/home");
     } catch {
       this.props.triggerSnackbar(
         "Sorry, an additional subscription account could not be created."
       );
-      mixpanel.track("Connect Attempt Unsuccessful", {
+      mixpanel.track("Create Attempt Unsuccessful", {
         service: this.getServiceName()
       });
     }
@@ -236,10 +115,7 @@ class _ConnectContent extends React.Component {
 
   getServiceName = () => {
     var selected = this.state.subscription;
-    if (this.state.services[selected]) {
-      return this.state.services[selected].name;
-    }
-    return "";
+    return this.state.services[selected].name;
   };
 
   getServiceSize = () => {
@@ -255,15 +131,11 @@ class _ConnectContent extends React.Component {
   };
 
   getPassword = () => {
-    var isUsingGen = this.state.isGeneratedPassword;
-    if (isUsingGen) return this.state.generatedPassword;
     return this.state.ownPassword;
   };
 
   render() {
     const { classes } = this.props;
-    var isGenDisabled = this.state.isGenerateDisabled;
-    var generatedPassword = this.state.generatedPassword;
     var isShowingFirst = "none";
     var activeStep = this.state.activeStep;
     if (activeStep == 0) {
@@ -271,7 +143,7 @@ class _ConnectContent extends React.Component {
     }
     return (
       <Mutation
-        mutation={CONNECT_SUBSCRIPTION_ACCOUNT}
+        mutation={ADD_SUBSCRIPTION_ACCOUNT}
         refetchQueries={[
           {
             query: USER,
@@ -281,7 +153,7 @@ class _ConnectContent extends React.Component {
           }
         ]}
       >
-        {connectSubscriptionAccount => (
+        {createSubscriptionAccount => (
           <div>
             <GridContainer>
               <GridItem xs={12} sm={12} md={12} lg={12}>
@@ -294,25 +166,33 @@ class _ConnectContent extends React.Component {
                       {
                         tabContent: (
                           <span style={{ display: isShowingFirst }}>
-                            <CardHeader color="primary">
+                            <CardHeader color="success">
                               <h4 className={classes.cardTitleWhite}>
-                                Connect Your Subscription Account
+                                Add A Subscription Account
                               </h4>
                               <p className={classes.cardCategoryWhite}>
-                                Connect an existing account to Anorak.
+                                Add a subscription to your dashboard
                               </p>
                             </CardHeader>
 
-                            {this.subscriptionSection(classes)}
+                            <Subscription
+                              classes={classes}
+                              services={this.state.services}
+                              handleSetSubscription={this.setSubscription}
+                            />
 
-                            {!this.state.isExisting &&
-                              this.planSection(classes)}
+                            <Plan
+                              classes={classes}
+                              selectedService={this.state.subscription}
+                              services={this.state.services}
+                              planSelected={this.state.planSelected}
+                              handleSetPlan={this.setPlan}
+                            />
 
-                            {this.loginSection(
-                              classes,
-                              isGenDisabled,
-                              generatedPassword
-                            )}
+                            <Login
+                              classes={classes}
+                              handleOnChange={this.setOwnPassword}
+                            />
                           </span>
                         )
                       },
@@ -345,17 +225,17 @@ class _ConnectContent extends React.Component {
                     <Button onClick={this.updateShowing}>Back</Button>
                     <Button
                       onClick={async values => {
-                        await this.onSubmit(connectSubscriptionAccount, values);
+                        await this.onSubmit(createSubscriptionAccount, values);
                         setTimeout(() => {}, 600);
                       }}
                       disabled={this.state.submitted}
-                      color="primary"
+                      color="success"
                     >
                       Confirm
                     </Button>
                   </span>
                 ) : (
-                  <Button onClick={this.updateShowing} color="primary">
+                  <Button onClick={this.updateShowing} color="success">
                     Next
                   </Button>
                 )}
@@ -367,11 +247,10 @@ class _ConnectContent extends React.Component {
     );
   }
 }
-const ConnectContent = withSnackbar(_ConnectContent);
+const CreateContent = withSnackbar(withRouter(_CreateContent));
 
-function ConnectWithServices(props) {
+function CreateWithServices(props) {
   const { classes } = props;
-
   return (
     <Query query={SUBSCRIPTION_SERVICES}>
       {({ loading, error, data }) => {
@@ -379,9 +258,9 @@ function ConnectWithServices(props) {
         if (error) return `Error! ${error.message}`;
         const services = data.subscriptionServices;
         return (
-          <ConnectContent
-            user={props.user}
+          <CreateContent
             classes={classes}
+            user={props.user}
             services={services}
           />
         );
@@ -390,7 +269,7 @@ function ConnectWithServices(props) {
   );
 }
 
-function Connect(props) {
+function Add(props) {
   const { classes } = props;
 
   return (
@@ -403,13 +282,13 @@ function Connect(props) {
         if (loading) return "Loading...";
         if (error) return `Error! ${error.message}`;
         const user = data.user;
-        return <ConnectWithServices classes={classes} user={user} />;
+        return <CreateWithServices classes={classes} user={user} />;
       }}
     </Query>
   );
 }
 
-Connect.propTypes = {
+Add.propTypes = {
   classes: PropTypes.object.isRequired
 };
-export default withStyles(pillsStyle)(Connect);
+export default withStyles(pillsStyle)(Add);

@@ -21,9 +21,7 @@ class SubscriptionServiceAdmin(admin.ModelAdmin):
         'url_home',
         'type',
         'is_available',
-        'stripe_product_id',
     )
-    readonly_fields=('stripe_product_id',)
 
 @admin.register(SubscriptionPlan)
 class SubscriptionPlanAdmin(admin.ModelAdmin):
@@ -35,9 +33,7 @@ class SubscriptionPlanAdmin(admin.ModelAdmin):
         'billing_frequency',
         'maximum_size',
         'is_active',
-        'stripe_plan_id',
     )
-    readonly_fields=('stripe_plan_id',)
 
 @admin.register(SubscriptionAccount)
 class SubscriptionAccountAdmin(admin.ModelAdmin):
@@ -79,7 +75,6 @@ class SubscriptionMemberAdmin(admin.ModelAdmin):
         'date_created',
         'date_modified',
         'date_canceled',
-        'stripe_subscription_item_id',
     )
     readonly_fields = (
         'user',
@@ -88,5 +83,4 @@ class SubscriptionMemberAdmin(admin.ModelAdmin):
         'date_created',
         'date_modified',
         'date_canceled',
-        'stripe_subscription_item_id',
     )

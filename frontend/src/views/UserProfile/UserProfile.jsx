@@ -71,7 +71,7 @@ class _CardForm extends React.Component {
     mixpanel.track("Account Page Load");
   }
 
-  onSubmit = async (setStripeCard, values) => {
+  onSubmit = async setStripeCard => {
     const name_on_card = this.props.valueQuery("name_on_card");
     const address_line1 = this.props.valueQuery("address_line1");
     const address_line2 = this.props.valueQuery("address_line2");

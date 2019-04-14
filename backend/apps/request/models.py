@@ -11,6 +11,7 @@ from core.models import User
 from subscription.models import SubscriptionMember, SubscriptionAccount
 from django.utils import timezone
 from . enum import *
+from backend.utility import get_current_epoch
 
 ##########################################################################
 ## Management Request
@@ -26,9 +27,9 @@ class ManagementRequest(models.Model):
     #The originator of the request
     originator = enum.EnumField(ManagementRequestOriginator, default=ManagementRequestOriginator.CLIENT)
     #Date that the processing request was created
-    date_created = models.DateTimeField(editable=False)
+    date_created = models.IntegerField(editable=False)
     #Date that the request was processed
-    date_processed = models.DateTimeField(editable=False, null=True, blank=True)
+    date_processed = models.IntegerField(editable=False, null=True, blank=True)
     #The status of the user subscription
     status = enum.EnumField(ManagementRequestStatus, default=ManagementRequestStatus.PROCESSING)
     #The action requested on the account
@@ -38,7 +39,7 @@ class ManagementRequest(models.Model):
 
     def process(self, processedNotes, processingUser):
         self.status = ManagementRequestStatus.COMPLETED
-        self.date_processed = timezone.now()
+        self.date_processed = get_current_epoch()
         self.processed_notes = processedNotes
         self.processed_by = processingUser
 
@@ -63,7 +64,7 @@ class ManagementRequest(models.Model):
         On save, update timestamps
         '''
         if not self.id:
-            self.date_created = timezone.now()
+            self.date_created = get_current_epoch()
         return super(ManagementRequest, self).save(*args, **kwargs)
 
     class Meta:

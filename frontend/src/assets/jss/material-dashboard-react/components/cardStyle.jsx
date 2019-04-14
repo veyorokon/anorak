@@ -30,7 +30,7 @@ const cardStyle = {
     }
   },
   cardSubscription: {
-    background: "#313131",
+    background: "#191C21",
     width: "100%",
     height: "300px"
   },

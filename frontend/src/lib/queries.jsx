@@ -26,6 +26,7 @@ const USER = gql`
       email
       firstName
       lastName
+      isMember
       dashboardAccounts {
         id
         dateCreated

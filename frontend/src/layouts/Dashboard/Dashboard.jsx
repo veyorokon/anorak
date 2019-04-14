@@ -11,6 +11,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Header from "components/material-dashboard/Header/Header.jsx";
 import Footer from "components/material-dashboard/Footer/Footer.jsx";
 import Sidebar from "components/material-dashboard/Sidebar/Sidebar.jsx";
+import { getToken } from "lib/utility.jsx";
 
 import dashboardRoutes from "routes/dashboard.jsx";
 
@@ -19,16 +20,9 @@ import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboar
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
 
+import { Query } from "react-apollo";
+import { USER } from "lib/queries";
 
-const switchRoutes = (
-  <Switch>
-    {dashboardRoutes.map((prop, key) => {
-      if (prop.redirect)
-        return <Redirect from={prop.path} to={prop.to} key={key} />;
-      return <Route path={prop.path} component={prop.component} key={key} />;
-    })}
-  </Switch>
-);
 
 class App extends React.Component {
   constructor(props) {
@@ -56,7 +50,7 @@ class App extends React.Component {
     window.addEventListener("resize", this.resizeFunction);
   }
   componentDidUpdate(e) {
-    if (e.history.location.pathname !== e.location.pathname) {
+    if (e.history.location.pathname !== e.location.pathname && this.refs.mainPanel) {
       this.refs.mainPanel.scrollTop = 0;
       if (this.state.mobileOpen) {
         this.setState({ mobileOpen: false });
@@ -66,36 +60,72 @@ class App extends React.Component {
   componentWillUnmount() {
     window.removeEventListener("resize", this.resizeFunction);
   }
+
+  switchRoutes = (dashboardRoutes) => {
+    return(
+      <Switch>
+        {dashboardRoutes.map((prop, key) => {
+          if (prop.redirect)
+            return <Redirect from={prop.path} to={prop.to} key={key} />;
+          return <Route path={prop.path} component={prop.component} key={key} />;
+        })}
+      </Switch>
+    );
+}
+
+updateRoutes = (routes, user) => {
+  var newRoutes = routes;
+  if (user.isMember){
+    return routes;
+  }
+  else{
+    return routes.filter(el => el.path !== "/dashboard/connect");
+  }
+}
+
   render() {
     const { classes, ...rest } = this.props;
     return (
-      <div className={classes.wrapper}>
-        <Sidebar
-          routes={dashboardRoutes}
-          logoText={"Anorak"}
-          logo={process.env.REACT_APP_STATIC_FILES+"images/logo-a.png"}
-          image={null}
-          handleDrawerToggle={this.handleDrawerToggle}
-          open={this.state.mobileOpen}
-          {...rest}
-        />
-        <div className={classes.mainPanel} ref="mainPanel">
-          <Header
-            routes={dashboardRoutes}
+      <Query
+        query={USER}
+        variables={{ token: getToken() }}
+        fetchPolicy="network-only"
+      >
+      {({ loading, error, data }) => {
+        if (loading) return "Loading...";
+        if (error) return `Error! ${error.message}`; //redirect on error
+        const user = data.user;
+        var updatedRoutes = this.updateRoutes(dashboardRoutes, user);
+
+        return (
+        <div className={classes.wrapper}>
+          <Sidebar
+            routes={updatedRoutes}
+            logoText={"Anorak"}
+            logo={process.env.REACT_APP_STATIC_FILES+"images/logo-a.png"}
+            image={null}
             handleDrawerToggle={this.handleDrawerToggle}
+            open={this.state.mobileOpen}
             {...rest}
           />
-          {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
-          {this.getRoute() ? (
-            <div className={classes.content}>
-              <div className={classes.container}>{switchRoutes}</div>
-            </div>
-          ) : (
-            <div className={classes.map}>{switchRoutes}</div>
-          )}
-          {this.getRoute() ? <Footer /> : null}
+          <div className={classes.mainPanel} ref="mainPanel">
+            <Header
+              routes={updatedRoutes}
+              handleDrawerToggle={this.handleDrawerToggle}
+              {...rest}
+            />
+            {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
+
+              <div className={classes.content}>
+                <div className={classes.container}>{this.switchRoutes(updatedRoutes)}</div>
+              </div>
+
+            <Footer />
+          </div>
         </div>
-      </div>
+      );
+      }}
+    </Query>
     );
   }
 }

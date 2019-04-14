@@ -36,13 +36,15 @@ class PlanBillingFrequency(enum.Enum):
 
 # Status for the subscription account
 class SubscriptionAccountStatus(EnumMap):
-    TERMINATED = 0
+    REMOVED = 0
+    TERMINATED = 5
     CANCELED = 10
     PENDING_CANCELLATION = 15
     PENDING = 20
     PENDING_CREATE = 29
     PENDING_CONNECT = 30
     PENDING_CONFIRM_CONNECT = 35
+    ADDED = 80
     ACTIVE = 90
     CONNECTED = 91
 
@@ -50,6 +52,7 @@ class SubscriptionAccountStatus(EnumMap):
         CONNECTED: (
             PENDING,
             PENDING_CONFIRM_CONNECT,
+            PENDING_CONNECT,
         ),
         ACTIVE: (
             PENDING,

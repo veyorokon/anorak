@@ -20,7 +20,7 @@ from . base import *
 DEBUG = False
 
 
-#ALLOWED_HOSTS+=[]
+ALLOWED_HOSTS.extend(['stripe.com', 'www.stripe.com'])
 
 DATABASES = {
     'default': {

@@ -40,7 +40,8 @@ ALLOWED_HOSTS = [
     'squadup.xyz',
     'www.squadup.xyz',
     'www.ianorak.com',
-    'ianorak.com'
+    'ianorak.com',
+    'stripe.com'
 ]
 
 #Facebook

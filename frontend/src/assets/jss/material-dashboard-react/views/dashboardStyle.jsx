@@ -40,10 +40,13 @@ const dashboardStyle = theme => ({
   cardCategoryWhite: {
     color: "rgba(255,255,255,.99)",
     margin: "0",
-    fontSize: "14px",
+    fontSize: "1rem",
     marginTop: "0",
     paddingTop: "10px",
-    marginBottom: "0"
+    marginBottom: "0",
+    [theme.breakpoints.down("md")]: {
+      fontSize: "14px"
+    }
   },
 
   cardTitle: {
@@ -96,7 +99,12 @@ const dashboardStyle = theme => ({
     boxShadow: "unset"
   },
   textLink: {
-    display: "contents"
+    cursor: "pointer",
+    display: "contents",
+    color: "black",
+    "&:hover": {
+      color: "black"
+    }
   }
 });
 
