@@ -8,7 +8,8 @@ import { withRouter } from "react-router-dom";
 import { USER } from "lib/queries";
 import {
   REQUEST_ACCOUNT_CANCELLATION,
-  CONFIRM_SUBSCRIPTION_CONNECT
+  CONFIRM_SUBSCRIPTION_CONNECT,
+  DELETE_SUBSCRIPTION_ACCOUNT
 } from "lib/mutations";
 
 import { getToken, isAccountConfirmationNeeded } from "lib/utility.jsx";
@@ -32,6 +33,7 @@ class _ManageContent extends React.Component {
     this.state = {
       active: 0,
       cancelClicked: false,
+      deleteClicked: false,
       submitted: false,
       confirmClicked: false
     };
@@ -57,6 +59,17 @@ class _ManageContent extends React.Component {
     await requestCancellation({ variables });
     this.setState({ submitted: true });
     this.props.triggerSnackbar("Your cancellation request has been sent.");
+  };
+
+  onDelete = async requestDelete => {
+    var subscriptionAccountKey = this.props.account.id;
+    const variables = {
+      token: getToken(),
+      subscriptionAccountKey: subscriptionAccountKey
+    };
+    await requestDelete({ variables });
+    this.props.history.push("/dashboard/home");
+    this.props.triggerSnackbar("Account deleted.");
   };
 
   confirmSubmit = async confirmSubscriptionConnect => {
@@ -143,8 +156,56 @@ class _ManageContent extends React.Component {
   };
 
   renderManage = () => {
-    const { classes } = this.props;
-
+    const { classes, user } = this.props;
+    var cancelMutation = <span />;
+    if (user.isMember) {
+      if (!this.state.cancelClicked) {
+        cancelMutation = (
+          <Button onClick={() => this.setState({ cancelClicked: true })}>
+            <span>Cancel</span>
+          </Button>
+        );
+      } else {
+        cancelMutation = (
+          <Mutation
+            mutation={REQUEST_ACCOUNT_CANCELLATION}
+            refetchQueries={[
+              {
+                query: USER,
+                variables: {
+                  token: getToken()
+                }
+              }
+            ]}
+          >
+            {requestCancellation => (
+              <Form
+                onSubmit={async (values, { setSubmitting }) => {
+                  await this.onSubmit(requestCancellation);
+                  setTimeout(() => {
+                    setSubmitting(false);
+                  }, 600);
+                }}
+              >
+                {({ isSubmitting }) => {
+                  var text = "Request Sent";
+                  if (!this.state.submitted) text = "Are You Sure?";
+                  return (
+                    <Button
+                      disabled={isSubmitting || this.state.submitted}
+                      color="danger"
+                      type="submit"
+                    >
+                      <span>{text}</span>
+                    </Button>
+                  );
+                }}
+              </Form>
+            )}
+          </Mutation>
+        );
+      }
+    }
     return (
       <div>
         <NavPills
@@ -170,17 +231,18 @@ class _ManageContent extends React.Component {
                       <CardFooter
                         style={{ margin: "auto", marginBottom: "15px" }}
                       >
-                        {!this.state.cancelClicked ? (
+                        {cancelMutation}
+                        {!this.state.deleteClicked ? (
                           <Button
                             onClick={() =>
-                              this.setState({ cancelClicked: true })
+                              this.setState({ deleteClicked: true })
                             }
                           >
-                            <span>Cancel</span>
+                            <span>Delete</span>
                           </Button>
                         ) : (
                           <Mutation
-                            mutation={REQUEST_ACCOUNT_CANCELLATION}
+                            mutation={DELETE_SUBSCRIPTION_ACCOUNT}
                             refetchQueries={[
                               {
                                 query: USER,
@@ -190,10 +252,10 @@ class _ManageContent extends React.Component {
                               }
                             ]}
                           >
-                            {requestCancellation => (
+                            {requestDelete => (
                               <Form
                                 onSubmit={async (values, { setSubmitting }) => {
-                                  await this.onSubmit(requestCancellation);
+                                  await this.onDelete(requestDelete);
                                   setTimeout(() => {
                                     setSubmitting(false);
                                   }, 600);
@@ -202,7 +264,7 @@ class _ManageContent extends React.Component {
                                 {({ isSubmitting }) => {
                                   var text = "Request Sent";
                                   if (!this.state.submitted)
-                                    text = "Are You Sure?";
+                                    text = "Delete subscription?";
                                   return (
                                     <Button
                                       disabled={
@@ -267,7 +329,7 @@ class _ManageContent extends React.Component {
   }
 }
 
-const ManageContent = withSnackbar(_ManageContent);
+const ManageContent = withSnackbar(withRouter(_ManageContent));
 
 function getAccountID(path) {
   return path.substr(path.lastIndexOf("/") + 1);
@@ -294,7 +356,11 @@ function Manage(props) {
         const account = getAccount(path, dashboardAccounts);
         return (
           <div>
-            <ManageContent account={account} classes={classes} />
+            <ManageContent
+              user={data.user}
+              account={account}
+              classes={classes}
+            />
           </div>
         );
       }}

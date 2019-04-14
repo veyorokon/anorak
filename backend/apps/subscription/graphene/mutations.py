@@ -95,6 +95,36 @@ class SubscriptionConnectMutation(graphene.Mutation):
             subscriptionAccount = account
         )
 
+##########################################################################
+## Mutation to delete account
+##########################################################################
+
+class DeleteAccountMutation(graphene.Mutation):
+
+    class Arguments:
+        token = graphene.String(required=True)
+        subscriptionAccountKey = graphene.Int(required=True)
+
+    success =  graphene.Boolean()
+
+    @login_required
+    def mutate(self, info, token, subscriptionAccountKey, **kwargs):
+        user = info.context.user
+        try:
+            account = SubscriptionAccount.objects.get(
+                pk = subscriptionAccountKey,
+                responsible_user = user
+            )
+        except:
+            raise ValueError(
+                "The subscription account could not be found."
+            )
+        account.delete()
+        return DeleteAccountMutation(
+            success = True
+        )
+
+
 
 class Mutations(graphene.ObjectType):
     subscription_add_account = SubscriptionAddMutation.Field(
@@ -103,4 +133,8 @@ class Mutations(graphene.ObjectType):
 
     subscription_connect_account = SubscriptionConnectMutation.Field(
         description = "Connect an existing subscription account. The service will automatically create a management request to verify connect login."
+    )
+
+    subscription_delete_account = DeleteAccountMutation.Field(
+        description = "Delete a subscription account."
     )

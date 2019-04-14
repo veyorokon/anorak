@@ -186,6 +186,20 @@ const REQUEST_ACCOUNT_CANCELLATION = gql`
   }
 `;
 
+const DELETE_SUBSCRIPTION_ACCOUNT = gql`
+  mutation SubscriptionDeleteAccount(
+    $token: String!
+    $subscriptionAccountKey: Int!
+  ) {
+    subscriptionDeleteAccount(
+      token: $token
+      subscriptionAccountKey: $subscriptionAccountKey
+    ) {
+      success
+    }
+  }
+`;
+
 export {
   ADD_SUBSCRIPTION_ACCOUNT,
   CONNECT_SUBSCRIPTION_ACCOUNT,
@@ -195,5 +209,6 @@ export {
   UPDATE_USER,
   REQUEST_ACCOUNT_CANCELLATION,
   CREATE_USER,
-  CONFIRM_SUBSCRIPTION_CONNECT
+  CONFIRM_SUBSCRIPTION_CONNECT,
+  DELETE_SUBSCRIPTION_ACCOUNT
 };

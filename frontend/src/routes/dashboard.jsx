@@ -18,9 +18,6 @@ import UserProfile from "views/UserProfile/UserProfile.jsx";
 import Logout from "views/Logout/Logout.jsx";
 import Connect from "views/Connect/Connect.jsx";
 import Add from "views/Add/Add.jsx";
-import Discover from "views/Discover/Discover.jsx";
-import Manage from "views/Manage/Manage.jsx";
-import InvoiceList from "views/Invoice/Invoice.jsx";
 
 const dashboardRoutes = [
   {
