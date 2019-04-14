@@ -13,7 +13,7 @@ import CardAvatar from "components/material-dashboard/Card/CardAvatar.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
 import {
-  formatDateTime,
+  formatEpochTime,
   getRenewalDate,
   getAccountStatus,
   calcAnorakFee,
@@ -101,7 +101,7 @@ class Overview extends React.Component {
               }}
               inputProps={{
                 disabled: true,
-                value: formatDateTime(getValue("dateCreated"))
+                value: formatEpochTime(getValue("dateCreated"))
               }}
             />
           </GridItem>
@@ -131,52 +131,6 @@ class Overview extends React.Component {
               inputProps={{
                 disabled: true,
                 value: "$" + getValue("subscriptionPlan").amount
-              }}
-            />
-          </GridItem>
-
-          <GridItem xs={6} sm={6} md={6}>
-            <CustomInput
-              labelText="Anorak Fee"
-              id="fee"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                disabled: true,
-                value:
-                  "* $" + calcAnorakFee(getValue("subscriptionPlan").amount)
-              }}
-            />
-          </GridItem>
-          <GridItem xs={6} sm={6} md={6}>
-            <CustomInput
-              labelText="Total"
-              id="total"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                disabled: true,
-                value:
-                  "$" +
-                  getSum(
-                    calcAnorakFee(getValue("subscriptionPlan").amount),
-                    getValue("subscriptionPlan").amount
-                  )
-              }}
-            />
-          </GridItem>
-          <GridItem xs={6} sm={6} md={6}>
-            <CustomInput
-              labelText="Renews"
-              id="renews"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                disabled: true,
-                value: getRenewalDate(getValue("statusAccount"))
               }}
             />
           </GridItem>

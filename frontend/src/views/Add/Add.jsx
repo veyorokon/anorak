@@ -15,7 +15,6 @@ import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
 import { Elements, StripeProvider } from "react-stripe-elements";
 
-import avatar from "assets/img/faces/marc.jpg";
 import { withRouter } from "react-router-dom";
 
 import AddBox from "@material-ui/icons/AddBox";
@@ -36,7 +35,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import Confirmation from "./Sections/Confirmation.jsx";
 
 import { USER, SUBSCRIPTION_SERVICES } from "lib/queries";
-import { CREATE_SUBSCRIPTION_ACCOUNT } from "lib/mutations";
+import { ADD_SUBSCRIPTION_ACCOUNT } from "lib/mutations";
 import withSnackbar from "components/material-dashboard/Form/withSnackbar";
 
 import { mixpanel } from "lib/utility.jsx";
@@ -161,93 +160,27 @@ class _CreateContent extends React.Component {
     return a.join("");
   };
 
-  loginSection = (classes, isGenDisabled, generatedPassword) => {
+  loginSection = classes => {
     return (
       <div className={classes.container}>
         <div id="navigation-pills">
           <div className={classes.title}>
             <h3>
-              <small>Step 3: Set Your Account Password:</small>
+              <small>Optional: Add Your Account Password:</small>
             </h3>
           </div>
-
-          <NavPillsModded
-            setValCallBack={this.setUsingGenerated}
-            color="success"
-            active={this.state.isGeneratedPassword}
-            tabs={[
-              {
-                tabButton: "Set",
-                tabIcon: AddBox,
-                tabContent: (
-                  <span>
-                    {this.state.isExisting ? (
-                      <p>Enter the current password on the account.</p>
-                    ) : (
-                      <p>Enter your own secure password.</p>
-                    )}
-
-                    <GridItem xs={6} sm={6} md={4} lg={8}>
-                      <CustomInput
-                        labelText="Password"
-                        id="setpassword"
-                        type={"password"}
-                        onChange={this.setOwnPassword}
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                      />
-                    </GridItem>
-                  </span>
-                )
-              },
-              {
-                tabButton: "Generate",
-                tabIcon: AddBox,
-                disabled: isGenDisabled,
-                tabContent: (
-                  <span>
-                    <p>Let Anorak set a randomly generated password.</p>
-
-                    <GridContainer
-                      style={{
-                        display: "flex",
-                        alignItems: "baseline",
-                        width: "100%"
-                      }}
-                    >
-                      <GridItem xs={6} sm={6} md={4} lg={8}>
-                        <CustomInput
-                          password
-                          labelText="Password"
-                          id="genpassword"
-                          formControlProps={{
-                            disabled: true,
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            placeholder: generatedPassword,
-                            value: generatedPassword
-                          }}
-                        />
-                      </GridItem>
-                      <GridItem xs={4} sm={4} md={4}>
-                        <CopyToClipboard
-                          text={generatedPassword}
-                          onCopy={this.handleCopy}
-                        >
-                          <Button color="transparent">Copy</Button>
-                        </CopyToClipboard>
-                      </GridItem>
-                    </GridContainer>
-                  </span>
-                )
-              }
-            ]}
+          <CustomInput
+            labelText="Password"
+            id="setpassword"
+            type={"password"}
+            onChange={this.setOwnPassword}
+            formControlProps={{
+              fullWidth: true
+            }}
           />
-
           <p>
-            Once set, passwords can be retrieved anytime from your dashboard.
+            Once set, passwords can be retrieved anytime from your dashboard and
+            shared with friends and family.
           </p>
         </div>
       </div>
@@ -366,11 +299,12 @@ class _CreateContent extends React.Component {
     try {
       await createSubscriptionAccount({ variables });
       this.props.triggerSnackbar(
-        "Subscribed! A new subscription was added to your dashboard."
+        "Success! A new subscription was added to your dashboard."
       );
       mixpanel.track("Create Attempt Successful", {
         service: this.getServiceName()
       });
+      this.props.history.push("/dashboard/home");
     } catch {
       this.props.triggerSnackbar(
         "Sorry, an additional subscription account could not be created."
@@ -418,7 +352,7 @@ class _CreateContent extends React.Component {
     }
     return (
       <Mutation
-        mutation={CREATE_SUBSCRIPTION_ACCOUNT}
+        mutation={ADD_SUBSCRIPTION_ACCOUNT}
         refetchQueries={[
           {
             query: USER,
@@ -443,18 +377,16 @@ class _CreateContent extends React.Component {
                           <span style={{ display: isShowingFirst }}>
                             <CardHeader color="success">
                               <h4 className={classes.cardTitleWhite}>
-                                Create A Subscription Account
+                                Add A Subscription Account
                               </h4>
                               <p className={classes.cardCategoryWhite}>
-                                Let Anorak generate your subscription account
+                                Add a subscription to your dashboard
                               </p>
                             </CardHeader>
 
                             {this.subscriptionSection(classes)}
 
-                            {!this.state.isExisting &&
-                              this.planSection(classes)}
-
+                            {this.planSection(classes)}
                             {this.loginSection(
                               classes,
                               isGenDisabled,
@@ -514,7 +446,7 @@ class _CreateContent extends React.Component {
     );
   }
 }
-const CreateContent = withSnackbar(_CreateContent);
+const CreateContent = withSnackbar(withRouter(_CreateContent));
 
 function CreateWithServices(props) {
   const { classes } = props;
@@ -537,7 +469,7 @@ function CreateWithServices(props) {
   );
 }
 
-function Create(props) {
+function Add(props) {
   const { classes } = props;
 
   return (
@@ -556,7 +488,7 @@ function Create(props) {
   );
 }
 
-Create.propTypes = {
+Add.propTypes = {
   classes: PropTypes.object.isRequired
 };
-export default withStyles(pillsStyle)(Create);
+export default withStyles(pillsStyle)(Add);

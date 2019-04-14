@@ -96,7 +96,7 @@ class Dashboard extends React.Component {
                           round
                           aria-label="Add"
                           onClick={() => {
-                            this.props.history.push("/dashboard/connect");
+                            this.props.history.push("/dashboard/add");
                           }}
                         >
                           <AddIcon className={classes.extendedIcon} />

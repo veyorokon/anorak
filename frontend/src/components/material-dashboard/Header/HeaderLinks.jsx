@@ -56,7 +56,8 @@ class HeaderLinks extends React.Component {
             </Hidden>
           </Button>
         </Link>
-        <div className={classes.manager}>
+
+        {/* <div className={classes.manager}>
           <Button
             buttonRef={node => {
               this.anchorEl = node;
@@ -114,7 +115,8 @@ class HeaderLinks extends React.Component {
               </Grow>
             )}
           </Poppers>
-        </div>
+        </div> */}
+
         <Link style={{ color: "gray" }} to="/dashboard/user">
           <Button
             color={window.innerWidth > 959 ? "transparent" : "white"}

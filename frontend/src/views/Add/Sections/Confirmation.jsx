@@ -69,36 +69,26 @@ function Confirmation(props) {
                   }}
                 />
               </GridItem>
-              <GridItem xs={12} sm={6} md={3}>
-                <CustomInput
-                  password
-                  type="password"
-                  labelText="Password"
-                  id="password"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    disabled: true,
-                    value: password
-                  }}
-                />
-              </GridItem>
+
+              {password && (
+                <GridItem xs={12} sm={6} md={3}>
+                  <CustomInput
+                    password
+                    type="password"
+                    labelText="Password"
+                    id="password"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      disabled: true,
+                      value: password
+                    }}
+                  />
+                </GridItem>
+              )}
             </GridContainer>
             <GridContainer>
-              <GridItem xs={4} sm={4} md={4}>
-                <CustomInput
-                  labelText="Size"
-                  id="size"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    disabled: true,
-                    value: size
-                  }}
-                />
-              </GridItem>
               <GridItem xs={4} sm={4} md={4}>
                 <CustomInput
                   labelText="Price"

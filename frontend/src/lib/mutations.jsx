@@ -1,14 +1,14 @@
 import gql from "graphql-tag";
 
-const CREATE_SUBSCRIPTION_ACCOUNT = gql`
-  mutation SubscriptionCreateMutation(
+const ADD_SUBSCRIPTION_ACCOUNT = gql`
+  mutation SubscriptionAddMutation(
     $token: String!
     $serviceKey: Int!
     $planKey: Int!
     $username: String!
     $password: String!
   ) {
-    subscriptionCreateAccount(
+    subscriptionAddAccount(
       token: $token
       serviceKey: $serviceKey
       planKey: $planKey
@@ -187,7 +187,7 @@ const REQUEST_ACCOUNT_CANCELLATION = gql`
 `;
 
 export {
-  CREATE_SUBSCRIPTION_ACCOUNT,
+  ADD_SUBSCRIPTION_ACCOUNT,
   CONNECT_SUBSCRIPTION_ACCOUNT,
   LOGIN_USER,
   GET_FACEBOOK_USER,

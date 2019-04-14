@@ -79,7 +79,7 @@ updateRoutes = (routes, user) => {
     return routes;
   }
   else{
-    return routes.filter(el => el.path !== "/dashboard/create");
+    return routes.filter(el => el.path !== "/dashboard/connect");
   }
 }
 

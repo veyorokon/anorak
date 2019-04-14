@@ -137,8 +137,10 @@ class SubscriptionAccount(models.Model):
             status_membership = MembershipStatus.ACTIVE
         )
 
-    def _connect(self):
+    def _connect(self, confirmRequired=False):
         self.status_account = SubscriptionAccountStatus.PENDING_CONFIRM_CONNECT
+        if not confirmRequired:
+            self.status_account = SubscriptionAccountStatus.CONNECTED
 
     def _cancel_basic_members(self):
         for member in self.basic_members:

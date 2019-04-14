@@ -156,92 +156,73 @@ class _ManageContent extends React.Component {
               tabIcon: AddBox,
               marginedTab: true,
               tabContent: (
-                <div>
-                  <Card>
-                    <div className={classes.container}>
-                      <div id="navigation-pills">
-                        <div className={classes.title}>
-                          <h3>
-                            <small>Overview</small>
-                          </h3>
-                        </div>
-                        <CardBody>
-                          <Overview getValue={this.getValue} />
-                        </CardBody>
-                        <CardFooter
-                          style={{ margin: "auto", marginBottom: "15px" }}
-                        >
-                          {!this.state.cancelClicked ? (
-                            <Button
-                              onClick={() =>
-                                this.setState({ cancelClicked: true })
-                              }
-                            >
-                              <span>Cancel</span>
-                            </Button>
-                          ) : (
-                            <Mutation
-                              mutation={REQUEST_ACCOUNT_CANCELLATION}
-                              refetchQueries={[
-                                {
-                                  query: USER,
-                                  variables: {
-                                    token: getToken()
-                                  }
-                                }
-                              ]}
-                            >
-                              {requestCancellation => (
-                                <Form
-                                  onSubmit={async (
-                                    values,
-                                    { setSubmitting }
-                                  ) => {
-                                    await this.onSubmit(requestCancellation);
-                                    setTimeout(() => {
-                                      setSubmitting(false);
-                                    }, 600);
-                                  }}
-                                >
-                                  {({ isSubmitting }) => {
-                                    var text = "Request Sent";
-                                    if (!this.state.submitted)
-                                      text = "Are You Sure?";
-                                    return (
-                                      <Button
-                                        disabled={
-                                          isSubmitting || this.state.submitted
-                                        }
-                                        color="danger"
-                                        type="submit"
-                                      >
-                                        <span>{text}</span>
-                                      </Button>
-                                    );
-                                  }}
-                                </Form>
-                              )}
-                            </Mutation>
-                          )}
-                        </CardFooter>
+                <Card>
+                  <div className={classes.container}>
+                    <div id="navigation-pills">
+                      <div className={classes.title}>
+                        <h3>
+                          <small>Overview</small>
+                        </h3>
                       </div>
+                      <CardBody>
+                        <Overview getValue={this.getValue} />
+                      </CardBody>
+                      <CardFooter
+                        style={{ margin: "auto", marginBottom: "15px" }}
+                      >
+                        {!this.state.cancelClicked ? (
+                          <Button
+                            onClick={() =>
+                              this.setState({ cancelClicked: true })
+                            }
+                          >
+                            <span>Cancel</span>
+                          </Button>
+                        ) : (
+                          <Mutation
+                            mutation={REQUEST_ACCOUNT_CANCELLATION}
+                            refetchQueries={[
+                              {
+                                query: USER,
+                                variables: {
+                                  token: getToken()
+                                }
+                              }
+                            ]}
+                          >
+                            {requestCancellation => (
+                              <Form
+                                onSubmit={async (values, { setSubmitting }) => {
+                                  await this.onSubmit(requestCancellation);
+                                  setTimeout(() => {
+                                    setSubmitting(false);
+                                  }, 600);
+                                }}
+                              >
+                                {({ isSubmitting }) => {
+                                  var text = "Request Sent";
+                                  if (!this.state.submitted)
+                                    text = "Are You Sure?";
+                                  return (
+                                    <Button
+                                      disabled={
+                                        isSubmitting || this.state.submitted
+                                      }
+                                      color="danger"
+                                      type="submit"
+                                    >
+                                      <span>{text}</span>
+                                    </Button>
+                                  );
+                                }}
+                              </Form>
+                            )}
+                          </Mutation>
+                        )}
+                      </CardFooter>
                     </div>
-                  </Card>
-                  <div
-                    style={{
-                      marginBottom: "25px",
-                      color: "gray",
-                      fontSize: "small"
-                    }}
-                  >
-                    *Anorak charges a 3% + $0.50 fee for each managed
-                    subscription up to a maximum of $5.00 across all
-                    subscriptions. When this cap is reached, no additional fee
-                    will be assesed for managed subscriptions. Anorak reserves
-                    the right to amend the billing plan and will notify you at
-                    least one month in advance should any changes be made.
                   </div>
-                </div>
+                </Card>
               )
             },
             {
