@@ -32,6 +32,7 @@ class PlanBillingFrequency(enum.Enum):
     DAY = 0
     WEEK = 10
     MONTH = 20
+    YEAR = 30
 
 
 # Status for the subscription account

@@ -83,7 +83,8 @@ const dashboardStyle = theme => ({
     alignItems: "baseline"
   },
   cardImage: {
-    maxWidth: "75%",
+    width: "70%",
+    height: "100%",
     margin: "inherit",
     padding: "initial",
     display: "flex"

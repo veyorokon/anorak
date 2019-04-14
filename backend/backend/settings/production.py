@@ -19,6 +19,7 @@ from . base import *
 
 DEBUG = False
 
+SESSION_COOKIE_SECURE=True
 
 ALLOWED_HOSTS.extend(['stripe.com', 'www.stripe.com'])
 

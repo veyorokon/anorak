@@ -54,7 +54,7 @@ class FacebookButton extends React.Component {
       <Mutation mutation={GET_FACEBOOK_USER}>
         {facebookUser => {
           return (
-            <FacebookProvider appId="1974089579550206">
+            <FacebookProvider appId={process.env.REACT_APP_FACEBOOK_CLIENT_ID}>
               <LoginButton
                 className={this.props.classes.button}
                 scope="email"

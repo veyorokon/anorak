@@ -19,6 +19,7 @@ from . base import *
 
 DEBUG = True
 
+SESSION_COOKIE_SECURE=False
 
 ALLOWED_HOSTS.extend(['stripe.com', 'www.stripe.com', 'ianoraktest.serveo.net', 'localhost'])
 

@@ -105,6 +105,7 @@ class _DashboardContent extends React.Component {
               amount = "$" + subscriptionCard.subscriptionPlan.amount;
             }
             var name = subscriptionCard.subscriptionService.name.toLowerCase();
+            name = name.split(" ").join("_");
             return (
               <GridItem key={subscriptionCard.id} xs={12} sm={6} md={6} lg={6}>
                 <Card subscription>

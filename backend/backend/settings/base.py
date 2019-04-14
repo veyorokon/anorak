@@ -102,7 +102,6 @@ TAX_JAR_KEY = environ_setting("TAX_JAR_KEY")
 SESSION_ENGINE='django.contrib.sessions.backends.db'
 SESSION_COOKIE_NAME='sessionid'
 SESSION_EXPIRE_AT_BROWSER_CLOSE=False
-SESSION_COOKIE_SECURE=True
 
 # # Other Celery settings
 # CELERY_RESULT_BACKEND = CELERY_BROKER_URL
