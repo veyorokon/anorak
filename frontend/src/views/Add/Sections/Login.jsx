@@ -19,7 +19,7 @@ function Login(props) {
           type={"password"}
           onChange={props.handleOnChange}
           formControlProps={{
-            fullWidth: true
+            fullWidth: false
           }}
         />
         <p>
