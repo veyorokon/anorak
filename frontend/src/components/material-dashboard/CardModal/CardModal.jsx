@@ -55,7 +55,7 @@ class CardModal extends React.Component {
         {client => (
           <div>
             <Button onClick={() => this.handleOpen(client)} color="transparent">
-              <span style={{ color: "white" }}>Account</span>
+              <span style={{ color: "white", fontSize: "1rem" }}>Account</span>
             </Button>
             <Dialog
               fullScreen={fullScreen}

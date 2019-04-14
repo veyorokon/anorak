@@ -18,16 +18,11 @@ import manageStyle from "assets/jss/material-dashboard-react/layouts/manageStyle
 import Manage from "views/Manage/Manage";
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
+import { getToken } from "lib/utility.jsx";
 
-const switchRoutes = (
-  <Switch>
-    {dashboardRoutes.map((prop, key) => {
-      if (prop.redirect)
-        return <Redirect from={prop.path} to={prop.to} key={key} />;
-      return <Route path={process.env.PUBLIC_URL+prop.path} component={prop.component} key={key} />;
-    })}
-  </Switch>
-);
+import { Query } from "react-apollo";
+import { USER } from "lib/queries";
+
 
 class App extends React.Component {
   constructor(props) {
@@ -62,15 +57,50 @@ class App extends React.Component {
       }
     }
   }
+
+    switchRoutes = (dashboardRoutes) => {
+      return(
+        <Switch>
+          {dashboardRoutes.map((prop, key) => {
+            if (prop.redirect)
+              return <Redirect from={prop.path} to={prop.to} key={key} />;
+            return <Route path={prop.path} component={prop.component} key={key} />;
+          })}
+        </Switch>
+      );
+  }
+
+  updateRoutes = (routes, user) => {
+    var newRoutes = routes;
+    if (user.isMember){
+      return routes;
+    }
+    else{
+      return routes.filter(el => el.path !== "/dashboard/connect");
+    }
+  }
   componentWillUnmount() {
     window.removeEventListener("resize", this.resizeFunction);
   }
   render() {
     const { classes, ...rest } = this.props;
+
+    return (
+      <Query
+        query={USER}
+        variables={{ token: getToken() }}
+        fetchPolicy="network-only"
+      >
+      {({ loading, error, data }) => {
+        if (loading) return "Loading...";
+        if (error) return `Error! ${error.message}`; //redirect on error
+        const user = data.user;
+        var updatedRoutes = this.updateRoutes(dashboardRoutes, user);
+
     return (
       <div className={classes.wrapper}>
         <Sidebar
-          routes={dashboardRoutes}
+          routes={updatedRoutes}
           logoText={"Anorak"}
           logo={process.env.REACT_APP_STATIC_FILES+"images/logo-a.png"}
           image={null}
@@ -80,7 +110,7 @@ class App extends React.Component {
         />
         <div className={classes.mainPanel} ref="mainPanel">
           <Header
-            routes={dashboardRoutes}
+            routes={updatedRoutes}
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
           />
@@ -95,6 +125,9 @@ class App extends React.Component {
         </div>
       </div>
     );
+    }}
+  </Query>
+  );
   }
 }
 

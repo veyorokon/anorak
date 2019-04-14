@@ -3,11 +3,9 @@ import PropTypes from "prop-types";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import InputLabel from "@material-ui/core/InputLabel";
 // core components
 import GridItem from "components/material-dashboard/Grid/GridItem.jsx";
 import GridContainer from "components/material-dashboard/Grid/GridContainer.jsx";
-import CustomInput from "components/material-dashboard/CustomInput/CustomInput.jsx";
 import Button from "components/material-dashboard/CustomButtons/Button.jsx";
 import Card from "components/material-dashboard/Card/Card.jsx";
 import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
@@ -16,11 +14,6 @@ import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
 
 import { withRouter } from "react-router-dom";
 
-import AddBox from "@material-ui/icons/AddBox";
-import Group from "@material-ui/icons/Group";
-import Person from "@material-ui/icons/Person";
-
-import NavPills from "components/material-dashboard/NavPills/NavPills.jsx";
 import NavPillsModded from "components/material-dashboard/NavPills/NavPillsModded.jsx";
 
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";

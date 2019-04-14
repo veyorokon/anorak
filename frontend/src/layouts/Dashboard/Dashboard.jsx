@@ -11,7 +11,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Header from "components/material-dashboard/Header/Header.jsx";
 import Footer from "components/material-dashboard/Footer/Footer.jsx";
 import Sidebar from "components/material-dashboard/Sidebar/Sidebar.jsx";
-import { getAccountStatus, getAccountColor, getToken } from "lib/utility.jsx";
+import { getToken } from "lib/utility.jsx";
 
 import dashboardRoutes from "routes/dashboard.jsx";
 
