@@ -32,7 +32,11 @@ const cardStyle = {
   cardSubscription: {
     background: "#191C21",
     width: "100%",
-    height: "300px"
+    height: "300px",
+    position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between"
   },
   cardMain: {
     marginTop: "30px",

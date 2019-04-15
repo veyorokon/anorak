@@ -3,7 +3,8 @@ const cardBodyStyle = {
     padding: "0.9375rem 20px",
     flex: "1 1 auto",
     WebkitBoxFlex: "1",
-    position: "relative"
+    position: "relative",
+    minWidth: "200px"
   },
   cardBodyPlain: {
     paddingLeft: "5px",
@@ -13,11 +14,13 @@ const cardBodyStyle = {
     marginTop: "15px"
   },
   cardBodySubscription: {
-    padding: "0.9375rem 20px",
-    position: "relative",
-    justifyContent: "center",
-    alignItems: "center",
-    display: "flex"
+    top: "50%",
+    left: " 50%",
+    transform: "translate(-50%, -50%)",
+    position: "absolute",
+    display: "flex",
+    width: "100%",
+    height: "100%"
   },
   cardBodyAdd: {
     display: "flex",

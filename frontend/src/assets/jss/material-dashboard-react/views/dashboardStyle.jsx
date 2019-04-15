@@ -90,11 +90,12 @@ const dashboardStyle = theme => ({
     alignItems: "baseline"
   },
   cardImage: {
-    width: "70%",
-    height: "100%",
-    margin: "inherit",
+    width: "60%",
+    height: "auto",
+    margin: "0 auto",
     padding: "initial",
-    display: "flex"
+    display: "block",
+    minWidth: "185px"
   },
   subscriptionHeader: {
     color: successColor,
