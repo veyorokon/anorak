@@ -11,6 +11,7 @@ import { successColor } from "assets/jss/material-dashboard-react.jsx";
 const cardHeaderStyle = {
   cardHeader: {
     padding: "0.75rem 1.25rem",
+    paddingBottom: "10px",
     marginBottom: "0",
     borderBottom: "none",
     background: "transparent",

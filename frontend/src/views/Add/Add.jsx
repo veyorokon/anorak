@@ -153,6 +153,7 @@ class _CreateContent extends React.Component {
       isShowingFirst = "initial";
     }
     const name = this.state.services[this.state.subscription].name
+      .toLowerCase()
       .split(" ")
       .join("_");
 

@@ -47,7 +47,15 @@ const dashboardStyle = theme => ({
     fontWeight: "bold",
     letterSpacing: "1px"
   },
-
+  cardCategorySpaced: {
+    color: "#000",
+    margin: "0",
+    fontSize: "14px",
+    marginTop: "0",
+    paddingTop: "10px",
+    marginBottom: "0",
+    letterSpacing: "1px"
+  },
   cardTitle: {
     color: "#3C4858",
     marginTop: "0px",

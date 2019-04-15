@@ -122,6 +122,13 @@ export function getAccountStatus(value) {
   if (value === "A_90") return "Active";
   if (value === "A_91") return "Connected";
 }
+
+export function isAccountStatusActive(value) {
+  var status = value.split("A_")[1];
+  if (status >= 80) return true;
+  return false;
+}
+
 export function getAccountColor(value) {
   if (value === "A_0") return "danger";
   if (value === "A_10") return "muted";
