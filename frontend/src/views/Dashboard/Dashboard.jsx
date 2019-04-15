@@ -68,7 +68,7 @@ class _DashboardContent extends React.Component {
         if (frequency == "A_20") {
           monthlySubscriptionCount++;
           averageMonthlyCost += subscription.subscriptionPlan.amount;
-          yearlyTotal = subscription.subscriptionPlan.amount * 12;
+          yearlyTotal += subscription.subscriptionPlan.amount * 12;
         } else if (frequency == "A_30") {
           yearlySubscriptionCount++;
           averageMonthlyCost += subscription.subscriptionPlan.amount / 12;
