@@ -333,6 +333,7 @@ class _UserProfileContent extends React.Component {
                               !this.state.updatedProfile
                             }
                             type="submit"
+                            style={{ marginLeft: "20px" }}
                           >
                             {text}
                           </Button>

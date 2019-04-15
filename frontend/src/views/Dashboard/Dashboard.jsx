@@ -107,7 +107,7 @@ class _DashboardContent extends React.Component {
                   style={{
                     textAlign: "left",
                     listStyle: "none",
-                    paddingLeft: "5vw"
+                    padding: "1vh 2vw"
                   }}
                 >
                   <li className={classes.cardCategorySpaced}>
@@ -165,8 +165,10 @@ class _DashboardContent extends React.Component {
               </CardBody>
               <CardFooter chart>
                 <div className={classes.stats}>
-                  By connecting an account, you agree to our &nbsp;
-                  <a className={classes.textLink}>Terms of Service</a>.
+                  <span style={{ marginLeft: "3vw" }}>
+                    By connecting an account, you agree to our &nbsp;
+                    <a className={classes.textLink}>Terms of Service</a>.
+                  </span>
                 </div>
               </CardFooter>
             </Card>

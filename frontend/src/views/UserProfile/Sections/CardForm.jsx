@@ -112,7 +112,6 @@ class _CardFormContent extends React.Component {
                     <CardElement {...createOptions()} />
                   </GridItem>
                   <Button
-                    style={{ marginLeft: "-12px", marginBottom: "-12px" }}
                     color={color}
                     disabled={isSubmitting || this.state.submitted}
                     type="submit"

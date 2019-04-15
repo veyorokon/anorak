@@ -54,7 +54,9 @@ const dashboardStyle = theme => ({
     marginTop: "0",
     paddingTop: "10px",
     marginBottom: "0",
-    letterSpacing: "1px"
+    letterSpacing: "1px",
+    display: "flex",
+    justifyContent: "space-between"
   },
   cardTitle: {
     color: "#3C4858",
