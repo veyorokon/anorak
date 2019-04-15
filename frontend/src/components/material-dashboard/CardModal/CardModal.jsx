@@ -54,7 +54,7 @@ class CardModal extends React.Component {
       <ApolloConsumer>
         {client => (
           <div>
-            <Button onClick={() => this.handleOpen(client)} color="transparent">
+            <Button onClick={() => this.handleOpen(client)} color={color}>
               <span style={{ color: "white", fontSize: "14px" }}>Account</span>
             </Button>
             <Dialog

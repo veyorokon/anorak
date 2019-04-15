@@ -22,7 +22,7 @@ class _SubscriptionAccountType(DjangoObjectType):
 class _SubscriptionLoginType(DjangoObjectType):
     class Meta:
         model = SubscriptionAccount
-        only_fields = ["username", "password"]
+        only_fields = ["username", "password", "id"]
         registry = Registry()
 
 class _SubscriptionMemberType(DjangoObjectType):

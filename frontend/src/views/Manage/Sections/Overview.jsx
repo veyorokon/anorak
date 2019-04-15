@@ -1,30 +1,12 @@
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import InputLabel from "@material-ui/core/InputLabel";
 // core components
 import GridItem from "components/material-dashboard/Grid/GridItem.jsx";
 import GridContainer from "components/material-dashboard/Grid/GridContainer.jsx";
 import CustomInput from "components/material-dashboard/CustomInput/CustomInput.jsx";
-import Button from "components/material-dashboard/CustomButtons/Button.jsx";
-import Card from "components/material-dashboard/Card/Card.jsx";
-import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
-import CardAvatar from "components/material-dashboard/Card/CardAvatar.jsx";
-import CardBody from "components/material-dashboard/Card/CardBody.jsx";
-import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
-import {
-  formatEpochTime,
-  getRenewalDate,
-  getAccountStatus,
-  calcAnorakFee,
-  isAccountConfirmationNeeded
-} from "lib/utility.jsx";
 
-import { Mutation } from "react-apollo";
-import { CONFIRM_SUBSCRIPTION_CONNECT } from "lib/mutations";
-import { USER } from "lib/queries";
-import { getToken } from "lib/utility.jsx";
-import Form from "components/material-dashboard/Form/Form";
+import { formatEpochTime, getAccountStatus } from "lib/utility.jsx";
 
 const styles = {
   cardCategoryWhite: {

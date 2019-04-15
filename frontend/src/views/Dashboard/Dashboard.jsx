@@ -112,25 +112,25 @@ class _DashboardContent extends React.Component {
                 >
                   <li className={classes.cardCategorySpaced}>
                     Monthly Subscriptions:{" "}
-                    <span style={{ fontWeight: "bold" }}>
+                    <span style={{ fontWeight: "500" }}>
                       {this.state.monthlySubscriptionCount}
                     </span>
                   </li>
                   <li className={classes.cardCategorySpaced}>
                     Yearly Subscriptions:{" "}
-                    <span style={{ fontWeight: "bold" }}>
+                    <span style={{ fontWeight: "500" }}>
                       {this.state.yearlySubscriptionCount}
                     </span>
                   </li>
                   <li className={classes.cardCategorySpaced}>
                     Monthly average:{" "}
-                    <span style={{ fontWeight: "bold" }}>
+                    <span style={{ fontWeight: "500" }}>
                       ${this.state.averageMonthlyCost}
                     </span>
                   </li>
                   <li className={classes.cardCategorySpaced}>
                     Yearly total:{" "}
-                    <span style={{ fontWeight: "bold" }}>
+                    <span style={{ fontWeight: "500" }}>
                       ${this.state.yearlyTotal}
                     </span>
                   </li>
@@ -217,6 +217,7 @@ class _DashboardContent extends React.Component {
                       <CardModal
                         subscriptionAccountKey={subscriptionCard.id}
                         title={"Account Login"}
+                        color={"transparent"}
                       />
                       <Button
                         onClick={() => {

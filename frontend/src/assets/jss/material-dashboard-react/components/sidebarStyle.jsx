@@ -156,7 +156,9 @@ const sidebarStyle = theme => ({
     margin: "0",
     lineHeight: "30px",
     fontSize: "14px",
-    color: "#FFFFFF"
+    color: "#FFFFFF",
+    fontWeight: "400",
+    letterSpacing: "0.5px"
   },
   whiteFont: {
     color: "#FFFFFF"

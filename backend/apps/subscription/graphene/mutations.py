@@ -7,7 +7,7 @@ Graphene (GraphQL) mutations for the subscription models
 ##########################################################################
 
 import graphene
-from . types import _SubscriptionAccountType, _SubscriptionMemberType
+from . types import _SubscriptionAccountType, _SubscriptionMemberType, _SubscriptionLoginType
 from core.models import *
 from subscription.models import SubscriptionService, SubscriptionAccount, SubscriptionPlan, CreateAccount, SubscriptionMember, ConnectAccount
 from subscription.enum import *
@@ -125,6 +125,36 @@ class DeleteAccountMutation(graphene.Mutation):
         )
 
 
+##########################################################################
+## Mutation to update account login
+##########################################################################
+
+class UpdateAccountMutation(graphene.Mutation):
+
+    class Arguments:
+        token = graphene.String(required=True)
+        subscriptionAccountKey = graphene.Int(required=True)
+        password = graphene.String(required=True)
+
+    subscriptionAccount =  graphene.Field(_SubscriptionLoginType)
+
+    @login_required
+    def mutate(self, info, token, subscriptionAccountKey, password, **kwargs):
+        user = info.context.user
+        try:
+            account = SubscriptionAccount.objects.get(
+                pk = subscriptionAccountKey,
+                responsible_user = user
+            )
+        except:
+            raise ValueError(
+                "The subscription account could not be found."
+            )
+        account.password = password
+        account.save()
+        return UpdateAccountMutation(
+            subscriptionAccount = account
+        )
 
 class Mutations(graphene.ObjectType):
     subscription_add_account = SubscriptionAddMutation.Field(
@@ -137,4 +167,8 @@ class Mutations(graphene.ObjectType):
 
     subscription_delete_account = DeleteAccountMutation.Field(
         description = "Delete a subscription account."
+    )
+
+    subscription_update_account = UpdateAccountMutation.Field(
+        description = "Update subscription account."
     )

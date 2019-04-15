@@ -45,6 +45,7 @@ const USER = gql`
           id
           firstName
           lastName
+          email
         }
       }
     }
@@ -100,6 +101,7 @@ const ACCOUNT_CREDENTIALS = gql`
       token: $token
       subscriptionAccountKey: $subscriptionAccountKey
     ) {
+      id
       username
       password
     }

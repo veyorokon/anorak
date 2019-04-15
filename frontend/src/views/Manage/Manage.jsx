@@ -9,13 +9,19 @@ import { USER } from "lib/queries";
 import {
   REQUEST_ACCOUNT_CANCELLATION,
   CONFIRM_SUBSCRIPTION_CONNECT,
-  DELETE_SUBSCRIPTION_ACCOUNT
+  DELETE_SUBSCRIPTION_ACCOUNT,
+  UPDATE_SUBSCRIPTION_ACCOUNT
 } from "lib/mutations";
 
-import { getToken, isAccountConfirmationNeeded } from "lib/utility.jsx";
+import { ACCOUNT_CREDENTIALS } from "lib/queries";
 
+import { getToken, isAccountConfirmationNeeded } from "lib/utility.jsx";
+import GridItem from "components/material-dashboard/Grid/GridItem.jsx";
+import GridContainer from "components/material-dashboard/Grid/GridContainer.jsx";
+import CustomInput from "components/material-dashboard/CustomInput/CustomInput.jsx";
 import Overview from "./Sections/Overview";
 import Connect from "./Sections/Connect";
+import Account from "./Sections/Account";
 
 import Button from "components/material-dashboard/CustomButtons/Button.jsx";
 
@@ -35,7 +41,10 @@ class _ManageContent extends React.Component {
       cancelClicked: false,
       deleteClicked: false,
       submitted: false,
-      confirmClicked: false
+      confirmClicked: false,
+      updateCredentialsClicked: false,
+      updateSubmitted: false,
+      updatedPassword: ""
     };
   }
 
@@ -48,6 +57,18 @@ class _ManageContent extends React.Component {
   getValue = key => {
     const account = this.props.account;
     return account[key];
+  };
+
+  onUpdate = async updateAccount => {
+    var subscriptionAccountKey = this.props.account.id;
+    const variables = {
+      token: getToken(),
+      subscriptionAccountKey: subscriptionAccountKey,
+      password: this.state.updatedPassword
+    };
+    await updateAccount({ variables }).then(data => console.log(data));
+    this.setState({ updateSubmitted: true });
+    this.props.triggerSnackbar("You updated your account.");
   };
 
   onSubmit = async requestCancellation => {
@@ -81,6 +102,12 @@ class _ManageContent extends React.Component {
     await confirmSubscriptionConnect({ variables });
     this.setState({ submitted: true });
     this.props.triggerSnackbar("You've succesfully connected your account.");
+  };
+
+  passwordUpdate = e => {
+    this.setState({
+      updatedPassword: e.target.value
+    });
   };
 
   renderConfirm = () => {
@@ -156,7 +183,7 @@ class _ManageContent extends React.Component {
   };
 
   renderManage = () => {
-    const { classes, user } = this.props;
+    const { classes, user, account } = this.props;
     var cancelMutation = <span />;
     if (user.isMember) {
       if (!this.state.cancelClicked) {
@@ -217,81 +244,191 @@ class _ManageContent extends React.Component {
               tabIcon: AddBox,
               marginedTab: true,
               tabContent: (
-                <Card>
-                  <div className={classes.container}>
-                    <div id="navigation-pills">
-                      <div className={classes.title}>
-                        <h3>
-                          <small>Overview</small>
-                        </h3>
-                      </div>
-                      <CardBody>
-                        <Overview getValue={this.getValue} />
-                      </CardBody>
-                      <CardFooter
-                        style={{ margin: "auto", marginBottom: "15px" }}
-                      >
-                        {cancelMutation}
-                        {!this.state.deleteClicked ? (
-                          <Button
-                            onClick={() =>
-                              this.setState({ deleteClicked: true })
-                            }
-                          >
-                            <span>Delete</span>
-                          </Button>
-                        ) : (
-                          <Mutation
-                            mutation={DELETE_SUBSCRIPTION_ACCOUNT}
-                            refetchQueries={[
-                              {
-                                query: USER,
-                                variables: {
-                                  token: getToken()
-                                }
+                <React.Fragment>
+                  <Card>
+                    <div className={classes.container}>
+                      <div id="navigation-pills">
+                        <div className={classes.title}>
+                          <h3>
+                            <small>
+                              {account.subscriptionService.name} Plan
+                            </small>
+                          </h3>
+                        </div>
+                        <CardBody>
+                          <Overview getValue={this.getValue} />
+                        </CardBody>
+                        <CardFooter
+                          style={{ margin: "auto", marginBottom: "15px" }}
+                        >
+                          {cancelMutation}
+                          {!this.state.deleteClicked ? (
+                            <Button
+                              onClick={() =>
+                                this.setState({ deleteClicked: true })
                               }
-                            ]}
-                          >
-                            {requestDelete => (
-                              <Form
-                                onSubmit={async (values, { setSubmitting }) => {
-                                  await this.onDelete(requestDelete);
-                                  setTimeout(() => {
-                                    setSubmitting(false);
-                                  }, 600);
-                                }}
-                              >
-                                {({ isSubmitting }) => {
-                                  var text = "Request Sent";
-                                  if (!this.state.submitted)
-                                    text = "Delete subscription?";
-                                  return (
-                                    <Button
-                                      disabled={
-                                        isSubmitting || this.state.submitted
-                                      }
-                                      color="danger"
-                                      type="submit"
-                                    >
-                                      <span>{text}</span>
-                                    </Button>
-                                  );
-                                }}
-                              </Form>
-                            )}
-                          </Mutation>
-                        )}
-                      </CardFooter>
+                            >
+                              <span>Delete</span>
+                            </Button>
+                          ) : (
+                            <Mutation
+                              mutation={DELETE_SUBSCRIPTION_ACCOUNT}
+                              refetchQueries={[
+                                {
+                                  query: USER,
+                                  variables: {
+                                    token: getToken()
+                                  }
+                                }
+                              ]}
+                            >
+                              {requestDelete => (
+                                <Form
+                                  onSubmit={async (
+                                    values,
+                                    { setSubmitting }
+                                  ) => {
+                                    await this.onDelete(requestDelete);
+                                    setTimeout(() => {
+                                      setSubmitting(false);
+                                    }, 600);
+                                  }}
+                                >
+                                  {({ isSubmitting }) => {
+                                    var text = "Request Sent";
+                                    if (!this.state.submitted)
+                                      text = "Delete subscription?";
+                                    return (
+                                      <Button
+                                        disabled={
+                                          isSubmitting || this.state.submitted
+                                        }
+                                        color="danger"
+                                        type="submit"
+                                      >
+                                        <span>{text}</span>
+                                      </Button>
+                                    );
+                                  }}
+                                </Form>
+                              )}
+                            </Mutation>
+                          )}
+                        </CardFooter>
+                      </div>
                     </div>
-                  </div>
-                </Card>
+                  </Card>
+
+                  {user.email == account.responsibleUser.email && (
+                    <Card>
+                      <div className={classes.container}>
+                        <div id="navigation-pills">
+                          <div className={classes.title}>
+                            <h3>
+                              <small>
+                                {account.subscriptionService.name} Account
+                              </small>
+                            </h3>
+                          </div>
+                          <CardBody>
+                            <Account user={user} account={account} />
+                            <GridContainer>
+                              <GridItem xs={12} sm={12} md={6}>
+                                <CustomInput
+                                  password
+                                  labelText="Update Password"
+                                  id="password"
+                                  type={"password"}
+                                  formControlProps={{
+                                    fullWidth: true
+                                  }}
+                                  inputProps={{
+                                    value: this.state.updatedPassword,
+                                    autocomplete: "off"
+                                  }}
+                                  onChange={this.passwordUpdate}
+                                />
+                              </GridItem>
+                            </GridContainer>
+                          </CardBody>
+                          <CardFooter
+                            style={{ margin: "auto", marginBottom: "15px" }}
+                          >
+                            {!this.state.updateCredentialsClicked ? (
+                              <span>
+                                <Button
+                                  onClick={() =>
+                                    this.setState({
+                                      updateCredentialsClicked: true
+                                    })
+                                  }
+                                >
+                                  <span>Update</span>
+                                </Button>
+                              </span>
+                            ) : (
+                              <Mutation
+                                mutation={UPDATE_SUBSCRIPTION_ACCOUNT}
+                                refetchQueries={[
+                                  {
+                                    query: ACCOUNT_CREDENTIALS,
+                                    variables: {
+                                      token: getToken(),
+                                      subscriptionAccountKey: account.id
+                                    }
+                                  }
+                                ]}
+                              >
+                                {updateAccount => (
+                                  <Form
+                                    onSubmit={async (
+                                      values,
+                                      { setSubmitting }
+                                    ) => {
+                                      await this.onUpdate(updateAccount);
+                                      setTimeout(() => {
+                                        setSubmitting(false);
+                                      }, 600);
+                                    }}
+                                  >
+                                    {({ isSubmitting }) => {
+                                      var text = "Success";
+                                      var color = "danger";
+
+                                      if (!this.state.updateSubmitted) {
+                                        text = "Update login?";
+                                      } else if (this.state.updateSubmitted) {
+                                        color = "success";
+                                      }
+                                      return (
+                                        <Button
+                                          disabled={
+                                            isSubmitting ||
+                                            this.state.updateSubmitted
+                                          }
+                                          color={color}
+                                          type="submit"
+                                        >
+                                          <span>{text}</span>
+                                        </Button>
+                                      );
+                                    }}
+                                  </Form>
+                                )}
+                              </Mutation>
+                            )}
+                          </CardFooter>
+                        </div>
+                      </div>
+                    </Card>
+                  )}
+                </React.Fragment>
               )
             },
             {
               tabButton: "Sharing",
               tabIcon: AddBox,
               marginedTab: true,
-              disabled: true,
               tabContent: (
                 <Card>
                   <div className={classes.container}>
@@ -355,13 +492,7 @@ function Manage(props) {
         const dashboardAccounts = data.user.dashboardAccounts;
         const account = getAccount(path, dashboardAccounts);
         return (
-          <div>
-            <ManageContent
-              user={data.user}
-              account={account}
-              classes={classes}
-            />
-          </div>
+          <ManageContent user={data.user} account={account} classes={classes} />
         );
       }}
     </Query>
