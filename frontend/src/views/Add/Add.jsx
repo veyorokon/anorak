@@ -20,7 +20,7 @@ import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/p
 import { Mutation } from "react-apollo";
 import { Query } from "react-apollo";
 
-import { getToken } from "lib/utility.jsx";
+import { getToken, getPlanFrequency } from "lib/utility.jsx";
 import Confirmation from "./Sections/Confirmation.jsx";
 import Login from "./Sections/Login.jsx";
 import Plan from "./Sections/Plan.jsx";
@@ -51,9 +51,20 @@ class _CreateContent extends React.Component {
     mixpanel.track("Create Subscription Page Load");
   }
 
+  getIndexFromName = name => {
+    const services = this.state.services;
+    for (var i = 0; i < services.length; i++) {
+      if (services[i].name == name) {
+        return i;
+      }
+    }
+  };
+
   setSubscription = val => {
+    const index = this.getIndexFromName(val);
+
     this.setState({
-      subscription: val,
+      subscription: index,
       planSelected: 0
     });
   };
@@ -141,6 +152,15 @@ class _CreateContent extends React.Component {
     if (activeStep == 0) {
       isShowingFirst = "initial";
     }
+    const name = this.state.services[this.state.subscription].name
+      .split(" ")
+      .join("_");
+
+    const plan = this.state.services[this.state.subscription].pricingPlans[
+      this.state.planSelected
+    ];
+    const billingFrequency = getPlanFrequency(plan.billingFrequency);
+
     return (
       <Mutation
         mutation={ADD_SUBSCRIPTION_ACCOUNT}
@@ -166,20 +186,37 @@ class _CreateContent extends React.Component {
                       {
                         tabContent: (
                           <span style={{ display: isShowingFirst }}>
-                            <CardHeader color="success">
-                              <h4 className={classes.cardTitleWhite}>
-                                Add A Subscription Account
-                              </h4>
-                              <p className={classes.cardCategoryWhite}>
-                                Add a subscription to your dashboard
-                              </p>
-                            </CardHeader>
-
                             <Subscription
                               classes={classes}
                               services={this.state.services}
                               handleSetSubscription={this.setSubscription}
                             />
+
+                            <CardBody
+                              style={{
+                                width: "60%",
+                                height: "auto",
+                                margin: "0 auto",
+                                backgroundColor: "black",
+                                textAlign: "center",
+                                borderRadius: "4px",
+                                marginTop: "1.5rem",
+                                boxShadow:
+                                  "0 12px 20px -10px rgba(0, 0, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 0, 0, 0.2)"
+                              }}
+                            >
+                              <img
+                                src={
+                                  process.env.REACT_APP_STATIC_FILES +
+                                  "logos/" +
+                                  name +
+                                  "/svg/" +
+                                  name +
+                                  ".svg"
+                                }
+                                style={{ height: "100%", width: "50%" }}
+                              />
+                            </CardBody>
 
                             <Plan
                               classes={classes}
@@ -208,6 +245,7 @@ class _CreateContent extends React.Component {
                                 service={this.getServiceName()}
                                 size={this.getServiceSize()}
                                 price={this.getPrice()}
+                                duration={billingFrequency}
                                 password={this.getPassword()}
                                 email={this.props.user.email}
                               />
@@ -235,7 +273,7 @@ class _CreateContent extends React.Component {
                     </Button>
                   </span>
                 ) : (
-                  <Button onClick={this.updateShowing} color="success">
+                  <Button onClick={this.updateShowing} color="primary">
                     Next
                   </Button>
                 )}

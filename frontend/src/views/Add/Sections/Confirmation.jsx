@@ -27,7 +27,7 @@ const styles = {
 };
 
 function Confirmation(props) {
-  const { service, price, password, email } = props;
+  const { service, price, password, email, duration } = props;
   return (
     <div>
       <GridContainer>
@@ -103,7 +103,7 @@ function Confirmation(props) {
                   }}
                   inputProps={{
                     disabled: true,
-                    value: "Monthly"
+                    value: duration
                   }}
                 />
               </GridItem>

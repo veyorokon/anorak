@@ -3,6 +3,7 @@ import React from "react";
 import Group from "@material-ui/icons/Group";
 import Person from "@material-ui/icons/Person";
 import NavPillsModded from "components/material-dashboard/NavPills/NavPillsModded.jsx";
+import { getPlanFrequency } from "lib/utility.jsx";
 
 // core components
 
@@ -21,10 +22,32 @@ function Plan(props) {
         marginedTab: true,
         tabContent: (
           <span>
-            <p>
-              Individual monthly plan for ${plan.amount}. Allows streaming for
-              only 1 session.
-            </p>
+            <ul>
+              <li>
+                <p>
+                  Plan size:{" "}
+                  <span style={{ fontWeight: "bold" }}>Individual</span>
+                </p>
+              </li>
+
+              <li>
+                <p>
+                  Plan cycle:{" "}
+                  <span style={{ fontWeight: "bold" }}>
+                    {getPlanFrequency(plan.billingFrequency).toLowerCase()}
+                  </span>
+                </p>
+              </li>
+
+              <li>
+                <p>
+                  Plan price:{" "}
+                  <span style={{ fontWeight: "bold" }}>
+                    ${plan.amount.toFixed(2)}
+                  </span>
+                </p>
+              </li>
+            </ul>
           </span>
         )
       };
@@ -35,10 +58,34 @@ function Plan(props) {
       marginedTab: true,
       tabContent: (
         <span>
-          <p>
-            Group monthly plan for ${plan.amount}. Allows streaming for{" "}
-            {plan.maximumSize} simultaneous sessions.
-          </p>
+          <ul>
+            <li>
+              <p>
+                Plan size:{" "}
+                <span style={{ fontWeight: "bold" }}>
+                  Group of {plan.maximumSize}
+                </span>
+              </p>
+            </li>
+
+            <li>
+              <p>
+                Plan cycle:{" "}
+                <span style={{ fontWeight: "bold" }}>
+                  {getPlanFrequency(plan.billingFrequency).toLowerCase()}
+                </span>
+              </p>
+            </li>
+
+            <li>
+              <p>
+                Plan price:{" "}
+                <span style={{ fontWeight: "bold" }}>
+                  ${plan.amount.toFixed(2)}
+                </span>
+              </p>
+            </li>
+          </ul>
         </span>
       )
     };
@@ -55,7 +102,7 @@ function Plan(props) {
         <NavPillsModded
           active={planSelected}
           setValCallBack={props.handleSetPlan}
-          color="success"
+          color="primary"
           tabs={tabs}
         />
       </div>

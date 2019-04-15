@@ -135,6 +135,13 @@ export function getAccountColor(value) {
   if (value === "A_91") return "success";
 }
 
+export function getPlanFrequency(value) {
+  if (value === "A_0") return "Daily";
+  if (value === "A_10") return "Weekly";
+  if (value === "A_20") return "Monthly";
+  if (value === "A_30") return "Yearly";
+}
+
 export function calcAnorakFee(value) {
   var fee = (value * 0.03 + 0.5).toFixed(2);
   if (fee <= 5.0) return fee;

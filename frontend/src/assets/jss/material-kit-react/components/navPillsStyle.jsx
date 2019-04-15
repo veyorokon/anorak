@@ -3,6 +3,7 @@ import {
   primaryColor,
   infoColor,
   successColor,
+  secondaryColor,
   warningColor,
   dangerColor
 } from "assets/jss/material-kit-react.jsx";
@@ -89,6 +90,14 @@ const navPillsStyle = theme => ({
       backgroundColor: primaryColor,
       boxShadow:
         "0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(156, 39, 176, 0.4)"
+    }
+  },
+  secondary: {
+    "&,&:hover": {
+      color: "#FFFFFF",
+      backgroundColor: secondaryColor,
+      boxShadow:
+        "0 12px 20px -10px rgba(0, 0, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 0, 0, 0.2)"
     }
   },
   info: {

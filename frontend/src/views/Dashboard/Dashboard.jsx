@@ -53,8 +53,10 @@ class _DashboardContent extends React.Component {
               <CardBody>
                 <h4 className={classes.cardTitle}>Welcome, {user.firstName}</h4>
                 <p className={classes.cardCategory}>
-                  Manage all your subscriptions in one simple interface. Cancel
-                  and subscribe at the click of a button.
+                  You have 12 subscriptions.
+                </p>
+                <p className={classes.cardCategory}>
+                  You have 12 subscriptions.
                 </p>
               </CardBody>
               <CardFooter chart>
@@ -102,7 +104,8 @@ class _DashboardContent extends React.Component {
             var color = getAccountColor(subscriptionCard.statusAccount);
             var amount = "Pending";
             if (subscriptionCard.subscriptionPlan != null) {
-              amount = "$" + subscriptionCard.subscriptionPlan.amount;
+              amount =
+                "$" + subscriptionCard.subscriptionPlan.amount.toFixed(2);
             }
             var name = subscriptionCard.subscriptionService.name.toLowerCase();
             name = name.split(" ").join("_");
@@ -115,11 +118,9 @@ class _DashboardContent extends React.Component {
                       color={color}
                     />
                     <span className={classes.cardInLine}>
-                      <h5>
-                        <Typography color={color}>
-                          {getAccountStatus(subscriptionCard.statusAccount)}
-                        </Typography>
-                      </h5>
+                      <Typography variant="h5" color={color}>
+                        {getAccountStatus(subscriptionCard.statusAccount)}
+                      </Typography>
 
                       <h5 className={classes.cardCategoryWhite}>{amount}</h5>
                     </span>

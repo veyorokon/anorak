@@ -3,9 +3,11 @@ import React from "react";
 // core components
 import NavPills from "components/material-dashboard/NavPills/NavPills.jsx";
 import AddBox from "@material-ui/icons/AddBox";
+import IntegrationAutosuggest from "./SuggestSearch";
 
 function Subscription(props) {
   const { classes, services } = props;
+  var searchList = [];
   var tabs = services.map(service => ({
     tabButton: service.name,
     tabIcon: AddBox,
@@ -17,6 +19,10 @@ function Subscription(props) {
     )
   }));
 
+  for (var i = 0; i < services.length; i++) {
+    searchList.push({ label: services[i].name });
+  }
+
   return (
     <div className={classes.container}>
       <div id="navigation-pills">
@@ -25,10 +31,9 @@ function Subscription(props) {
             <small>Step 1: Choose Subscription Service:</small>
           </h3>
         </div>
-        <NavPills
+        <IntegrationAutosuggest
           setValCallBack={props.handleSetSubscription}
-          color="success"
-          tabs={tabs}
+          searchList={searchList}
         />
       </div>
     </div>

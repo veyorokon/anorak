@@ -14,6 +14,7 @@ const SUBSCRIPTION_SERVICES = gql`
         amount
         isActive
         maximumSize
+        billingFrequency
       }
     }
   }
@@ -34,6 +35,7 @@ const USER = gql`
         subscriptionPlan {
           id
           amount
+          billingFrequency
         }
         subscriptionService {
           id

@@ -42,7 +42,9 @@ const typographyStyle = {
     color: infoColor
   },
   successText: {
-    color: successColor
+    color: successColor,
+    fontWeight: "bold",
+    letterSpacing: "1px"
   },
   warningText: {
     color: warningColor
