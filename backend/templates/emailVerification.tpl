@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block subject %}
-Your iAnorak Subscription Order
+Verify Your iAnorak Account
 {% endblock %}
 
 
@@ -10,7 +10,7 @@ Your iAnorak Subscription Order
 <html>
 <head>
     <meta charset="utf-8">
-    <title>A simple, clean, and responsive HTML invoice template</title>
+    <title>Email Verification</title>
 
     <style>
     .invoice-box {

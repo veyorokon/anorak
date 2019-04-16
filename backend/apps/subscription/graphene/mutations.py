@@ -48,6 +48,11 @@ class SubscriptionAddMutation(graphene.Mutation):
             password = password
         )
 
+        member = SubscriptionMember.objects.create(
+            user = user,
+            subscription_account = account
+        )
+
         return SubscriptionAddMutation(
             subscriptionAccount = account
         )

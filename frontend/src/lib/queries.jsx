@@ -33,6 +33,15 @@ const USER = gql`
         id
         dateCreated
         statusAccount
+        subscribers {
+          id
+          user {
+            id
+            firstName
+            lastName
+            email
+          }
+        }
         subscriptionPlan {
           id
           amount
@@ -47,6 +56,49 @@ const USER = gql`
           firstName
           lastName
           email
+        }
+      }
+
+      invitesSent {
+        sender {
+          id
+          firstName
+          lastName
+          email
+        }
+        id
+        recipientEmail
+        subscriptionAccount {
+          id
+          subscriptionService {
+            id
+            name
+          }
+          subscriptionPlan {
+            id
+            amount
+          }
+        }
+      }
+      invitesReceived {
+        sender {
+          id
+          firstName
+          lastName
+          email
+        }
+        id
+        recipientEmail
+        subscriptionAccount {
+          id
+          subscriptionService {
+            id
+            name
+          }
+          subscriptionPlan {
+            id
+            amount
+          }
         }
       }
     }

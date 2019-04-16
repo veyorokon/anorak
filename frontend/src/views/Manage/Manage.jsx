@@ -264,6 +264,7 @@ class _ManageContent extends React.Component {
                           {cancelMutation}
                           {!this.state.deleteClicked ? (
                             <Button
+                              color="primary"
                               onClick={() =>
                                 this.setState({ deleteClicked: true })
                               }
@@ -319,6 +320,22 @@ class _ManageContent extends React.Component {
                     </div>
                   </Card>
 
+                  <Card>
+                    <div className={classes.container}>
+                      <div id="sharing">
+                        <div className={classes.title}>
+                          <h3>
+                            <small>Members</small>
+                          </h3>
+                        </div>
+
+                        <CardFooter>
+                          <Sharing account={account} user={user} />
+                        </CardFooter>
+                      </div>
+                    </div>
+                  </Card>
+
                   {user.email == account.responsibleUser.email && (
                     <Card>
                       <div className={classes.container}>
@@ -357,6 +374,7 @@ class _ManageContent extends React.Component {
                             {!this.state.updateCredentialsClicked ? (
                               <span>
                                 <Button
+                                  color="primary"
                                   onClick={() =>
                                     this.setState({
                                       updateCredentialsClicked: true
@@ -423,28 +441,6 @@ class _ManageContent extends React.Component {
                     </Card>
                   )}
                 </React.Fragment>
-              )
-            },
-            {
-              tabButton: "Sharing",
-              tabIcon: AddBox,
-              marginedTab: true,
-              tabContent: (
-                <Card>
-                  <div className={classes.container}>
-                    <div id="sharing">
-                      <div className={classes.title}>
-                        <h3>
-                          <small>Your Neflix Account</small>
-                        </h3>
-                      </div>
-                      <CardBody>
-                        <Sharing user={user} />
-                      </CardBody>
-                      <CardFooter />
-                    </div>
-                  </div>
-                </Card>
               )
             }
           ]}
