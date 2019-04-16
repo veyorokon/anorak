@@ -44,7 +44,7 @@ class AccountContent extends React.Component {
               }}
             />
           </GridItem>
-          {password ? (
+          {credentials.password ? (
             <GridItem xs={12} sm={12} md={6}>
               <CustomInput
                 password

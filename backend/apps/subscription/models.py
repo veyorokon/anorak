@@ -245,3 +245,33 @@ class SubscriptionMember(models.Model):
 
     class Meta:
         db_table = "Subscriptions"
+
+
+##########################################################################
+## Subscription Invite
+##########################################################################
+
+class SubscriptionInvite(models.Model):
+    #The account the invite is for
+    subscription_account = models.ForeignKey(SubscriptionAccount, on_delete=models.CASCADE, related_name="invites")
+    #The user this invite is from
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="invites_sent")
+    #The user this invite is for
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="invites_received", null=True, blank=True)
+    #The user email this invite is for - use email bc usr might not exist
+    recipient_email = models.CharField(max_length=128, null=False)
+    #Date that the subscription was created
+    date_created = models.IntegerField(editable=False)
+    #Date that the subscription was modified
+    date_modified = models.IntegerField(editable=False)
+    #If this has been processed or not
+    processed = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        '''
+        On save, update timestamps
+        '''
+        if not self.id:
+            self.date_created = get_current_epoch()
+        self.date_modified = get_current_epoch()
+        return super(SubscriptionInvite, self).save(*args, **kwargs)

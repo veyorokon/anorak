@@ -7,9 +7,9 @@ Graphene (GraphQL) mutations for the subscription models
 ##########################################################################
 
 import graphene
-from . types import _SubscriptionAccountType, _SubscriptionMemberType, _SubscriptionLoginType
+from . types import _SubscriptionAccountType, _SubscriptionMemberType, _SubscriptionLoginType, _SubscriptionInviteType
 from core.models import *
-from subscription.models import SubscriptionService, SubscriptionAccount, SubscriptionPlan, CreateAccount, SubscriptionMember, ConnectAccount
+from subscription.models import SubscriptionService, SubscriptionAccount, SubscriptionPlan, CreateAccount, SubscriptionMember, ConnectAccount, SubscriptionInvite
 from subscription.enum import *
 from graphql_jwt.decorators import login_required
 
@@ -156,6 +156,53 @@ class UpdateAccountMutation(graphene.Mutation):
             subscriptionAccount = account
         )
 
+
+##########################################################################
+## Mutation to create subscription invite
+##########################################################################
+
+class CreateInviteMutation(graphene.Mutation):
+
+    class Arguments:
+        token = graphene.String(required=True)
+        subscriptionAccountKey = graphene.Int(required=True)
+        recipientEmail = graphene.String(required=True)
+
+    subscriptionInvite =  graphene.Field(_SubscriptionInviteType)
+
+    @login_required
+    def mutate(self, info, token, subscriptionAccountKey, recipientEmail, **kwargs):
+        user = info.context.user
+        if recipientEmail == user.email:
+            raise ValueError(
+                "You can't invite yourself."
+            )
+        try:
+            account = SubscriptionAccount.objects.get(
+                pk = subscriptionAccountKey,
+                responsible_user = user
+            )
+        except:
+            raise ValueError(
+                "The subscription account could not be found."
+            )
+
+        try:
+            recipient = User.objects.get(email=recipientEmail)
+        except:
+            recipient = None
+
+        invite = SubscriptionInvite.objects.create(
+            sender = user,
+            recipient = recipient,
+            recipient_email = recipientEmail,
+            subscription_account = account
+        )
+
+        return CreateInviteMutation(
+            subscriptionInvite = invite
+        )
+
 class Mutations(graphene.ObjectType):
     subscription_add_account = SubscriptionAddMutation.Field(
         description = "Adds a new, unmanaged subscription account and no management request is generated."
@@ -171,4 +218,8 @@ class Mutations(graphene.ObjectType):
 
     subscription_update_account = UpdateAccountMutation.Field(
         description = "Update subscription account."
+    )
+
+    subscription_invite_account = CreateInviteMutation.Field(
+        description = "Invites a user by email address."
     )

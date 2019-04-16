@@ -1,8 +1,7 @@
 import React from "react";
 import withSnackbar from "components/material-dashboard/Form/withSnackbar";
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
-import { Mutation } from "react-apollo";
-import { Query } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { withRouter } from "react-router-dom";
 import { USER } from "lib/queries";
@@ -344,7 +343,7 @@ class _ManageContent extends React.Component {
                                   }}
                                   inputProps={{
                                     value: this.state.updatedPassword,
-                                    autocomplete: "off"
+                                    id: "password"
                                   }}
                                   onChange={this.passwordUpdate}
                                 />

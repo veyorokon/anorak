@@ -1,4 +1,20 @@
+
+"""
+Custom managers for the core models
+"""
+
+##########################################################################
+## Imports
+##########################################################################
+
 from django.contrib.auth.base_user import BaseUserManager
+from backend.utility import get_current_epoch
+from django.db import models
+
+
+##########################################################################
+## User Manager
+##########################################################################
 
 class UserManager(BaseUserManager):
     """Define a model manager for User model with no username field."""

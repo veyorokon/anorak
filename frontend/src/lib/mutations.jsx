@@ -220,6 +220,43 @@ const UPDATE_SUBSCRIPTION_ACCOUNT = gql`
   }
 `;
 
+const INVITE_SUBSCRIPTION_ACCOUNT = gql`
+  mutation SubscriptionInviteAccount(
+    $token: String!
+    $accountKey: Int!
+    $recipientEmail: String!
+  ) {
+    subscriptionInviteAccount(
+      token: $token
+      subscriptionAccountKey: $accountKey
+      recipientEmail: $recipientEmail
+    ) {
+      subscriptionInvite {
+        id
+        recipient {
+          id
+        }
+        recipientEmail
+        sender {
+          id
+        }
+      }
+    }
+  }
+`;
+
+const VERIFY_USER = gql`
+  mutation VerifyUser($token: String!, $code: String!) {
+    verifyUser(token: $token, code: $code) {
+      user {
+        id
+        isVerified
+        firstName
+      }
+    }
+  }
+`;
+
 export {
   ADD_SUBSCRIPTION_ACCOUNT,
   CONNECT_SUBSCRIPTION_ACCOUNT,
@@ -231,5 +268,7 @@ export {
   CREATE_USER,
   CONFIRM_SUBSCRIPTION_CONNECT,
   DELETE_SUBSCRIPTION_ACCOUNT,
-  UPDATE_SUBSCRIPTION_ACCOUNT
+  UPDATE_SUBSCRIPTION_ACCOUNT,
+  INVITE_SUBSCRIPTION_ACCOUNT,
+  VERIFY_USER
 };

@@ -84,6 +84,8 @@ INSTALLED_APPS = [
 
 TAX_JAR_KEY = environ_setting("TAX_JAR_KEY")
 
+FRONTEND_URL = environ_setting("FRONTEND_URL")
+
 ####            Cache settings
 #
 # CELERY_BROKER_URL = "redis://:"+ environ_setting("REDIS_PASSWORD")+ "@"+environ_setting("REDIS_HOST") + ":" + environ_setting("REDIS_PORT")

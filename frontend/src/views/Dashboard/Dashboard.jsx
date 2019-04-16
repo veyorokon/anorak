@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 // react plugin for creating charts
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
+import { withRouter } from "react-router-dom";
+
 import GridItem from "components/material-dashboard/Grid/GridItem.jsx";
 import GridContainer from "components/material-dashboard/Grid/GridContainer.jsx";
 import Card from "components/material-dashboard/Card/Card.jsx";
@@ -14,6 +16,7 @@ import AddIcon from "@material-ui/icons/Add";
 import Icon from "@material-ui/core/Icon";
 import CardIcon from "components/material-dashboard/Card/CardIcon.jsx";
 import Typography from "components/material-dashboard/Typography/Typography.jsx";
+import withSnackbar from "components/material-dashboard/Form/withSnackbar";
 
 import CardModal from "components/material-dashboard/CardModal/CardModal";
 import {
@@ -24,23 +27,37 @@ import {
   getPlanFrequency
 } from "lib/utility.jsx";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
-import { withRouter } from "react-router-dom";
-import { Query } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 import { USER } from "lib/queries";
+import { VERIFY_USER } from "lib/mutations";
 import { mixpanel } from "lib/utility.jsx";
 
 class _DashboardContent extends React.Component {
-  state = {
-    value: 0,
-    monthlySubscriptionCount: 0,
-    yearlySubscriptionCount: 0,
-    averageMonthlyCost: 0,
-    subscriptionTotal: 0,
-    yearlyTotal: 0,
-    activeSubscriptionCount: 0
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: 0,
+      monthlySubscriptionCount: 0,
+      yearlySubscriptionCount: 0,
+      averageMonthlyCost: 0,
+      subscriptionTotal: 0,
+      yearlyTotal: 0,
+      activeSubscriptionCount: 0
+    };
+
+    const alerVerified = localStorage.getItem("alertVerified");
+    if (alerVerified) {
+      this.props.triggerSnackbar("You've verified your account.");
+      localStorage.removeItem("alertVerified");
+    }
+  }
 
   componentDidMount() {
+    if (this.props.verifyUser && !this.props.user.isVerified) {
+      this.props.verifyUser();
+      localStorage.setItem("alertVerified", true);
+      this.props.history.push("/dashboard/home");
+    }
     this.processSubscriptions(this.props.subscriptionCards);
     mixpanel.track("Dashboard Page Load");
   }
@@ -250,32 +267,87 @@ _DashboardContent.propTypes = {
 };
 
 const DashboardContent = withStyles(dashboardStyle)(
-  withRouter(_DashboardContent)
+  withSnackbar(withRouter(_DashboardContent))
 );
 
-function Dashboard() {
-  return (
-    <Query
-      query={USER}
-      variables={{ token: getToken() }}
-      fetchPolicy="network-only"
-    >
-      {({ loading, error, data }) => {
-        if (loading) return "Loading...";
-        if (error) return `Error! ${error.message}`; //redirect on error
-        let subscriptionCards = [];
-        data.user.dashboardAccounts.forEach(elem => {
-          subscriptionCards.push(elem);
-        });
-        return (
-          <DashboardContent
-            user={data.user}
-            subscriptionCards={subscriptionCards}
-          />
-        );
-      }}
-    </Query>
-  );
+function getActivationCode(path) {
+  return path.substr(path.lastIndexOf("/") + 1);
 }
 
-export default Dashboard;
+class Dashboard extends React.Component {
+  onSubmit = async (verifyUser, code) => {
+    console.log(code);
+    const variables = {
+      token: getToken(),
+      code: code
+    };
+    await verifyUser({ variables });
+  };
+
+  render() {
+    const { classes } = this.props;
+    const path = this.props.location.pathname;
+    const code = getActivationCode(path);
+
+    if (code.length == 120) {
+      return (
+        <Mutation
+          mutation={VERIFY_USER}
+          variables={{ token: getToken(), code: code }}
+        >
+          {(verifyUser, { loading, error }) => {
+            if (loading) return <div>loading</div>;
+            if (error) return <p>An error occurred</p>;
+            return (
+              <Query
+                query={USER}
+                variables={{ token: getToken() }}
+                fetchPolicy="network-only"
+              >
+                {({ loading, error, data }) => {
+                  if (loading) return "Loading...";
+                  if (error) return `Error! ${error.message}`; //redirect on error
+                  let subscriptionCards = [];
+                  data.user.dashboardAccounts.forEach(elem => {
+                    subscriptionCards.push(elem);
+                  });
+                  return (
+                    <DashboardContent
+                      user={data.user}
+                      subscriptionCards={subscriptionCards}
+                      verifyUser={verifyUser}
+                    />
+                  );
+                }}
+              </Query>
+            );
+          }}
+        </Mutation>
+      );
+    }
+    return (
+      <Query
+        query={USER}
+        variables={{ token: getToken() }}
+        fetchPolicy="network-only"
+      >
+        {({ loading, error, data }) => {
+          if (loading) return "Loading...";
+          if (error) return `Error! ${error.message}`; //redirect on error
+          let subscriptionCards = [];
+          data.user.dashboardAccounts.forEach(elem => {
+            subscriptionCards.push(elem);
+          });
+          return (
+            <DashboardContent
+              user={data.user}
+              subscriptionCards={subscriptionCards}
+            />
+          );
+        }}
+      </Query>
+    );
+  }
+}
+
+export default withRouter(Dashboard);

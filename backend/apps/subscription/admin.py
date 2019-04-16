@@ -84,3 +84,22 @@ class SubscriptionMemberAdmin(admin.ModelAdmin):
         'date_modified',
         'date_canceled',
     )
+
+
+@admin.register(SubscriptionInvite)
+class SubscriptionInviteAdmin(admin.ModelAdmin):
+    """Define admin model for SubscriptionMember."""
+    list_display = (
+        'id',
+        'subscription_account',
+        'sender',
+        'recipient_email',
+        'processed'
+    )
+    readonly_fields = (
+        'id',
+        'sender',
+        'recipient',
+        'recipient_email',
+        'subscription_account'
+    )
