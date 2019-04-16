@@ -21,6 +21,7 @@ import CustomInput from "components/material-dashboard/CustomInput/CustomInput.j
 import Overview from "./Sections/Overview";
 import Connect from "./Sections/Connect";
 import Account from "./Sections/Account";
+import Sharing from "./Sections/Sharing";
 
 import Button from "components/material-dashboard/CustomButtons/Button.jsx";
 
@@ -236,7 +237,7 @@ class _ManageContent extends React.Component {
       <div>
         <NavPills
           active={this.state.activeStep}
-          color="success"
+          color="primary"
           tabs={[
             {
               tabButton: "Manage",
@@ -438,7 +439,7 @@ class _ManageContent extends React.Component {
                         </h3>
                       </div>
                       <CardBody>
-                        <Overview getValue={this.getValue} />
+                        <Sharing user={user} />
                       </CardBody>
                       <CardFooter />
                     </div>
