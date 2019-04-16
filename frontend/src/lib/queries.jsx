@@ -57,47 +57,12 @@ const USER = gql`
           lastName
           email
         }
-      }
-
-      invitesSent {
-        sender {
+        invites {
           id
-          firstName
-          lastName
-          email
-        }
-        id
-        recipientEmail
-        subscriptionAccount {
-          id
-          subscriptionService {
+          recipientEmail
+          sender {
             id
-            name
-          }
-          subscriptionPlan {
-            id
-            amount
-          }
-        }
-      }
-      invitesReceived {
-        sender {
-          id
-          firstName
-          lastName
-          email
-        }
-        id
-        recipientEmail
-        subscriptionAccount {
-          id
-          subscriptionService {
-            id
-            name
-          }
-          subscriptionPlan {
-            id
-            amount
+            email
           }
         }
       }

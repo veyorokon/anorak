@@ -196,7 +196,7 @@ class _CreateContent extends React.Component {
                             <CardBody
                               style={{
                                 width: "60%",
-                                height: "auto",
+                                height: "100px",
                                 margin: "0 auto",
                                 backgroundColor: "black",
                                 textAlign: "center",

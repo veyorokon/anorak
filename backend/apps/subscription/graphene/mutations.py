@@ -7,6 +7,7 @@ Graphene (GraphQL) mutations for the subscription models
 ##########################################################################
 
 import graphene
+from django.db.models import Q
 from . types import _SubscriptionAccountType, _SubscriptionMemberType, _SubscriptionLoginType, _SubscriptionInviteType
 from core.models import *
 from subscription.models import SubscriptionService, SubscriptionAccount, SubscriptionPlan, CreateAccount, SubscriptionMember, ConnectAccount, SubscriptionInvite
@@ -208,6 +209,35 @@ class CreateInviteMutation(graphene.Mutation):
             subscriptionInvite = invite
         )
 
+
+##########################################################################
+## Mutation to delete invite
+##########################################################################
+
+class DeleteInviteMutation(graphene.Mutation):
+
+    class Arguments:
+        token = graphene.String(required=True)
+        subscriptionInviteKey = graphene.Int(required=True)
+
+    success =  graphene.Boolean()
+
+    @login_required
+    def mutate(self, info, token, subscriptionInviteKey, **kwargs):
+        user = info.context.user
+        try:
+            invite = SubscriptionInvite.objects.filter(
+                Q(sender=user) | Q(recipient_email=user.email)
+            ).get(pk = subscriptionInviteKey)
+            invite.delete()
+        except:
+            return DeleteInviteMutation(
+                success = False
+            )
+        return DeleteInviteMutation(
+            success = True
+        )
+
 class Mutations(graphene.ObjectType):
     subscription_add_account = SubscriptionAddMutation.Field(
         description = "Adds a new, unmanaged subscription account and no management request is generated."
@@ -227,4 +257,8 @@ class Mutations(graphene.ObjectType):
 
     subscription_invite_account = CreateInviteMutation.Field(
         description = "Invites a user by email address."
+    )
+
+    subscription_invite_delete = DeleteInviteMutation.Field(
+        description = "Deletes an invite."
     )

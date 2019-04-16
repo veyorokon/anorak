@@ -7,6 +7,11 @@ import GridContainer from "components/material-dashboard/Grid/GridContainer.jsx"
 import CustomInput from "components/material-dashboard/CustomInput/CustomInput.jsx";
 import { Mutation } from "react-apollo";
 import { USER } from "lib/queries";
+import withSnackbar from "components/material-dashboard/Form/withSnackbar";
+
+import Chip from "@material-ui/core/Chip";
+import FaceIcon from "@material-ui/icons/Face";
+import Avatar from "@material-ui/core/Avatar";
 
 import { INVITE_SUBSCRIPTION_ACCOUNT } from "lib/mutations";
 import Form from "components/material-dashboard/Form/Form";
@@ -14,11 +19,10 @@ import Button from "components/material-dashboard/CustomButtons/Button.jsx";
 
 import { getToken } from "lib/utility.jsx";
 
-class SharingContent extends React.Component {
+class _SharingContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sharingClicked: false,
       submitted: false,
       inviteEmail: ""
     };
@@ -34,16 +38,30 @@ class SharingContent extends React.Component {
     var subscriptionAccountKey = this.props.account.id;
     const variables = {
       token: getToken(),
-      subscriptionAccountKey: subscriptionAccountKey
+      subscriptionAccountKey: subscriptionAccountKey,
+      recipientEmail: this.state.inviteEmail
     };
-    // await createInvite({ variables });
-    this.setState({ submitted: true });
-    // this.props.triggerSnackbar("Your cancellation request has been sent.");
+    await createInvite({ variables });
+    this.setState({ submitted: false, inviteEmail: "" });
+    this.props.triggerSnackbar("Invite successfully sent.");
+  };
+
+  handleDelete = data => () => {
+    if (data.label === "React") {
+      alert("Why would you want to delete React?! :)"); // eslint-disable-line no-alert
+      return;
+    }
+
+    this.setState(state => {
+      const chipData = [...state.chipData];
+      const chipToDelete = chipData.indexOf(data);
+      chipData.splice(chipToDelete, 1);
+      return { chipData };
+    });
   };
 
   render() {
     const { user, account } = this.props;
-
     return (
       <div>
         <GridContainer>
@@ -65,6 +83,28 @@ class SharingContent extends React.Component {
               </GridItem>
             );
           })}
+
+          {account.invites && (
+            <GridItem xs={12} sm={12} md={12}>
+              <h5>Invites</h5>
+              {account.invites.map(invitation => {
+                return (
+                  <Chip
+                    key={invitation.id}
+                    label={invitation.recipientEmail}
+                    color="primary"
+                    onDelete={this.handleDelete(invitation)}
+                    avatar={
+                      <Avatar>
+                        <FaceIcon />
+                      </Avatar>
+                    }
+                    variant="outlined"
+                  />
+                );
+              })}
+            </GridItem>
+          )}
 
           <GridItem xs={12} sm={12} md={12}>
             <CustomInput
@@ -128,6 +168,8 @@ class SharingContent extends React.Component {
     );
   }
 }
+
+const SharingContent = withSnackbar(_SharingContent);
 
 function Sharing(props) {
   const { user, account } = props;

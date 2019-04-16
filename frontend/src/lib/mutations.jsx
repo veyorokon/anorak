@@ -223,12 +223,12 @@ const UPDATE_SUBSCRIPTION_ACCOUNT = gql`
 const INVITE_SUBSCRIPTION_ACCOUNT = gql`
   mutation SubscriptionInviteAccount(
     $token: String!
-    $accountKey: Int!
+    $subscriptionAccountKey: Int!
     $recipientEmail: String!
   ) {
     subscriptionInviteAccount(
       token: $token
-      subscriptionAccountKey: $accountKey
+      subscriptionAccountKey: $subscriptionAccountKey
       recipientEmail: $recipientEmail
     ) {
       subscriptionInvite {
