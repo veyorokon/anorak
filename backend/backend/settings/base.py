@@ -41,7 +41,11 @@ ALLOWED_HOSTS = [
     'www.squadup.xyz',
     'www.ianorak.com',
     'ianorak.com',
-    'stripe.com'
+    'stripe.com',
+    'api.stripe.com',
+    'checkout.stripe.com',
+    'm.stripe.com',
+    'q.stripe.com'
 ]
 
 #Facebook
