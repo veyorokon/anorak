@@ -13,7 +13,7 @@ import Chip from "@material-ui/core/Chip";
 import FaceIcon from "@material-ui/icons/Face";
 import Avatar from "@material-ui/core/Avatar";
 
-import { INVITE_SUBSCRIPTION_ACCOUNT } from "lib/mutations";
+import { INVITE_SUBSCRIPTION_ACCOUNT, DELETE_INVITE } from "lib/mutations";
 import Form from "components/material-dashboard/Form/Form";
 import Button from "components/material-dashboard/CustomButtons/Button.jsx";
 
@@ -46,18 +46,14 @@ class _SharingContent extends React.Component {
     this.props.triggerSnackbar("Invite successfully sent.");
   };
 
-  handleDelete = data => () => {
-    if (data.label === "React") {
-      alert("Why would you want to delete React?! :)"); // eslint-disable-line no-alert
-      return;
-    }
-
-    this.setState(state => {
-      const chipData = [...state.chipData];
-      const chipToDelete = chipData.indexOf(data);
-      chipData.splice(chipToDelete, 1);
-      return { chipData };
-    });
+  handleDelete = async (invitation, deleteInvite) => {
+    var subscriptionInviteKey = invitation.id;
+    const variables = {
+      token: getToken(),
+      subscriptionInviteKey: subscriptionInviteKey
+    };
+    await deleteInvite({ variables });
+    this.props.triggerSnackbar("Invite deleted.");
   };
 
   render() {
@@ -70,7 +66,7 @@ class _SharingContent extends React.Component {
               <GridItem key={subscriptionMember.id} xs={12} sm={12} md={12}>
                 <CustomInput
                   labelText="Member"
-                  id="email"
+                  id={subscriptionMember.id}
                   formControlProps={{
                     fullWidth: true,
                     disabled: true,
@@ -89,18 +85,34 @@ class _SharingContent extends React.Component {
               <h5>Invites</h5>
               {account.invites.map(invitation => {
                 return (
-                  <Chip
+                  <Mutation
                     key={invitation.id}
-                    label={invitation.recipientEmail}
-                    color="primary"
-                    onDelete={this.handleDelete(invitation)}
-                    avatar={
-                      <Avatar>
-                        <FaceIcon />
-                      </Avatar>
-                    }
-                    variant="outlined"
-                  />
+                    mutation={DELETE_INVITE}
+                    refetchQueries={[
+                      {
+                        query: USER,
+                        variables: {
+                          token: getToken()
+                        }
+                      }
+                    ]}
+                  >
+                    {deleteInvite => (
+                      <Chip
+                        label={invitation.recipientEmail}
+                        color="primary"
+                        onDelete={() =>
+                          this.handleDelete(invitation, deleteInvite)
+                        }
+                        avatar={
+                          <Avatar>
+                            <FaceIcon />
+                          </Avatar>
+                        }
+                        variant="outlined"
+                      />
+                    )}
+                  </Mutation>
                 );
               })}
             </GridItem>
@@ -155,7 +167,7 @@ class _SharingContent extends React.Component {
                         color={color}
                         type="submit"
                       >
-                        <span>{text}</span>
+                        {text}
                       </Button>
                     );
                   }}
