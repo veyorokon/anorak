@@ -28,6 +28,7 @@ const USER = gql`
       firstName
       lastName
       isMember
+      isVerified
       dashboardAccounts {
         id
         dateCreated

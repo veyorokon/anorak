@@ -45,7 +45,7 @@ class _DashboardContent extends React.Component {
       activeSubscriptionCount: 0
     };
 
-    const alerVerified = localStorage.getItem("alertVerified");
+    var alerVerified = localStorage.getItem("alertVerified");
     if (alerVerified) {
       this.props.triggerSnackbar("You've verified your account.");
       localStorage.removeItem("alertVerified");
@@ -58,6 +58,7 @@ class _DashboardContent extends React.Component {
       localStorage.setItem("alertVerified", true);
       this.props.history.push("/dashboard/home");
     }
+
     this.processSubscriptions(this.props.subscriptionCards);
     mixpanel.track("Dashboard Page Load");
   }
