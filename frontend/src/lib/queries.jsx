@@ -59,6 +59,7 @@ const USER = gql`
         }
         invites {
           id
+          processed
           recipientEmail
           sender {
             id

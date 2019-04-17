@@ -13,6 +13,8 @@ import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
 import Button from "components/material-dashboard/CustomButtons/Button.jsx";
 import AddIcon from "@material-ui/icons/Add";
+import MailIcon from "@material-ui/icons/Mail";
+
 import Icon from "@material-ui/core/Icon";
 import CardIcon from "components/material-dashboard/Card/CardIcon.jsx";
 import Typography from "components/material-dashboard/Typography/Typography.jsx";
@@ -108,16 +110,26 @@ class _DashboardContent extends React.Component {
 
   render() {
     const { classes, subscriptionCards, user } = this.props;
+    let hasPendingInvite = user.invitesReceived;
+    if (hasPendingInvite) {
+      hasPendingInvite = user.invitesReceived.some(
+        invite => invite["isProcessed"] === false
+      );
+    } else {
+      hasPendingInvite = false;
+    }
     return (
       <React.Fragment>
         <GridContainer>
           <GridItem xs={12} sm={6} md={6} lg={6}>
             <Card main>
-              <CardHeader color="success" icon>
+              {/*
+                <CardHeader color="success" icon>
                 <CardIcon color="primary">
                   <Icon>assessment</Icon>
                 </CardIcon>
               </CardHeader>
+              */}
               <CardBody>
                 <h3 className={classes.cardTitle}>Welcome, {user.firstName}</h3>
 
@@ -154,6 +166,29 @@ class _DashboardContent extends React.Component {
                   </li>
                 </ul>
               </CardBody>
+              <CardFooter
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end"
+                }}
+              >
+                {hasPendingInvite ? (
+                  <Button
+                    color="transparent"
+                    round
+                    aria-label="Add"
+                    onClick={() => {}}
+                  >
+                    <span style={{ color: "red" }}>
+                      <MailIcon />
+                      You have an invitation
+                    </span>
+                  </Button>
+                ) : (
+                  <p>No new notifications</p>
+                )}
+              </CardFooter>
             </Card>
           </GridItem>
 

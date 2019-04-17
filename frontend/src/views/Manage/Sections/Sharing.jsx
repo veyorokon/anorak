@@ -84,36 +84,39 @@ class _SharingContent extends React.Component {
             <GridItem xs={12} sm={12} md={12}>
               <h5>Invites</h5>
               {account.invites.map(invitation => {
-                return (
-                  <Mutation
-                    key={invitation.id}
-                    mutation={DELETE_INVITE}
-                    refetchQueries={[
-                      {
-                        query: USER,
-                        variables: {
-                          token: getToken()
+                if (!invitation.processed) {
+                  return (
+                    <Mutation
+                      key={invitation.id}
+                      mutation={DELETE_INVITE}
+                      refetchQueries={[
+                        {
+                          query: USER,
+                          variables: {
+                            token: getToken()
+                          }
                         }
-                      }
-                    ]}
-                  >
-                    {deleteInvite => (
-                      <Chip
-                        label={invitation.recipientEmail}
-                        color="primary"
-                        onDelete={() =>
-                          this.handleDelete(invitation, deleteInvite)
-                        }
-                        avatar={
-                          <Avatar>
-                            <FaceIcon />
-                          </Avatar>
-                        }
-                        variant="outlined"
-                      />
-                    )}
-                  </Mutation>
-                );
+                      ]}
+                    >
+                      {deleteInvite => (
+                        <Chip
+                          style={{ margin: "3px" }}
+                          label={invitation.recipientEmail}
+                          color="primary"
+                          onDelete={() =>
+                            this.handleDelete(invitation, deleteInvite)
+                          }
+                          avatar={
+                            <Avatar>
+                              <FaceIcon />
+                            </Avatar>
+                          }
+                          variant="outlined"
+                        />
+                      )}
+                    </Mutation>
+                  );
+                }
               })}
             </GridItem>
           )}
@@ -184,9 +187,7 @@ class _SharingContent extends React.Component {
 const SharingContent = withSnackbar(_SharingContent);
 
 function Sharing(props) {
-  const { user, account } = props;
-
-  return <SharingContent account={account} user={user} />;
+  return <SharingContent {...props} />;
 }
 
 export default Sharing;
