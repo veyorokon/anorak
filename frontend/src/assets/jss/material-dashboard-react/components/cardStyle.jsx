@@ -1,3 +1,5 @@
+import { primaryColor } from "assets/jss/material-dashboard-react";
+
 const cardStyle = theme => ({
   card: {
     border: "0",
@@ -19,6 +21,12 @@ const cardStyle = theme => ({
     background: "transparent",
     boxShadow: "none"
   },
+  cardPrimary: {
+    background: primaryColor
+  },
+  cardBlack: {
+    background: "black"
+  },
   cardProfile: {
     marginTop: "30px",
     textAlign: "center"
@@ -31,6 +39,21 @@ const cardStyle = theme => ({
   },
   cardSubscription: {
     background: "#191C21",
+    width: "100%",
+    height: "300px",
+    position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    [theme.breakpoints.up("xs")]: {
+      height: "250px"
+    },
+    [theme.breakpoints.up("sm")]: {
+      height: "300px"
+    }
+  },
+  cardSubscriptionLight: {
+    background: "#fff",
     width: "100%",
     height: "300px",
     position: "relative",

@@ -1,6 +1,6 @@
 import graphene
 from graphene_django.types import DjangoObjectType
-from subscription.models import SubscriptionService, SubscriptionPlan, SubscriptionAccount, SubscriptionMember
+from subscription.models import SubscriptionService, SubscriptionPlan, SubscriptionAccount, SubscriptionMember, SubscriptionInvite
 from graphene_django.registry import Registry
 from subscription.enum import SubscriptionAccountStatus
 
@@ -28,4 +28,9 @@ class _SubscriptionLoginType(DjangoObjectType):
 class _SubscriptionMemberType(DjangoObjectType):
     class Meta:
         model = SubscriptionMember
+        exclude_fields = []
+
+class _SubscriptionInviteType(DjangoObjectType):
+    class Meta:
+        model = SubscriptionInvite
         exclude_fields = []

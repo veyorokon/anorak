@@ -1,8 +1,7 @@
 import React from "react";
 import withSnackbar from "components/material-dashboard/Form/withSnackbar";
 import pillsStyle from "assets/jss/material-kit-react/views/componentsSections/pillsStyle.jsx";
-import { Mutation } from "react-apollo";
-import { Query } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { withRouter } from "react-router-dom";
 import { USER } from "lib/queries";
@@ -22,6 +21,7 @@ import CustomInput from "components/material-dashboard/CustomInput/CustomInput.j
 import Overview from "./Sections/Overview";
 import Connect from "./Sections/Connect";
 import Account from "./Sections/Account";
+import Sharing from "./Sections/Sharing";
 
 import Button from "components/material-dashboard/CustomButtons/Button.jsx";
 
@@ -235,220 +235,192 @@ class _ManageContent extends React.Component {
     }
     return (
       <div>
-        <NavPills
-          active={this.state.activeStep}
-          color="success"
-          tabs={[
-            {
-              tabButton: "Manage",
-              tabIcon: AddBox,
-              marginedTab: true,
-              tabContent: (
-                <React.Fragment>
-                  <Card>
-                    <div className={classes.container}>
-                      <div id="navigation-pills">
-                        <div className={classes.title}>
-                          <h3>
-                            <small>
-                              {account.subscriptionService.name} Plan
-                            </small>
-                          </h3>
-                        </div>
-                        <CardBody>
-                          <Overview getValue={this.getValue} />
-                        </CardBody>
-                        <CardFooter
-                          style={{ margin: "auto", marginBottom: "15px" }}
-                        >
-                          {cancelMutation}
-                          {!this.state.deleteClicked ? (
-                            <Button
-                              onClick={() =>
-                                this.setState({ deleteClicked: true })
-                              }
-                            >
-                              <span>Delete</span>
-                            </Button>
-                          ) : (
-                            <Mutation
-                              mutation={DELETE_SUBSCRIPTION_ACCOUNT}
-                              refetchQueries={[
-                                {
-                                  query: USER,
-                                  variables: {
-                                    token: getToken()
-                                  }
-                                }
-                              ]}
-                            >
-                              {requestDelete => (
-                                <Form
-                                  onSubmit={async (
-                                    values,
-                                    { setSubmitting }
-                                  ) => {
-                                    await this.onDelete(requestDelete);
-                                    setTimeout(() => {
-                                      setSubmitting(false);
-                                    }, 600);
-                                  }}
-                                >
-                                  {({ isSubmitting }) => {
-                                    var text = "Request Sent";
-                                    if (!this.state.submitted)
-                                      text = "Delete subscription?";
-                                    return (
-                                      <Button
-                                        disabled={
-                                          isSubmitting || this.state.submitted
-                                        }
-                                        color="danger"
-                                        type="submit"
-                                      >
-                                        <span>{text}</span>
-                                      </Button>
-                                    );
-                                  }}
-                                </Form>
-                              )}
-                            </Mutation>
-                          )}
-                        </CardFooter>
-                      </div>
-                    </div>
-                  </Card>
+        <React.Fragment>
+          <h3>{account.subscriptionService.name}</h3>
+          <Card>
+            <div className={classes.container}>
+              <div id="sharing">
+                <div className={classes.title}>
+                  <h3>
+                    <small>Members</small>
+                  </h3>
+                </div>
 
+                <CardFooter>
+                  <Sharing account={account} user={user} />
+                </CardFooter>
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className={classes.container}>
+              <div id="navigation-pills">
+                <div className={classes.title}>
+                  <h3>
+                    <small>{account.subscriptionService.name} Account</small>
+                  </h3>
+                </div>
+                <CardBody>
+                  <Account user={user} account={account} />
                   {user.email == account.responsibleUser.email && (
-                    <Card>
-                      <div className={classes.container}>
-                        <div id="navigation-pills">
-                          <div className={classes.title}>
-                            <h3>
-                              <small>
-                                {account.subscriptionService.name} Account
-                              </small>
-                            </h3>
-                          </div>
-                          <CardBody>
-                            <Account user={user} account={account} />
-                            <GridContainer>
-                              <GridItem xs={12} sm={12} md={6}>
-                                <CustomInput
-                                  password
-                                  labelText="Update Password"
-                                  id="password"
-                                  type={"password"}
-                                  formControlProps={{
-                                    fullWidth: true
-                                  }}
-                                  inputProps={{
-                                    value: this.state.updatedPassword,
-                                    autocomplete: "off"
-                                  }}
-                                  onChange={this.passwordUpdate}
-                                />
-                              </GridItem>
-                            </GridContainer>
-                          </CardBody>
-                          <CardFooter
-                            style={{ margin: "auto", marginBottom: "15px" }}
-                          >
-                            {!this.state.updateCredentialsClicked ? (
-                              <span>
-                                <Button
-                                  onClick={() =>
-                                    this.setState({
-                                      updateCredentialsClicked: true
-                                    })
-                                  }
-                                >
-                                  <span>Update</span>
-                                </Button>
-                              </span>
-                            ) : (
-                              <Mutation
-                                mutation={UPDATE_SUBSCRIPTION_ACCOUNT}
-                                refetchQueries={[
-                                  {
-                                    query: ACCOUNT_CREDENTIALS,
-                                    variables: {
-                                      token: getToken(),
-                                      subscriptionAccountKey: account.id
-                                    }
-                                  }
-                                ]}
-                              >
-                                {updateAccount => (
-                                  <Form
-                                    onSubmit={async (
-                                      values,
-                                      { setSubmitting }
-                                    ) => {
-                                      await this.onUpdate(updateAccount);
-                                      setTimeout(() => {
-                                        setSubmitting(false);
-                                      }, 600);
-                                    }}
-                                  >
-                                    {({ isSubmitting }) => {
-                                      var text = "Success";
-                                      var color = "danger";
-
-                                      if (!this.state.updateSubmitted) {
-                                        text = "Update login?";
-                                      } else if (this.state.updateSubmitted) {
-                                        color = "success";
-                                      }
-                                      return (
-                                        <Button
-                                          disabled={
-                                            isSubmitting ||
-                                            this.state.updateSubmitted
-                                          }
-                                          color={color}
-                                          type="submit"
-                                        >
-                                          <span>{text}</span>
-                                        </Button>
-                                      );
-                                    }}
-                                  </Form>
-                                )}
-                              </Mutation>
-                            )}
-                          </CardFooter>
-                        </div>
-                      </div>
-                    </Card>
+                    <GridContainer>
+                      <GridItem xs={12} sm={12} md={6}>
+                        <CustomInput
+                          password
+                          labelText="Update Password"
+                          id="password"
+                          type={"password"}
+                          formControlProps={{
+                            fullWidth: true
+                          }}
+                          inputProps={{
+                            value: this.state.updatedPassword,
+                            id: "password"
+                          }}
+                          onChange={this.passwordUpdate}
+                        />
+                      </GridItem>
+                    </GridContainer>
                   )}
-                </React.Fragment>
-              )
-            },
-            {
-              tabButton: "Sharing",
-              tabIcon: AddBox,
-              marginedTab: true,
-              tabContent: (
-                <Card>
-                  <div className={classes.container}>
-                    <div id="sharing">
-                      <div className={classes.title}>
-                        <h3>
-                          <small>Your Neflix Account</small>
-                        </h3>
-                      </div>
-                      <CardBody>
-                        <Overview getValue={this.getValue} />
-                      </CardBody>
-                      <CardFooter />
-                    </div>
-                  </div>
-                </Card>
-              )
-            }
-          ]}
-        />
+                </CardBody>
+                {user.email == account.responsibleUser.email && (
+                  <CardFooter style={{ margin: "auto", marginBottom: "15px" }}>
+                    {!this.state.updateCredentialsClicked ? (
+                      <span>
+                        <Button
+                          color="primary"
+                          onClick={() =>
+                            this.setState({
+                              updateCredentialsClicked: true
+                            })
+                          }
+                        >
+                          <span>Update</span>
+                        </Button>
+                      </span>
+                    ) : (
+                      <Mutation
+                        mutation={UPDATE_SUBSCRIPTION_ACCOUNT}
+                        refetchQueries={[
+                          {
+                            query: ACCOUNT_CREDENTIALS,
+                            variables: {
+                              token: getToken(),
+                              subscriptionAccountKey: account.id
+                            }
+                          }
+                        ]}
+                      >
+                        {updateAccount => (
+                          <Form
+                            onSubmit={async (values, { setSubmitting }) => {
+                              await this.onUpdate(updateAccount);
+                              setTimeout(() => {
+                                setSubmitting(false);
+                              }, 600);
+                            }}
+                          >
+                            {({ isSubmitting }) => {
+                              var text = "Success";
+                              var color = "danger";
+
+                              if (!this.state.updateSubmitted) {
+                                text = "Update login?";
+                              } else if (this.state.updateSubmitted) {
+                                color = "success";
+                              }
+                              return (
+                                <Button
+                                  disabled={
+                                    isSubmitting || this.state.updateSubmitted
+                                  }
+                                  color={color}
+                                  type="submit"
+                                >
+                                  <span>{text}</span>
+                                </Button>
+                              );
+                            }}
+                          </Form>
+                        )}
+                      </Mutation>
+                    )}
+                  </CardFooter>
+                )}
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className={classes.container}>
+              <div id="navigation-pills">
+                <div className={classes.title}>
+                  <h3>
+                    <small>{account.subscriptionService.name} Plan</small>
+                  </h3>
+                </div>
+                <CardBody>
+                  <Overview getValue={this.getValue} />
+                </CardBody>
+
+                <CardFooter style={{ margin: "auto", marginBottom: "15px" }}>
+                  {cancelMutation}
+                  {!this.state.deleteClicked ? (
+                    <Button
+                      color="primary"
+                      onClick={() => this.setState({ deleteClicked: true })}
+                    >
+                      {user.email == account.responsibleUser.email ? (
+                        <span>Delete</span>
+                      ) : (
+                        <span>Leave</span>
+                      )}
+                    </Button>
+                  ) : (
+                    <Mutation
+                      mutation={DELETE_SUBSCRIPTION_ACCOUNT}
+                      refetchQueries={[
+                        {
+                          query: USER,
+                          variables: {
+                            token: getToken()
+                          }
+                        }
+                      ]}
+                    >
+                      {requestDelete => (
+                        <Form
+                          onSubmit={async (values, { setSubmitting }) => {
+                            await this.onDelete(requestDelete);
+                            setTimeout(() => {
+                              setSubmitting(false);
+                            }, 600);
+                          }}
+                        >
+                          {({ isSubmitting }) => {
+                            var text = "Request Sent";
+                            if (!this.state.submitted)
+                              text = "Delete subscription?";
+                            return (
+                              <Button
+                                disabled={isSubmitting || this.state.submitted}
+                                color="danger"
+                                type="submit"
+                              >
+                                <span>{text}</span>
+                              </Button>
+                            );
+                          }}
+                        </Form>
+                      )}
+                    </Mutation>
+                  )}
+                </CardFooter>
+              </div>
+            </div>
+          </Card>
+        </React.Fragment>
       </div>
     );
   };
@@ -490,7 +462,9 @@ function Manage(props) {
         if (error) return `Error! ${error.message}`;
         const path = props.location.pathname;
         const dashboardAccounts = data.user.dashboardAccounts;
-        const account = getAccount(path, dashboardAccounts);
+        const joinedAccounts = data.user.joinedAccounts;
+        const accounts = joinedAccounts.concat(dashboardAccounts);
+        const account = getAccount(path, accounts);
         return (
           <ManageContent user={data.user} account={account} classes={classes} />
         );

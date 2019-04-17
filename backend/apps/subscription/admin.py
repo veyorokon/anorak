@@ -52,16 +52,16 @@ class SubscriptionAccountAdmin(admin.ModelAdmin):
 
     readonly_fields = (
         'id',
-        'type',
-        'responsible_user',
-        'subscription_service',
-        'subscription_plan',
-        'status_account',
-        'date_created',
-        'date_modified',
-        'date_canceled',
-        'username',
-        'password',
+        # 'type',
+        # 'responsible_user',
+        # 'subscription_service',
+        # 'subscription_plan',
+        # 'status_account',
+        # 'date_created',
+        # 'date_modified',
+        # 'date_canceled',
+        # 'username',
+        # 'password',
     )
 
 @admin.register(SubscriptionMember)
@@ -77,10 +77,25 @@ class SubscriptionMemberAdmin(admin.ModelAdmin):
         'date_canceled',
     )
     readonly_fields = (
-        'user',
-        'subscription_account',
-        'status_membership',
+        # 'user',
+        # 'subscription_account',
+        # 'status_membership',
         'date_created',
         'date_modified',
         'date_canceled',
+    )
+
+
+@admin.register(SubscriptionInvite)
+class SubscriptionInviteAdmin(admin.ModelAdmin):
+    """Define admin model for SubscriptionMember."""
+    list_display = (
+        'id',
+        'subscription_account',
+        'sender',
+        'recipient_email',
+        'processed'
+    )
+    readonly_fields = (
+        'id',
     )

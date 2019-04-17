@@ -41,7 +41,11 @@ ALLOWED_HOSTS = [
     'www.squadup.xyz',
     'www.ianorak.com',
     'ianorak.com',
-    'stripe.com'
+    'stripe.com',
+    'api.stripe.com',
+    'checkout.stripe.com',
+    'm.stripe.com',
+    'q.stripe.com'
 ]
 
 #Facebook
@@ -83,6 +87,8 @@ INSTALLED_APPS = [
 ]
 
 TAX_JAR_KEY = environ_setting("TAX_JAR_KEY")
+
+FRONTEND_URL = environ_setting("FRONTEND_URL")
 
 ####            Cache settings
 #

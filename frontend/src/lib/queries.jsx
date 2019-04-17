@@ -28,10 +28,42 @@ const USER = gql`
       firstName
       lastName
       isMember
+      isVerified
+      invitesReceived {
+        id
+        processed
+        sender {
+          id
+          firstName
+          lastName
+          email
+        }
+        subscriptionAccount {
+          id
+          subscriptionService {
+            id
+            name
+          }
+          subscriptionPlan {
+            id
+            amount
+            billingFrequency
+          }
+        }
+      }
       dashboardAccounts {
         id
         dateCreated
         statusAccount
+        subscribers {
+          id
+          user {
+            id
+            firstName
+            lastName
+            email
+          }
+        }
         subscriptionPlan {
           id
           amount
@@ -46,6 +78,52 @@ const USER = gql`
           firstName
           lastName
           email
+        }
+        invites {
+          id
+          recipientEmail
+          sender {
+            id
+            email
+          }
+        }
+      }
+
+      joinedAccounts {
+        id
+        dateCreated
+        statusAccount
+        subscribers {
+          id
+          user {
+            id
+            firstName
+            lastName
+            email
+          }
+        }
+        subscriptionPlan {
+          id
+          amount
+          billingFrequency
+        }
+        subscriptionService {
+          id
+          name
+        }
+        responsibleUser {
+          id
+          firstName
+          lastName
+          email
+        }
+        invites {
+          id
+          recipientEmail
+          sender {
+            id
+            email
+          }
         }
       }
     }

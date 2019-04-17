@@ -11,6 +11,7 @@ import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
 import ExitToApp from "@material-ui/icons/ExitToApp";
 import ArrowForward from "@material-ui/icons/ArrowForward";
+import Mail from "@material-ui/icons/Mail";
 
 // core components/views
 import DashboardPage from "views/Dashboard/Dashboard.jsx";
@@ -18,6 +19,7 @@ import UserProfile from "views/UserProfile/UserProfile.jsx";
 import Logout from "views/Logout/Logout.jsx";
 import Connect from "views/Connect/Connect.jsx";
 import Add from "views/Add/Add.jsx";
+import Invites from "views/Invites/Invites.jsx";
 
 const dashboardRoutes = [
   {
@@ -34,7 +36,13 @@ const dashboardRoutes = [
   //       icon: Dashboard,
   //       component: Discover
   //   },
-
+  {
+    path: "/dashboard/invites",
+    sidebarName: "Invites",
+    navbarName: "Invites",
+    icon: Mail,
+    component: Invites
+  },
   {
     path: "/dashboard/add",
     sidebarName: "Add Account",

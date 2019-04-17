@@ -86,8 +86,8 @@ const sidebarStyle = theme => ({
   img: {
     width: "22px",
     top: "22px",
-    position: "absolute",
-    verticalAlign: "middle",
+    //position: "absolute",
+    verticalAlign: "sub",
     border: "0"
   },
   background: {

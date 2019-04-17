@@ -41,7 +41,10 @@ class Overview extends React.Component {
 
   render() {
     const { classes, getValue } = this.props;
-
+    var responsibleUser = getValue("responsibleUser").firstName;
+    if (responsibleUser == "") {
+      responsibleUser = getValue("responsibleUser").email;
+    }
     return (
       <div>
         <GridContainer>
@@ -96,7 +99,7 @@ class Overview extends React.Component {
               }}
               inputProps={{
                 disabled: true,
-                value: getValue("responsibleUser").firstName
+                value: responsibleUser
               }}
             />
           </GridItem>

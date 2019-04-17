@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
-
+import random
+import string
 from django.db import models
 from django.conf import settings
 from .managers import UserManager
@@ -29,11 +30,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     facebook_id = models.CharField(_('facebook id'), max_length=30, blank=True, null=True, editable=False)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, null=True, blank=True)
-    date_joined = models.IntegerField(_('date joined'),
-        editable=True, null=True, default=get_current_epoch())
+    date_joined = models.DateTimeField(_('date joined'), editable=True, null=True, auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('staff'), default=False)
     is_member = models.BooleanField(_('is paying member'), default=False)
+    is_verified = models.BooleanField(_('is verified'), default=False)
 
     objects = UserManager()
 
@@ -69,15 +70,34 @@ class User(AbstractBaseUser, PermissionsMixin):
         customer_api = customer.api_retrieve()
         return customer_api
 
+    # @property
+    # def dashboard_accounts(self):
+    #     accounts = self.subscription_accounts.all()
+    #     memberships = self.subscription_memberships.all()
+    #     membershipAccounts = []
+    #     for membership in memberships:
+    #         membershipAccounts.append(membership.subscription_account)
+    #     userAccounts = membershipAccounts + list(accounts)
+    #     return list(set(userAccounts))
+
     @property
     def dashboard_accounts(self):
         accounts = self.subscription_accounts.all()
+        ownedAccounts = []
+        for account in accounts:
+            if account.responsible_user == self:
+                ownedAccounts.append(account)
+        return list(set(ownedAccounts))
+
+    @property
+    def joined_accounts(self):
         memberships = self.subscription_memberships.all()
-        membershipAccounts = []
+        joinedAccounts = []
         for membership in memberships:
-            membershipAccounts.append(membership.subscription_account)
-        userAccounts = membershipAccounts + list(accounts)
-        return list(set(userAccounts))
+            accountUser = membership.subscription_account.responsible_user
+            if accountUser != self:
+                joinedAccounts.append(membership.subscription_account)
+        return list(set(joinedAccounts))
 
     def upcoming_invoice(self):
         invoice = stripe.Invoice.upcoming(
@@ -111,3 +131,32 @@ class User(AbstractBaseUser, PermissionsMixin):
             self.djstripe_customer.id,
             default_source = source.id
         )
+
+
+##########################################################################
+## Verification Email Codes
+##########################################################################
+
+class EmailVerification(models.Model):
+    #serice this pricing plan is attached to
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="verification_emails")
+    #The verification code
+    code = models.CharField(max_length=128, null=True, blank=True)
+    #Epoch date that the code was created
+    date_created = models.IntegerField(editable=False)
+    #Epoch date that the code expires
+    date_expires = models.IntegerField(editable=False)
+
+    def save(self, *args, **kwargs):
+        '''
+        On save, update timestamps
+        '''
+        if not self.id:
+            currentEpoch = get_current_epoch()
+            self.date_created = currentEpoch
+            self.date_expires = currentEpoch+ 2*86400
+            self.code = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase + string.digits) for _ in range(120))
+        return super(EmailVerification, self).save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['-date_expires']

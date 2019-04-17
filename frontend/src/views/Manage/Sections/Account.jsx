@@ -25,7 +25,7 @@ class AccountContent extends React.Component {
     var password = credentials.password;
     var passwordType = "password";
     if (password === "") {
-      password = "You haven't set a password yet";
+      password = "The password hasn't been set";
       passwordType = null;
     }
     return (
@@ -44,7 +44,7 @@ class AccountContent extends React.Component {
               }}
             />
           </GridItem>
-          {password ? (
+          {credentials.password ? (
             <GridItem xs={12} sm={12} md={6}>
               <CustomInput
                 password
