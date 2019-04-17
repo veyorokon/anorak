@@ -50,12 +50,33 @@ class CardModal extends React.Component {
   };
   render() {
     const { fullScreen, color } = this.props;
+    var textColor = "black";
+    var backgroundColor = color;
+    if (color == "transparentBlack") {
+      textColor = "black";
+      backgroundColor = "transparent";
+    } else if (color == "transparentWhite") {
+      textColor = "white";
+      backgroundColor = "transparent";
+    }
     return (
       <ApolloConsumer>
         {client => (
           <div>
-            <Button onClick={() => this.handleOpen(client)} color={color}>
-              <span style={{ color: "white", fontSize: "14px" }}>Account</span>
+            <Button
+              onClick={() => this.handleOpen(client)}
+              color={backgroundColor}
+            >
+              <span
+                style={{
+                  color: textColor,
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  letterSpacing: "1px"
+                }}
+              >
+                Account
+              </span>
             </Button>
             <Dialog
               fullScreen={fullScreen}
@@ -68,14 +89,20 @@ class CardModal extends React.Component {
               </DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  Username: {this.state.username}
+                  Username:{" "}
+                  <span style={{ fontWeight: "bold" }}>
+                    {this.state.username}
+                  </span>
                 </DialogContentText>
                 <DialogContentText>
-                  Password: {this.state.password}
+                  Password:{" "}
+                  <span style={{ fontWeight: "bold" }}>
+                    {this.state.password}
+                  </span>
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button onClick={this.handleClose} color={color}>
+                <Button onClick={this.handleClose} color={backgroundColor}>
                   close
                 </Button>
               </DialogActions>
@@ -95,7 +122,9 @@ CardModal.propTypes = {
     "success",
     "info",
     "rose",
-    "gray"
+    "gray",
+    "transparentWhite",
+    "transparentBlack"
   ]),
   title: PropTypes.string.isRequired
 };

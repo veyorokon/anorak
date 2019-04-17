@@ -88,6 +88,44 @@ const USER = gql`
           }
         }
       }
+
+      joinedAccounts {
+        id
+        dateCreated
+        statusAccount
+        subscribers {
+          id
+          user {
+            id
+            firstName
+            lastName
+            email
+          }
+        }
+        subscriptionPlan {
+          id
+          amount
+          billingFrequency
+        }
+        subscriptionService {
+          id
+          name
+        }
+        responsibleUser {
+          id
+          firstName
+          lastName
+          email
+        }
+        invites {
+          id
+          recipientEmail
+          sender {
+            id
+            email
+          }
+        }
+      }
     }
   }
 `;

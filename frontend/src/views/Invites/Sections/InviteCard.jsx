@@ -13,6 +13,9 @@ import CardHeader from "components/material-dashboard/Card/CardHeader.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import CardFooter from "components/material-dashboard/Card/CardFooter.jsx";
 
+import RejectButton from "./RejectInviteButton";
+import JoinButton from "./JoinInviteButton";
+
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 import { withRouter } from "react-router-dom";
 
@@ -69,12 +72,8 @@ class _InviteCardContent extends React.Component {
           </CardBody>
           <CardFooter>
             <span className={classes.cardInLineMargin}>
-              <Button onClick={() => {}} color="transparent">
-                <span className={classes.cardCategoryBlack}>Reject</span>
-              </Button>
-              <Button onClick={() => {}} color="transparent">
-                <span className={classes.cardCategoryBlack}>Join</span>
-              </Button>
+              <RejectButton {...this.props} invitation={invite} />
+              <JoinButton {...this.props} invitation={invite} />
             </span>
           </CardFooter>
         </Card>

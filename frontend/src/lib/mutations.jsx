@@ -271,6 +271,20 @@ const DELETE_INVITE = gql`
   }
 `;
 
+const JOIN_INVITE = gql`
+  mutation SubscriptionInviteAccept(
+    $token: String!
+    $subscriptionInviteKey: Int!
+  ) {
+    subscriptionInviteAccept(
+      token: $token
+      subscriptionInviteKey: $subscriptionInviteKey
+    ) {
+      success
+    }
+  }
+`;
+
 export {
   ADD_SUBSCRIPTION_ACCOUNT,
   CONNECT_SUBSCRIPTION_ACCOUNT,
@@ -285,5 +299,6 @@ export {
   UPDATE_SUBSCRIPTION_ACCOUNT,
   INVITE_SUBSCRIPTION_ACCOUNT,
   VERIFY_USER,
-  DELETE_INVITE
+  DELETE_INVITE,
+  JOIN_INVITE
 };

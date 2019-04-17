@@ -10,6 +10,11 @@ class _UserType(DjangoObjectType):
         source='dashboard_accounts'
     )
 
+    joinedAccounts = graphene.List(
+        _SubscriptionAccountType,
+        source='joined_accounts'
+    )
+
     class Meta:
         model = User
         exclude_fields = ['is_superuser', 'is_staff', 'password', 'facebook_id']

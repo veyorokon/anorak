@@ -109,7 +109,7 @@ class _DashboardContent extends React.Component {
   };
 
   render() {
-    const { classes, subscriptionCards, user } = this.props;
+    const { classes, user } = this.props;
     let hasPendingInvite = user.invitesReceived;
     if (hasPendingInvite) {
       hasPendingInvite = user.invitesReceived.some(
@@ -182,7 +182,13 @@ class _DashboardContent extends React.Component {
                       this.props.history.push("/dashboard/invites");
                     }}
                   >
-                    <span style={{ color: "red" }}>
+                    <span
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                        color: "red"
+                      }}
+                    >
                       <MailIcon />
                       You have an invitation
                     </span>
@@ -218,18 +224,10 @@ class _DashboardContent extends React.Component {
                   </Button>
                 </p>
               </CardBody>
-              <CardFooter chart>
-                <div className={classes.stats}>
-                  <span style={{ marginLeft: "3vw" }}>
-                    By connecting an account, you agree to our &nbsp;
-                    <a className={classes.textLink}>Terms of Service</a>.
-                  </span>
-                </div>
-              </CardFooter>
             </Card>
           </GridItem>
 
-          {subscriptionCards.map(subscriptionCard => {
+          {user.dashboardAccounts.map(subscriptionCard => {
             var color = getAccountColor(subscriptionCard.statusAccount);
             var amount = "Pending";
             if (subscriptionCard.subscriptionPlan != null) {
@@ -244,7 +242,7 @@ class _DashboardContent extends React.Component {
             return (
               <GridItem key={subscriptionCard.id} xs={12} sm={6} md={6} lg={6}>
                 <Card subscription>
-                  <CardHeader>
+                  <CardHeader style={{ margin: "0 .75rem" }}>
                     <span className={classes.cardInLine}>
                       <Typography variant="h5" color={color}>
                         {getAccountStatus(subscriptionCard.statusAccount)}
@@ -272,7 +270,7 @@ class _DashboardContent extends React.Component {
                       <CardModal
                         subscriptionAccountKey={subscriptionCard.id}
                         title={"Account Login"}
-                        color={"transparent"}
+                        color={"transparentWhite"}
                       />
                       <Button
                         onClick={() => {
@@ -283,6 +281,59 @@ class _DashboardContent extends React.Component {
                         color="transparent"
                       >
                         <span className={classes.cardCategoryWhite}>
+                          Manage
+                        </span>
+                      </Button>
+                    </span>
+                  </CardFooter>
+                </Card>
+              </GridItem>
+            );
+          })}
+
+          {user.joinedAccounts.map(subscriptionCard => {
+            var name = subscriptionCard.subscriptionService.name.toLowerCase();
+            name = name.split(" ").join("_");
+            return (
+              <GridItem key={subscriptionCard.id} xs={12} sm={6} md={6} lg={6}>
+                <Card subscriptionLight>
+                  <CardHeader style={{ margin: "0 .75rem" }}>
+                    <span className={classes.cardInLine}>
+                      <Typography variant="h5" color={"success"}>
+                        Member
+                      </Typography>
+                      <h5 className={classes.cardCategoryBlack}>Free</h5>
+                    </span>
+                  </CardHeader>
+                  <CardBody subscription>
+                    <img
+                      src={
+                        process.env.REACT_APP_STATIC_FILES +
+                        "logos/" +
+                        name +
+                        "/svg/" +
+                        name +
+                        "--dark.svg"
+                      }
+                      className={classes.cardImage}
+                    />
+                  </CardBody>
+                  <CardFooter>
+                    <span className={classes.cardInLine}>
+                      <CardModal
+                        subscriptionAccountKey={subscriptionCard.id}
+                        title={"Account Login"}
+                        color={"transparentBlack"}
+                      />
+                      <Button
+                        onClick={() => {
+                          this.props.history.push(
+                            "manage/" + subscriptionCard.id
+                          );
+                        }}
+                        color="transparent"
+                      >
+                        <span className={classes.cardCategoryBlack}>
                           Manage
                         </span>
                       </Button>
@@ -345,14 +396,10 @@ class Dashboard extends React.Component {
                 {({ loading, error, data }) => {
                   if (loading) return "Loading...";
                   if (error) return `Error! ${error.message}`; //redirect on error
-                  let subscriptionCards = [];
-                  data.user.dashboardAccounts.forEach(elem => {
-                    subscriptionCards.push(elem);
-                  });
+
                   return (
                     <DashboardContent
                       user={data.user}
-                      subscriptionCards={subscriptionCards}
                       verifyUser={verifyUser}
                     />
                   );

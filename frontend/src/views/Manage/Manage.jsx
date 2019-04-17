@@ -253,17 +253,17 @@ class _ManageContent extends React.Component {
             </div>
           </Card>
 
-          {user.email == account.responsibleUser.email && (
-            <Card>
-              <div className={classes.container}>
-                <div id="navigation-pills">
-                  <div className={classes.title}>
-                    <h3>
-                      <small>{account.subscriptionService.name} Account</small>
-                    </h3>
-                  </div>
-                  <CardBody>
-                    <Account user={user} account={account} />
+          <Card>
+            <div className={classes.container}>
+              <div id="navigation-pills">
+                <div className={classes.title}>
+                  <h3>
+                    <small>{account.subscriptionService.name} Account</small>
+                  </h3>
+                </div>
+                <CardBody>
+                  <Account user={user} account={account} />
+                  {user.email == account.responsibleUser.email && (
                     <GridContainer>
                       <GridItem xs={12} sm={12} md={6}>
                         <CustomInput
@@ -282,7 +282,9 @@ class _ManageContent extends React.Component {
                         />
                       </GridItem>
                     </GridContainer>
-                  </CardBody>
+                  )}
+                </CardBody>
+                {user.email == account.responsibleUser.email && (
                   <CardFooter style={{ margin: "auto", marginBottom: "15px" }}>
                     {!this.state.updateCredentialsClicked ? (
                       <span>
@@ -345,10 +347,10 @@ class _ManageContent extends React.Component {
                       </Mutation>
                     )}
                   </CardFooter>
-                </div>
+                )}
               </div>
-            </Card>
-          )}
+            </div>
+          </Card>
 
           <Card>
             <div className={classes.container}>
@@ -361,6 +363,7 @@ class _ManageContent extends React.Component {
                 <CardBody>
                   <Overview getValue={this.getValue} />
                 </CardBody>
+
                 <CardFooter style={{ margin: "auto", marginBottom: "15px" }}>
                   {cancelMutation}
                   {!this.state.deleteClicked ? (
@@ -368,7 +371,11 @@ class _ManageContent extends React.Component {
                       color="primary"
                       onClick={() => this.setState({ deleteClicked: true })}
                     >
-                      <span>Delete</span>
+                      {user.email == account.responsibleUser.email ? (
+                        <span>Delete</span>
+                      ) : (
+                        <span>Leave</span>
+                      )}
                     </Button>
                   ) : (
                     <Mutation
@@ -455,7 +462,9 @@ function Manage(props) {
         if (error) return `Error! ${error.message}`;
         const path = props.location.pathname;
         const dashboardAccounts = data.user.dashboardAccounts;
-        const account = getAccount(path, dashboardAccounts);
+        const joinedAccounts = data.user.joinedAccounts;
+        const accounts = joinedAccounts.concat(dashboardAccounts);
+        const account = getAccount(path, accounts);
         return (
           <ManageContent user={data.user} account={account} classes={classes} />
         );

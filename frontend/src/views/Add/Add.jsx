@@ -213,7 +213,7 @@ class _CreateContent extends React.Component {
                                   name +
                                   "/svg/" +
                                   name +
-                                  ".svg"
+                                  "--light.svg"
                                 }
                                 style={{ height: "100%", width: "50%" }}
                               />

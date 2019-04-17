@@ -17,6 +17,7 @@ import workStyle from "assets/jss/material-kit-react/views/landingPageSections/w
 import Card from "components/material-dashboard/Card/Card.jsx";
 import CardBody from "components/material-dashboard/Card/CardBody.jsx";
 import { withRouter } from "react-router-dom";
+import FacebookButton from "components/material-dashboard/FacebookButton/FacebookButton.jsx";
 
 class CallToAction extends React.Component {
   constructor(props) {
@@ -83,9 +84,13 @@ class CallToAction extends React.Component {
             <h2 className={classes.title}>
               The Best Free Subscription Manager
             </h2>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <FacebookButton text="Signup with Facebook" />
+            </div>
             <h5 className={classes.description}>
               It's free to create an Anorak account!
             </h5>
+
             <Mutation mutation={CREATE_USER}>
               {createUser => (
                 <Form

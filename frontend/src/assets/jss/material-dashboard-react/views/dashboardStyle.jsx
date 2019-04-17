@@ -54,7 +54,28 @@ const dashboardStyle = theme => ({
     paddingTop: "10px",
     marginBottom: "0",
     fontWeight: "bold",
-    letterSpacing: "1px"
+    letterSpacing: "1px",
+    fontSize: "14px"
+  },
+  cardCategoryRed: {
+    color: "red",
+    margin: "0",
+    marginTop: "0",
+    paddingTop: "10px",
+    marginBottom: "0",
+    fontWeight: "bold",
+    letterSpacing: "1px",
+    fontSize: "14px"
+  },
+  cardCategorySuccess: {
+    color: successColor,
+    margin: "0",
+    marginTop: "0",
+    paddingTop: "10px",
+    marginBottom: "0",
+    fontWeight: "bold",
+    letterSpacing: "1px",
+    fontSize: "14px"
   },
   cardCategorySpaced: {
     color: "#000",

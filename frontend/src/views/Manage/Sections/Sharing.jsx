@@ -58,14 +58,21 @@ class _SharingContent extends React.Component {
 
   render() {
     const { user, account } = this.props;
+    const isUserOwner = user.email == account.responsibleUser.email;
     return (
       <div>
         <GridContainer>
           {account.subscribers.map(subscriptionMember => {
+            var status = "Member";
+            if (
+              subscriptionMember.user.email == account.responsibleUser.email
+            ) {
+              status = "Owner";
+            }
             return (
               <GridItem key={subscriptionMember.id} xs={12} sm={12} md={12}>
                 <CustomInput
-                  labelText="Member"
+                  labelText={status}
                   id={subscriptionMember.id}
                   formControlProps={{
                     fullWidth: true,
@@ -80,7 +87,7 @@ class _SharingContent extends React.Component {
             );
           })}
 
-          {account.invites && (
+          {isUserOwner && (
             <GridItem xs={12} sm={12} md={12}>
               <h5>Invites</h5>
               {account.invites.map(invitation => {
@@ -121,63 +128,65 @@ class _SharingContent extends React.Component {
             </GridItem>
           )}
 
-          <GridItem xs={12} sm={12} md={12}>
-            <CustomInput
-              labelText="Email"
-              id="email"
-              formControlProps={{
-                fullWidth: true,
-                type: "email"
-              }}
-              inputProps={{
-                value: this.state.inviteEmail
-              }}
-              onChange={e => this.handleOnChange(e)}
-            />
+          {isUserOwner && (
+            <GridItem xs={12} sm={12} md={12}>
+              <CustomInput
+                labelText="Email"
+                id="email"
+                formControlProps={{
+                  fullWidth: true,
+                  type: "email"
+                }}
+                inputProps={{
+                  value: this.state.inviteEmail
+                }}
+                onChange={e => this.handleOnChange(e)}
+              />
 
-            <Mutation
-              mutation={INVITE_SUBSCRIPTION_ACCOUNT}
-              refetchQueries={[
-                {
-                  query: USER,
-                  variables: {
-                    token: getToken()
-                  }
-                }
-              ]}
-            >
-              {createInvite => (
-                <Form
-                  onSubmit={async (values, { setSubmitting }) => {
-                    await this.onSubmit(createInvite);
-                    setTimeout(() => {
-                      setSubmitting(false);
-                    }, 600);
-                  }}
-                >
-                  {({ isSubmitting }) => {
-                    var text = "Success";
-                    var color = "primary";
-
-                    if (!this.state.submitted) {
-                      text = "Send Invite";
-                    } else if (this.state.submitted) {
-                      color = "success";
+              <Mutation
+                mutation={INVITE_SUBSCRIPTION_ACCOUNT}
+                refetchQueries={[
+                  {
+                    query: USER,
+                    variables: {
+                      token: getToken()
                     }
-                    return (
-                      <Button
-                        disabled={isSubmitting || this.state.submitted}
-                        color={color}
-                        type="submit"
-                      >
-                        {text}
-                      </Button>
-                    );
-                  }}
-                </Form>
-              )}
-            </Mutation>
-          </GridItem>
+                  }
+                ]}
+              >
+                {createInvite => (
+                  <Form
+                    onSubmit={async (values, { setSubmitting }) => {
+                      await this.onSubmit(createInvite);
+                      setTimeout(() => {
+                        setSubmitting(false);
+                      }, 600);
+                    }}
+                  >
+                    {({ isSubmitting }) => {
+                      var text = "Success";
+                      var color = "primary";
+
+                      if (!this.state.submitted) {
+                        text = "Send Invite";
+                      } else if (this.state.submitted) {
+                        color = "success";
+                      }
+                      return (
+                        <Button
+                          disabled={isSubmitting || this.state.submitted}
+                          color={color}
+                          type="submit"
+                        >
+                          {text}
+                        </Button>
+                      );
+                    }}
+                  </Form>
+                )}
+              </Mutation>
+            </GridItem>
+          )}
         </GridContainer>
       </div>
     );

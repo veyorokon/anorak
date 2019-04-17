@@ -15,6 +15,7 @@ import { USER } from "lib/queries";
 import { getToken } from "lib/utility.jsx";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 import { withRouter } from "react-router-dom";
+import withSnackbar from "components/material-dashboard/Form/withSnackbar";
 
 class _InvitesContent extends React.Component {
   constructor(props) {
@@ -26,42 +27,48 @@ class _InvitesContent extends React.Component {
     return <div>no</div>;
   };
 
-  renderInvites(invite) {
+  renderInvite(invite) {
     return (
-      <React.Fragment>
-        <h3>You were invited!</h3>
-        <GridContainer>
-          <GridItem xs={12} sm={6} md={6} lg={6}>
-            <InviteCard />
-          </GridItem>
-        </GridContainer>
-      </React.Fragment>
+      <GridItem key={invite.id} xs={12} sm={6} md={6} lg={6}>
+        <InviteCard {...this.props} invite={invite} />
+      </GridItem>
     );
+  }
+
+  unprocessedInvites(invites) {
+    var unprocessedInvites = [];
+    for (var i = 0; i < invites.length; i++) {
+      if (invites[i].processed == false) {
+        unprocessedInvites.push(invites[i]);
+      }
+    }
+    return unprocessedInvites;
   }
 
   render() {
     const { classes, user } = this.props;
     const invites = user.invitesReceived;
     //Chck if user is verified. Check if they have invites
+    const unprocessedInvites = this.unprocessedInvites(invites);
 
     return (
       <React.Fragment>
-        <h3>You were invited!</h3>
-        <GridContainer>
-          {invites.map(invite => {
-            return (
-              <GridItem key={invite.id} xs={12} sm={6} md={6} lg={6}>
-                <InviteCard invite={invite} />
-              </GridItem>
-            );
-          })}
-        </GridContainer>
+        {unprocessedInvites.length > 0 ? (
+          <React.Fragment>
+            <h3>You were invited!</h3>
+            <GridContainer>
+              {invites.map(invite => this.renderInvite(invite))}
+            </GridContainer>
+          </React.Fragment>
+        ) : (
+          <h3>Nope. No invites at the moment...</h3>
+        )}
       </React.Fragment>
     );
   }
 }
 //<Sharing account={account} user={user} />
-const InvitesContent = _InvitesContent;
+const InvitesContent = withSnackbar(_InvitesContent);
 
 function Invites(props) {
   const { classes } = props;

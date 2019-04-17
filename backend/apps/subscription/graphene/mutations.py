@@ -279,8 +279,7 @@ class AcceptInviteMutation(graphene.Mutation):
                 subscription_account = invite.subscription_account,
                 status_membership = MembershipStatus.ACTIVE
             )
-            invite.processed = True
-            invite.save()
+            invite.delete()
         except:
             return AcceptInviteMutation(
                 success = False
