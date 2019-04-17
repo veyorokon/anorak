@@ -32,6 +32,8 @@ class SubscriptionService(models.Model):
     free_trial_days = models.IntegerField(default=0)
     #The url for home page
     url_home = models.CharField(max_length=128, null=True)
+    #The url for the signup
+    url_signup = models.CharField(max_length=128, null=True, blank=True)
     #The url for the terms of service.
     url_terms_of_service = models.CharField(max_length=128, null=True)
     #If the username is the email address
