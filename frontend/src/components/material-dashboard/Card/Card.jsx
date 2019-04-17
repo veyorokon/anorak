@@ -18,7 +18,10 @@ function Card({ ...props }) {
     plain,
     profile,
     chart,
+    black,
     subscription,
+    subscriptionLight,
+    primary,
     main,
     add,
     ...rest
@@ -26,7 +29,10 @@ function Card({ ...props }) {
   const cardClasses = classNames({
     [classes.card]: true,
     [classes.cardPlain]: plain,
+    [classes.cardPrimary]: primary,
     [classes.cardProfile]: profile,
+    [classes.cardBlack]: black,
+    [classes.cardSubscriptionLight]: subscriptionLight,
     [classes.cardChart]: chart,
     [classes.cardSubscription]: subscription,
     [classes.cardMain]: main,
@@ -45,8 +51,11 @@ Card.propTypes = {
   className: PropTypes.string,
   plain: PropTypes.bool,
   profile: PropTypes.bool,
+  primary: PropTypes.bool,
   chart: PropTypes.bool,
+  subscriptionLight: PropTypes.bool,
   subscription: PropTypes.bool,
+  black: PropTypes.bool,
   main: PropTypes.bool,
   add: PropTypes.bool
 };

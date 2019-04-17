@@ -113,7 +113,7 @@ class _DashboardContent extends React.Component {
     let hasPendingInvite = user.invitesReceived;
     if (hasPendingInvite) {
       hasPendingInvite = user.invitesReceived.some(
-        invite => invite["isProcessed"] === false
+        invite => invite["processed"] === false
       );
     } else {
       hasPendingInvite = false;
@@ -178,7 +178,9 @@ class _DashboardContent extends React.Component {
                     color="transparent"
                     round
                     aria-label="Add"
-                    onClick={() => {}}
+                    onClick={() => {
+                      this.props.history.push("/dashboard/invites");
+                    }}
                   >
                     <span style={{ color: "red" }}>
                       <MailIcon />
@@ -260,7 +262,7 @@ class _DashboardContent extends React.Component {
                         name +
                         "/svg/" +
                         name +
-                        ".svg"
+                        "--light.svg"
                       }
                       className={classes.cardImage}
                     />

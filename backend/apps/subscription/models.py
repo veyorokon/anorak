@@ -245,6 +245,10 @@ class SubscriptionMember(models.Model):
 
     class Meta:
         db_table = "Subscriptions"
+        unique_together = (
+            'user',
+            'subscription_account'
+        )
 
 
 ##########################################################################

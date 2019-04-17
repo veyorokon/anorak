@@ -8,7 +8,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import GridContainer from "components/material-dashboard/Grid/GridContainer.jsx";
 import GridItem from "components/material-dashboard/Grid/GridItem.jsx";
 
-import HeaderCard from "./Sections/HeaderCard";
+import InviteCard from "./Sections/InviteCard";
 
 import { Query } from "react-apollo";
 import { USER } from "lib/queries";
@@ -21,17 +21,42 @@ class _InvitesContent extends React.Component {
     super(props);
     this.state = {};
   }
+
+  renderNoInvites = () => {
+    return <div>no</div>;
+  };
+
+  renderInvites(invite) {
+    return (
+      <React.Fragment>
+        <h3>You were invited!</h3>
+        <GridContainer>
+          <GridItem xs={12} sm={6} md={6} lg={6}>
+            <InviteCard />
+          </GridItem>
+        </GridContainer>
+      </React.Fragment>
+    );
+  }
+
   render() {
     const { classes, user } = this.props;
+    const invites = user.invitesReceived;
+    //Chck if user is verified. Check if they have invites
+
     return (
-      <GridContainer>
-        <GridItem xs={12} sm={6} md={6} lg={6}>
-          <HeaderCard />
-        </GridItem>
-        <GridItem xs={12} sm={6} md={6} lg={6}>
-          <HeaderCard />
-        </GridItem>
-      </GridContainer>
+      <React.Fragment>
+        <h3>You were invited!</h3>
+        <GridContainer>
+          {invites.map(invite => {
+            return (
+              <GridItem key={invite.id} xs={12} sm={6} md={6} lg={6}>
+                <InviteCard invite={invite} />
+              </GridItem>
+            );
+          })}
+        </GridContainer>
+      </React.Fragment>
     );
   }
 }
@@ -46,7 +71,6 @@ function Invites(props) {
       {({ loading, error, data }) => {
         if (loading) return "Loading...";
         if (error) return `Error! ${error.message}`;
-        console.log(data.user);
         return <InvitesContent user={data.user} classes={classes} />;
       }}
     </Query>

@@ -102,7 +102,7 @@ class SubscriptionConnectMutation(graphene.Mutation):
         )
 
 ##########################################################################
-## Mutation to delete account
+## Mutation to delete membership and account
 ##########################################################################
 
 class DeleteAccountMutation(graphene.Mutation):
@@ -116,16 +116,31 @@ class DeleteAccountMutation(graphene.Mutation):
     @login_required
     def mutate(self, info, token, subscriptionAccountKey, **kwargs):
         user = info.context.user
-        try:
-            account = SubscriptionAccount.objects.get(
-                pk = subscriptionAccountKey,
-                responsible_user = user
-            )
-        except:
-            raise ValueError(
-                "The subscription account could not be found."
-            )
-        account.delete()
+        account = SubscriptionAccount.objects.get(
+            pk = subscriptionAccountKey,
+        )
+        if not user == account.responsible_user:
+            try:
+                member = SubscriptionMember.objects.get(
+                    subscription_account = account,
+                    user = user
+                )
+                member.delete()
+            except:
+                raise ValueError(
+                    "You don't have an active membership."
+                )
+        else:
+            try:
+                account = SubscriptionAccount.objects.get(
+                    pk = subscriptionAccountKey,
+                    responsible_user = user
+                )
+            except:
+                raise ValueError(
+                    "The subscription account could not be found."
+                )
+            account.delete()
         return DeleteAccountMutation(
             success = True
         )
@@ -238,6 +253,42 @@ class DeleteInviteMutation(graphene.Mutation):
             success = True
         )
 
+##########################################################################
+## Mutation to accept invite
+##########################################################################
+
+class AcceptInviteMutation(graphene.Mutation):
+
+    class Arguments:
+        token = graphene.String(required=True)
+        subscriptionInviteKey = graphene.Int(required=True)
+
+    success =  graphene.Boolean()
+
+    @login_required
+    def mutate(self, info, token, subscriptionInviteKey, **kwargs):
+        user = info.context.user
+        try:
+            invite = SubscriptionInvite.objects.get(
+                pk = subscriptionInviteKey,
+                recipient_email=user.email
+            )
+
+            member = SubscriptionMember.objects.create(
+                user = user,
+                subscription_account = invite.subscription_account,
+                status_membership = MembershipStatus.ACTIVE
+            )
+            invite.processed = True
+            invite.save()
+        except:
+            return AcceptInviteMutation(
+                success = False
+            )
+        return AcceptInviteMutation(
+            success = True
+        )
+
 class Mutations(graphene.ObjectType):
     subscription_add_account = SubscriptionAddMutation.Field(
         description = "Adds a new, unmanaged subscription account and no management request is generated."
@@ -261,4 +312,8 @@ class Mutations(graphene.ObjectType):
 
     subscription_invite_delete = DeleteInviteMutation.Field(
         description = "Deletes an invite."
+    )
+
+    subscription_invite_accept = AcceptInviteMutation.Field(
+        description = "Accept an invite."
     )

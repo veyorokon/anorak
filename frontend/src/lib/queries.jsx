@@ -29,6 +29,28 @@ const USER = gql`
       lastName
       isMember
       isVerified
+      invitesReceived {
+        id
+        processed
+        sender {
+          id
+          firstName
+          lastName
+          email
+        }
+        subscriptionAccount {
+          id
+          subscriptionService {
+            id
+            name
+          }
+          subscriptionPlan {
+            id
+            amount
+            billingFrequency
+          }
+        }
+      }
       dashboardAccounts {
         id
         dateCreated
@@ -59,7 +81,6 @@ const USER = gql`
         }
         invites {
           id
-          processed
           recipientEmail
           sender {
             id
