@@ -24,7 +24,7 @@ from . enum import *
 class SubscriptionService(models.Model):
     #The encrypted secret.
     name = models.CharField(max_length=128, null=False, unique=True)
-    #The encrypted secret.
+    #The description
     description = models.CharField(max_length=256, null=True, blank=True)
     #The frequency of billing
     type = enum.EnumField(ServiceType, default=ServiceType.STREAMING)
@@ -55,6 +55,8 @@ class SubscriptionService(models.Model):
 class SubscriptionPlan(models.Model):
     #serice this pricing plan is attached to
     service = models.ForeignKey(SubscriptionService, on_delete=models.CASCADE, related_name="pricing_plans")
+    #The description
+    description = models.CharField(max_length=128, null=False, blank=True)
     #The current amount of the plan
     amount = models.FloatField(default=0.0)
     #If this is an actively available plan for the service
