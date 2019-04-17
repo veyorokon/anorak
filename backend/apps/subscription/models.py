@@ -24,6 +24,8 @@ from . enum import *
 class SubscriptionService(models.Model):
     #The encrypted secret.
     name = models.CharField(max_length=128, null=False, unique=True)
+    #Tag line and slogan
+    tag_line = models.CharField(max_length=128, null=True, blank=True)
     #The description
     description = models.CharField(max_length=256, null=True, blank=True)
     #The frequency of billing
