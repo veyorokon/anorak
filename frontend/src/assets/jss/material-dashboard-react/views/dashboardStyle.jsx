@@ -130,7 +130,8 @@ const dashboardStyle = theme => ({
   cardImage: {
     width: "60%",
     height: "auto",
-    margin: "0 auto",
+    maxHeight: "60%",
+    margin: "auto auto",
     padding: "initial",
     display: "block",
     minWidth: "185px"

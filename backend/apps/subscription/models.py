@@ -24,6 +24,8 @@ from . enum import *
 class SubscriptionService(models.Model):
     #The encrypted secret.
     name = models.CharField(max_length=128, null=False, unique=True)
+    #The encrypted secret.
+    description = models.CharField(max_length=256, null=True, blank=True)
     #The frequency of billing
     type = enum.EnumField(ServiceType, default=ServiceType.STREAMING)
     #the number of days for a free trial
