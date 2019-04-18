@@ -75,6 +75,7 @@ class _DashboardContent extends React.Component {
   processSubscriptions = subscriptionCards => {
     var monthlySubscriptionCount = 0;
     var yearlySubscriptionCount = 0;
+    var weeklySubscriptionCount = 0;
     var subscriptionTotal = 0;
     var yearlyTotal = 0;
     var averageMonthlyCost = 0;
@@ -95,16 +96,18 @@ class _DashboardContent extends React.Component {
           yearlyTotal += subscription.subscriptionPlan.amount;
         } else if (frequency == "A_10") {
           averageMonthlyCost += subscription.subscriptionPlan.amount * 4;
-          yearlyTotal += subscription.subscriptionPlan.amount;
+          yearlyTotal += subscription.subscriptionPlan.amount * 52;
+          weeklySubscriptionCount++;
         }
         subscriptionTotal += subscription.subscriptionPlan.amount;
         activeSubscriptionCount++;
       }
     }
     this.setState({
-      monthlySubscriptionCount: monthlySubscriptionCount,
-      yearlySubscriptionCount: yearlySubscriptionCount,
-      activeSubscriptionCount: activeSubscriptionCount,
+      monthlySubscriptionCount,
+      yearlySubscriptionCount,
+      activeSubscriptionCount,
+      weeklySubscriptionCount,
       yearlyTotal: yearlyTotal.toFixed(2),
       averageMonthlyCost: averageMonthlyCost.toFixed(2),
       subscriptionTotal: subscriptionTotal.toFixed(2)
@@ -133,7 +136,7 @@ class _DashboardContent extends React.Component {
                 </CardIcon>
               </CardHeader>
               */}
-              <CardBody>
+              <CardBody style={{ paddingBottom: "0" }}>
                 <h3 className={classes.cardTitle}>Welcome, {user.firstName}</h3>
 
                 <ul
@@ -144,15 +147,21 @@ class _DashboardContent extends React.Component {
                   }}
                 >
                   <li className={classes.cardCategorySpaced}>
+                    Yearly Subscriptions:{" "}
+                    <span style={{ fontWeight: "500" }}>
+                      {this.state.yearlySubscriptionCount}
+                    </span>
+                  </li>
+                  <li className={classes.cardCategorySpaced}>
                     Monthly Subscriptions:{" "}
                     <span style={{ fontWeight: "500" }}>
                       {this.state.monthlySubscriptionCount}
                     </span>
                   </li>
                   <li className={classes.cardCategorySpaced}>
-                    Yearly Subscriptions:{" "}
+                    Weekly Subscriptions:{" "}
                     <span style={{ fontWeight: "500" }}>
-                      {this.state.yearlySubscriptionCount}
+                      {this.state.weeklySubscriptionCount}
                     </span>
                   </li>
                   <li className={classes.cardCategorySpaced}>
@@ -173,7 +182,8 @@ class _DashboardContent extends React.Component {
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "flex-end"
+                  justifyContent: "flex-end",
+                  paddingTop: "0"
                 }}
               >
                 {hasPendingInvite ? (

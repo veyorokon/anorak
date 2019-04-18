@@ -32,6 +32,8 @@ class PlanBillingFrequency(enum.Enum):
     DAY = 0
     WEEK = 10
     MONTH = 20
+    BIMONTH = 21
+    QUARTER = 25
     YEAR = 30
 
 
