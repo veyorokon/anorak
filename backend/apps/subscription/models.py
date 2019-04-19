@@ -5,16 +5,17 @@ Custom subscription models
 ##########################################################################
 ## Imports
 ##########################################################################
-from django.db import models
-from core.models import User, BaseMixin
-from django.utils import timezone
-from encrypted_model_fields.fields import EncryptedCharField
+
 from django.db.models import Q
-from djstripe.models import *
-from backend.utility import *
+from django.db import models
+from core.models import User
+from core.mixins import  BaseMixin
+from django_enumfield import enum
+from encrypted_model_fields.fields import EncryptedCharField
 from backend.stripe import stripe
-from . managers import *
-from . enum import *
+from . managers import CreateAccountManager, ConnectAccountManager
+from . enum import ServiceType, PlanBillingFrequency,  SubscriptionAccountStatus, MembershipStatus
+
 
 ##########################################################################
 ## Subscription Service
@@ -69,7 +70,6 @@ class SubscriptionPlan(BaseMixin):
     #Maximum size for the service
     maximum_size = models.IntegerField(default=None, null=True)
 
-
     class Meta:
         db_table = "Subscription_Plans"
         unique_together = ('service', 'amount','maximum_size')
@@ -86,23 +86,18 @@ class SubscriptionPlan(BaseMixin):
         return self.product_name + " $"+str(self.amount)+" billed monthly"
 
 
+
 ##########################################################################
 ## Subscription Account
 ##########################################################################
 
 class SubscriptionAccount(BaseMixin):
-    #The type of the account
-    type = enum.EnumField(SubscriptionAccountType, default=SubscriptionAccountType.CREATE, editable=False)
     #User who is responsible and pays if other members miss.
     responsible_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subscription_accounts")
     #The service this account is for
     subscription_service = models.ForeignKey(SubscriptionService, on_delete=models.CASCADE, related_name="subscription_accounts")
     #The price plan this account has
     subscription_plan = models.ForeignKey(SubscriptionPlan, on_delete=models.CASCADE, related_name="subscription_accounts", null=True)
-    #The encrypted username
-    username = EncryptedCharField(max_length=128, null=True, blank=True)
-    #The encrypted password.
-    password = EncryptedCharField(max_length=128, null=True, blank=True)
     #The status of the account
     status_account = enum.EnumField(SubscriptionAccountStatus, default=SubscriptionAccountStatus.PENDING)
     #Date that the subscription was canceled
@@ -119,10 +114,9 @@ class SubscriptionAccount(BaseMixin):
     @property
     def responsible_member(self):
         try:
-            return SubscriptionMember.objects.get(
-                user = self.responsible_user,
-                subscription_account = self
-            )
+            return self.subscribers.all().filter(Q(
+                user = self.responsible_user
+            ))[0]
         except:
             return None
 
@@ -132,45 +126,6 @@ class SubscriptionAccount(BaseMixin):
             user = self.responsible_user
         ))
 
-    def _create(self):
-        self.status_account = SubscriptionAccountStatus.ACTIVE
-        SubscriptionMember.objects.create(
-            user=self.responsible_user,
-            subscription_account=self,
-            status_membership = MembershipStatus.ACTIVE
-        )
-
-    def _connect(self, confirmRequired=False):
-        self.status_account = SubscriptionAccountStatus.PENDING_CONFIRM_CONNECT
-        if not confirmRequired:
-            self.status_account = SubscriptionAccountStatus.CONNECTED
-
-    def _cancel_basic_members(self):
-        for member in self.basic_members:
-            member.delete()
-
-    def _cancel_responsible_member(self):
-        self.responsible_member.cancel()
-
-    def _set_plan(self, plan):
-        self.subscription_plan = plan
-
-    def connect(self, plan):
-        self._set_plan(plan)
-        self.activate()
-
-    def activate(self):
-        if self.type == SubscriptionAccountType.CREATE:
-            self._create()
-        else:
-            self._connect()
-        self.save()
-
-    def cancel(self):
-        self._cancel_basic_members()
-        self._cancel_responsible_member()
-        self.status_account = SubscriptionAccountStatus.CANCELED
-        self.save()
 
     def validate_user(self, user):
         if user == self.responsible_user:
@@ -192,16 +147,6 @@ class SubscriptionAccount(BaseMixin):
         type = SubscriptionAccountType.label(self.type).lower().capitalize()
         return user +"\'s "+ plan + ' - '+type+' Account'
 
-class CreateAccount(SubscriptionAccount):
-    objects = CreateAccountManager()
-    class Meta:
-        proxy = True
-
-class ConnectAccount(SubscriptionAccount):
-    objects = ConnectAccountManager()
-    class Meta:
-        proxy = True
-
 
 ##########################################################################
 ## Subscription Membership
@@ -215,14 +160,6 @@ class SubscriptionMember(BaseMixin):
     status_membership = enum.EnumField(MembershipStatus, default=MembershipStatus.PENDING)
     #Date that the subscription was created
     date_canceled = models.IntegerField(editable=False, null=True, blank=True)
-
-
-    def _cancel_membership_status(self):
-        self.status_membership = MembershipStatus.CANCELED
-
-    def cancel(self):
-        self._cancel_membership_status()
-        self.save()
 
     class Meta:
         db_table = "Subscriptions"

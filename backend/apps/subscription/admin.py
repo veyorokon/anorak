@@ -35,13 +35,13 @@ class SubscriptionPlanAdmin(admin.ModelAdmin):
         'is_active',
     )
 
+
 @admin.register(SubscriptionAccount)
 class SubscriptionAccountAdmin(admin.ModelAdmin):
     """Define admin model for SubscriptionAccount."""
     list_display = (
         'id',
         'status_account',
-        'type',
         'responsible_user',
         'subscription_service',
         'subscription_plan',
@@ -52,16 +52,6 @@ class SubscriptionAccountAdmin(admin.ModelAdmin):
 
     readonly_fields = (
         'id',
-        # 'type',
-        # 'responsible_user',
-        # 'subscription_service',
-        # 'subscription_plan',
-        # 'status_account',
-        # 'date_created',
-        # 'date_modified',
-        # 'date_canceled',
-        # 'username',
-        # 'password',
     )
 
 @admin.register(SubscriptionMember)

@@ -21,12 +21,11 @@ django-jet = "*"
 django-feedparser = "*"
 django-encrypted-model-fields = "*"
 django-mail-templated = "*"
-jupyter = "*"
 psycopg2-binary = "*"
 dj-stripe = "*"
-nano = "*"
 
 [dev-packages]
+jupyter = "*"
 
 [requires]
 python_version = "3.6"

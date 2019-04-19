@@ -12,15 +12,6 @@ from enum import Enum
 ## Enum Types
 ##########################################################################
 
-class EnumMap(enum.Enum):
-
-    def enum_map(self):
-        output = {}
-        for key in self.values:
-            label = self.label(key)
-            output[key] = label
-        return output
-
 # Type of service
 class ServiceType(enum.Enum):
     STREAMING = 0
@@ -38,7 +29,7 @@ class PlanBillingFrequency(enum.Enum):
 
 
 # Status for the subscription account
-class SubscriptionAccountStatus(EnumMap):
+class SubscriptionAccountStatus(enum.Enum):
     REMOVED = 0
     TERMINATED = 5
     CANCELED = 10
@@ -77,12 +68,6 @@ class SubscriptionAccountStatus(EnumMap):
             PENDING_CANCELLATION,
         )
     }
-
-
-# Type of subscription account
-class SubscriptionAccountType(enum.Enum):
-    CREATE = 0
-    CONNECT = 10
 
 
 # Status for the subscription membership

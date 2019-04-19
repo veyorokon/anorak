@@ -6,13 +6,16 @@ RUN pip install --upgrade pip
 RUN pip install --upgrade pipenv
 
 COPY ./build/entrypoint.sh /entrypoint.sh
-COPY ./build/jupyter_notebook_config.py ~/.jupyter/
+COPY ./build/.bashrc /root/.bashrc
 
 ADD . backend/
 
 WORKDIR /backend
 
-RUN set -ex && pipenv install --deploy --system --skip-lock
+RUN pipenv install --dev --deploy --system --skip-lock
+
+RUN jupyter notebook --generate-config
+COPY ./build/jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 
 EXPOSE 8000
 

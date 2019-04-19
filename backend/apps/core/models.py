@@ -19,26 +19,6 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 from django.utils import timezone
 
-class BaseMixin(models.Model):
-    #Date that the model instance was created
-    date_created = models.IntegerField(editable=False, default=get_current_epoch())
-    #Date that the model instance was modified
-    date_modified = models.IntegerField(editable=False, default=get_current_epoch())
-    #If this model instance is live data or not
-    live_mode = models.BooleanField(editable=False, default=False)
-
-    def save(self, *args, **kwargs):
-        '''
-        On save, update timestamps
-        '''
-        if not self.id:
-            self.live_mode = not settings.DEBUG
-        self.date_modified = get_current_epoch()
-        return super(BaseMixin, self).save(*args, **kwargs)
-
-    class Meta:
-        abstract = True
-
 
 class User(AbstractBaseUser, PermissionsMixin):
 
@@ -84,12 +64,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.djstripe_customer.subscription
 
     @property
-    def customer_api(self):
-        customer = self.djstripe_customer
-        customer_api = customer.api_retrieve()
-        return customer_api
-
-    @property
     def dashboard_accounts(self):
         accounts = self.subscription_accounts.all()
         ownedAccounts = []
@@ -97,7 +71,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             if account.responsible_user == self:
                 ownedAccounts.append(account)
         return list(set(ownedAccounts))
-        
+
 
 ##########################################################################
 ## Verification Email Codes
