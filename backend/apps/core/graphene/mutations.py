@@ -107,11 +107,7 @@ class StripeCard(graphene.Mutation):
     @login_required
     def mutate(self, info, token, cardToken, nameOnCard):
         user = info.context.user
-        try:
-            user.link_card(cardToken, nameOnCard)
-            return StripeCard(user=user)
-        except:
-          raise ValueError("Card not created")
+        raise ValueError("Card not created")
 
 class LoginUser(graphene.Mutation):
 

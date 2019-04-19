@@ -5,13 +5,14 @@ ENV PYTHONUNBUFFERED 1
 RUN pip install --upgrade pip
 RUN pip install --upgrade pipenv
 
-COPY ./scripts/entrypoint.sh /entrypoint.sh
+COPY ./build/entrypoint.sh /entrypoint.sh
+COPY ./build/jupyter_notebook_config.py ~/.jupyter/
+
 ADD . backend/
 
 WORKDIR /backend
 
-RUN pipenv install --system --deploy
-RUN jupyter notebook --generate-config
+RUN set -ex && pipenv install --deploy --system --skip-lock
 
 EXPOSE 8000
 
