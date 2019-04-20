@@ -42,6 +42,8 @@ class SubscriptionService(BaseMixin):
     is_username_email = models.BooleanField(default=False)
     #If this service is currently available for subscribers
     is_available = models.BooleanField(default=False)
+    #The stripe product
+    stripe_product = models.CharField(max_length=128, null=True, blank=True)
 
     class Meta:
         db_table = "Subscription_Services"
@@ -69,6 +71,8 @@ class SubscriptionPlan(BaseMixin):
     billing_frequency = enum.EnumField(PlanBillingFrequency, default= PlanBillingFrequency.MONTH)
     #Maximum size for the service
     maximum_size = models.IntegerField(default=None, null=True)
+    #The stripe product
+    stripe_plan = models.CharField(max_length=128, null=True, blank=True)
 
     class Meta:
         db_table = "Subscription_Plans"

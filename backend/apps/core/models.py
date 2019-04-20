@@ -34,6 +34,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_('staff'), default=False)
     is_member = models.BooleanField(_('is paying member'), default=False)
     is_verified = models.BooleanField(_('is verified'), default=False)
+    #The stripe connect account
+    stripe_account = models.CharField(max_length=128, null=True, blank=True)
 
     objects = UserManager()
 

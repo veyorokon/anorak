@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DataTable.TableBody should render 1`] = `
+<Table
+  short={false}
+  shouldShowBorder={true}
+  zebra={true}
+>
+  <table
+    className="bx--data-table bx--data-table--zebra"
+  >
+    <TableBody
+      className="custom-class"
+    >
+      <tbody
+        className="custom-class"
+      />
+    </TableBody>
+  </table>
+</Table>
+`;
