@@ -1,8 +1,9 @@
-import { defaultFont } from "assets/jss/universal";
-
 const cardStyle = {
   secondary: {
     color: "white"
+  },
+  tertiary: {
+    color: "#999"
   },
   h1: {
     display: "block",
@@ -37,6 +38,13 @@ const cardStyle = {
     fontWeight: "400",
     color: "#999",
     textTransform: "uppercase"
+  },
+  p: {
+    fontSize: "1.4rem",
+    fontWeight: "400",
+    lineHeight: "2.4rem",
+    marginBlockStart: "1em",
+    marginBlockEnd: "1em"
   }
 };
 

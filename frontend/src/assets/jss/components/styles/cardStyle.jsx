@@ -17,7 +17,7 @@ const cardStyle = theme => ({
       boxShadow: "rgba(0, 0, 0, 0.12) 0px 5px 10px 0px"
     }
   },
-  secondary: {
+  dark: {
     background: "black",
     color: "white"
   }

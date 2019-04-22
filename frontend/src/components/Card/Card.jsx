@@ -8,13 +8,13 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // @material-ui/icons
 
 // core components
-import cardStyle from "assets/jss/components/cardStyle.jsx";
+import cardStyle from "assets/jss/components/styles/cardStyle.jsx";
 
 function Card({ ...props }) {
-  const { classes, className, children, secondary, ...rest } = props;
+  const { classes, className, children, dark, ...rest } = props;
   const cardClasses = classNames({
     [classes.card]: true,
-    [classes.secondary]: secondary,
+    [classes.dark]: dark,
     [className]: className !== undefined
   });
   return (
@@ -27,7 +27,7 @@ function Card({ ...props }) {
 Card.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
-  secondary: PropTypes.bool
+  dark: PropTypes.bool
 };
 
 export default withStyles(cardStyle)(Card);

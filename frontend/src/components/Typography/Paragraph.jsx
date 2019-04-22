@@ -9,25 +9,26 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import typographyStyle from "assets/jss/components/styles/typographyStyle.jsx";
 
-function Typography({ ...props }) {
-  const { classes, children, secondary, variant, ...rest } = props;
-  const headingClasses = classNames({
-    [classes[variant]]: true,
-    [classes.secondary]: secondary
+function Paragraph({ ...props }) {
+  const { classes, children, tertiary, secondary, variant, ...rest } = props;
+  const paragraphClasses = classNames({
+    [classes.p]: true,
+    [classes.secondary]: secondary,
+    [classes.tertiary]: tertiary
   });
-  const Variant = variant == "subheading" ? "span" : `${variant}`;
+
   return (
-    <Variant className={headingClasses} {...rest}>
+    <p className={paragraphClasses} {...rest}>
       {children}
-    </Variant>
+    </p>
   );
 }
 
-Typography.propTypes = {
+Paragraph.propTypes = {
   classes: PropTypes.object.isRequired,
-  variant: PropTypes.string.isRequired,
   className: PropTypes.string,
-  secondary: PropTypes.bool
+  secondary: PropTypes.bool,
+  tertiary: PropTypes.bool
 };
 
-export default withStyles(typographyStyle)(Typography);
+export default withStyles(typographyStyle)(Paragraph);
