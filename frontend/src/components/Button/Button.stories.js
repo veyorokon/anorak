@@ -9,15 +9,17 @@ import { GoMarkGithub } from "react-icons/go";
 
 storiesOf("Button", module)
   .addDecorator(story => <div style={{ padding: "3rem 20vw" }}>{story()}</div>)
-  .add("Buttons", () => (
+  .add("Light", () => (
     <React.Fragment>
       <Typography variant="h2">Buttons</Typography>
       <Paragraph tertiary style={{ fontSize: "1.2rem" }}>
-        Button &mdash; Primary
+        Button &mdash;
       </Paragraph>
       <Card>
         <div style={{ padding: "20px 20px 10px 0px" }}>
-          <Button size="lg">Action</Button>
+          <Button dark size="lg">
+            Action
+          </Button>
         </div>
         <div style={{ padding: "10px 20px 20px 0px" }}>
           <Button size="sm">Action</Button>
@@ -161,6 +163,7 @@ storiesOf("Button", module)
             Action
           </Button>
         </div>
+
         <div style={{ padding: "10px 20px 10px 0px" }}>
           <Button
             secondary

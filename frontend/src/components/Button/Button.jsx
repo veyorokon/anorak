@@ -6,9 +6,10 @@ import PropTypes from "prop-types";
 
 // material-ui components
 import withStyles from "@material-ui/core/styles/withStyles";
-import Button from "@material-ui/core/Button";
+import MaterialButton from "@material-ui/core/Button";
 
-import buttonStyle from "assets/jss/components/styles/buttonStyle.jsx";
+import buttonLightStyle from "assets/jss/components/styles/Button/buttonLightStyle.jsx";
+import buttonDarkStyle from "assets/jss/components/styles/Button/buttonDarkStyle.jsx";
 
 function RegularButton({ ...props }) {
   const {
@@ -21,16 +22,11 @@ function RegularButton({ ...props }) {
     link,
     icon,
     iconPosition,
-
-    round,
-    simple,
+    primary,
     size,
-    block,
-    justIcon,
     className,
     muiClasses,
     loading,
-    action,
     ...rest
   } = props;
 
@@ -38,8 +34,8 @@ function RegularButton({ ...props }) {
     [classes.button]: true,
     [classes[size]]: size,
     [classes[color]]: color,
-    [classes.round]: round,
     [classes.secondary]: secondary,
+    [classes.primary]: primary,
     [classes.loading]: loading,
     [classes.disabled]: disabled,
     [classes.shadow]: shadow,
@@ -48,26 +44,28 @@ function RegularButton({ ...props }) {
     [className]: className
   });
 
-  if (disabled && icon == null) {
+  if (disabled) {
     return (
       <span className={classes.disabledWrapper}>
-        <Button {...rest} classes={muiClasses} className={btnClasses}>
+        <MaterialButton {...rest} classes={muiClasses} className={btnClasses}>
+          {icon && (
+            <span className={[classes[iconPosition + "Icon"]]}>{icon}</span>
+          )}
           {children}
-        </Button>
+        </MaterialButton>
       </span>
     );
-  }
-  if (icon) {
+  } else if (icon) {
     return (
-      <Button {...rest} classes={muiClasses} className={btnClasses}>
+      <MaterialButton {...rest} classes={muiClasses} className={btnClasses}>
         <span className={[classes[iconPosition + "Icon"]]}>{icon}</span>
         {children}
-      </Button>
+      </MaterialButton>
     );
   }
 
   return (
-    <Button {...rest} classes={muiClasses} className={btnClasses}>
+    <MaterialButton {...rest} classes={muiClasses} className={btnClasses}>
       {loading ? (
         <div className={classes.loadingDots}>
           <div />
@@ -77,7 +75,7 @@ function RegularButton({ ...props }) {
       ) : (
         [children]
       )}
-    </Button>
+    </MaterialButton>
   );
 }
 
@@ -85,8 +83,9 @@ RegularButton.propTypes = {
   classes: PropTypes.object.isRequired,
   color: PropTypes.oneOf(["success", "warning", "highlight"]),
   size: PropTypes.oneOf(["sm", "lg"]),
+  primary: PropTypes.bool,
   secondary: PropTypes.bool,
-  simple: PropTypes.bool,
+  disabled: PropTypes.bool,
   loading: PropTypes.bool,
   shadow: PropTypes.bool,
   link: PropTypes.bool,
@@ -97,4 +96,21 @@ RegularButton.propTypes = {
   muiClasses: PropTypes.object
 };
 
-export default withStyles(buttonStyle)(RegularButton);
+const LightButton = withStyles(buttonLightStyle)(RegularButton);
+const DarkButton = withStyles(buttonDarkStyle)(RegularButton);
+
+function Button({ ...props }) {
+  const { dark, ...rest } = props;
+  const ButtonVariant = dark ? LightButton : DarkButton;
+  return <ButtonVariant {...rest} />;
+}
+
+Button.defaultProps = {
+  primary: true
+};
+
+Button.propTypes = {
+  dark: PropTypes.bool
+};
+
+export default Button;

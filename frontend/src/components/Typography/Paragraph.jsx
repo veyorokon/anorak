@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 // core components
-import typographyStyle from "assets/jss/components/styles/typographyStyle.jsx";
+import typographyStyle from "assets/jss/components/styles/Typography/typographyStyle.jsx";
 
 function Paragraph({ ...props }) {
   const { classes, children, tertiary, secondary, variant, ...rest } = props;

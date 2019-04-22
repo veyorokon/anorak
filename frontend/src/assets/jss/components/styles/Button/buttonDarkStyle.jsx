@@ -1,11 +1,3 @@
-import {
-  grayColor,
-  primaryColor,
-  infoColor,
-  successColor,
-  warningColor,
-  dangerColor
-} from "assets/jss/universal.jsx";
 import buttonAnimation from "assets/jss/components/animations/buttonAnimation";
 
 const buttonStyle = {
@@ -14,8 +6,6 @@ const buttonStyle = {
     boxSizing: "border-box",
     minHeight: "auto",
     minWidth: "auto",
-    backgroundColor: "#000",
-    color: "#FFFFFF",
     borderRadius: "5px",
     position: "relative",
     padding: "0rem 2.5rem",
@@ -27,12 +17,9 @@ const buttonStyle = {
     whiteSpace: "nowrap",
     touchAction: "manipulation",
     cursor: "pointer",
-    border: "1px solid rgba(0,0,0,0)",
     transition: "all 0.2s ease",
     "&:hover": {
-      color: "#000",
-      backgroundColor: "#fff",
-      border: "1px solid #000"
+      backgroundColor: "#fff"
     },
 
     "& svg": {
@@ -42,6 +29,16 @@ const buttonStyle = {
       width: "2rem",
       height: "2rem",
       verticalAlign: "middle"
+    }
+  },
+
+  primary: {
+    backgroundColor: "#000",
+    color: "#FFFFFF",
+    border: "1px solid rgba(0,0,0,0)",
+    "&:hover": {
+      color: "#000",
+      border: "1px solid #000"
     }
   },
   secondary: {
@@ -88,7 +85,7 @@ const buttonStyle = {
     "&$highlight": {
       backgroundColor: "rgb(0, 118, 255)",
       color: "#fff",
-      "&,&:focus,&:hover": {
+      "&:hover": {
         backgroundColor: "rgb(0, 118, 255)",
         color: "#fff"
       }
@@ -105,7 +102,7 @@ const buttonStyle = {
   },
 
   disabledWrapper: {
-    cursor: "not-allowed !important",
+    cursor: "not-allowed",
     display: "inline-block"
   },
   disabled: {
@@ -137,6 +134,7 @@ const buttonStyle = {
   link: {
     color: "black",
     background: "transparent",
+    border: "1px solid rgba(0,0,0,0) !important",
     "&:hover": {
       backgroundColor: "transparent",
       color: "black",
