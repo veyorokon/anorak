@@ -45,11 +45,6 @@ function RegularButton({ ...props }) {
     [classes.shadow]: shadow,
     [classes.link]: link,
 
-    [classes.simple]: simple,
-    [classes.block]: block,
-    [classes.link]: link,
-    [classes.justIcon]: justIcon,
-    [classes.cardAction]: action,
     [className]: className
   });
 
@@ -97,12 +92,6 @@ RegularButton.propTypes = {
   link: PropTypes.bool,
   icon: PropTypes.node,
   iconPosition: PropTypes.oneOf(["left", "right"]),
-
-  round: PropTypes.bool,
-  disabled: PropTypes.bool,
-  block: PropTypes.bool,
-  justIcon: PropTypes.bool,
-  action: PropTypes.bool,
   className: PropTypes.string,
   // use this to pass the classes props from Material-UI
   muiClasses: PropTypes.object

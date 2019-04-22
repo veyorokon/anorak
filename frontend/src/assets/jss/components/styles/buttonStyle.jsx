@@ -8,7 +8,7 @@ import {
 } from "assets/jss/universal.jsx";
 import buttonAnimation from "assets/jss/components/animations/buttonAnimation";
 
-const buttonStyle = theme => ({
+const buttonStyle = {
   ...buttonAnimation,
   button: {
     boxSizing: "border-box",
@@ -34,37 +34,14 @@ const buttonStyle = theme => ({
       backgroundColor: "#fff",
       border: "1px solid #000"
     },
-    "& .fab,& .fas,& .far,& .fal, &.material-icons": {
-      position: "relative",
-      display: "inline-block",
-      top: "0",
-      marginTop: "-1em",
-      marginBottom: "-1em",
-      fontSize: "1.1rem",
-      marginRight: "4px",
-      verticalAlign: "middle"
-    },
+
     "& svg": {
       position: "relative",
       display: "inline-block",
       top: "0",
-      width: "18px",
-      height: "18px",
-      marginRight: "4px",
+      width: "2rem",
+      height: "2rem",
       verticalAlign: "middle"
-    },
-    "&$justIcon": {
-      "& .fab,& .fas,& .far,& .fal,& .material-icons": {
-        marginTop: "0px",
-        position: "absolute",
-        width: "100%",
-        transform: "none",
-        left: "0px",
-        top: "0px",
-        height: "100%",
-        lineHeight: "41px",
-        fontSize: "20px"
-      }
     }
   },
   secondary: {
@@ -209,13 +186,6 @@ const buttonStyle = theme => ({
     minHeight: "2.4rem"
   },
 
-  round: {
-    borderRadius: "30px"
-  },
-  block: {
-    width: "100% !important"
-  },
-
   leftIcon: {
     display: "flex",
     alignItems: "center",
@@ -231,46 +201,7 @@ const buttonStyle = theme => ({
     position: "absolute",
     right: ".8rem",
     left: "auto"
-  },
-
-  justIcon: {
-    paddingLeft: "12px",
-    paddingRight: "12px",
-    fontSize: "20px",
-    height: "41px",
-    minWidth: "41px",
-    width: "41px",
-    "& .fab,& .fas,& .far,& .fal,& svg,& .material-icons": {
-      marginRight: "0px"
-    },
-    "&$lg": {
-      height: "57px",
-      minWidth: "57px",
-      width: "57px",
-      lineHeight: "56px",
-      "& .fab,& .fas,& .far,& .fal,& .material-icons": {
-        fontSize: "32px",
-        lineHeight: "56px"
-      },
-      "& svg": {
-        width: "32px",
-        height: "32px"
-      }
-    },
-    "&$sm": {
-      height: "30px",
-      minWidth: "30px",
-      width: "30px",
-      "& .fab,& .fas,& .far,& .fal,& .material-icons": {
-        fontSize: "17px",
-        lineHeight: "29px"
-      },
-      "& svg": {
-        width: "17px",
-        height: "17px"
-      }
-    }
   }
-});
+};
 
 export default buttonStyle;
