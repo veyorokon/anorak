@@ -8,8 +8,8 @@ import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import MaterialButton from "@material-ui/core/Button";
 
-import buttonLightStyle from "assets/jss/components/styles/Button/buttonLightStyle.jsx";
-import buttonDarkStyle from "assets/jss/components/styles/Button/buttonDarkStyle.jsx";
+import buttonLightStyle from "assets/jss/components/Button/buttonLightStyle.jsx";
+import buttonDarkStyle from "assets/jss/components/Button/buttonDarkStyle.jsx";
 
 function RegularButton({ ...props }) {
   const {
@@ -101,7 +101,7 @@ const DarkButton = withStyles(buttonDarkStyle)(RegularButton);
 
 function Button({ ...props }) {
   const { dark, ...rest } = props;
-  const ButtonVariant = dark ? LightButton : DarkButton;
+  const ButtonVariant = dark ? DarkButton : LightButton;
   return <ButtonVariant {...rest} />;
 }
 

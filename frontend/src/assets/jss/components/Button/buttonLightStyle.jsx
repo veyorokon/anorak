@@ -1,4 +1,4 @@
-import buttonAnimation from "assets/jss/components/animations/buttonAnimation";
+import buttonAnimation from "assets/jss/animations/buttonAnimation";
 
 const buttonStyle = {
   ...buttonAnimation,
@@ -6,7 +6,7 @@ const buttonStyle = {
     boxSizing: "border-box",
     minHeight: "auto",
     minWidth: "auto",
-    borderRadius: "5px",
+    borderRadius: ".5rem",
     position: "relative",
     padding: "0rem 2.5rem",
     fontSize: "1.2rem",
@@ -73,11 +73,11 @@ const buttonStyle = {
     background: "white",
     color: "black",
     border: "1px solid rgba(0, 0, 0, 0) !important",
-    boxShadow: "0 5px 10px rgba(0, 0, 0, 0.12)",
+    boxShadow: "0 .5rem 1rem rgba(0, 0, 0, 0.12)",
     "&:hover": {
       background: "white",
       color: "black",
-      boxShadow: "0 7px 20px rgba(0, 0, 0, 0.16)",
+      boxShadow: "0 7px 2rem rgba(0, 0, 0, 0.16)",
       transform: "translate3d(0px,-1px,0px)",
       border: "1px solid rgba(0, 0, 0, 0) !important"
     },
