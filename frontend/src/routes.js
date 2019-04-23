@@ -1,4 +1,7 @@
 // @material-ui/icons
+import BubbleChart from "@material-ui/icons/BubbleChart";
+
+import Home from "views/Home/Home";
 
 // {
 //   path: "/dashboard",
@@ -9,6 +12,15 @@
 //   layout: "/admin"
 // },
 //
-const dashboardRoutes = [];
+const homeRoutes = [
+  {
+    path: "/",
+    name: "Landing",
+    rtlName: "Landing",
+    icon: BubbleChart,
+    component: Home,
+    layout: "/"
+  }
+];
 
-export default dashboardRoutes;
+export default homeRoutes;

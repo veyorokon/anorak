@@ -23,12 +23,12 @@ const cardStyle = theme => ({
       padding: "1rem 2rem 2rem 0px"
     }
   },
-  section: {
-    padding: "1rem 2rem 1rem 0px"
+  image: {
+    padding: "1rem 3rem"
   },
+
   dark: {
-    background: "black",
-    color: "white"
+    background: "black"
   }
 });
 

@@ -11,10 +11,20 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import cardStyle from "assets/jss/components/Card/cardStyle.jsx";
 
 function Card({ ...props }) {
-  const { classes, className, children, dark, ...rest } = props;
+  const {
+    classes,
+    className,
+    children,
+    dark,
+    image,
+    fullImage,
+    ...rest
+  } = props;
   const cardClasses = classNames({
     [classes.card]: true,
     [classes.dark]: dark,
+    [classes.image]: image,
+    [classes.fullImage]: fullImage,
     [className]: className !== undefined
   });
   return (
@@ -27,7 +37,9 @@ function Card({ ...props }) {
 Card.propTypes = {
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
-  dark: PropTypes.bool
+  dark: PropTypes.bool,
+  image: PropTypes.bool,
+  fullImage: PropTypes.bool
 };
 
 export default withStyles(cardStyle)(Card);
