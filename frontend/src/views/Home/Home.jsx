@@ -14,26 +14,15 @@ class _HomeContent extends React.Component {
   }
   render() {
     //const { classes, user } = this.props;
-    return <div>Hello</div>;
+    return <div>Hesllo</div>;
   }
 }
-const HomeContent = _HomeContent;
+const HomeContent = withStyles(homeStyle)(_HomeContent);
 
 function Home(props) {
   const { classes } = props;
 
-  return (
-    <div
-      style={{
-        height: "500px",
-        width: "500px",
-        color: "black",
-        fontSize: "2rem"
-      }}
-    >
-      Hello
-    </div>
-  );
+  return <HomeContent {...props} />;
 }
 
 _HomeContent.propTypes = {
