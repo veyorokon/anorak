@@ -12,67 +12,107 @@ import Check from "@material-ui/icons/Check";
 // core components
 import inputStyle from "assets/jss/components/Input/inputStyle";
 
-function CustomInput({ ...props }) {
-  const {
-    classes,
-    formControlProps,
-    labelText,
-    id,
-    labelProps,
-    inputProps,
-    error,
-    success
-  } = props;
+class CustomInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      active: false,
+      value: ""
+    };
+  }
 
-  const labelClasses = classNames({
-    [" " + classes.labelRootError]: error,
-    [" " + classes.labelRootSuccess]: success && !error
-  });
-  const underlineClasses = classNames({
-    [classes.underlineError]: error,
-    [classes.underlineSuccess]: success && !error,
-    [classes.underline]: true
-  });
-  const marginTop = classNames({
-    [classes.marginTop]: labelText === undefined
-  });
-  return (
-    <FormControl {...formControlProps} className={classes.formControl}>
-      {labelText !== undefined ? (
-        <InputLabel
-          className={classes.labelRoot + labelClasses}
-          htmlFor={id}
-          {...labelProps}
-        >
-          {labelText}
-        </InputLabel>
-      ) : null}
-      <Input
-        className={classes.input}
-        classes={{
-          disabled: classes.disabled,
-          underline: underlineClasses
-        }}
-        id={id}
-        {...inputProps}
-      />
-      {error ? (
-        <Clear className={classes.feedback + " " + classes.labelRootError} />
-      ) : success ? (
-        <Check className={classes.feedback + " " + classes.labelRootSuccess} />
-      ) : null}
-    </FormControl>
-  );
+  handleFocus = () => {
+    this.setState({
+      active: true
+    });
+  };
+  handleBlur = () => {
+    this.setState({
+      active: false
+    });
+  };
+
+  handleChange = e => {
+    this.setState({ value: e.target.value });
+  };
+
+  render() {
+    const {
+      classes,
+      formControlProps,
+      disabled,
+      id,
+      error,
+      inputprops,
+      success
+    } = this.props;
+    const activeInput = this.state.value !== "" ? true : false;
+
+    const wrapperClasses = classNames({
+      [classes.activeWrapper]: this.state.active,
+      [classes.wrapper]: true,
+      [classes.disabledWrapper]: disabled,
+      [classes.errorWrapper]: error
+    });
+    const inputWrapperClasses = classNames({
+      [classes.inputWrapper]: true,
+      [classes.disabledInputWrapper]: disabled
+    });
+    const inputClasses = classNames({
+      [classes.input]: true,
+      [classes.activeInput]: activeInput,
+      [classes.disabledInput]: disabled,
+      [classes.errorInput]: error
+    });
+
+    return (
+      <FormControl {...formControlProps} className={classes.formControl}>
+        <div className={wrapperClasses}>
+          <div className={inputWrapperClasses}>
+            <input
+              id={id}
+              {...inputprops}
+              className={inputClasses}
+              onFocus={this.handleFocus}
+              onBlur={this.handleBlur}
+              onChange={this.handleChange}
+            />
+
+            {error ? (
+              <Clear
+                className={
+                  classes.feedback +
+                  " " +
+                  classes.labelRoot +
+                  " " +
+                  classes.labelRootError
+                }
+              />
+            ) : success ? (
+              <Check
+                className={
+                  classes.feedback +
+                  " " +
+                  classes.labelRoot +
+                  " " +
+                  classes.labelRootSuccess
+                }
+              />
+            ) : null}
+          </div>
+        </div>
+      </FormControl>
+    );
+  }
 }
 
 CustomInput.propTypes = {
   classes: PropTypes.object.isRequired,
-  labelText: PropTypes.node,
-  labelProps: PropTypes.object,
   id: PropTypes.string,
-  inputProps: PropTypes.object,
+  inputprops: PropTypes.object,
   formControlProps: PropTypes.object,
   error: PropTypes.bool,
+  disabled: PropTypes.bool,
   success: PropTypes.bool
 };
 

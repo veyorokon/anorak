@@ -19,6 +19,9 @@ storiesOf("Button", module)
         <div style={{ padding: "2rem 2rem 1rem 0px" }}>
           <Button size="lg">Action</Button>
         </div>
+        <div style={{ padding: "1rem 2rem 1rem 0px" }}>
+          <Button size="md">Action</Button>
+        </div>
         <div style={{ padding: "1rem 2rem 2rem 0px" }}>
           <Button size="sm">Action</Button>
         </div>
@@ -30,6 +33,11 @@ storiesOf("Button", module)
       <Card>
         <div style={{ padding: "2rem 2rem 1rem 0px" }}>
           <Button secondary size="lg">
+            Action
+          </Button>
+        </div>
+        <div style={{ padding: "1rem 2rem 1rem 0px" }}>
+          <Button secondary size="md">
             Action
           </Button>
         </div>
@@ -49,6 +57,11 @@ storiesOf("Button", module)
             Action
           </Button>
         </div>
+        <div style={{ padding: "1rem 2rem 1rem 0px" }}>
+          <Button color="plain" size="md">
+            Action
+          </Button>
+        </div>
         <div style={{ padding: "1rem 2rem 2rem 0px" }}>
           <Button color="plain" size="sm">
             Action
@@ -62,6 +75,11 @@ storiesOf("Button", module)
       <Card>
         <div style={{ padding: "2rem 2rem 1rem 0px" }}>
           <Button disabled size="lg">
+            Action
+          </Button>
+        </div>
+        <div style={{ padding: "1rem 2rem 1rem 0px" }}>
+          <Button disabled size="md">
             Action
           </Button>
         </div>
@@ -79,6 +97,11 @@ storiesOf("Button", module)
         <div style={{ padding: "2rem 2rem 1rem 0px" }}>
           <Button loading size="lg" />
         </div>
+        <div style={{ padding: "1rem 2rem 1rem 0px" }}>
+          <Button loading size="md">
+            Action
+          </Button>
+        </div>
         <div style={{ padding: "1rem 2rem 2rem 0px" }}>
           <Button loading size="sm" />
         </div>
@@ -90,6 +113,11 @@ storiesOf("Button", module)
       <Card>
         <div style={{ padding: "2rem 2rem 1rem 0px" }}>
           <Button color="warning" size="lg">
+            Action
+          </Button>
+        </div>
+        <div style={{ padding: "1rem 2rem 1rem 0px" }}>
+          <Button color="warning" size="md">
             Action
           </Button>
         </div>
@@ -106,6 +134,11 @@ storiesOf("Button", module)
       <Card>
         <div style={{ padding: "2rem 2rem 1rem 0px" }}>
           <Button color="highlight" size="lg">
+            Action
+          </Button>
+        </div>
+        <div style={{ padding: "1rem 2rem 1rem 0px" }}>
+          <Button color="highlight" size="md">
             Action
           </Button>
         </div>
@@ -258,6 +291,11 @@ storiesOf("Button", module)
             Action
           </Button>
         </div>
+        <div style={{ padding: "1rem 2rem 1rem 0px" }}>
+          <Button dark size="md">
+            Action
+          </Button>
+        </div>
         <div style={{ padding: "1rem 2rem 2rem 0px" }}>
           <Button dark size="sm">
             Action
@@ -271,6 +309,11 @@ storiesOf("Button", module)
       <Card dark>
         <div style={{ padding: "2rem 2rem 1rem 0px" }}>
           <Button dark secondary size="lg">
+            Action
+          </Button>
+        </div>
+        <div style={{ padding: "1rem 2rem 1rem 0px" }}>
+          <Button dark secondary size="md">
             Action
           </Button>
         </div>
@@ -290,6 +333,11 @@ storiesOf("Button", module)
             Action
           </Button>
         </div>
+        <div style={{ padding: "1rem 2rem 1rem 0px" }}>
+          <Button dark color="plain" size="md">
+            Action
+          </Button>
+        </div>
         <div style={{ padding: "1rem 2rem 2rem 0px" }}>
           <Button dark color="plain" size="sm">
             Action
@@ -303,6 +351,11 @@ storiesOf("Button", module)
       <Card dark>
         <div style={{ padding: "2rem 2rem 1rem 0px" }}>
           <Button dark disabled size="lg">
+            Action
+          </Button>
+        </div>
+        <div style={{ padding: "1rem 2rem 1rem 0px" }}>
+          <Button dark disabled size="md">
             Action
           </Button>
         </div>
@@ -320,6 +373,11 @@ storiesOf("Button", module)
         <div style={{ padding: "2rem 2rem 1rem 0px" }}>
           <Button dark loading size="lg" />
         </div>
+        <div style={{ padding: "1rem 2rem 1rem 0px" }}>
+          <Button dark loading size="md">
+            Action
+          </Button>
+        </div>
         <div style={{ padding: "1rem 2rem 2rem 0px" }}>
           <Button dark loading size="sm" />
         </div>
@@ -331,6 +389,11 @@ storiesOf("Button", module)
       <Card dark>
         <div style={{ padding: "2rem 2rem 1rem 0px" }}>
           <Button dark color="warning" size="lg">
+            Action
+          </Button>
+        </div>
+        <div style={{ padding: "1rem 2rem 1rem 0px" }}>
+          <Button dark color="warning" size="md">
             Action
           </Button>
         </div>
@@ -347,6 +410,11 @@ storiesOf("Button", module)
       <Card dark>
         <div style={{ padding: "2rem 2rem 1rem 0px" }}>
           <Button dark color="highlight" size="lg">
+            Action
+          </Button>
+        </div>
+        <div style={{ padding: "1rem 2rem 1rem 0px" }}>
+          <Button dark color="highlight" size="md">
             Action
           </Button>
         </div>

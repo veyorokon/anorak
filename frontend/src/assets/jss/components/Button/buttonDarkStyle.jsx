@@ -1,8 +1,10 @@
+import { defaultFont } from "assets/jss/universal.jsx";
 import buttonAnimation from "assets/jss/animations/buttonAnimation";
 
 const buttonStyle = {
   ...buttonAnimation,
   button: {
+    ...defaultFont,
     boxSizing: "border-box",
     minHeight: "auto",
     minWidth: "auto",
