@@ -30,6 +30,8 @@ function RegularButton({ ...props }) {
     ...rest
   } = props;
 
+  const disableRippleEffect = color == "plain" ? true : false;
+
   const btnClasses = classNames({
     [classes.button]: true,
     [classes[size]]: size,
@@ -40,14 +42,18 @@ function RegularButton({ ...props }) {
     [classes.disabled]: disabled,
     [classes.shadow]: shadow,
     [classes.link]: link,
-
     [className]: className
   });
 
   if (disabled) {
     return (
       <span className={classes.disabledWrapper}>
-        <MaterialButton {...rest} classes={muiClasses} className={btnClasses}>
+        <MaterialButton
+          disableRipple={disableRippleEffect}
+          {...rest}
+          classes={muiClasses}
+          className={btnClasses}
+        >
           {icon && (
             <span className={[classes[iconPosition + "Icon"]]}>{icon}</span>
           )}
@@ -57,7 +63,12 @@ function RegularButton({ ...props }) {
     );
   } else if (icon) {
     return (
-      <MaterialButton {...rest} classes={muiClasses} className={btnClasses}>
+      <MaterialButton
+        disableRipple={disableRippleEffect}
+        {...rest}
+        classes={muiClasses}
+        className={btnClasses}
+      >
         <span className={[classes[iconPosition + "Icon"]]}>{icon}</span>
         {children}
       </MaterialButton>
@@ -65,7 +76,12 @@ function RegularButton({ ...props }) {
   }
 
   return (
-    <MaterialButton {...rest} classes={muiClasses} className={btnClasses}>
+    <MaterialButton
+      disableRipple={disableRippleEffect}
+      {...rest}
+      classes={muiClasses}
+      className={btnClasses}
+    >
       {loading ? (
         <div className={classes.loadingDots}>
           <div />

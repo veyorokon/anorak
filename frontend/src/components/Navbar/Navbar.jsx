@@ -48,6 +48,7 @@ class PrimarySearchAppBar extends React.Component {
     const { classes } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const inlineInputbuttonStyle = { flex: "1 1", marginRight: "-5rem" };
 
     const renderMenu = (
       <Menu
@@ -99,25 +100,28 @@ class PrimarySearchAppBar extends React.Component {
       <div className={classes.root}>
         <AppBar position="static" className={classes.appBar}>
           <Toolbar>
-            <Typography className={classes.title} variant="h2" noWrap>
+            <Typography className={classes.title} variant="h2">
               iAnorak
             </Typography>
-            <div className={classes.search}>
-              <Input placeholder="Search..." style={{ width: "60vw" }} />
-            </div>
-            <Button size="md">
-              <SearchIcon />
-            </Button>
+            <Input
+              search
+              formControlProps={{
+                style: inlineInputbuttonStyle
+              }}
+              inputprops={{
+                placeholder: "Search",
+                inputprops: {
+                  "aria-label": "Search"
+                }
+              }}
+            />
+
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-              <Button secondary size="md">
-                Login
-              </Button>
+              <Button size="md">Login</Button>
             </div>
             <div className={classes.sectionMobile}>
-              <Button secondary size="md">
-                Login
-              </Button>
+              <Button size="md">Login</Button>
             </div>
           </Toolbar>
         </AppBar>

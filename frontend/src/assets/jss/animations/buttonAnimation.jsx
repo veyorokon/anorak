@@ -9,6 +9,18 @@ const buttonAnimation = {
       opacity: "1",
       transform: "scale(1, 1)"
     }
+  },
+
+  "@keyframes clickAnimation": {
+    "0%": {
+      fontWeight: "initial",
+      color: "initial"
+    },
+
+    "100%": {
+      fontWeight: "bold",
+      color: "black"
+    }
   }
 };
 

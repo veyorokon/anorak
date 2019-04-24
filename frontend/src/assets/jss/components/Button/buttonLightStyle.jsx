@@ -53,12 +53,17 @@ const buttonStyle = theme => ({
     }
   },
   plain: {
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(0, 0, 0, 0)",
     color: "rgb(102, 102, 102)",
     border: "1px solid rgb(0, 0, 0,0)",
     "&:hover": {
+      backgroundColor: "rgba(0, 0, 0, 0)",
       color: "rgb(102, 102, 102)",
       border: "1px solid rgb(0, 0, 0,0)"
+    },
+    "&:focus, &:active, &:visited": {
+      border: "1px solid rgb(0, 0, 0,0)",
+      animation: `clickAnimation 0.2s`
     }
   },
   warning: {

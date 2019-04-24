@@ -26,6 +26,7 @@ const customInputStyle = {
   },
   inputWrapper: {
     display: "inline-flex",
+    alignItems: "center",
     position: "relative",
     width: "100%",
     margin: " 4px 10px",
@@ -102,7 +103,8 @@ const customInputStyle = {
   feedback: {
     zIndex: "2",
     textAlign: "center",
-    pointerEvents: "none"
+    pointerEvents: "none",
+    marginLeft: "1rem"
   },
 
   formControl: {

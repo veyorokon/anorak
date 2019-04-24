@@ -4,8 +4,7 @@ import PropTypes from "prop-types";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
+import SearchIcon from "@material-ui/icons/Search";
 // @material-ui/icons
 import Clear from "@material-ui/icons/Clear";
 import Check from "@material-ui/icons/Check";
@@ -44,6 +43,7 @@ class CustomInput extends React.Component {
       id,
       error,
       inputprops,
+      search,
       success
     } = this.props;
     const activeInput = this.state.value !== "" ? true : false;
@@ -98,6 +98,10 @@ class CustomInput extends React.Component {
                   classes.labelRootSuccess
                 }
               />
+            ) : search ? (
+              <SearchIcon
+                className={classes.feedback + " " + classes.labelRoot}
+              />
             ) : null}
           </div>
         </div>
@@ -113,6 +117,7 @@ CustomInput.propTypes = {
   formControlProps: PropTypes.object,
   error: PropTypes.bool,
   disabled: PropTypes.bool,
+  search: PropTypes.bool,
   success: PropTypes.bool
 };
 
