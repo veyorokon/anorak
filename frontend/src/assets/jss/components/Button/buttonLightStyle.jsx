@@ -1,6 +1,6 @@
 import buttonAnimation from "assets/jss/animations/buttonAnimation";
 
-const buttonStyle = {
+const buttonStyle = theme => ({
   ...buttonAnimation,
   button: {
     boxSizing: "border-box",
@@ -48,6 +48,15 @@ const buttonStyle = {
     "&:hover": {
       color: "#000",
       border: "1px solid #000"
+    }
+  },
+  plain: {
+    backgroundColor: "#fff",
+    color: "rgb(102, 102, 102)",
+    border: "1px solid rgb(0, 0, 0,0)",
+    "&:hover": {
+      color: "rgb(102, 102, 102)",
+      border: "1px solid rgb(0, 0, 0,0)"
     }
   },
   warning: {
@@ -179,6 +188,10 @@ const buttonStyle = {
     height: "4rem",
     minWidth: "20rem"
   },
+  md: {
+    height: "3.4rem",
+    minWidth: "12rem"
+  },
   sm: {
     minWidth: "10rem",
     minHeight: "2.4rem"
@@ -200,6 +213,6 @@ const buttonStyle = {
     right: ".8rem",
     left: "auto"
   }
-};
+});
 
 export default buttonStyle;

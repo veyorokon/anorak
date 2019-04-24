@@ -50,6 +50,15 @@ const buttonStyle = {
       backgroundColor: "#fff"
     }
   },
+  plain: {
+    backgroundColor: "#000",
+    color: "rgb(102, 102, 102)",
+    border: "1px solid rgb(0, 0, 0,0)",
+    "&:hover": {
+      color: "rgb(102, 102, 102)",
+      border: "1px solid rgb(0, 0, 0,0)"
+    }
+  },
   warning: {
     backgroundColor: "rgb(235, 87, 87)",
     color: "#fff",
@@ -180,6 +189,10 @@ const buttonStyle = {
   lg: {
     height: "4rem",
     minWidth: "20rem"
+  },
+  md: {
+    height: "3.4rem",
+    minWidth: "12rem"
   },
   sm: {
     minWidth: "10rem",

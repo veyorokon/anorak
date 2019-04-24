@@ -41,6 +41,22 @@ storiesOf("Button", module)
       </Card>
 
       <Paragraph tertiary style={{ fontSize: "1.2rem" }}>
+        Button &mdash; Plain
+      </Paragraph>
+      <Card>
+        <div style={{ padding: "2rem 2rem 1rem 0px" }}>
+          <Button color="plain" size="lg">
+            Action
+          </Button>
+        </div>
+        <div style={{ padding: "1rem 2rem 2rem 0px" }}>
+          <Button color="plain" size="sm">
+            Action
+          </Button>
+        </div>
+      </Card>
+
+      <Paragraph tertiary style={{ fontSize: "1.2rem" }}>
         Button &mdash; Disabled
       </Paragraph>
       <Card>
@@ -260,6 +276,22 @@ storiesOf("Button", module)
         </div>
         <div style={{ padding: "1rem 2rem 2rem 0px" }}>
           <Button dark secondary size="sm">
+            Action
+          </Button>
+        </div>
+      </Card>
+
+      <Paragraph tertiary style={{ fontSize: "1.2rem" }}>
+        Button &mdash; Plain
+      </Paragraph>
+      <Card dark>
+        <div style={{ padding: "2rem 2rem 1rem 0px" }}>
+          <Button dark color="plain" size="lg">
+            Action
+          </Button>
+        </div>
+        <div style={{ padding: "1rem 2rem 2rem 0px" }}>
+          <Button dark color="plain" size="sm">
             Action
           </Button>
         </div>

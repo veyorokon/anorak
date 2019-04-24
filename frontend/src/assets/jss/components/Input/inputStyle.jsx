@@ -1,103 +1,67 @@
 import { defaultFont } from "assets/jss/universal.jsx";
 
-const inputStyle = {
-  ...defaultFont,
-  wrapper: {
-    alignItems: "center",
-    display: "inline-flex",
-    height: "37px",
-    position: "relative",
-    verticalAlign: "middle",
-    minWidth: "15rem",
-    borderRadius: "5px",
-    borderWidth: "1px",
-    borderStyle: "solid",
-    borderColor: "#8f8f8f",
-    color: "rgb(225, 225, 225)",
-    borderImage: "initial",
-    transition: "border 0.2s ease 0s, color 1s ease 0s",
-    background: "rgb(255, 255, 255)",
-    fontSize: "1.4rem",
-    "&:hover": {
-      borderColor: "#6f6f6f"
+const customInputStyle = {
+  disabled: {
+    "&:before": {
+      backgroundColor: "transparent !important"
     }
   },
-  activeWrapper: {
-    borderColor: "#555 !important"
+  underline: {
+    "&:hover:not($disabled):before,&:before": {
+      borderColor: "grey" + " !important",
+      borderWidth: "1px !important"
+    },
+    "&:after": {
+      borderColor: "grey"
+    }
   },
-  inputWrapper: {
-    display: "inline-flex",
-    position: "relative",
-    width: "100%",
-    margin: " 4px 10px",
-    fontSize: "inherit",
-    "&disabled": {
-      margin: " 40px 10px"
+  underlineError: {
+    "&:after": {
+      borderColor: "red"
+    }
+  },
+  underlineSuccess: {
+    "&:after": {
+      borderColor: "green"
     }
   },
   input: {
-    lineHeight: "2.7rem",
-    width: "100%",
-    color: "inherit",
     backgroundColor: "transparent",
     caretColor: "rgb(0, 0, 0)",
-    borderRadius: "0px",
-    borderWidth: "initial",
-    borderStyle: "none",
-    borderColor: "initial",
-    borderImage: "initial",
-    outline: "0px",
-    underline: "none",
-    fontSize: "inherit",
-    "&::placeholder": {
-      textOverflow: "ellipsis !important",
-      color: "#555",
-      transition: "color .2s ease 0s"
-    },
-    "&:focus": {
-      color: "#000",
-      "&::placeholder": {
-        color: "#333"
-      }
-    }
-  },
-  activeInput: {
-    color: "#000"
-  },
-  disabledWrapper: {
-    borderColor: "rgb(225, 225, 225) !important",
-    cursor: "not-allowed"
-  },
-  disabledInputWrapper: {
-    pointerEvents: "none"
-  },
-  disabledInput: {
-    color: "#999",
-    "&::placeholder": {
-      textOverflow: "ellipsis !important",
-      color: "#999"
-    }
-  },
-
-  errorWrapper: {
-    borderColor: "red !important"
-  },
-  errorInput: {
-    color: "red !important",
-    "&::placeholder": {
-      color: "red !important"
-    }
-  },
-  leftIcon: {
-    display: "flex",
-    padding: "0 1.2em",
-    alignItems: "center",
     fontSize: "inherit"
   },
-  icon: {
-    fontSize: "1.2em",
-    color: "#555"
+  labelRoot: {
+    ...defaultFont,
+    color: "grey" + " !important",
+    fontWeight: "400",
+    fontSize: "1.4rem",
+    lineHeight: "1.4"
+  },
+  labelRootError: {
+    color: "red"
+  },
+  labelRootSuccess: {
+    color: "green"
+  },
+  feedback: {
+    position: "absolute",
+    top: "1rem",
+    right: "0",
+    zIndex: "2",
+    display: "block",
+    width: "2.4rem",
+    height: "2.4rem",
+    textAlign: "center",
+    pointerEvents: "none"
+  },
+  marginTop: {
+    marginTop: "1.6rem"
+  },
+  formControl: {
+    position: "relative",
+    verticalAlign: "unset",
+    marginRight: "2rem"
   }
 };
 
-export default inputStyle;
+export default customInputStyle;

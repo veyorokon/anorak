@@ -4,7 +4,6 @@ import Card from "../Card/Card";
 import Paragraph from "../Typography/Paragraph";
 import Typography from "../Typography/Typography";
 import Input from "./Input";
-import Button from "../Button/Button";
 import Search from "@material-ui/icons/Search";
 
 storiesOf("Input", module)
@@ -17,60 +16,35 @@ storiesOf("Input", module)
         Normal
       </Paragraph>
       <Card>
-        <Input
-          inputProps={{
-            placeholder: "Search",
-            inputProps: {
-              "aria-label": "Search"
-            }
-          }}
-        />
+        <div style={{ padding: "2rem 2rem 2rem 0px" }}>
+          <Input placeholder="Search" />
+        </div>
+      </Card>
+
+      <Paragraph tertiary style={{ fontSize: "1.2rem" }}>
+        Disabled
+      </Paragraph>
+      <Card>
+        <div style={{ padding: "2rem 2rem 2rem 0px" }}>
+          <Input disabled placeholder="Search" />
+        </div>
       </Card>
 
       <Paragraph tertiary style={{ fontSize: "1.2rem" }}>
         Error
       </Paragraph>
       <Card>
-        <Input
-          error
-          inputProps={{
-            placeholder: "Search",
-            inputProps: {
-              "aria-label": "Search"
-            }
-          }}
-        />
+        <div style={{ padding: "2rem 2rem 2rem 0px" }}>
+          <Input error placeholder="Search" />
+        </div>
       </Card>
 
       <Paragraph tertiary style={{ fontSize: "1.2rem" }}>
-        Success
+        Icon
       </Paragraph>
       <Card>
-        <Input
-          success
-          inputProps={{
-            placeholder: "Search",
-            inputProps: {
-              "aria-label": "Search"
-            }
-          }}
-        />
-      </Card>
-
-      <Paragraph tertiary style={{ fontSize: "1.2rem" }}>
-        Button
-      </Paragraph>
-      <Card>
-        <div style={{ display: "flex", alignItems: "flex-end" }}>
-          <Input
-            inputProps={{
-              placeholder: "Search",
-              inputProps: {
-                "aria-label": "Search"
-              }
-            }}
-          />
-          <Button size="md">Search</Button>
+        <div style={{ padding: "2rem 2rem 2rem 0px" }}>
+          <Input icon={<Search />} iconPosition="left" placeholder="Search" />
         </div>
       </Card>
     </React.Fragment>

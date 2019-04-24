@@ -3,95 +3,77 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Input from "@material-ui/core/Input";
+// @material-ui/icons
+import Clear from "@material-ui/icons/Clear";
+import Check from "@material-ui/icons/Check";
 // core components
 import inputStyle from "assets/jss/components/Input/inputStyle";
 
-class Input extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      active: false,
-      value: ""
-    };
-  }
+function CustomInput({ ...props }) {
+  const {
+    classes,
+    formControlProps,
+    labelText,
+    id,
+    labelProps,
+    inputProps,
+    error,
+    success
+  } = props;
 
-  handleFocus = () => {
-    this.setState({
-      active: true
-    });
-  };
-  handleBlur = () => {
-    this.setState({
-      active: false
-    });
-  };
-
-  handleChange = e => {
-    this.setState({ value: e.target.value });
-  };
-  render() {
-    const {
-      classes,
-      id,
-      disabled,
-      error,
-      placeholder,
-      icon,
-      iconPosition
-    } = this.props;
-
-    const activeInput = this.state.value !== "" ? true : false;
-    const wrapperClasses = classNames({
-      [classes.activeWrapper]: this.state.active,
-      [classes.wrapper]: true,
-      [classes.disabledWrapper]: disabled,
-      [classes.errorWrapper]: error
-    });
-    const inputWrapperClasses = classNames({
-      [classes.inputWrapper]: true,
-      [classes.disabledInputWrapper]: disabled
-    });
-    const inputClasses = classNames({
-      [classes.input]: true,
-      [classes.activeInput]: activeInput,
-      [classes.disabledInput]: disabled,
-      [classes.errorInput]: error
-    });
-    const Icon = icon
-      ? React.cloneElement(icon, {
-          className: [classes.icon]
-        })
-      : null;
-
-    return (
-      <div className={wrapperClasses}>
-        <div className={inputWrapperClasses}>
-          {icon && (
-            <span className={[classes[iconPosition + "Icon"]]}>{Icon}</span>
-          )}
-          <input
-            id={id}
-            placeholder={placeholder}
-            className={inputClasses}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
-            onChange={this.handleChange}
-          />
-        </div>
-      </div>
-    );
-  }
+  const labelClasses = classNames({
+    [" " + classes.labelRootError]: error,
+    [" " + classes.labelRootSuccess]: success && !error
+  });
+  const underlineClasses = classNames({
+    [classes.underlineError]: error,
+    [classes.underlineSuccess]: success && !error,
+    [classes.underline]: true
+  });
+  const marginTop = classNames({
+    [classes.marginTop]: labelText === undefined
+  });
+  return (
+    <FormControl {...formControlProps} className={classes.formControl}>
+      {labelText !== undefined ? (
+        <InputLabel
+          className={classes.labelRoot + labelClasses}
+          htmlFor={id}
+          {...labelProps}
+        >
+          {labelText}
+        </InputLabel>
+      ) : null}
+      <Input
+        className={classes.input}
+        classes={{
+          disabled: classes.disabled,
+          underline: underlineClasses
+        }}
+        id={id}
+        {...inputProps}
+      />
+      {error ? (
+        <Clear className={classes.feedback + " " + classes.labelRootError} />
+      ) : success ? (
+        <Check className={classes.feedback + " " + classes.labelRootSuccess} />
+      ) : null}
+    </FormControl>
+  );
 }
 
-Input.propTypes = {
+CustomInput.propTypes = {
   classes: PropTypes.object.isRequired,
-  disabled: PropTypes.boolean,
-  error: PropTypes.boolean,
+  labelText: PropTypes.node,
+  labelProps: PropTypes.object,
   id: PropTypes.string,
-  icon: PropTypes.node,
-  iconPosition: PropTypes.oneOf(["left", "right"]),
-  placeholder: PropTypes.string
+  inputProps: PropTypes.object,
+  formControlProps: PropTypes.object,
+  error: PropTypes.bool,
+  success: PropTypes.bool
 };
 
-export default withStyles(inputStyle)(Input);
+export default withStyles(inputStyle)(CustomInput);
