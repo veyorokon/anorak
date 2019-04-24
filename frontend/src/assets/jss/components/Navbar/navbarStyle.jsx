@@ -33,26 +33,7 @@ const inputStyle = theme => ({
     color: "#000",
     ...defaultFont
   },
-  search: {
-    borderRadius: "5px",
-    borderWidth: "1px",
-    borderStyle: "solid",
-    borderColor: "#8f8f8f",
-    position: "relative",
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25)
-    },
-    marginRight: theme.spacing.unit * 2,
-    marginLeft: 0,
-    width: "100%",
-    minWidth: "20rem",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing.unit * 3,
-      width: "60vw"
-    },
-    ...defaultFont
-  },
+
   searchIcon: {
     width: theme.spacing.unit * 9,
     height: "100%",

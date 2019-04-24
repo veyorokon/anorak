@@ -11,15 +11,35 @@ const buttonAnimation = {
     }
   },
 
-  "@keyframes clickAnimation": {
+  "@keyframes clickAnimationLight": {
     "0%": {
       fontWeight: "initial",
       color: "initial"
     },
 
-    "100%": {
+    "50%": {
       fontWeight: "bold",
       color: "black"
+    },
+    "100%": {
+      fontWeight: "initial",
+      color: "initial"
+    }
+  },
+  "@keyframes clickAnimationDark": {
+    "0%": {
+      fontWeight: "initial",
+      color: "rgb(102, 102, 102)"
+    },
+
+    "50%": {
+      fontWeight: "bold",
+      color: "#ccc"
+    },
+
+    "100%": {
+      fontWeight: "initial",
+      color: "rgb(102, 102, 102)"
     }
   }
 };

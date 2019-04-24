@@ -63,7 +63,7 @@ const buttonStyle = theme => ({
     },
     "&:focus, &:active, &:visited": {
       border: "1px solid rgb(0, 0, 0,0)",
-      animation: `clickAnimation 0.2s`
+      animation: `clickAnimationLight 0.2s`
     }
   },
   warning: {
