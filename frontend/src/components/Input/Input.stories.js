@@ -7,7 +7,7 @@ import Input from "./Input";
 import Button from "../Button/Button";
 import Search from "@material-ui/icons/Search";
 
-const inlineInputbuttonStyle = { width: "30rem" };
+const inlineInputbuttonStyle = { flex: "1 1" };
 
 storiesOf("Input", module)
   .addDecorator(story => <div style={{ padding: "3rem 20vw" }}>{story()}</div>)
@@ -121,7 +121,13 @@ storiesOf("Input", module)
         Button
       </Paragraph>
       <Card>
-        <div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "space-between"
+          }}
+        >
           <Input
             formControlProps={{
               style: inlineInputbuttonStyle
@@ -137,7 +143,7 @@ storiesOf("Input", module)
             Search
           </Button>
         </div>
-        <div style={{ display: "inline-block", alignItems: "flex-end" }}>
+        <div style={{ display: "flex", alignItems: "flex-end" }}>
           <Input
             inputprops={{
               placeholder: "Search",
