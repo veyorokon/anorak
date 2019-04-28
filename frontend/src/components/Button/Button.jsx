@@ -41,8 +41,7 @@ function RegularButton({ ...props }) {
     [classes.loading]: loading,
     [classes.disabled]: disabled,
     [classes.shadow]: shadow,
-    [classes.link]: link,
-    [className]: className
+    [classes.link]: link
   });
 
   if (disabled) {
@@ -52,7 +51,7 @@ function RegularButton({ ...props }) {
           disableRipple={disableRippleEffect}
           {...rest}
           classes={muiClasses}
-          className={btnClasses}
+          className={btnClasses + " " + className}
         >
           {icon && (
             <span className={[classes[iconPosition + "Icon"]]}>{icon}</span>
@@ -67,7 +66,7 @@ function RegularButton({ ...props }) {
         disableRipple={disableRippleEffect}
         {...rest}
         classes={muiClasses}
-        className={btnClasses}
+        className={btnClasses + " " + className}
       >
         <span className={[classes[iconPosition + "Icon"]]}>{icon}</span>
         {children}
@@ -79,8 +78,7 @@ function RegularButton({ ...props }) {
     <MaterialButton
       disableRipple={disableRippleEffect}
       {...rest}
-      classes={muiClasses}
-      className={btnClasses}
+      className={btnClasses + " " + className}
     >
       {loading ? (
         <div className={classes.loadingDots}>

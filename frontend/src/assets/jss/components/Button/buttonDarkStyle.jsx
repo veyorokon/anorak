@@ -1,7 +1,7 @@
 import { defaultFont } from "assets/jss/universal.jsx";
 import buttonAnimation from "assets/jss/animations/buttonAnimation";
 
-const buttonStyle = {
+const buttonStyle = theme => ({
   ...buttonAnimation,
   button: {
     ...defaultFont,
@@ -95,7 +95,7 @@ const buttonStyle = {
     "&:hover": {
       background: "white",
       color: "black",
-      boxShadow: "0 7px 2rem rgba(0, 0, 0, 0.16)",
+      boxShadow: "0 .7rem 2rem rgba(0, 0, 0, 0.16)",
       transform: "translate3d(0px,-1px,0px)",
       border: "1px solid rgba(0, 0, 0, 0) !important"
     },
@@ -222,6 +222,6 @@ const buttonStyle = {
     right: ".8rem",
     left: "auto"
   }
-};
+});
 
 export default buttonStyle;

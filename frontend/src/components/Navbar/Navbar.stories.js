@@ -5,9 +5,11 @@ import Paragraph from "../Typography/Paragraph";
 import Typography from "../Typography/Typography";
 import Navbar from "./Navbar";
 
-storiesOf("Navbar", module).add("HomeNav", () => (
-  <React.Fragment>
-    <Typography variant="h2">Navbar</Typography>
-    <Navbar />
-  </React.Fragment>
-));
+storiesOf("Navbar", module)
+  .addDecorator(story => <div style={{ height: "200vh" }}>{story()}</div>)
+  .add("HomeNav", () => (
+    <React.Fragment>
+      <Typography variant="h2">Navbar</Typography>
+      <Navbar />
+    </React.Fragment>
+  ));

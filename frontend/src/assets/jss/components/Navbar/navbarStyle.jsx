@@ -14,22 +14,38 @@ const inputStyle = theme => ({
     color: "#000",
     boxShadow: "none"
   },
+  menuBar: {
+    "& > button:not(:last-child)": {
+      marginRight: 10
+    }
+  },
   menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-    color: "#777",
-    transition: "color .2s",
-    "&:hover": {
-      background: "none",
-      color: "#000"
+    [theme.breakpoints.down("xs")]: {
+      minWidth: "10rem",
+      fontSize: "1rem",
+      margin: "0 auto",
+      paddingLeft: "15%"
+    }
+  },
+  categoryButton: {
+    [theme.breakpoints.down("md")]: {
+      minWidth: "5rem",
+      fontSize: "1rem"
+    },
+    "&:active,&:focus": {
+      color: "black",
+      borderColor: "black"
+    }
+  },
+  categoryBar: {
+    display: "flex",
+    "& > button:not(:last-child)": {
+      marginRight: 10
     }
   },
   title: {
-    display: "none",
-    marginRight: "2rem",
-    [theme.breakpoints.up("sm")]: {
-      display: "block"
-    },
+    paddingRight: "2.5rem",
+    display: "block",
     color: "#000",
     ...defaultFont
   },

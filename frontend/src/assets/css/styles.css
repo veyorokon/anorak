@@ -9,9 +9,6 @@ html {
   font-size: 62.5%;
 }
 
-body {
-  box-sizing: border-box;
-  }
 
 ::selection {
   background-color: #000;
@@ -24,6 +21,8 @@ body {
   color: #000;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+
 }
 
 p{
