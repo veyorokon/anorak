@@ -17,6 +17,9 @@ const inputStyle = theme => ({
   menuBar: {
     "& > button:not(:last-child)": {
       marginRight: 10
+    },
+    [theme.breakpoints.down("sm")]: {
+      marginTop: "2rem"
     }
   },
   menuButton: {
@@ -39,8 +42,15 @@ const inputStyle = theme => ({
   },
   categoryBar: {
     display: "flex",
+    margin: "1rem 0",
     "& > button:not(:last-child)": {
       marginRight: 10
+    }
+  },
+  mainBar: {
+    marginTop: "2rem",
+    [theme.breakpoints.down("sm")]: {
+      marginTop: "0rem"
     }
   },
   title: {

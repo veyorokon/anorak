@@ -4,11 +4,11 @@ const customInputStyle = {
   wrapper: {
     alignItems: "center",
     display: "inline-flex",
-    height: "37px",
+    height: "3.7rem",
     position: "relative",
     verticalAlign: "middle",
     minWidth: "15rem",
-    borderRadius: "5px",
+    borderRadius: ".5rem",
     borderWidth: "1px",
     borderStyle: "solid",
     borderColor: "#8f8f8f",
@@ -29,10 +29,10 @@ const customInputStyle = {
     alignItems: "center",
     position: "relative",
     width: "100%",
-    margin: " 4px 10px",
+    margin: " .4rem 1rem",
     fontSize: "inherit",
     "&disabled": {
-      margin: " 40px 10px"
+      margin: "4rem 1rem"
     }
   },
   input: {

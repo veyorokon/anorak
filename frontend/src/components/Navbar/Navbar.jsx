@@ -68,9 +68,9 @@ class PrimarySearchAppBar extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="fixed" className={classes.appBar}>
+        <AppBar position="static" className={classes.appBar}>
           {mobileViewable}
-          <Toolbar>
+          <Toolbar className={classes.mainBar}>
             <Hidden smDown>
               <Typography className={classes.title} variant="h2">
                 iAnorak
