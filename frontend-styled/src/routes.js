@@ -1,5 +1,4 @@
 // @material-ui/icons
-import BubbleChart from "@material-ui/icons/BubbleChart";
 
 import Home from "views/Home/Home";
 
@@ -17,7 +16,7 @@ const homeRoutes = [
     path: "/",
     name: "Landing",
     rtlName: "Landing",
-    icon: BubbleChart,
+    icon: null,
     component: Home,
     layout: "/"
   }
