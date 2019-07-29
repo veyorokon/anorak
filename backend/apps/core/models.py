@@ -20,7 +20,6 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 from django.utils import timezone
 
 
-
 class User(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(_('email address'), blank=False, unique=True,
@@ -35,6 +34,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_('staff'), default=False)
     is_member = models.BooleanField(_('is paying member'), default=False)
     is_verified = models.BooleanField(_('is verified'), default=False)
+    #The stripe connect account
+    stripe_account = models.CharField(max_length=128, null=True, blank=True)
 
     objects = UserManager()
 
@@ -65,22 +66,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.djstripe_customer.subscription
 
     @property
-    def customer_api(self):
-        customer = self.djstripe_customer
-        customer_api = customer.api_retrieve()
-        return customer_api
-
-    # @property
-    # def dashboard_accounts(self):
-    #     accounts = self.subscription_accounts.all()
-    #     memberships = self.subscription_memberships.all()
-    #     membershipAccounts = []
-    #     for membership in memberships:
-    #         membershipAccounts.append(membership.subscription_account)
-    #     userAccounts = membershipAccounts + list(accounts)
-    #     return list(set(userAccounts))
-
-    @property
     def dashboard_accounts(self):
         accounts = self.subscription_accounts.all()
         ownedAccounts = []
@@ -88,49 +73,6 @@ class User(AbstractBaseUser, PermissionsMixin):
             if account.responsible_user == self:
                 ownedAccounts.append(account)
         return list(set(ownedAccounts))
-
-    @property
-    def joined_accounts(self):
-        memberships = self.subscription_memberships.all()
-        joinedAccounts = []
-        for membership in memberships:
-            accountUser = membership.subscription_account.responsible_user
-            if accountUser != self:
-                joinedAccounts.append(membership.subscription_account)
-        return list(set(joinedAccounts))
-
-    def upcoming_invoice(self):
-        invoice = stripe.Invoice.upcoming(
-            customer=self.djstripe_customer.id
-        )
-        return invoice
-
-    def latest_invoice(self):
-        subscription = stripe.Subscription.retrieve(
-            id=self.djstripe_subscription.id
-        )
-        invoice = stripe.Invoice.retrieve(
-            id=subscription.latest_invoice
-        )
-        return invoice
-
-    def get_tax_zip(self):
-        customer = self.customer_api
-        sourceZip = customer.default_source.address_zip
-        return sourceZip
-
-    def link_card(self, token, nameOnCard):
-        customer = self.djstripe_customer.api_retrieve()
-        source = customer.sources.create(
-            source=token,
-            metadata={
-                "name_on_card": nameOnCard
-            }
-        )
-        stripe.Customer.modify(
-            self.djstripe_customer.id,
-            default_source = source.id
-        )
 
 
 ##########################################################################

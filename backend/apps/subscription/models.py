@@ -5,23 +5,23 @@ Custom subscription models
 ##########################################################################
 ## Imports
 ##########################################################################
+
+from django.db.models import Q
 from django.db import models
 from core.models import User
-from django.utils import timezone
+from core.mixins import  BaseMixin
+from django_enumfield import enum
 from encrypted_model_fields.fields import EncryptedCharField
-from django.db.models import Q
-from djstripe.models import *
-from backend.utility import *
 from backend.stripe import stripe
-from backend.tax import tax_from_zip
-from . managers import *
-from . enum import *
+from . managers import CreateAccountManager, ConnectAccountManager
+from . enum import ServiceType, PlanBillingFrequency,  SubscriptionAccountStatus, MembershipStatus
+
 
 ##########################################################################
 ## Subscription Service
 ##########################################################################
 
-class SubscriptionService(models.Model):
+class SubscriptionService(BaseMixin):
     #The encrypted secret.
     name = models.CharField(max_length=128, null=False, unique=True)
     #Tag line and slogan
@@ -42,6 +42,8 @@ class SubscriptionService(models.Model):
     is_username_email = models.BooleanField(default=False)
     #If this service is currently available for subscribers
     is_available = models.BooleanField(default=False)
+    #The stripe product
+    stripe_product = models.CharField(max_length=128, null=True, blank=True)
 
     class Meta:
         db_table = "Subscription_Services"
@@ -54,7 +56,7 @@ class SubscriptionService(models.Model):
 ## Subscription Plan
 ##########################################################################
 
-class SubscriptionPlan(models.Model):
+class SubscriptionPlan(BaseMixin):
     #serice this pricing plan is attached to
     service = models.ForeignKey(SubscriptionService, on_delete=models.CASCADE, related_name="pricing_plans")
     #The description
@@ -69,7 +71,8 @@ class SubscriptionPlan(models.Model):
     billing_frequency = enum.EnumField(PlanBillingFrequency, default= PlanBillingFrequency.MONTH)
     #Maximum size for the service
     maximum_size = models.IntegerField(default=None, null=True)
-
+    #The stripe product
+    stripe_plan = models.CharField(max_length=128, null=True, blank=True)
 
     class Meta:
         db_table = "Subscription_Plans"
@@ -87,29 +90,20 @@ class SubscriptionPlan(models.Model):
         return self.product_name + " $"+str(self.amount)+" billed monthly"
 
 
+
 ##########################################################################
 ## Subscription Account
 ##########################################################################
 
-class SubscriptionAccount(models.Model):
-    #The type of the account
-    type = enum.EnumField(SubscriptionAccountType, default=SubscriptionAccountType.CREATE, editable=False)
+class SubscriptionAccount(BaseMixin):
     #User who is responsible and pays if other members miss.
     responsible_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subscription_accounts")
     #The service this account is for
     subscription_service = models.ForeignKey(SubscriptionService, on_delete=models.CASCADE, related_name="subscription_accounts")
     #The price plan this account has
     subscription_plan = models.ForeignKey(SubscriptionPlan, on_delete=models.CASCADE, related_name="subscription_accounts", null=True)
-    #The encrypted username
-    username = EncryptedCharField(max_length=128, null=True, blank=True)
-    #The encrypted password.
-    password = EncryptedCharField(max_length=128, null=True, blank=True)
     #The status of the account
     status_account = enum.EnumField(SubscriptionAccountStatus, default=SubscriptionAccountStatus.PENDING)
-    #Date that the subscription was created
-    date_created = models.IntegerField(editable=False)
-    #Date that the subscription was modified
-    date_modified = models.IntegerField(editable=False)
     #Date that the subscription was canceled
     date_canceled = models.IntegerField(editable=False, null=True, blank=True)
 
@@ -124,10 +118,9 @@ class SubscriptionAccount(models.Model):
     @property
     def responsible_member(self):
         try:
-            return SubscriptionMember.objects.get(
-                user = self.responsible_user,
-                subscription_account = self
-            )
+            return self.subscribers.all().filter(Q(
+                user = self.responsible_user
+            ))[0]
         except:
             return None
 
@@ -137,45 +130,6 @@ class SubscriptionAccount(models.Model):
             user = self.responsible_user
         ))
 
-    def _create(self):
-        self.status_account = SubscriptionAccountStatus.ACTIVE
-        SubscriptionMember.objects.create(
-            user=self.responsible_user,
-            subscription_account=self,
-            status_membership = MembershipStatus.ACTIVE
-        )
-
-    def _connect(self, confirmRequired=False):
-        self.status_account = SubscriptionAccountStatus.PENDING_CONFIRM_CONNECT
-        if not confirmRequired:
-            self.status_account = SubscriptionAccountStatus.CONNECTED
-
-    def _cancel_basic_members(self):
-        for member in self.basic_members:
-            member.delete()
-
-    def _cancel_responsible_member(self):
-        self.responsible_member.cancel()
-
-    def _set_plan(self, plan):
-        self.subscription_plan = plan
-
-    def connect(self, plan):
-        self._set_plan(plan)
-        self.activate()
-
-    def activate(self):
-        if self.type == SubscriptionAccountType.CREATE:
-            self._create()
-        else:
-            self._connect()
-        self.save()
-
-    def cancel(self):
-        self._cancel_basic_members()
-        self._cancel_responsible_member()
-        self.status_account = SubscriptionAccountStatus.CANCELED
-        self.save()
 
     def validate_user(self, user):
         if user == self.responsible_user:
@@ -191,65 +145,25 @@ class SubscriptionAccount(models.Model):
             pass
         return False
 
-    def save(self, *args, **kwargs):
-        '''
-        On save, update timestamps
-        '''
-        if not self.id:
-            self.date_created = get_current_epoch()
-        self.date_modified = get_current_epoch()
-        return super(SubscriptionAccount, self).save(*args, **kwargs)
-
     def __str__(self):
         user = self.responsible_user.email
         plan = str(self.subscription_plan)
         type = SubscriptionAccountType.label(self.type).lower().capitalize()
         return user +"\'s "+ plan + ' - '+type+' Account'
 
-class CreateAccount(SubscriptionAccount):
-    objects = CreateAccountManager()
-    class Meta:
-        proxy = True
-
-class ConnectAccount(SubscriptionAccount):
-    objects = ConnectAccountManager()
-    class Meta:
-        proxy = True
-
 
 ##########################################################################
 ## Subscription Membership
 ##########################################################################
 
-class SubscriptionMember(models.Model):
+class SubscriptionMember(BaseMixin):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subscription_memberships")
     #The subscription account of which this is a member.
     subscription_account = models.ForeignKey(SubscriptionAccount, on_delete=models.CASCADE, related_name="subscribers")
     #The status of the user subscription
     status_membership = enum.EnumField(MembershipStatus, default=MembershipStatus.PENDING)
     #Date that the subscription was created
-    date_created = models.IntegerField(editable=False)
-    #Date that the subscription was modified
-    date_modified = models.IntegerField(editable=False)
-    #Date that the subscription was created
     date_canceled = models.IntegerField(editable=False, null=True, blank=True)
-
-
-    def _cancel_membership_status(self):
-        self.status_membership = MembershipStatus.CANCELED
-
-    def cancel(self):
-        self._cancel_membership_status()
-        self.save()
-
-    def save(self, *args, **kwargs):
-        '''
-        On save, update timestamps
-        '''
-        if not self.id:
-            self.date_created = get_current_epoch()
-        self.date_modified = get_current_epoch()
-        return super(SubscriptionMember, self).save(*args, **kwargs)
 
     class Meta:
         db_table = "Subscriptions"
@@ -263,7 +177,7 @@ class SubscriptionMember(models.Model):
 ## Subscription Invite
 ##########################################################################
 
-class SubscriptionInvite(models.Model):
+class SubscriptionInvite(BaseMixin):
     #The account the invite is for
     subscription_account = models.ForeignKey(SubscriptionAccount, on_delete=models.CASCADE, related_name="invites")
     #The user this invite is from
@@ -272,18 +186,5 @@ class SubscriptionInvite(models.Model):
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="invites_received", null=True, blank=True)
     #The user email this invite is for - use email bc usr might not exist
     recipient_email = models.CharField(max_length=128, null=False)
-    #Date that the subscription was created
-    date_created = models.IntegerField(editable=False)
-    #Date that the subscription was modified
-    date_modified = models.IntegerField(editable=False)
     #If this has been processed or not
     processed = models.BooleanField(default=False)
-
-    def save(self, *args, **kwargs):
-        '''
-        On save, update timestamps
-        '''
-        if not self.id:
-            self.date_created = get_current_epoch()
-        self.date_modified = get_current_epoch()
-        return super(SubscriptionInvite, self).save(*args, **kwargs)

@@ -82,45 +82,16 @@ INSTALLED_APPS = [
 
     'core',
     'subscription',
-    'notification',
-    'request',
 ]
 
 TAX_JAR_KEY = environ_setting("TAX_JAR_KEY")
 
 FRONTEND_URL = environ_setting("FRONTEND_URL")
 
-####            Cache settings
-#
-# CELERY_BROKER_URL = "redis://:"+ environ_setting("REDIS_PASSWORD")+ "@"+environ_setting("REDIS_HOST") + ":" + environ_setting("REDIS_PORT")
-
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": CELERY_BROKER_URL+"/1",
-#         "OPTIONS": {
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-#         },
-#     }
-# }
-
 
 SESSION_ENGINE='django.contrib.sessions.backends.db'
 SESSION_COOKIE_NAME='sessionid'
 SESSION_EXPIRE_AT_BROWSER_CLOSE=False
-
-# # Other Celery settings
-# CELERY_RESULT_BACKEND = CELERY_BROKER_URL
-# CELERY_ACCEPT_CONTENT = ['application/json']
-# CELERY_RESULT_SERIALIZER = 'json'
-# CELERY_TASK_SERIALIZER = 'json'
-#
-# CELERY_BEAT_SCHEDULE = {
-#     'task-number-one': {
-#         'task': 'accounting.tasks.sync_stripe_invoices',
-#         'schedule': crontab(minute='55', hour='23'),
-#     },
-# }
 
 # GSuite Gmail server
 EMAIL_USE_TLS = True
@@ -183,8 +154,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 AUTH_USER_MODEL = 'core.User'
 
-DJSTRIPE_WEBHOOK_SECRET = environ_setting("DJSTRIPE_WEBHOOK_SECRET")
 # Get it from the section in the Stripe dashboard where you added the webhook endpoint
+
+DJSTRIPE_WEBHOOK_SECRET = environ_setting("DJSTRIPE_WEBHOOK_SECRET")
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

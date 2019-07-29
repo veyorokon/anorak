@@ -47,3 +47,14 @@ class UserManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True.')
 
         return self._create_user(email, password, **extra_fields)
+
+
+class BaseManager(models.Manager):
+    """
+    Base Manager for Base model
+    """
+    def __init__(self):
+        super(BaseManager, self).__init__()
+
+    def get_queryset(self):
+        return BaseQuerySet(model=self.model, using=self._db).filter(trashed=False)

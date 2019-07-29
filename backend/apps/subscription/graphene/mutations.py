@@ -10,7 +10,7 @@ import graphene
 from django.db.models import Q
 from . types import _SubscriptionAccountType, _SubscriptionMemberType, _SubscriptionLoginType, _SubscriptionInviteType
 from core.models import *
-from subscription.models import SubscriptionService, SubscriptionAccount, SubscriptionPlan, CreateAccount, SubscriptionMember, ConnectAccount, SubscriptionInvite
+from subscription.models import SubscriptionService, SubscriptionAccount, SubscriptionPlan, SubscriptionMember, SubscriptionInvite
 from subscription.enum import *
 from graphql_jwt.decorators import login_required
 
@@ -19,7 +19,7 @@ from graphql_jwt.decorators import login_required
 ## Mutation for new CreateAccount
 ##########################################################################
 
-class SubscriptionAddMutation(graphene.Mutation):
+class SubscriptionCreateMutation(graphene.Mutation):
 
     class Arguments:
         serviceKey = graphene.Int(required=True)
@@ -40,7 +40,7 @@ class SubscriptionAddMutation(graphene.Mutation):
             pk = planKey,
             service = service,
         )
-        account = CreateAccount.objects.create(
+        account = SubscriptionAccount.objects.create(
             responsible_user = user,
             subscription_service = service,
             subscription_plan = plan,
@@ -54,50 +54,7 @@ class SubscriptionAddMutation(graphene.Mutation):
             subscription_account = account
         )
 
-        return SubscriptionAddMutation(
-            subscriptionAccount = account
-        )
-
-
-##########################################################################
-## Mutation for new ConnectAccount
-##########################################################################
-
-class SubscriptionConnectMutation(graphene.Mutation):
-
-    class Arguments:
-        serviceKey = graphene.Int(required=True)
-        planKey = graphene.Int(required=True)
-        token = graphene.String(required=True)
-        username = graphene.String(required=True)
-        password = graphene.String(required=True)
-
-    subscriptionAccount =  graphene.Field(_SubscriptionAccountType)
-
-    @login_required
-    def mutate(self, info, serviceKey, planKey, token, username, password, **kwargs):
-        user = info.context.user
-        if not user.is_member:
-            raise ValueError(
-                "Subscription could not be connected. No active membership."
-            )
-        service = SubscriptionService.objects.get(
-            pk=serviceKey
-        )
-        plan = SubscriptionPlan.objects.get(
-            pk = planKey,
-            service = service,
-        )
-        account = ConnectAccount.objects.create(
-            type = SubscriptionAccountType.CONNECT,
-            responsible_user = user,
-            subscription_service = service,
-            subscription_plan = plan,
-            status_account = SubscriptionAccountStatus.PENDING_CONNECT,
-            username = username,
-            password = password
-        )
-        return SubscriptionConnectMutation(
+        return SubscriptionCreateMutation(
             subscriptionAccount = account
         )
 
@@ -289,12 +246,8 @@ class AcceptInviteMutation(graphene.Mutation):
         )
 
 class Mutations(graphene.ObjectType):
-    subscription_add_account = SubscriptionAddMutation.Field(
+    subscription_create_account = SubscriptionCreateMutation.Field(
         description = "Adds a new, unmanaged subscription account and no management request is generated."
-    )
-
-    subscription_connect_account = SubscriptionConnectMutation.Field(
-        description = "Connect an existing subscription account. The service will automatically create a management request to verify connect login."
     )
 
     subscription_delete_account = DeleteAccountMutation.Field(
